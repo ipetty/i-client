@@ -11,5 +11,6 @@
     <string name="title_activity_login_has_account">LoginHasAccountActivity</string>
     <!-- welcome login or reg -->
     <string name="enter_btn">立即体验</string>
+    <string name="title_activity_comment">CommentActivity</string>
 
 </resources>

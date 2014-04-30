@@ -30,6 +30,17 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+
+		Button btn = (Button) this.findViewById(R.id.enter_btn_test);
+		btn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(WelcomeRegisterOrLoginActivity.this,
+						CommentActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 	@Override
