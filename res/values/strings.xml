@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">爱宠</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_splash">启动</string>
+    <string name="title_activity_welcome_register_or_login">WelcomeRegisterOrLoginActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_login_has_account">LoginHasAccountActivity</string>
+    <!-- welcome login or reg -->
+    <string name="enter_btn">立即体验</string>
+
+</resources>

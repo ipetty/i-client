@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/action_bar_bg" >
+        
+         <ImageView 
+             android:layout_width="48dp"
+             android:layout_height="match_parent"
+             android:id="@+id/action_bar_button_back" 
+             android:src="@drawable/action_bar_back"/>
+        
+    </LinearLayout>
+
+</RelativeLayout>
