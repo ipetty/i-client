@@ -3,10 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SplashActivity" >
+    
+    <ImageView
+        android:id="@+id/splashView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/splash" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="启动界面" />
+       <FrameLayout android:id="@+id/branding_bar" android:background="@drawable/welcome_branding_gradient" 
+           android:layout_width="fill_parent" 
+           android:layout_height="wrap_content" 
+           android:layout_alignParentBottom="true">
 
+        <TextView
+            android:id="@+id/version_info"
+            style="@style/VersionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="6.0dip"
+            android:gravity="bottom"
+            android:text="@string/app_version"
+            android:textSize="12sp" />
+
+   </FrameLayout>
 </RelativeLayout>

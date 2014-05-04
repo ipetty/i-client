@@ -1,9 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".LoginActivity" >
-
+<?xml version="1.0" encoding="utf-8"?>
+<merge  xmlns:android="http://schemas.android.com/apk/res/android">
 <LinearLayout
     	android:id="@+id/action_bar"
         android:layout_width="match_parent"
@@ -11,8 +7,5 @@
         android:gravity="center_vertical" 
         android:background="@drawable/action_bar_bg" >
        <include layout="@layout/action_bar_simple_back_content"/>
-       <include layout="@layout/vertical_divider"  />
-       
  </LinearLayout>
-
-</RelativeLayout>
+</merge>

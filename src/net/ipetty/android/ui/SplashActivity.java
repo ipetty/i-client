@@ -2,9 +2,11 @@ package net.ipetty.android.ui;
 
 import net.ipetty.R;
 import net.ipetty.android.task.SplashTask;
+import net.ipetty.android.utils.AppUtils;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.TextView;
 
 public class SplashActivity extends BaseActivity {
 	public final static String TAG = "SplashActivity";
@@ -14,7 +16,15 @@ public class SplashActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 		Log.i(TAG, "onCreate");
+		init();
 		new SplashTask(SplashActivity.this).execute();
+	}
+
+	private void init() {
+		TextView version = (TextView) this.findViewById(R.id.version_info);
+		String verStr = getResources().getString(R.string.app_version);
+		String VersionName = String.format(verStr, AppUtils.getAppVersionName(this));
+		version.setText(VersionName);
 	}
 
 	@Override
