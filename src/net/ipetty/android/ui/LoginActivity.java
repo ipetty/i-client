@@ -2,6 +2,7 @@ package net.ipetty.android.ui;
 
 import net.ipetty.R;
 import net.ipetty.android.ui.event.BackClickListener;
+import net.ipetty.android.utils.ActivityUtils;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -55,6 +56,26 @@ public class LoginActivity extends BaseActivity {
 		// 登陆
 		View loginBtnView = (View) this.findViewById(R.id.button);
 		loginBtnView.setOnClickListener(loginOnClick);
+
+		// sina
+		View sina = this.findViewById(R.id.sina);
+		sina.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO sina Login
+
+			}
+		});
+		View qq = this.findViewById(R.id.qq);
+		qq.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO qq login
+
+			}
+		});
+
 	}
 
 	private final OnClickListener loginOnClick = new OnClickListener() {
@@ -97,7 +118,7 @@ public class LoginActivity extends BaseActivity {
 		protected Integer doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -110,6 +131,10 @@ public class LoginActivity extends BaseActivity {
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
+			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+			startActivity(intent);
+			finish();
+			ActivityUtils.getInstance().finish();// 退出所有的Activity
 		}
 
 	}
