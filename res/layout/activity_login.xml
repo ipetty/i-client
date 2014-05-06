@@ -10,11 +10,8 @@
         android:layout_height="@dimen/action_bar_height"
         android:background="@drawable/action_bar_bg"
         android:gravity="center_vertical" >
-
         <include layout="@layout/action_bar_simple_back_content" />
-
         <include layout="@layout/vertical_divider" />
-
         <TextView
             android:id="@+id/register"
             style="@style/ActionBarButton"
@@ -23,7 +20,6 @@
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:text="@string/register" />
-
     </LinearLayout>
 
     <LinearLayout

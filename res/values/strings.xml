@@ -4,7 +4,6 @@
     <string name="app_name">爱宠</string>
     <string name="action_settings">设置</string>
     <string name="hello_world">Hello world!</string>
-    
 
     <!-- splash -->
     <string name="title_activity_splash">启动</string>
@@ -19,12 +18,9 @@
     <string name="register">注册</string>
     <string name="login">登录</string>
     <string name="login_loading">正在登录...</string>
-     
+
     <!-- comment -->
     <string name="title_activity_comment">评论</string>
-    
-   
-
-   
+    <string name="title_activity_sexy_dialog">SexyDialogActivity</string>
 
 </resources>

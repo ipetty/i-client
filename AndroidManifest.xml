@@ -47,6 +47,11 @@
             android:name="net.ipetty.android.ui.CommentActivity"
             android:label="@string/title_activity_comment" >
         </activity>
+        <activity
+            android:name="net.ipetty.LoginsActivity"
+            android:label="@string/title_activity_logins"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
     </application>
 
 </manifest>
