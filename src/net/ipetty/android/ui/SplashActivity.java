@@ -5,7 +5,6 @@ import net.ipetty.android.task.SplashTask;
 import net.ipetty.android.utils.AppUtils;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.widget.TextView;
 
 public class SplashActivity extends BaseActivity {
@@ -67,13 +66,6 @@ public class SplashActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		Log.i(TAG, "onDestroy");
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.splash, menu);
-		return true;
 	}
 
 }
