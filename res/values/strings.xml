@@ -21,6 +21,5 @@
 
     <!-- comment -->
     <string name="title_activity_comment">评论</string>
-    <string name="title_activity_sexy_dialog">SexyDialogActivity</string>
 
 </resources>
