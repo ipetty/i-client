@@ -35,7 +35,7 @@ public class MainHomeFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.i(TAG, "onCreateView");
-		return inflater.inflate(R.layout.main_tab_home, container, false);
+		return inflater.inflate(R.layout.main_fragment_home, container, false);
 	}
 
 	@Override

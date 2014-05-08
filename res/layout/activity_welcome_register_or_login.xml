@@ -22,4 +22,13 @@
         android:layout_weight="1.0"
         android:text="模拟LIST" />
 
+    <Button
+        android:id="@+id/enter_btn_test1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/enter_btn"
+        android:layout_toRightOf="@+id/enter_btn"
+        android:layout_weight="1.0"
+        android:text="模拟第一次已经登录的情况" />
+
 </RelativeLayout>

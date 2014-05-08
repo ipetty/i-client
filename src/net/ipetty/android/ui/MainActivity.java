@@ -1,17 +1,30 @@
 package net.ipetty.android.ui;
 
 import net.ipetty.R;
+import net.ipetty.android.utils.AnimUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class MainActivity extends BaseFragmentActivity {
 	public final static String TAG = "MainActivity";
 	private ViewPager viewPager;
+	private ImageView mTabImg;
+	private int currIndex = 0;
+	private int zero = 0;
+	private int one;
+	private int two;
 	private final Class[] fragments = { MainHomeFragment.class, MainDiscoverFragment.class, MainNewsFragment.class };
 
 	@Override
@@ -19,6 +32,17 @@ public class MainActivity extends BaseFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Log.i(TAG, "onCreate");
+
+		// sub_action_bar_now
+		DisplayMetrics dm = AnimUtils.getDefaultDisplayMetrics(this);
+		int screenWidth = dm.widthPixels;
+		one = screenWidth / 3;
+		two = one * 2;
+
+		mTabImg = (ImageView) findViewById(R.id.imageTabNow);
+		RelativeLayout.LayoutParams mParams = (LayoutParams) mTabImg.getLayoutParams();
+		mParams.width = one;
+		mTabImg.setLayoutParams(mParams);
 
 		// pager
 		viewPager = (ViewPager) findViewById(R.id.tabpager);
@@ -60,6 +84,11 @@ public class MainActivity extends BaseFragmentActivity {
 		public int getItemPosition(Object object) {
 			return super.getItemPosition(object);
 		}
+
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			super.destroyItem(container, position, object);
+		}
 	}
 
 	private final OnPageChangeListener myPageChangeListener = new OnPageChangeListener() {
@@ -78,7 +107,40 @@ public class MainActivity extends BaseFragmentActivity {
 		@Override
 		public void onPageSelected(int arg0) {
 			// TODO Auto-generated method stub
+			Animation animation = null;
+			switch (arg0) {
+			case 0: {
+				if (currIndex == 1) {
+					animation = new TranslateAnimation(one, zero, 0, 0);
+				} else if (currIndex == 2) {
+					animation = new TranslateAnimation(two, zero, 0, 0);
+				}
+				break;
+			}
+			case 1: {
+				if (currIndex == 0) {
+					animation = new TranslateAnimation(zero, one, 0, 0);
+				} else if (currIndex == 2) {
+					animation = new TranslateAnimation(two, one, 0, 0);
+				}
 
+				break;
+			}
+			case 2: {
+				if (currIndex == 0) {
+					animation = new TranslateAnimation(zero, two, 0, 0);
+				} else if (currIndex == 1) {
+					animation = new TranslateAnimation(one, two, 0, 0);
+				}
+
+				break;
+			}
+
+			}
+			currIndex = arg0;
+			animation.setFillAfter(true);
+			animation.setDuration(150);
+			mTabImg.startAnimation(animation);
 		}
 
 	};

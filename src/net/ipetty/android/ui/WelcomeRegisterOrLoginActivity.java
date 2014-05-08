@@ -25,8 +25,7 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(WelcomeRegisterOrLoginActivity.this,
-						LoginActivity.class);
+				Intent intent = new Intent(WelcomeRegisterOrLoginActivity.this, LoginActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -36,8 +35,17 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(WelcomeRegisterOrLoginActivity.this,
-						CommentActivity.class);
+				Intent intent = new Intent(WelcomeRegisterOrLoginActivity.this, CommentActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		Button btn1 = (Button) this.findViewById(R.id.enter_btn_test1);
+		btn1.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(WelcomeRegisterOrLoginActivity.this, LoginHasAccountActivity.class);
 				startActivity(intent);
 			}
 		});

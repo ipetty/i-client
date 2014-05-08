@@ -13,7 +13,7 @@ public class MainDiscoverFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.main_tab_discover, container, false);
+		return inflater.inflate(R.layout.main_fragment_discover, container, false);
 	}
 
 	@Override

@@ -7,7 +7,12 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
 public class LoginHasAccountActivity extends BaseActivity {
+	DisplayImageOptions options;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,30 @@ public class LoginHasAccountActivity extends BaseActivity {
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
 		text.setText(this.getResources().getString(R.string.title_activity_login_has_account));
 		btnBack.setOnClickListener(new BackClickListener(this));
+
+		String textUrl = "http://weibo.kedacom.com/weibo/files/h/b9c31599803e48f0a0595e2e913714e4/h64.jpg?t=1388814731997";
+
+		options = new DisplayImageOptions.Builder()
+		//
+		// .showImageOnLoading(R.drawable.ic_stub)
+		//
+		// .showImageForEmptyUri(R.drawable.ic_empty)
+		//
+		// .showImageOnFail(R.drawable.ic_error)
+		//
+				.cacheInMemory(true)
+				//
+				.cacheOnDisk(true)
+				//
+				.considerExifParams(true)
+				//
+				.displayer(new RoundedBitmapDisplayer(20))
+				//
+				.build();
+
+		// avator
+		ImageView avator = (ImageView) this.findViewById(R.id.avator);
+		ImageLoader.getInstance().displayImage(textUrl, avator, options);
 
 	}
 
