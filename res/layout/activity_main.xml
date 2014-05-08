@@ -37,10 +37,11 @@
        		 android:layout_height="match_parent"
              android:orientation="horizontal" >
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" 
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
 
             <TextView
                 android:id="@+id/textView2"
@@ -49,50 +50,44 @@
                 android:layout_gravity="center"
                 android:text="主页" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-            </RelativeLayout>
+        </LinearLayout>
 
-        </FrameLayout>
-
-        <FrameLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center" >
 
             <TextView
                 android:id="@+id/TextView01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="动态" />
+                android:text="发现" />
 
-        </FrameLayout>
+        </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" 
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
 
             <TextView
                 android:id="@+id/TextView02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="消息" />
+                android:text="动态" />
 
-        </FrameLayout>
+        </LinearLayout>
 
-    </LinearLayout>
+    	</LinearLayout>
     </RelativeLayout>
-
-   
-
-  		<android.support.v4.view.ViewPager
-        	android:id="@+id/tabpager"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_gravity="center" > 
-        </android.support.v4.view.ViewPager>  
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tabpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </android.support.v4.view.ViewPager>
+  
 </LinearLayout>

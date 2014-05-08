@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
@@ -28,9 +27,7 @@ public class MainHomeFragment extends Fragment {
 	private LinkedList<String> mListItems;
 	private PullToRefreshListView mPullRefreshListView;
 	private ArrayAdapter<String> mAdapter;
-	private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam", "Abondance", "Ackawi", "Acorn", "Adelost", "Affidelice au Chablis", "Afuega'l Pitu", "Airag", "Airedale",
-			"Aisy Cendre", "Allgauer Emmentaler", "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam", "Abondance", "Ackawi", "Acorn", "Adelost", "Affidelice au Chablis", "Afuega'l Pitu",
-			"Airag", "Airedale", "Aisy Cendre", "Allgauer Emmentaler" };
+	private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats" };
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,14 +77,15 @@ public class MainHomeFragment extends Fragment {
 		mListItems.addAll(Arrays.asList(mStrings));
 		ListView actualListView = mPullRefreshListView.getRefreshableView();
 
-		View v = activity.getLayoutInflater().inflate(R.layout.mod_dialog_item, actualListView, false);
-		TextView tx = (TextView) v.findViewById(R.id.text);
-		tx.setText("TTTTTTTTTTTT");
+		initHeaderView(actualListView);
 
-		actualListView.addHeaderView(v);
-
-		mAdapter = new ArrayAdapter<String>(this.activity, android.R.layout.simple_list_item_1, mListItems);
+		mAdapter = new ArrayAdapter<String>(this.activity, android.R.layout.simple_gallery_item, mListItems);
 		actualListView.setAdapter(mAdapter);
+	}
+
+	private void initHeaderView(ListView listView) {
+		View v = activity.getLayoutInflater().inflate(R.layout.main_fragment_home_header, null, false);
+		listView.addHeaderView(v);
 	}
 
 	private class MainHomeTask extends AsyncTask<Void, Void, String[]> {
