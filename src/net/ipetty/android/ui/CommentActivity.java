@@ -30,6 +30,7 @@ public class CommentActivity extends BaseActivity {
 		listView = (ListView) this.findViewById(R.id.listView);
 		// 初始化适配器
 		adapter = new CommentAdapter(this);
+
 		listView.setAdapter(adapter);
 
 		// TODO:还不确定在哪个个生命周期执行第一次数据加载 特别是内嵌多个fragment的时候
@@ -44,8 +45,7 @@ public class CommentActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 
 				if (adapter.getCount() > 20) {
-					Toast.makeText(CommentActivity.this, "已经加载过了",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(CommentActivity.this, "已经加载过了", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				loadMoreData(getList(20));
