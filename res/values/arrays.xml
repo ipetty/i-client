@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="alert_camera">
+        <item>@string/take_picture</item>
+        <item>@string/choose_gallery</item>
+        <item>@string/cancel</item>
+    </string-array>
+</resources>

@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import net.ipetty.R;
+import net.ipetty.android.ui.adapter.ListFeedAdapter;
+import net.ipetty.android.utils.DialogUtils;
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +15,9 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -26,8 +30,9 @@ public class MainHomeFragment extends Fragment {
 	private Activity activity;
 	private LinkedList<String> mListItems;
 	private PullToRefreshListView mPullRefreshListView;
-	private ArrayAdapter<String> mAdapter;
+	private ListFeedAdapter mAdapter;
 	private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats" };
+	private Dialog cameraDialog;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +52,43 @@ public class MainHomeFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		Log.i(TAG, "onActivityCreated");
 
+		initListView();
+		initCamera();
+
+	}
+
+	private void initCamera() {
+		// TODO Auto-generated method stub
+		ImageView camera = (ImageView) activity.findViewById(R.id.composer_buttons_show_hide_button);
+		camera.setOnClickListener(cameraClick);
+	}
+
+	private OnClickListener cameraClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
+			cameraDialog = DialogUtils.bottomPopupDialog(activity, Listener, R.array.alert_camera, getString(R.string.camera_title), cameraDialog);
+		}
+	};
+
+	private final OnClickListener takePhotoClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+		}
+	};
+
+	private final OnClickListener pickPhotoClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+
+		}
+	};
+
+	private void initListView() {
+		// TODO Auto-generated method stub
 		this.activity = getActivity();
 
 		mPullRefreshListView = (PullToRefreshListView) this.activity.findViewById(R.id.pull_refresh_list);
@@ -79,12 +121,12 @@ public class MainHomeFragment extends Fragment {
 
 		initHeaderView(actualListView);
 
-		mAdapter = new ArrayAdapter<String>(this.activity, android.R.layout.simple_gallery_item, mListItems);
+		mAdapter = new ListFeedAdapter(this.activity);
 		actualListView.setAdapter(mAdapter);
 	}
 
 	private void initHeaderView(ListView listView) {
-		View v = activity.getLayoutInflater().inflate(R.layout.main_fragment_home_header, null, false);
+		View v = activity.getLayoutInflater().inflate(R.layout.list_feed_header, listView, false);
 		listView.addHeaderView(v);
 	}
 

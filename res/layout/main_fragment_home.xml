@@ -18,9 +18,23 @@
 		        android:fadingEdge="none"
 		        android:fastScrollEnabled="false"
 		        android:footerDividersEnabled="false"
-		        android:headerDividersEnabled="false"
-		        android:smoothScrollbar="true" />
+		        ptr:ptrHeaderBackground="#FF0000"
+		        android:headerDividersEnabled="false"/>
 
 </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
+        <ImageView
+            android:id="@+id/composer_buttons_show_hide_button"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:src="@drawable/chooser_button_selector" />
+
+    </RelativeLayout>
 </FrameLayout>
