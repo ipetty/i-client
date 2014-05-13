@@ -1,16 +1,23 @@
 package net.ipetty.android.ui;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 
 import net.ipetty.R;
 import net.ipetty.android.ui.adapter.ListFeedAdapter;
+import net.ipetty.android.utils.DeviceUtils;
 import net.ipetty.android.utils.DialogUtils;
+import net.ipetty.android.utils.ImageUtils;
+import net.ipetty.android.utils.PathUtils;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
@@ -33,6 +41,8 @@ public class MainHomeFragment extends Fragment {
 	private ListFeedAdapter mAdapter;
 	private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats" };
 	private Dialog cameraDialog;
+	private String mImageName;
+	private ImageView avator;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +61,6 @@ public class MainHomeFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.i(TAG, "onActivityCreated");
-
 		initListView();
 		initCamera();
 
@@ -75,17 +84,56 @@ public class MainHomeFragment extends Fragment {
 	private final OnClickListener takePhotoClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
+			mImageName = (System.currentTimeMillis() + ".jpg");
+			DeviceUtils.takePicture(MainHomeFragment.this, PathUtils.getCarmerDir(), mImageName);
+			cameraDialog.cancel();
 		}
 	};
 
 	private final OnClickListener pickPhotoClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
-
+			mImageName = (System.currentTimeMillis() + ".jpg");
+			DeviceUtils.chooserSysPics(MainHomeFragment.this);
+			cameraDialog.cancel();
 		}
 	};
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Log.i(TAG, requestCode + " " + resultCode);
+		if (requestCode == DeviceUtils.REQUEST_CODE_PICK_IMAGE) {
+			if (resultCode == FragmentActivity.RESULT_OK) {
+				Uri uri = data.getData();
+				String path = PathUtils.getPathByUriFromFile(uri, activity);
+				compressImage(path);
+			}
+		}
+
+		if (requestCode == DeviceUtils.REQUEST_CODE_TAKE_IMAGE) {
+			if (resultCode == FragmentActivity.RESULT_OK) {
+				File file = new File(PathUtils.getCarmerDir(), mImageName);
+				String path = file.getPath();
+				compressImage(path);
+
+			}
+		}
+	}
+
+	private void compressImage(String path) {
+		String outPath = new File(PathUtils.getCarmerDir(), mImageName).getPath();
+		int result = ImageUtils.compressImage(path, outPath);
+		if (result == ImageUtils.RESULT_FAILTRUE) {
+			Toast.makeText(activity, "您选择的图片过小，请大于64x64", Toast.LENGTH_LONG).show();
+			return;
+		}
+		if (result == ImageUtils.RESULT_ERROR) {
+			Toast.makeText(activity, "操作失败", Toast.LENGTH_LONG).show();
+			return;
+		}
+
+	}
 
 	private void initListView() {
 		// TODO Auto-generated method stub
@@ -127,6 +175,7 @@ public class MainHomeFragment extends Fragment {
 
 	private void initHeaderView(ListView listView) {
 		View v = activity.getLayoutInflater().inflate(R.layout.list_feed_header, listView, false);
+		avator = (ImageView) v.findViewById(R.id.avator);
 		listView.addHeaderView(v);
 	}
 

@@ -38,6 +38,7 @@
              android:orientation="horizontal" >
 
         <LinearLayout
+             android:id="@+id/main"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -53,6 +54,7 @@
         </LinearLayout>
 
         <LinearLayout
+             android:id="@+id/discover"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -68,6 +70,7 @@
         </LinearLayout>
 
         <LinearLayout
+             android:id="@+id/news"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"

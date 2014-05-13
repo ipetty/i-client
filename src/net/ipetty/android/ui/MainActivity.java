@@ -10,6 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -48,6 +50,29 @@ public class MainActivity extends BaseFragmentActivity {
 		viewPager = (ViewPager) findViewById(R.id.tabpager);
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments));
 		viewPager.setOnPageChangeListener(myPageChangeListener);
+
+		// viewTab
+		View main = findViewById(R.id.main);
+		View discover = findViewById(R.id.discover);
+		View news = findViewById(R.id.news);
+		main.setOnClickListener(new TabClickListener(0));
+		discover.setOnClickListener(new TabClickListener(1));
+		news.setOnClickListener(new TabClickListener(2));
+	}
+
+	public class TabClickListener implements OnClickListener {
+		private int index = 0;
+
+		public TabClickListener(int i) {
+			index = i;
+		}
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			viewPager.setCurrentItem(index);
+		}
+
 	}
 
 	public class MyFragmentPagerAdapter extends FragmentPagerAdapter {

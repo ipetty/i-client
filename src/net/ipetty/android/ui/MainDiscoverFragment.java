@@ -1,15 +1,21 @@
 package net.ipetty.android.ui;
 
 import net.ipetty.R;
+import net.ipetty.android.ui.adapter.DisvocerAdapter;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 public class MainDiscoverFragment extends Fragment {
 	public final static String TAG = "MainDiscoverFragment";
+	private Activity activity;
+	private GridView gridview;
+	private DisvocerAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -20,6 +26,17 @@ public class MainDiscoverFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		Log.i(TAG, "onActivityCreated");
+		this.activity = getActivity();
+		gridview = (GridView) this.activity.findViewById(R.id.gridview);
+		adapter = new DisvocerAdapter(this.activity);
+		gridview.setAdapter(adapter);
+
 	}
 
 	@Override

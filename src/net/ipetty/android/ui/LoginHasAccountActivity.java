@@ -2,6 +2,7 @@ package net.ipetty.android.ui;
 
 import net.ipetty.R;
 import net.ipetty.android.ui.event.BackClickListener;
+import net.ipetty.android.utils.AppUtils;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class LoginHasAccountActivity extends BaseActivity {
 	DisplayImageOptions options;
@@ -27,23 +27,7 @@ public class LoginHasAccountActivity extends BaseActivity {
 
 		String textUrl = "http://weibo.kedacom.com/weibo/files/h/b9c31599803e48f0a0595e2e913714e4/h64.jpg?t=1388814731997";
 
-		options = new DisplayImageOptions.Builder()
-		//
-		// .showImageOnLoading(R.drawable.ic_stub)
-		//
-		// .showImageForEmptyUri(R.drawable.ic_empty)
-		//
-		// .showImageOnFail(R.drawable.ic_error)
-		//
-				.cacheInMemory(true)
-				//
-				.cacheOnDisk(true)
-				//
-				.considerExifParams(true)
-				//
-				.displayer(new RoundedBitmapDisplayer(20))
-				//
-				.build();
+		options = AppUtils.getRoundedImageOptions();
 
 		// avator
 		ImageView avator = (ImageView) this.findViewById(R.id.avator);

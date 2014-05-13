@@ -19,6 +19,7 @@ public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
 	public ListFeedAdapter(Context context) {
 		// TODO Auto-generated constructor stub
 		this.inflater = LayoutInflater.from(context);
+
 	}
 
 	@Override
