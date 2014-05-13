@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import net.ipetty.R;
+import net.ipetty.android.common.Constant;
 import net.ipetty.android.ui.adapter.ListFeedAdapter;
 import net.ipetty.android.utils.DeviceUtils;
 import net.ipetty.android.utils.DialogUtils;
@@ -35,6 +36,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainHomeFragment extends Fragment {
 	public final static String TAG = "MainHomeFragment";
+
 	private Activity activity;
 	private LinkedList<String> mListItems;
 	private PullToRefreshListView mPullRefreshListView;
@@ -131,6 +133,13 @@ public class MainHomeFragment extends Fragment {
 		if (result == ImageUtils.RESULT_ERROR) {
 			Toast.makeText(activity, "操作失败", Toast.LENGTH_LONG).show();
 			return;
+		}
+		if (result == ImageUtils.RESULT_SUCCESS) {
+			Intent intent = new Intent(activity, FeedPublishActivity.class);
+			Bundle bundle = new Bundle();// 该类用作携带数据
+			bundle.putString(Constant.INTENT_PHOTO_PATH_KEY, outPath);
+			intent.putExtras(bundle);
+			startActivity(intent);
 		}
 
 	}

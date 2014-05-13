@@ -7,17 +7,17 @@
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="18" />
-    
-	<uses-permission android:name="android.permission.INTERNET" />  
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />  
-	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />  
 
-    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
     <application
+        android:name="net.ipetty.android.common.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/IPettyTheme" android:name=".android.common.MyApplication">
+        android:theme="@style/IPettyTheme" >
         <activity
             android:name="net.ipetty.android.ui.SplashActivity"
             android:label="@string/app_name"
@@ -30,8 +30,8 @@
         </activity>
         <activity
             android:name="net.ipetty.android.ui.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.ui.WelcomeRegisterOrLoginActivity"
@@ -57,6 +57,10 @@
             android:name="net.ipetty.LoginsActivity"
             android:label="@string/title_activity_logins"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name="net.ipetty.android.ui.FeedPublishActivity"
+            android:label="@string/title_activity_feed_publish" >
         </activity>
     </application>
 

@@ -4,8 +4,8 @@
     <string name="app_name">爱宠</string>
     <string name="action_settings">设置</string>
     <string name="hello_world">Hello world!</string>
-    
-     <!-- camera -->
+
+    <!-- camera -->
     <string name="take_picture">拍照</string>
     <string name="choose_gallery">从手机相册选择</string>
     <string name="cancel">取消</string>
@@ -19,7 +19,7 @@
     <string name="title_activity_register">注册</string>
     <string name="title_activity_welcome_register_or_login">欢迎</string>
     <string name="title_activity_login_has_account">登录</string>
-    <string name="enter_btn">立即体验</string>
+    <string name="btn_enter">立即体验</string>
     <string name="forget_password">忘记密码</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
@@ -27,7 +27,8 @@
 
     <!-- comment -->
     <string name="title_activity_comment">评论</string>
-    
-
+    <string name="title_activity_feed_publish">FeedPublishActivity</string>
+     <!-- publish -->
+    <string name="btn_publish_text">发布</string>
 
 </resources>
