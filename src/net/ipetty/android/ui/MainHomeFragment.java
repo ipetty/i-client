@@ -125,22 +125,16 @@ public class MainHomeFragment extends Fragment {
 
 	private void compressImage(String path) {
 		String outPath = new File(PathUtils.getCarmerDir(), mImageName).getPath();
-		int result = ImageUtils.compressImage(path, outPath);
-		if (result == ImageUtils.RESULT_FAILTRUE) {
-			Toast.makeText(activity, "您选择的图片过小，请大于64x64", Toast.LENGTH_LONG).show();
+		if (!ImageUtils.isCorrectSize(path)) {
+			Toast.makeText(activity, "您选择的图片过小，请大于" + Constant.COMPRESS_IMAGE_MIN_WIDTH + "x" + Constant.COMPRESS_IMAGE_MIN_HEIGHT, Toast.LENGTH_LONG).show();
 			return;
 		}
-		if (result == ImageUtils.RESULT_ERROR) {
-			Toast.makeText(activity, "操作失败", Toast.LENGTH_LONG).show();
-			return;
-		}
-		if (result == ImageUtils.RESULT_SUCCESS) {
-			Intent intent = new Intent(activity, FeedPublishActivity.class);
-			Bundle bundle = new Bundle();// 该类用作携带数据
-			bundle.putString(Constant.INTENT_PHOTO_PATH_KEY, outPath);
-			intent.putExtras(bundle);
-			startActivity(intent);
-		}
+		Intent intent = new Intent(activity, FeedPublishActivity.class);
+		Bundle bundle = new Bundle();// 该类用作携带数据
+		bundle.putString(Constant.INTENT_PHOTO_PATH_KEY, path);
+		bundle.putString(Constant.INTENT_PHOTO_OUT_PATH_KEY, outPath);
+		intent.putExtras(bundle);
+		startActivity(intent);
 
 	}
 
