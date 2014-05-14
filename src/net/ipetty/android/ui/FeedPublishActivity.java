@@ -49,6 +49,7 @@ public class FeedPublishActivity extends Activity {
 		btn_publish = (TextView) this.findViewById(R.id.btn_publish);
 		btn_publish.setOnClickListener(onClickPublish);
 
+		// 图片压缩
 		new CompressTask().execute();
 	}
 
@@ -59,6 +60,7 @@ public class FeedPublishActivity extends Activity {
 			Editable text = edit.getText();
 			String str = text.toString();
 
+			// 发布操作
 			new FeedPublishTask().execute();
 		}
 

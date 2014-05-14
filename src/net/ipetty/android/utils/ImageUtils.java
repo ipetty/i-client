@@ -90,8 +90,8 @@ public class ImageUtils {
 	public static int getCompressLevel(Bitmap image) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		int options = 80;
-		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-		while (baos.toByteArray().length / 1024 > Constant.COMPRESS_IMAGE_KB) { // 压缩后图片过大，继续压缩
+		image.compress(Bitmap.CompressFormat.JPEG, options, baos);
+		while (baos.toByteArray().length / 1024 > Constant.COMPRESS_IMAGE_KB && options > 20) { // 压缩后图片过大，继续压缩
 			baos.reset();// 即清空baos
 			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
 			options -= 10;// 每次都减少10
@@ -114,11 +114,21 @@ public class ImageUtils {
 		int h = bm.getHeight();
 		float ww = Constant.COMPRESS_IMAGE_MAX_WIDTH;
 		float hh = Constant.COMPRESS_IMAGE_MAX_HEIGHT;
-		if (w < ww && h < hh) {
+		int reqWidth = w;
+		if (h > w && w < ww) {
 			return bm;
 		}
-		int reqWidth = (int) ww;
-		int reqHeight = (int) (ww * h) / w;
+		if (w > h && w < hh) {
+			return bm;
+		}
+
+		if (h > w) {
+			reqWidth = (int) ww;
+		}
+		if (w > h) {
+			reqWidth = (int) hh;
+		}
+		int reqHeight = (int) (reqWidth * h) / w;
 		Bitmap bitmap = Bitmap.createScaledBitmap(bm, reqWidth, reqHeight, true);
 		return bitmap;
 	}
