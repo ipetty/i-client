@@ -7,8 +7,10 @@ import net.ipetty.android.common.Constant;
 import net.ipetty.android.utils.AppUtils;
 import net.ipetty.android.utils.ImageUtils;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -27,6 +29,7 @@ public class FeedPublishActivity extends Activity {
 	private DisplayImageOptions options;
 	private EditText edit;
 	private TextView btn_publish;
+	private Integer hasCompress = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +49,69 @@ public class FeedPublishActivity extends Activity {
 		btn_publish = (TextView) this.findViewById(R.id.btn_publish);
 		btn_publish.setOnClickListener(onClickPublish);
 
+		new CompressTask().execute();
 	}
 
 	private final OnClickListener onClickPublish = new OnClickListener() {
-
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			Editable text = edit.getText();
 			String str = text.toString();
 
-			// 压缩图片
-			ImageUtils.compressImage(path, outPath);
-			// TODO publish
-
+			new FeedPublishTask().execute();
 		}
 
 	};
+
+	public class CompressTask extends AsyncTask<Integer, Integer, Integer> {
+		@Override
+		protected Integer doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+			// 压缩图片
+			int result = ImageUtils.compressImage(path, outPath);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			hasCompress = result;
+		}
+
+	}
+
+	// AsyncTask
+	public class FeedPublishTask extends AsyncTask<Integer, Integer, Integer> {
+		private ProgressDialog progress;
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			String str = getResources().getString(R.string.publish_loading);
+			this.progress = ProgressDialog.show(FeedPublishActivity.this, null, str);
+		}
+
+		@Override
+		protected Integer doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+			while (hasCompress == null) {
+				try {
+					// 等待图片压缩线程完成
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			this.progress.dismiss();
+			return hasCompress;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+
+		}
+	}
 }
