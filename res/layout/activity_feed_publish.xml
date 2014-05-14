@@ -1,9 +1,13 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".FeedPublishActivity" >
 
+  <include
+        android:id="@+id/include"
+        layout="@layout/action_bar_simple_back" />
   <EditText
             android:id="@+id/editText"
             android:layout_width="match_parent"
@@ -19,24 +23,20 @@
             <requestFocus />
         </EditText>
 
+      <ImageView
+          android:id="@+id/image"
+          android:layout_width="72dp"
+          android:layout_height="72dp"
+          android:scaleType="centerCrop"
+          android:src="@drawable/ic_empty" />
+
       <TextView
           android:id="@+id/btn_publish"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:layout_alignParentLeft="true"
-          android:layout_below="@+id/image"
           android:layout_marginTop="40dp"
           android:gravity="center"
           android:text="@string/btn_publish_text"
           android:textSize="18sp" />
 
-      <ImageView
-          android:id="@+id/image"
-          android:layout_width="72dp"
-          android:layout_height="72dp"
-          android:layout_alignParentLeft="true"
-          android:layout_below="@+id/editText"
-          android:scaleType="centerCrop"
-          android:src="@drawable/ic_empty" />
-
-</RelativeLayout>
+</LinearLayout>

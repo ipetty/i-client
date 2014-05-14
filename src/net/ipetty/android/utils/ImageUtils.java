@@ -114,7 +114,6 @@ public class ImageUtils {
 		int h = bm.getHeight();
 		float ww = Constant.COMPRESS_IMAGE_MAX_WIDTH;
 		float hh = Constant.COMPRESS_IMAGE_MAX_HEIGHT;
-		int reqWidth = w;
 		if (h > w && w < ww) {
 			return bm;
 		}
@@ -122,12 +121,7 @@ public class ImageUtils {
 			return bm;
 		}
 
-		if (h > w) {
-			reqWidth = (int) ww;
-		}
-		if (w > h) {
-			reqWidth = (int) hh;
-		}
+		int reqWidth = (int) ww;
 		int reqHeight = (int) (reqWidth * h) / w;
 		Bitmap bitmap = Bitmap.createScaledBitmap(bm, reqWidth, reqHeight, true);
 		return bitmap;

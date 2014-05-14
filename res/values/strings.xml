@@ -27,8 +27,9 @@
 
     <!-- comment -->
     <string name="title_activity_comment">评论</string>
-    <string name="title_activity_feed_publish">FeedPublishActivity</string>
+   
      <!-- publish -->
+     <string name="title_activity_feed_publish">发布</string>
     <string name="btn_publish_text">发布</string>
     <string name="publish_loading">正在发布...</string>
 

@@ -4,6 +4,7 @@ import java.io.File;
 
 import net.ipetty.R;
 import net.ipetty.android.common.Constant;
+import net.ipetty.android.ui.event.BackClickListener;
 import net.ipetty.android.utils.AppUtils;
 import net.ipetty.android.utils.ImageUtils;
 import android.app.Activity;
@@ -35,6 +36,13 @@ public class FeedPublishActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_feed_publish);
+
+		/* action bar */
+		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
+		text.setText(this.getResources().getString(R.string.title_activity_feed_publish));
+		btnBack.setOnClickListener(new BackClickListener(this));
+
 		options = AppUtils.getNormalImageOptions();
 
 		// photoPath
