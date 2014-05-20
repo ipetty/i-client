@@ -7,19 +7,25 @@ import net.ipetty.R;
 import net.ipetty.android.domain.CommentVO;
 import net.ipetty.android.domain.UserVO;
 import net.ipetty.android.ui.adapter.CommentAdapter;
+import net.ipetty.android.ui.event.BackClickListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class CommentActivity extends BaseActivity {
 	public final static String TAG = "CommentActivity";
 	private CommentAdapter adapter; // 定义适配器
-	private ListView listView;
+	private PullToRefreshListView listView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,34 +33,48 @@ public class CommentActivity extends BaseActivity {
 		setContentView(R.layout.activity_comment);
 		Log.i(TAG, "onCreate");
 
-		listView = (ListView) this.findViewById(R.id.listView);
-		// 初始化适配器
-		adapter = new CommentAdapter(this);
+		/* action bar */
+		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
+		text.setText(this.getResources().getString(R.string.title_activity_comment));
+		btnBack.setOnClickListener(new BackClickListener(this));
 
-		listView.setAdapter(adapter);
-
-		// TODO:还不确定在哪个个生命周期执行第一次数据加载 特别是内嵌多个fragment的时候
-		// 加载数据 - 这里省略了异步加载数据
-		loadData(this.getList(0));
-
-		// 加载更多按钮
-		Button btn = (Button) this.findViewById(R.id.button);
-		btn.setOnClickListener(new OnClickListener() {
+		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
+		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
-				if (adapter.getCount() > 20) {
-					Toast.makeText(CommentActivity.this, "已经加载过了", Toast.LENGTH_SHORT).show();
-					return;
-				}
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+
+				// Do work to refresh the list here.
+				new CommentTask().execute();
+			}
+		});
+
+		listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+			@Override
+			public void onLastItemVisible() {
+				// TODO Auto-generated method stub
 				loadMoreData(getList(20));
 			}
 		});
+
+		// 初始化适配器
+		adapter = new CommentAdapter(this);
+		listView.setAdapter(adapter);
+		loadData();
+
 	}
 
 	// TODO:这部分方法没考虑好 是放在adapter中 还是 Activity中
 	// 加载数据
+	public void loadData() {
+		adapter.setList(this.getList(0));
+		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
+	}
+
 	public void loadData(List<CommentVO> list) {
 		adapter.setList(this.getList(0));
 		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
@@ -82,6 +102,22 @@ public class CommentActivity extends BaseActivity {
 			list.add(vo);
 		}
 		return list;
+	}
+
+	private class CommentTask extends AsyncTask<Void, Void, String[]> {
+
+		@Override
+		protected String[] doInBackground(Void... params) {
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String[] result) {
+			loadData(getList(0));
+			listView.onRefreshComplete();
+			super.onPostExecute(result);
+		}
 	}
 
 	@Override

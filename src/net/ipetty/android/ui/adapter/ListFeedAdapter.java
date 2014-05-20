@@ -3,21 +3,29 @@ package net.ipetty.android.ui.adapter;
 import java.util.List;
 
 import net.ipetty.R;
+import net.ipetty.android.sdk.domain.IpetPhoto;
+import net.ipetty.android.ui.CommentActivity;
+import net.ipetty.android.ui.MainActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
 	public final static String TAG = "ListFeedAdapter";
 	private LayoutInflater inflater;
+	private Context context;
 	private List list = null; // 这个就本地dataStore
 
 	public ListFeedAdapter(Context context) {
 		// TODO Auto-generated constructor stub
+		this.context = context;
 		this.inflater = LayoutInflater.from(context);
 
 	}
@@ -41,7 +49,8 @@ public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
 
 	// 构建一个布局缓存的结构体 与VO对应
 	public class ViewHolder {
-
+		public ImageView btn_liked;
+		public ImageView btn_comment;
 	}
 
 	public ViewHolder holder;
@@ -55,15 +64,60 @@ public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
 			view = inflater.inflate(R.layout.list_feed_item, null);
 			holder = new ViewHolder();
 
+			holder.btn_liked = (ImageView) view.findViewById(R.id.feed_button_like);
+			holder.btn_comment = (ImageView) view.findViewById(R.id.feed_button_comment);
+
 			convertView = view;
 			convertView.setTag(holder);
 		} else {
 			view = convertView;
 			holder = (ViewHolder) view.getTag();
 		}
+		IpetPhoto feed = new IpetPhoto();
+
+		initLikedBtnView(holder, feed, position);
+		initCommentView(holder, feed, position);
 		// 数据与界面绑定
 
 		return view;
+	}
+
+	private void initCommentView(ViewHolder holder, final IpetPhoto feed, int position) {
+		if (feed.isFavored()) {
+			holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_active);
+		} else {
+			holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_background);
+		}
+		holder.btn_liked.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+
+	private void initLikedBtnView(ViewHolder holder, final IpetPhoto feed, final int position) {
+		OnCommentClick myCommentClick = new OnCommentClick(feed);
+		holder.btn_comment.setOnClickListener(myCommentClick);
+	}
+
+	public class OnCommentClick implements OnClickListener {
+		private IpetPhoto feed;
+
+		public OnCommentClick(IpetPhoto feed) {
+			this.feed = feed;
+		}
+
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			Intent intent = new Intent((MainActivity) context, CommentActivity.class);
+			// Bundle mBundle = new Bundle();
+			// mBundle.putSerializable(Constant.IPET_PHOTO_SERIALIZABLE,
+			// (Serializable) feed);
+			// intent.putExtras(mBundle);
+			((MainActivity) context).startActivity(intent);
+		}
 	}
 
 	@Override

@@ -62,6 +62,10 @@
             android:name="net.ipetty.android.ui.FeedPublishActivity"
             android:label="@string/title_activity_feed_publish" >
         </activity>
+        <activity
+            android:name="net.ipetty.LargerImageActivity"
+            android:label="@string/title_activity_larger_image" >
+        </activity>
     </application>
 
 </manifest>

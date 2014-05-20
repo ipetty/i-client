@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<RelativeLayout android:id="@+id/row_feed_photo_view_group_buttons" 
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:layout_marginBottom="15.0dip">
+        <ImageView  android:id="@+id/feed_button_like" 
+            android:background="@drawable/feed_button_like_background" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_margin="0.0px" 
+            android:layout_alignParentLeft="true" />
+
+        <ImageView
+            android:id="@+id/feed_button_comment"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/feed_button_like"
+            android:background="@drawable/feed_button_comment_background" />
+
+    </RelativeLayout>
+   
+	 <LinearLayout
+        android:id="@+id/feed_photo_comments_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+</merge>
