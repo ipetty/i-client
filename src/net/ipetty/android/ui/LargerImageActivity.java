@@ -1,5 +1,7 @@
-package net.ipetty;
+package net.ipetty.android.ui;
 
+import net.ipetty.R;
+import net.ipetty.R.layout;
 import android.app.Activity;
 import android.os.Bundle;
 

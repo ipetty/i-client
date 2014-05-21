@@ -5,6 +5,7 @@ import java.util.List;
 import net.ipetty.R;
 import net.ipetty.android.sdk.domain.IpetPhoto;
 import net.ipetty.android.ui.CommentActivity;
+import net.ipetty.android.ui.LikeActivity;
 import net.ipetty.android.ui.MainActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,13 +18,13 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
+public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 	public final static String TAG = "ListFeedAdapter";
 	private LayoutInflater inflater;
 	private Context context;
 	private List list = null; // 这个就本地dataStore
 
-	public ListFeedAdapter(Context context) {
+	public FeedAdapter(Context context) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		this.inflater = LayoutInflater.from(context);
@@ -50,6 +51,7 @@ public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
 	// 构建一个布局缓存的结构体 与VO对应
 	public class ViewHolder {
 		public ImageView btn_liked;
+		public View liked_detail;
 		public ImageView btn_comment;
 	}
 
@@ -66,6 +68,7 @@ public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
 
 			holder.btn_liked = (ImageView) view.findViewById(R.id.feed_button_like);
 			holder.btn_comment = (ImageView) view.findViewById(R.id.feed_button_comment);
+			holder.liked_detail = view.findViewById(R.id.row_feed_photo_textview_likes);
 
 			convertView = view;
 			convertView.setTag(holder);
@@ -82,12 +85,23 @@ public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
 		return view;
 	}
 
-	private void initCommentView(ViewHolder holder, final IpetPhoto feed, int position) {
+	private void initLikedBtnView(ViewHolder holder, final IpetPhoto feed, int position) {
 		if (feed.isFavored()) {
 			holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_active);
 		} else {
 			holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_background);
 		}
+
+		holder.liked_detail.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent((MainActivity) context, LikeActivity.class);
+				((MainActivity) context).startActivity(intent);
+			}
+		});
+
 		holder.btn_liked.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -97,7 +111,7 @@ public class ListFeedAdapter extends BaseAdapter implements OnScrollListener {
 		});
 	}
 
-	private void initLikedBtnView(ViewHolder holder, final IpetPhoto feed, final int position) {
+	private void initCommentView(ViewHolder holder, final IpetPhoto feed, final int position) {
 		OnCommentClick myCommentClick = new OnCommentClick(feed);
 		holder.btn_comment.setOnClickListener(myCommentClick);
 	}

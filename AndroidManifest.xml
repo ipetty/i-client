@@ -63,8 +63,12 @@
             android:label="@string/title_activity_feed_publish" >
         </activity>
         <activity
-            android:name="net.ipetty.LargerImageActivity"
+            android:name="net.ipetty.android.ui.LargerImageActivity"
             android:label="@string/title_activity_larger_image" >
+        </activity>
+        <activity
+            android:name="net.ipetty.android.ui.LikeActivity"
+            android:label="@string/title_activity_like" >
         </activity>
     </application>
 

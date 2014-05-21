@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import net.ipetty.R;
 import net.ipetty.android.common.Constant;
-import net.ipetty.android.ui.adapter.ListFeedAdapter;
+import net.ipetty.android.ui.adapter.FeedAdapter;
 import net.ipetty.android.utils.DeviceUtils;
 import net.ipetty.android.utils.DialogUtils;
 import net.ipetty.android.utils.ImageUtils;
@@ -40,7 +40,7 @@ public class MainHomeFragment extends Fragment {
 	private Activity activity;
 	private LinkedList<String> mListItems;
 	private PullToRefreshListView mPullRefreshListView;
-	private ListFeedAdapter mAdapter;
+	private FeedAdapter mAdapter;
 	private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats" };
 	private Dialog cameraDialog;
 	private String mImageName;
@@ -172,7 +172,7 @@ public class MainHomeFragment extends Fragment {
 
 		initHeaderView(actualListView);
 
-		mAdapter = new ListFeedAdapter(this.activity);
+		mAdapter = new FeedAdapter(this.activity);
 		actualListView.setAdapter(mAdapter);
 	}
 
