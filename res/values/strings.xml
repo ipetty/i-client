@@ -35,6 +35,16 @@
     <string name="btn_publish_text">发布</string>
     <string name="publish_loading">正在发布...</string>
     <string name="title_activity_larger_image">LargerImageActivity</string>
+
+    <!-- menu -->
+    <string name="title_activity_main_pop_dialog">菜单</string>
+    <string name="nav_menu_space">我的空间</string>
+    <string name="nav_menu_feedback">意见反馈</string>
     
+    <!-- FeedbackActivity -->
+    <string name="title_activity_feedback">意见反馈</string>
+    <string name="feedback_no_empty">反馈内容不能为空</string>
+    
+   
 
 </resources>

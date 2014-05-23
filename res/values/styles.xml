@@ -55,6 +55,16 @@
         <item name="android:windowFullscreen">true</item>
     </style>
     
+    <style name="MenuPopDialog"  parent="PopDialog" >
+        <item name="android:windowBackground">@drawable/trans</item>
+        <item name="android:windowAnimationStyle">@style/nav_menu_animation</item>
+    </style>
+    
+    <style name="nav_menu_animation">
+        <item name="android:windowEnterAnimation">@anim/grow_animation</item>
+        <item name="android:windowExitAnimation">@anim/shrink_animation</item>
+    </style>
+    
     <style name="SelectPopDialog" parent="PopDialog" >
     </style>
     
@@ -72,6 +82,8 @@
         <item name="android:windowEnterAnimation">@anim/push_up_in</item>
         <item name="android:windowExitAnimation">@anim/push_down_out</item>
     </style>
+    
+
 
 
 </resources>

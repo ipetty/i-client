@@ -70,6 +70,15 @@
             android:name="net.ipetty.android.ui.LikeActivity"
             android:label="@string/title_activity_like" >
         </activity>
+        <activity
+            android:name="net.ipetty.android.ui.MainPopDialog"
+            android:label="@string/title_activity_main_pop_dialog"
+            android:theme="@style/MenuPopDialog" >
+        </activity>
+        <activity
+            android:name="net.ipetty.android.ui.FeedbackActivity"
+            android:label="@string/title_activity_feedback" >
+        </activity>
     </application>
 
 </manifest>

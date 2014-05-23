@@ -2,6 +2,7 @@ package net.ipetty.android.ui;
 
 import net.ipetty.R;
 import net.ipetty.android.utils.AnimUtils;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,6 +35,10 @@ public class MainActivity extends BaseFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Log.i(TAG, "onCreate");
+
+		// action_bar
+		ImageView rightBtn = (ImageView) findViewById(R.id.action_bar_right_image);
+		rightBtn.setOnClickListener(popMenuOnClick);
 
 		// sub_action_bar_now
 		DisplayMetrics dm = AnimUtils.getDefaultDisplayMetrics(this);
@@ -168,6 +173,14 @@ public class MainActivity extends BaseFragmentActivity {
 			mTabImg.startAnimation(animation);
 		}
 
+	};
+
+	public OnClickListener popMenuOnClick = new OnClickListener() {
+		@Override
+		public void onClick(View arg0) {
+			Intent intent = new Intent(MainActivity.this, MainPopDialog.class);
+			startActivity(intent);
+		}
 	};
 
 	@Override
