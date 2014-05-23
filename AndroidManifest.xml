@@ -79,6 +79,22 @@
             android:name="net.ipetty.android.ui.FeedbackActivity"
             android:label="@string/title_activity_feedback" >
         </activity>
+        <activity
+            android:name="net.ipetty.android.ui.SpaceActivity"
+            android:label="@string/title_activity_space" >
+        </activity>
+        <activity
+            android:name="net.ipetty.android.ui.FansActivity"
+            android:label="@string/title_activity_fans" >
+        </activity>
+        <activity
+            android:name="net.ipetty.android.ui.FollowsActivity"
+            android:label="@string/title_activity_follows" >
+        </activity>
+        <activity
+            android:name="net.ipetty.android.ui.BonusPointActivity"
+            android:label="@string/title_activity_bonus_point" >
+        </activity>
     </application>
 
 </manifest>

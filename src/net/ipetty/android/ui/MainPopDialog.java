@@ -50,10 +50,9 @@ public class MainPopDialog extends BaseActivity {
 			// TODO Auto-generated method stub
 			// Toast.makeText(MainPopDialog.this, "尚未实现",
 			// Toast.LENGTH_SHORT).show();
-			// Intent intent = new Intent(MainPopDialog.this,
-			// SetUserInfoActivity.class);
-			// startActivity(intent);
-			// finish();
+			Intent intent = new Intent(MainPopDialog.this, SpaceActivity.class);
+			startActivity(intent);
+			finish();
 		}
 
 	};

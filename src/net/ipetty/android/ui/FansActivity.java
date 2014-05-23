@@ -6,12 +6,11 @@ import java.util.List;
 import net.ipetty.R;
 import net.ipetty.android.domain.CommentVO;
 import net.ipetty.android.domain.UserVO;
-import net.ipetty.android.ui.adapter.LikeAdapter;
+import net.ipetty.android.ui.adapter.FansAdapter;
 import net.ipetty.android.ui.event.BackClickListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,21 +21,20 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleLis
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-public class LikeActivity extends BaseActivity {
-	public final static String TAG = "LikeActivity";
-	private LikeAdapter adapter; // 定义适配器
+public class FansActivity extends BaseActivity {
+	public final static String TAG = "FansActivity";
+	private FansAdapter adapter; // 定义适配器
 	private PullToRefreshListView listView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_like);
-		Log.i(TAG, "onCreate");
+		setContentView(R.layout.activity_fans);
 
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
-		text.setText(this.getResources().getString(R.string.title_activity_like));
+		text.setText(this.getResources().getString(R.string.title_activity_fans));
 		btnBack.setOnClickListener(new BackClickListener(this));
 
 		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
@@ -49,7 +47,7 @@ public class LikeActivity extends BaseActivity {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				// Do work to refresh the list here.
-				new LikeTask().execute();
+				new FansTask().execute();
 			}
 		});
 
@@ -62,7 +60,7 @@ public class LikeActivity extends BaseActivity {
 		});
 
 		// 初始化适配器
-		adapter = new LikeAdapter(this);
+		adapter = new FansAdapter(this);
 		listView.setAdapter(adapter);
 		loadData();
 
@@ -104,7 +102,7 @@ public class LikeActivity extends BaseActivity {
 		return list;
 	}
 
-	private class LikeTask extends AsyncTask<Void, Void, String[]> {
+	private class FansTask extends AsyncTask<Void, Void, String[]> {
 
 		@Override
 		protected String[] doInBackground(Void... params) {
@@ -121,51 +119,10 @@ public class LikeActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		Log.i(TAG, "onStart");
-	}
-
-	@Override
-	protected void onRestart() {
-		// TODO Auto-generated method stub
-		super.onRestart();
-		Log.i(TAG, "onRestart");
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		Log.i(TAG, "onResume");
-	}
-
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		Log.i(TAG, "onPause");
-	}
-
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		Log.i(TAG, "onStop");
-	}
-
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Log.i(TAG, "onDestroy");
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.comment, menu);
+		getMenuInflater().inflate(R.menu.fans, menu);
 		return true;
 	}
+
 }
