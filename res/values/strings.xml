@@ -57,7 +57,9 @@
 
     <!-- follow -->
     <string name="title_activity_follows">关注</string>
-     <!-- bonus_point -->
+    <!-- bonus_point -->
     <string name="title_activity_bonus_point">积分</string>
+    <string name="title_activity_petty">PettyActivity</string>
+    <string name="title_activity_user">UserActivity</string>
 
 </resources>

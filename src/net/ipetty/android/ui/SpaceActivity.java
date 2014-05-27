@@ -86,7 +86,6 @@ public class SpaceActivity extends Activity {
 			// TODO Auto-generated method stub
 			viewFlipper.setDisplayedChild(index);
 		}
-
 	}
 
 	@Override

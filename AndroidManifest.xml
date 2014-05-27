@@ -95,6 +95,14 @@
             android:name="net.ipetty.android.ui.BonusPointActivity"
             android:label="@string/title_activity_bonus_point" >
         </activity>
+        <activity
+            android:name="net.ipetty.android.ui.PettyActivity"
+            android:label="@string/title_activity_petty" >
+        </activity>
+        <activity
+            android:name="net.ipetty.android.ui.UserActivity"
+            android:label="@string/title_activity_user" >
+        </activity>
     </application>
 
 </manifest>
