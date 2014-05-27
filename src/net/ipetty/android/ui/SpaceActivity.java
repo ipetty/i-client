@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 public class SpaceActivity extends Activity {
+	public final static String TAG = "SpaceActivity";
+	private ViewFlipper viewFlipper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,32 @@ public class SpaceActivity extends Activity {
 				// finish();
 			}
 		});
+
+		//
+		viewFlipper = (ViewFlipper) this.findViewById(R.id.viewFlipper);
+		viewFlipper.setDisplayedChild(0);
+
+		View space_petty_layout = this.findViewById(R.id.space_petty_btn);
+		View space_photo_layout = this.findViewById(R.id.space_photo_btn);
+		View space_feed_layout = this.findViewById(R.id.space_feed_btn);
+		space_petty_layout.setOnClickListener(new TabClickListener(0));
+		space_photo_layout.setOnClickListener(new TabClickListener(1));
+		space_feed_layout.setOnClickListener(new TabClickListener(2));
+	}
+
+	public class TabClickListener implements OnClickListener {
+		private int index = 0;
+
+		public TabClickListener(int i) {
+			index = i;
+		}
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			viewFlipper.setDisplayedChild(index);
+		}
+
 	}
 
 	@Override

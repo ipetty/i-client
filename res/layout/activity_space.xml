@@ -122,31 +122,44 @@
               android:layout_height="wrap_content" >
 
               <ImageView
-                  android:id="@+id/imageView1"
+                  android:id="@+id/space_petty_btn"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
                   android:src="@drawable/action_bar_menu" />
 
               <ImageView
-                  android:id="@+id/imageView2"
+                  android:id="@+id/space_photo_btn"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                    android:layout_weight="1"
                   android:src="@drawable/action_bar_menu" />
 
               <ImageView
-                  android:id="@+id/imageView3"
+                  android:id="@+id/space_feed_btn"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                    android:layout_weight="1"
                   android:src="@drawable/action_bar_menu" />
 
           </LinearLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/tabpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </android.support.v4.view.ViewPager>
+          
+        <ViewFlipper
+            android:id="@+id/viewFlipper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+           
+            <include 
+             android:id="@+id/space_petty_layout" 
+             layout="@layout/space_petty" /> 
+             
+            <include 
+             android:id="@+id/space_photo_layout" 
+             layout="@layout/space_photo" /> 
+             
+             <include 
+             android:id="@+id/space_feed_layout" 
+             layout="@layout/space_feed" /> 
+        </ViewFlipper>
   
 </LinearLayout>
