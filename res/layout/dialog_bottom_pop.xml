@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:cacheColorHint="#00000000"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:cacheColorHint="#00000000"
+    android:gravity="center"
+    android:orientation="vertical" >
+
     <TextView android:textSize="17dp" android:textColor="@android:color/white" android:gravity="center" android:id="@+id/title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="15.0dip" android:layout_marginTop="10.0dip" android:layout_marginRight="15.0dip" android:text="title" android:shadowColor="@android:color/black" android:shadowDx="1.2" android:shadowDy="1.2" android:shadowRadius="1.0" />
     <TextView android:textSize="18dp" android:textColor="@android:color/black" android:gravity="center" android:id="@+id/item1" android:background="@drawable/dialog_bottom_pop_button" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="15.0dip" android:layout_marginTop="10.0dip" android:layout_marginRight="15.0dip" android:text="item1" android:shadowColor="@android:color/white" android:shadowDx="1.2" android:shadowDy="1.2" android:shadowRadius="1.0" android:layout_below="@+id/title" />
     <TextView android:textSize="18dp" android:textColor="@android:color/black" android:gravity="center" android:id="@+id/item2" android:background="@drawable/dialog_bottom_pop_button" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="15.0dip" android:layout_marginTop="15.0dip" android:layout_marginRight="15.0dip" android:text="item2" android:shadowColor="@android:color/white" android:shadowDx="1.2" android:shadowDy="1.2" android:shadowRadius="1.0" android:layout_below="@+id/item1" />

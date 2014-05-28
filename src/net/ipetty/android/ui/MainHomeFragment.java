@@ -1,12 +1,15 @@
 package net.ipetty.android.ui;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import net.ipetty.R;
 import net.ipetty.android.common.Constant;
 import net.ipetty.android.ui.adapter.FeedAdapter;
+import net.ipetty.android.ui.model.ModDialogItem;
 import net.ipetty.android.utils.DeviceUtils;
 import net.ipetty.android.utils.DialogUtils;
 import net.ipetty.android.utils.ImageUtils;
@@ -45,6 +48,9 @@ public class MainHomeFragment extends Fragment {
 	private Dialog cameraDialog;
 	private String mImageName;
 	private ImageView avator;
+
+	private Dialog headBgDialog;
+	private List<ModDialogItem> head_bg_items;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -177,10 +183,40 @@ public class MainHomeFragment extends Fragment {
 	}
 
 	private void initHeaderView(ListView listView) {
+		head_bg_items = new ArrayList<ModDialogItem>();
+		head_bg_items.add(new ModDialogItem(null, "更换相册封面", headBgOnClick));
+
 		View v = activity.getLayoutInflater().inflate(R.layout.list_feed_header, listView, false);
 		avator = (ImageView) v.findViewById(R.id.avator);
+		avator.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(activity, SpaceActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		View header_bg = v.findViewById(R.id.header_bg);
+		header_bg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				headBgDialog = DialogUtils.modPopupDialog(activity, head_bg_items, headBgDialog);
+			}
+		});
+
 		listView.addHeaderView(v);
+
 	}
+
+	private OnClickListener headBgOnClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Toast.makeText(activity, "暂未实现", Toast.LENGTH_SHORT).show();
+			headBgDialog.cancel();
+		}
+	};
 
 	private class MainHomeTask extends AsyncTask<Void, Void, String[]> {
 

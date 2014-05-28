@@ -19,7 +19,7 @@
 		        android:fadingEdge="none"
 		        android:fastScrollEnabled="false"
 		        android:footerDividersEnabled="false"
-		        ptr:ptrHeaderBackground="#FF0000"
+		        android:background="@color/background"
 		        android:headerDividersEnabled="false"/>
 
 </LinearLayout>
