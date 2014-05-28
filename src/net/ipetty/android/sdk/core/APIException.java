@@ -1,4 +1,4 @@
-package net.ipetty.android.sdk.base;
+package net.ipetty.android.sdk.core;
 
 /**
  * Service层公用的Exception.
