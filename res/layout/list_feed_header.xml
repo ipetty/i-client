@@ -24,6 +24,6 @@
         android:background="@android:color/white"
         android:padding="2dp"
         android:scaleType="fitXY"
-        android:src="@drawable/splash" />
+        android:src="@drawable/avator" />
 
 </RelativeLayout>

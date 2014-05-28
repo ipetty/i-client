@@ -19,6 +19,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 public class MainActivity extends BaseFragmentActivity {
 	public final static String TAG = "MainActivity";
@@ -29,6 +30,13 @@ public class MainActivity extends BaseFragmentActivity {
 	private int one;
 	private int two;
 	private final Class[] fragments = { MainHomeFragment.class, MainDiscoverFragment.class, MainNewsFragment.class };
+
+	private TextView main_text;
+	private TextView discover_text;
+	private TextView news_text;
+
+	private int gray;
+	private int red;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +68,18 @@ public class MainActivity extends BaseFragmentActivity {
 		View main = findViewById(R.id.main);
 		View discover = findViewById(R.id.discover);
 		View news = findViewById(R.id.news);
+
+		main_text = (TextView) main.findViewById(R.id.textView);
+		discover_text = (TextView) discover.findViewById(R.id.textView);
+		news_text = (TextView) news.findViewById(R.id.textView);
+
 		main.setOnClickListener(new TabClickListener(0));
 		discover.setOnClickListener(new TabClickListener(1));
 		news.setOnClickListener(new TabClickListener(2));
+
+		gray = getResources().getColor(R.color.title_gray);
+		red = getResources().getColor(R.color.title_red);
+
 	}
 
 	public class TabClickListener implements OnClickListener {
@@ -138,6 +155,11 @@ public class MainActivity extends BaseFragmentActivity {
 		public void onPageSelected(int arg0) {
 			// TODO Auto-generated method stub
 			Animation animation = null;
+
+			main_text.setTextColor(gray);
+			discover_text.setTextColor(gray);
+			news_text.setTextColor(gray);
+
 			switch (arg0) {
 			case 0: {
 				if (currIndex == 1) {
@@ -145,7 +167,9 @@ public class MainActivity extends BaseFragmentActivity {
 				} else if (currIndex == 2) {
 					animation = new TranslateAnimation(two, zero, 0, 0);
 				}
+				main_text.setTextColor(red);
 				break;
+
 			}
 			case 1: {
 				if (currIndex == 0) {
@@ -153,7 +177,7 @@ public class MainActivity extends BaseFragmentActivity {
 				} else if (currIndex == 2) {
 					animation = new TranslateAnimation(two, one, 0, 0);
 				}
-
+				discover_text.setTextColor(red);
 				break;
 			}
 			case 2: {
@@ -162,7 +186,7 @@ public class MainActivity extends BaseFragmentActivity {
 				} else if (currIndex == 1) {
 					animation = new TranslateAnimation(one, two, 0, 0);
 				}
-
+				news_text.setTextColor(red);
 				break;
 			}
 
