@@ -10,6 +10,7 @@ import net.ipetty.R;
 import net.ipetty.android.common.Constant;
 import net.ipetty.android.ui.adapter.FeedAdapter;
 import net.ipetty.android.ui.model.ModDialogItem;
+import net.ipetty.android.utils.AppUtils;
 import net.ipetty.android.utils.DeviceUtils;
 import net.ipetty.android.utils.DialogUtils;
 import net.ipetty.android.utils.ImageUtils;
@@ -36,6 +37,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 public class MainHomeFragment extends Fragment {
 	public final static String TAG = "MainHomeFragment";
@@ -51,6 +53,8 @@ public class MainHomeFragment extends Fragment {
 
 	private Dialog headBgDialog;
 	private List<ModDialogItem> head_bg_items;
+
+	DisplayImageOptions options;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +73,8 @@ public class MainHomeFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.i(TAG, "onActivityCreated");
+
+		options = AppUtils.getNormalImageOptions();
 		initListView();
 		initCamera();
 
@@ -197,7 +203,12 @@ public class MainHomeFragment extends Fragment {
 			}
 		});
 
-		View header_bg = v.findViewById(R.id.header_bg);
+		// TODO:根据个人信息修改头像
+		// ImageLoader.getInstance().displayImage(url, avator, options);
+
+		ImageView header_bg = (ImageView) v.findViewById(R.id.header_bg);
+		
+
 		header_bg.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -206,6 +217,8 @@ public class MainHomeFragment extends Fragment {
 			}
 		});
 
+		// TODO:根据个人信息修改背景
+		// ImageLoader.getInstance().displayImage(url, header_bg, options);
 		listView.addHeaderView(v);
 
 	}
@@ -213,6 +226,7 @@ public class MainHomeFragment extends Fragment {
 	private OnClickListener headBgOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
+			// TODO:切换到背景图修改界面
 			Toast.makeText(activity, "暂未实现", Toast.LENGTH_SHORT).show();
 			headBgDialog.cancel();
 		}

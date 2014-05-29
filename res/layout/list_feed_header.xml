@@ -9,7 +9,7 @@
         android:layout_height="@dimen/main_header_bg_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@drawable/default_main_header_bg"/>
 
     <ImageView

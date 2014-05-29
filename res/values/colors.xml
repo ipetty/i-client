@@ -7,4 +7,6 @@
     <color name="background">#FAFAFA</color>
     <color name="title_gray">#666666</color>
     <color name="title_red">#C73C1C</color>
+    <color name="link_text">#334D83</color>
+    <color name="timestamp_text">#8A8A8A</color>
 </resources>
