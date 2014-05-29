@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.ipetty.android.sdk.util;
+package net.ipetty.android.utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -19,9 +19,7 @@ import org.codehaus.jackson.type.TypeReference;
  *
  * @author Administrator
  */
-public class JSONUtil {
-
-    private final String TAG = "JSONUtil";
+public class JSONUtils {
 
     public static String toJson(Object o) {
         ObjectMapper mapper = new ObjectMapper();

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.ipetty.android.sdk.util;
+package net.ipetty.android.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;

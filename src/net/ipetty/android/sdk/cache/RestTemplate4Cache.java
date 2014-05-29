@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.net.URI;
 
 import net.ipetty.android.sdk.core.APIException;
-import net.ipetty.android.sdk.util.JSONUtil;
-import net.ipetty.android.sdk.util.NetWorkUtils;
+import net.ipetty.android.utils.JSONUtils;
+import net.ipetty.android.utils.NetWorkUtils;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -60,7 +60,7 @@ public class RestTemplate4Cache extends RestTemplate {
 
             if (null != e) {
                 Log.i(TAG, "doExecute:" + "找到离线缓存:" + e.getValue());
-                T t = JSONUtil.fromJSON(e.getValue(), e.getClassType());
+                T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
                 return t;
             } else {
                 Log.i(TAG, "doExecute:" + "没找到离线缓存");
@@ -80,7 +80,7 @@ public class RestTemplate4Cache extends RestTemplate {
 
         if (null != e && System.currentTimeMillis() < e.getExpireOn()) {
             Log.i(TAG, "doExecute:" + "找到未过期缓存");
-            T t = JSONUtil.fromJSON(e.getValue(), e.getClassType());
+            T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
             Log.i(TAG, "doExecute:" + "未过期缓存JSON:" + e.getValue());
             Log.i(TAG, "doExecute:" + "转换后:" + t.getClass());
             return t;
@@ -154,7 +154,7 @@ public class RestTemplate4Cache extends RestTemplate {
             if (isNotModified) {
                 CacheEntry e = cache.get(uri.toString());
                 Log.i(TAG, "extractData-->304,从缓存取:" + e.getValue());
-                T t = JSONUtil.fromJSON(e.getValue(), e.getClassType());
+                T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
                 return t;
             }
 
@@ -177,7 +177,7 @@ public class RestTemplate4Cache extends RestTemplate {
                     expireOn = System.currentTimeMillis() + (Long.valueOf(s) * 1000);
                 }
 
-                String str = JSONUtil.toJson(result);
+                String str = JSONUtils.toJson(result);
                 String classType = result.getClass().getName();
                 Log.i(TAG, "extractData-->200,Result类型:" + classType);
                 Log.i(TAG, "extractData-->200,放入缓存:" + str);

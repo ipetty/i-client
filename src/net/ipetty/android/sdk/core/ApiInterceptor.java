@@ -3,6 +3,8 @@ package net.ipetty.android.sdk.core;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import net.ipetty.android.utils.DeviceUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ContentCodingType;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +27,8 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 	public static final String HEADER_NAME_USER_TOKEN = "user_token";
 	
 	public static final String HEADER_NAME_REFRESH_TOKEN = "refresh_token";
+	
+	public static final String HEADER_NAME_DEVICE_UUID = "device_uuid";
 	
     private final String TAG = "ApiInterceptor";
 
@@ -50,7 +54,7 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
     	requestHeaders.setAcceptEncoding(ContentCodingType.GZIP);
     	requestHeaders.set(HEADER_NAME_USER_TOKEN, userToken);
     	requestHeaders.set(HEADER_NAME_REFRESH_TOKEN, refreshToken);
-    	
+    	requestHeaders.set(HEADER_NAME_DEVICE_UUID, DeviceUtils.getDeviceUUID(context).toString());
     	
 //        request.getHeaders().set("Authorization",
 //                "Basic " + new String(new Base64().encode((Constant.APP_KEY + ":" + Constant.APP_SECRET).getBytes(charset)), charset));
