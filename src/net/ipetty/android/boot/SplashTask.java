@@ -4,8 +4,6 @@ import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.login.LoginHasAccountActivity;
 import net.ipetty.android.login.WelcomeRegisterOrLoginActivity;
 import net.ipetty.android.main.MainActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.vo.UserVO;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -23,8 +21,8 @@ public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
 	protected Integer doInBackground(Integer... params) {
 		// TODO Auto-generated method stub
 		try {
-			UserVO u = IpetApi.init(activity).getUserApi().login("luocanfeng@ipetty.net", "888888");
-			Log.i(TAG,"登录用户："+u.getEmail());
+			//UserVO u = IpetApi.init(activity).getUserApi().login("luocanfeng@ipetty.net", "888888");
+			//Log.i(TAG,"登录用户："+u.getEmail());
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
