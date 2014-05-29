@@ -1,76 +1,207 @@
 package net.ipetty.android.sdk.impl;
 
-import java.io.File;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
 
-import net.ipetty.android.sdk.UserApi;
-import net.ipetty.android.sdk.base.ApiBase;
-import net.ipetty.android.sdk.base.ApiContext;
-import net.ipetty.android.sdk.domain.IpetUser;
-import net.ipetty.android.sdk.domain.IpetUserUpdate;
+import net.ipetty.android.sdk.core.ApiBase;
+import net.ipetty.android.sdk.core.Constant;
+import net.ipetty.sdk.UserApi;
+import net.ipetty.vo.RegisterVO;
+import net.ipetty.vo.UserVO;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import android.content.Context;
 
 /**
+ * UserApiImpl
  * 
- * @author xiaojinghai
+ * @author luocanfeng
+ * @date 2014年5月6日
  */
 public class UserApiImpl extends ApiBase implements UserApi {
 
-	public UserApiImpl(ApiContext context) {
+	public UserApiImpl(Context context) {
 		super(context);
 	}
 
+	private static final String URI_LOGIN = "/login";
+
+	/**
+	 * 用户登陆验证
+	 */
 	@Override
-	public IpetUser getUser(String userId) {
-		IpetUser user = context.getRestTemplate().getForObject(ApiContext.API_SERVER_BASE + "user/{id}",
-				IpetUser.class, userId);
+	public UserVO login(String username, String password) {
+		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+		request.set("username", username);
+		request.set("password", password);
+		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN), request, UserVO.class);
+		setIsAuthorized(true);
+		setCurrUserId(user.getId());
 		return user;
 	}
-
+	
+	/**
+	 * 用户登出
+	 */
 	@Override
-	public List<IpetUser> getUsers(String ids) {
-		URI uri = buildUri("user/listByIds", "ids", ids);
-		IpetUser[] users = context.getRestTemplate().getForObject(uri, IpetUser[].class);
-		List<IpetUser> list = Arrays.asList(users);
-		return list;
+	public void logout() {
+        setIsAuthorized(false);
+        setCurrUserId(-1);
+    }
+
+	private static final String URI_REGISTER = "/register";
+
+	/**
+	 * 注册
+	 */
+	@Override
+	public UserVO register(RegisterVO register) {
+		return getRestTemplate().postForObject(buildUri(URI_REGISTER), register, UserVO.class);
 	}
 
+	private static final String URI_CHECK_EMAIL_AVAILABLE = "/user/checkEmailAvailable";
+
+	/**
+	 * 检查用户名是否可用，true表示可用，false表示不可用
+	 */
 	@Override
-	public IpetUser updateUserInfo(IpetUserUpdate update) {
-		requireAuthorization();
-		update.setId(context.getCurrUserId());
-		IpetUser ret = context.getRestTemplate().postForObject(ApiContext.API_SERVER_BASE + "user/updateInfo", update,
-				IpetUser.class);
-		return ret;
+	public boolean checkEmailAvailable(String email) {
+		return getRestTemplate().getForObject(buildUri(URI_CHECK_EMAIL_AVAILABLE, "email", email),
+				Boolean.class);
 	}
 
+	private static final String URI_GET_BY_ID = "/user/id/{id}";
+
+	/**
+	 * 根据ID获取用户帐号
+	 */
 	@Override
-	public IpetUser updateAvatar(FileSystemResource avatarFile) {
-		requireAuthorization();
-		String url = ApiContext.API_SERVER_BASE + "user/uploadAvatar";
-		LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
-		body.add("userId", context.getCurrUserId());
-		body.add("file", avatarFile);
-		IpetUser ret = context.getRestTemplate().postForObject(url, body, IpetUser.class);
-		return ret;
+	public UserVO getById(Integer id) {
+		return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_ID, UserVO.class, id);
 	}
 
+	private static final String URI_GET_BY_UID = "/user/uid/{uid}";
+
+	/**
+	 * 根据uid获取用户帐号
+	 */
 	@Override
-	public IpetUser updateAvatar(File avatarFile) {
-		FileSystemResource fsr = new FileSystemResource(avatarFile);
-		IpetUser ret = updateAvatar(fsr);
-		return ret;
+	public UserVO getByUid(int uid) {
+		return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UID, UserVO.class, uid);
 	}
 
+	private static final String URI_GET_BY_UNIQUE_NAME = "/user/{uniqueName}";
+
+	/**
+	 * 根据爱宠号获取用户帐号
+	 */
 	@Override
-	public IpetUser updateAvatar(String avatarFilePath) {
-		File f = new File(avatarFilePath);
-		IpetUser ret = updateAvatar(f);
-		return ret;
+	public UserVO getByUniqueName(String uniqueName) {
+		return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UNIQUE_NAME,
+				UserVO.class, uniqueName);
+	}
+
+	private static final String URI_UPDATE_UNIQUE_NAME = "/user/uniqueName";
+
+	/**
+	 * 设置爱宠号，只能设置一次，一经设置不能变更
+	 */
+	@Override
+	public boolean updateUniqueName(String uniqueName) {
+		super.requireAuthorization();
+
+		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+		request.set("uniqueName", uniqueName);
+		return getRestTemplate().postForObject(buildUri(URI_UPDATE_UNIQUE_NAME), request, Boolean.class);
+	}
+
+	private static final String URI_CHANGE_PASSWORD = "/changePassword";
+
+	/**
+	 * 修改密码
+	 */
+	@Override
+	public boolean changePassword(String oldPassword, String newPassword) {
+		super.requireAuthorization();
+
+		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+		request.set("oldPassword", oldPassword);
+		request.set("newPassword", newPassword);
+		return getRestTemplate().postForObject(buildUri(URI_CHANGE_PASSWORD), request, Boolean.class);
+	}
+
+	private static final String URI_FOLLOW = "/user/follow";
+
+	/**
+	 * 关注
+	 */
+	@Override
+	public boolean follow(Integer friendId) {
+		super.requireAuthorization();
+
+		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+		request.set("friendId", String.valueOf(friendId));
+		return getRestTemplate().postForObject(buildUri(URI_FOLLOW), request, Boolean.class);
+	}
+
+	private static final String URI_IS_FOLLOW = "/user/isfollow";
+
+	/**
+	 * 是否已关注，true为已关注，false为未关注
+	 */
+	@Override
+	public boolean isFollow(Integer friendId) {
+		super.requireAuthorization();
+
+		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+		request.set("friendId", String.valueOf(friendId));
+		return getRestTemplate().postForObject(buildUri(URI_IS_FOLLOW), request, Boolean.class);
+	}
+
+	private static final String URI_IS_UNFOLLOW = "/user/unfollow";
+
+	/**
+	 * 取消关注
+	 */
+	@Override
+	public boolean unfollow(Integer friendId) {
+		super.requireAuthorization();
+
+		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+		request.set("friendId", String.valueOf(friendId));
+		return getRestTemplate().postForObject(buildUri(URI_IS_UNFOLLOW), request, Boolean.class);
+	}
+
+	private static final String URI_UPDATE_AVATAR = "/user/updateAvatar";
+
+	/**
+	 * 更新用户头像
+	 */
+	@Override
+	public String updateAvatar(String imagePath) {
+		super.requireAuthorization();
+
+		URI updateAvatarUri = buildUri(URI_UPDATE_AVATAR);
+		LinkedMultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
+		request.add("imageFile", new FileSystemResource(imagePath));
+		return getRestTemplate().postForObject(updateAvatarUri, request, String.class);
+	}
+
+	private static final String URI_UPDATE_BACKGROUD = "/user/updateBackground";
+
+	/**
+	 * 更新个人空间背景图片
+	 */
+	@Override
+	public String updateBackground(String imagePath) {
+		super.requireAuthorization();
+
+		URI updateBackgroundUri = buildUri(URI_UPDATE_BACKGROUD);
+		LinkedMultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
+		request.add("imageFile", new FileSystemResource(imagePath));
+		return getRestTemplate().postForObject(updateBackgroundUri, request, String.class);
 	}
 
 }

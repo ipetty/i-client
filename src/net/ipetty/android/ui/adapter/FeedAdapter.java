@@ -3,11 +3,11 @@ package net.ipetty.android.ui.adapter;
 import java.util.List;
 
 import net.ipetty.R;
-import net.ipetty.android.sdk.domain.IpetPhoto;
 import net.ipetty.android.ui.CommentActivity;
 import net.ipetty.android.ui.LikeActivity;
 import net.ipetty.android.ui.MainActivity;
 import net.ipetty.android.utils.AppUtils;
+import net.ipetty.vo.FeedVO;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 public class FeedAdapter extends BaseAdapter implements OnScrollListener {
+
 	private DisplayImageOptions options;
 	public final static String TAG = "ListFeedAdapter";
 	private LayoutInflater inflater;
@@ -106,7 +107,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			view = convertView;
 			holder = (ViewHolder) view.getTag();
 		}
-		IpetPhoto feed = new IpetPhoto();
+		FeedVO feed = new FeedVO();
 		initDefaultView(holder, feed, position);
 		initLikedBtnView(holder, feed, position);
 		initCommentView(holder, feed, position);
@@ -115,7 +116,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		return view;
 	}
 
-	private void initDefaultView(ViewHolder holder, IpetPhoto feed, int position) {
+	private void initDefaultView(ViewHolder holder, FeedVO feed, int position) {
 		// TODO 基本内容信息修改
 		// ImageLoader.getInstance().displayImage(url, holder.avator, options);
 		// holder.nickname.setText(text);
@@ -157,7 +158,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		}
 	};
 
-	private void initLikedBtnView(ViewHolder holder, final IpetPhoto feed, int position) {
+	private void initLikedBtnView(ViewHolder holder, final FeedVO feed, int position) {
 		if (feed.isFavored()) {
 			holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_active);
 		} else {
@@ -183,15 +184,15 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		});
 	}
 
-	private void initCommentView(ViewHolder holder, final IpetPhoto feed, final int position) {
+	private void initCommentView(ViewHolder holder, final FeedVO feed, final int position) {
 		OnCommentClick myCommentClick = new OnCommentClick(feed);
 		holder.btn_comment.setOnClickListener(myCommentClick);
 	}
 
 	public class OnCommentClick implements OnClickListener {
-		private IpetPhoto feed;
+		private FeedVO feed;
 
-		public OnCommentClick(IpetPhoto feed) {
+		public OnCommentClick(FeedVO feed) {
 			this.feed = feed;
 		}
 
