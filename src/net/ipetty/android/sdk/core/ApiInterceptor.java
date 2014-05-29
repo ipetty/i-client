@@ -3,7 +3,7 @@ package net.ipetty.android.sdk.core;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import net.ipetty.android.utils.DeviceUtils;
+import net.ipetty.android.core.util.DeviceUtils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ContentCodingType;

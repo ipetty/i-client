@@ -19,13 +19,13 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name="net.ipetty.android.common.MyApplication"
+        android:name="net.ipetty.android.core.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/IPettyTheme" >
         <activity
-            android:name="net.ipetty.android.ui.SplashActivity"
+            android:name="net.ipetty.android.boot.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/IPettyTheme.NoTitleBar.FullScreen" >
             <intent-filter>
@@ -35,28 +35,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.MainActivity"
+            android:name="net.ipetty.android.main.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.WelcomeRegisterOrLoginActivity"
+            android:name="net.ipetty.android.login.WelcomeRegisterOrLoginActivity"
             android:label="@string/title_activity_welcome_register_or_login" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.LoginActivity"
+            android:name="net.ipetty.android.login.LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.RegisterActivity"
+            android:name="net.ipetty.android.login.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.LoginHasAccountActivity"
+            android:name="net.ipetty.android.login.LoginHasAccountActivity"
             android:label="@string/title_activity_login_has_account" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.CommentActivity"
+            android:name="net.ipetty.android.comment.CommentActivity"
             android:label="@string/title_activity_comment" >
         </activity>
         <activity
@@ -65,48 +65,48 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.FeedPublishActivity"
+            android:name="net.ipetty.android.feed.FeedPublishActivity"
             android:label="@string/title_activity_feed_publish" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.LargerImageActivity"
+            android:name="net.ipetty.android.image.LargerImageActivity"
             android:label="@string/title_activity_larger_image" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.LikeActivity"
+            android:name="net.ipetty.android.like.LikeActivity"
             android:label="@string/title_activity_like" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.MainPopDialog"
+            android:name="net.ipetty.android.main.MainPopDialog"
             android:label="@string/title_activity_main_pop_dialog"
             android:theme="@style/MenuPopDialog" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.FeedbackActivity"
+            android:name="net.ipetty.android.feedback.FeedbackActivity"
             android:label="@string/title_activity_feedback" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.SpaceActivity"
+            android:name="net.ipetty.android.space.SpaceActivity"
             android:label="@string/title_activity_space" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.FansActivity"
+            android:name="net.ipetty.android.fans.FansActivity"
             android:label="@string/title_activity_fans" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.FollowsActivity"
+            android:name="net.ipetty.android.follow.FollowsActivity"
             android:label="@string/title_activity_follows" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.BonusPointActivity"
+            android:name="net.ipetty.android.bonuspoint.BonusPointActivity"
             android:label="@string/title_activity_bonus_point" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.PettyActivity"
+            android:name="net.ipetty.android.petty.PettyActivity"
             android:label="@string/title_activity_petty" >
         </activity>
         <activity
-            android:name="net.ipetty.android.ui.UserActivity"
+            android:name="net.ipetty.android.user.UserActivity"
             android:label="@string/title_activity_user" >
         </activity>
     </application>

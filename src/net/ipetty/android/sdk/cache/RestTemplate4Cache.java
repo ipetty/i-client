@@ -6,9 +6,9 @@ import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 import java.io.IOException;
 import java.net.URI;
 
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.sdk.core.APIException;
-import net.ipetty.android.utils.JSONUtils;
-import net.ipetty.android.utils.NetWorkUtils;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
