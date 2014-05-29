@@ -14,7 +14,6 @@ import net.ipetty.android.core.util.DeviceUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.ImageUtils;
 import net.ipetty.android.core.util.PathUtils;
-import net.ipetty.android.feed.FeedAdapter;
 import net.ipetty.android.feed.FeedPublishActivity;
 import net.ipetty.android.space.SpaceActivity;
 import android.app.Activity;
@@ -209,7 +208,6 @@ public class MainHomeFragment extends Fragment {
 		// ImageLoader.getInstance().displayImage(url, avator, options);
 
 		ImageView header_bg = (ImageView) v.findViewById(R.id.header_bg);
-		
 
 		header_bg.setOnClickListener(new OnClickListener() {
 			@Override

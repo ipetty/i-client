@@ -16,7 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class LikeAdapter extends BaseAdapter implements OnScrollListener {
-	public final static String TAG = "FavorAdapter";
+	public final static String TAG = "LikeAdapter";
 	private LayoutInflater inflater;
 	private List<CommentVO> list = null; // 这个就本地dataStore
 

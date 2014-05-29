@@ -13,15 +13,21 @@
 
         <ImageView
             android:id="@+id/feed_button_comment"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/feed_button_like"
             android:background="@drawable/feed_button_comment_background" />
 
-    </RelativeLayout>
-   
+        <ImageView
+            android:id="@+id/feed_button_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/feed_button_more_background" />
+   </RelativeLayout>
 <LinearLayout android:gravity="center" 
     android:orientation="vertical" 
     android:id="@+id/feed_list_fatherview" 

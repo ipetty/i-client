@@ -89,8 +89,8 @@
            android:textColor="@color/timestamp_text"
            android:text="苏州" 
            android:singleLine="true" />
-		
-		<include layout="@layout/list_feed_item_feedback" />
+
+        <include layout="@layout/list_feed_item_feedback" />
 
     </LinearLayout>
 </LinearLayout>

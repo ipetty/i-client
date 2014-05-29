@@ -1,21 +1,26 @@
-package net.ipetty.android.feed;
+package net.ipetty.android.home;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.ipetty.R;
 import net.ipetty.android.comment.CommentActivity;
+import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.like.LikeActivity;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.vo.FeedVO;
 
 import org.apache.commons.lang3.StringUtils;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -32,15 +37,42 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 	public final static String TAG = "ListFeedAdapter";
 	private LayoutInflater inflater;
 	private Context context;
+	public List<ModDialogItem> more_items;
 	private List list = null; // 这个就本地dataStore
+	private ModDialogItem shareItems;
+	private ModDialogItem delItems;
+	private Dialog moreDialog;
 
 	public FeedAdapter(Context context) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		this.inflater = LayoutInflater.from(context);
 		options = AppUtils.getNormalImageOptions();
+		more_items = new ArrayList<ModDialogItem>();
+
+		shareItems = new ModDialogItem(null, "分享", shareOnClick);
+		delItems = new ModDialogItem(null, "删除", delOnClick);
 
 	}
+
+	private OnClickListener shareOnClick = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			moreDialog.cancel();
+		}
+	};
+
+	private OnClickListener delOnClick = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			moreDialog.cancel();
+		}
+
+	};
 
 	@Override
 	public int getCount() {
@@ -71,6 +103,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		public ImageView btn_liked;
 		public View liked_detail;
 		public ImageView btn_comment;
+		public View btn_more;
 
 	}
 
@@ -83,6 +116,18 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		if (convertView == null) {
 			view = inflater.inflate(R.layout.list_feed_item, null);
 			holder = new ViewHolder();
+
+			view.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					// TODO Auto-generated method stub
+					showItems();
+
+					return false;
+				}
+
+			});
+
 			// 头像
 			holder.avator = (ImageView) view.findViewById(R.id.avator);
 			holder.avator.setOnClickListener(userInfoOnClick);
@@ -97,9 +142,12 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			// 地理位置
 			holder.address = (TextView) view.findViewById(R.id.address);
 
+			// 操作区域
 			holder.btn_liked = (ImageView) view.findViewById(R.id.feed_button_like);
 			holder.btn_comment = (ImageView) view.findViewById(R.id.feed_button_comment);
 			holder.liked_detail = view.findViewById(R.id.row_feed_photo_textview_likes);
+			holder.btn_more = view.findViewById(R.id.feed_button_more);
+			holder.btn_more.setOnClickListener(moreOnClick);
 
 			convertView = view;
 			convertView.setTag(holder);
@@ -115,6 +163,23 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 		return view;
 	}
+
+	private void showItems() {
+		// TODO Auto-generated method stub
+		more_items.clear();
+		more_items.add(shareItems);
+		// TODO:按条件添加删除按钮
+
+		moreDialog = DialogUtils.modPopupDialog(context, more_items, moreDialog);
+	}
+
+	private OnClickListener moreOnClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			showItems();
+		}
+	};
 
 	private void initDefaultView(ViewHolder holder, FeedVO feed, int position) {
 		// TODO 基本内容信息修改
