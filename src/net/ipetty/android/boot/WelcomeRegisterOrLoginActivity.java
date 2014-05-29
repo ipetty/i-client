@@ -1,8 +1,10 @@
-package net.ipetty.android.login;
+package net.ipetty.android.boot;
 
 import net.ipetty.R;
 import net.ipetty.android.comment.CommentActivity;
 import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.login.LoginActivity;
+import net.ipetty.android.login.LoginHasAccountActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;

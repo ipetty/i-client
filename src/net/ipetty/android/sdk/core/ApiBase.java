@@ -84,7 +84,7 @@ public class ApiBase {
         }
     }
 
-    protected boolean getIsAuthorized() {
+    public boolean getIsAuthorized() {
         return StateManager.getAuthorized(context);
     }
 

@@ -40,7 +40,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="net.ipetty.android.login.WelcomeRegisterOrLoginActivity"
+            android:name="net.ipetty.android.boot.WelcomeRegisterOrLoginActivity"
             android:label="@string/title_activity_welcome_register_or_login" >
         </activity>
         <activity

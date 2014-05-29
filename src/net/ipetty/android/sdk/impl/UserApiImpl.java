@@ -1,7 +1,9 @@
 package net.ipetty.android.sdk.impl;
 
 import java.net.URI;
+import java.util.concurrent.CountDownLatch;
 
+import net.ipetty.android.sdk.core.APIException;
 import net.ipetty.android.sdk.core.ApiBase;
 import net.ipetty.android.sdk.core.Constant;
 import net.ipetty.sdk.UserApi;
@@ -22,6 +24,8 @@ import android.content.Context;
  */
 public class UserApiImpl extends ApiBase implements UserApi {
 
+	private UserVO user;
+	
 	public UserApiImpl(Context context) {
 		super(context);
 	}
@@ -48,7 +52,6 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	@Override
 	public void logout() {
         setIsAuthorized(false);
-        setCurrUserId(-1);
     }
 
 	private static final String URI_REGISTER = "/register";
@@ -78,8 +81,21 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	 * 根据ID获取用户帐号
 	 */
 	@Override
-	public UserVO getById(Integer id) {
-		return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_ID, UserVO.class, id);
+	public UserVO getById(final Integer id) {
+		final CountDownLatch latch = new CountDownLatch(1);
+		new Thread(new Runnable() {
+            @Override
+            public void run() {
+                user = getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_ID, UserVO.class, id);
+                latch.countDown();
+            }
+        }).start();
+        try {
+            latch.await();
+        } catch (InterruptedException ex) {
+            throw new APIException(ex);
+        }
+        return user;
 	}
 
 	private static final String URI_GET_BY_UID = "/user/uid/{uid}";
@@ -88,8 +104,23 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	 * 根据uid获取用户帐号
 	 */
 	@Override
-	public UserVO getByUid(int uid) {
-		return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UID, UserVO.class, uid);
+	public UserVO getByUid(final int uid) {
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		new Thread(new Runnable() {
+            @Override
+            public void run() {
+            	getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UID, UserVO.class, uid);
+                latch.countDown();
+            }
+        }).start();
+        try {
+            latch.await();
+        } catch (InterruptedException ex) {
+            throw new APIException(ex);
+        }
+        
+        return user;
 	}
 
 	private static final String URI_GET_BY_UNIQUE_NAME = "/user/{uniqueName}";

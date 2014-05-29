@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,12 +25,43 @@ public class LoginActivity extends BaseActivity {
 	private EditText passwordView;
 	private String account = null;
 	private String password = null;
+	
+	public Handler mHandler=new Handler()  
+    {  
+        public void handleMessage(Message msg)  
+        {  
+        	//TODO:更新界面
+            switch(msg.what)  
+            {  
+            case 1:  
+                break;  
+            default:  
+                break;        
+            }  
+            super.handleMessage(msg);  
+        }  
+    };  
+	
+	public class LoginThread implements Runnable {
+		
+		@Override  
+        public void run()  
+        {  
+			//TODO:登录过程
+            Message message=new Message();  
+            message.what=1;  
+            mHandler.sendMessage(message);  
+        }  
+		
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		
+		Message m = new Message();
+		
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);

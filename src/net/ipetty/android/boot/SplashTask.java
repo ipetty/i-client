@@ -2,15 +2,15 @@ package net.ipetty.android.boot;
 
 import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.login.LoginHasAccountActivity;
-import net.ipetty.android.login.WelcomeRegisterOrLoginActivity;
 import net.ipetty.android.main.MainActivity;
+import net.ipetty.android.sdk.core.IpetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
-	public final static String TAG = "SplashTask";
+	public final static String TAG = "GetUserByIdTask";
 	private Activity activity;
 
 	public SplashTask(Activity activity) {
@@ -21,8 +21,21 @@ public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
 	protected Integer doInBackground(Integer... params) {
 		// TODO Auto-generated method stub
 		try {
-			//UserVO u = IpetApi.init(activity).getUserApi().login("luocanfeng@ipetty.net", "888888");
-			//Log.i(TAG,"登录用户："+u.getEmail());
+			IpetApi api= IpetApi.init(activity);
+			
+			if(api.getIsAuthorized()){
+				//首页
+				goMain();
+			}else{
+				//以前没有登录过
+				if(api.getCurrUserId()==-1){
+					//欢迎界面
+					goWelcomeLogin();
+				}else{
+					//有过登录帐号
+					goHasAccountLogin();
+				}
+			}
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -33,7 +46,7 @@ public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
 
 	@Override
 	protected void onPostExecute(Integer result) {
-		this.goWelcomeLogin();
+		
 	}
 
 	// 转向主界面
