@@ -8,7 +8,6 @@ import net.ipetty.android.comment.CommentActivity;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.like.LikeActivity;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.vo.FeedVO;
 
@@ -17,6 +16,13 @@ import org.apache.commons.lang3.StringUtils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,7 +40,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 	private DisplayImageOptions options;
-	public final static String TAG = "ListFeedAdapter";
+	public final static String TAG = "FeedAdapter";
 	private LayoutInflater inflater;
 	private Context context;
 	public List<ModDialogItem> more_items;
@@ -105,6 +111,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		public ImageView btn_comment;
 		public View btn_more;
 
+		public TextView like_text;
+
 	}
 
 	public ViewHolder holder;
@@ -148,6 +156,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			holder.liked_detail = view.findViewById(R.id.row_feed_photo_textview_likes);
 			holder.btn_more = view.findViewById(R.id.feed_button_more);
 			holder.btn_more.setOnClickListener(moreOnClick);
+
+			// like
+			holder.like_text = (TextView) view.findViewById(R.id.row_feed_photo_textview_likes);
 
 			convertView = view;
 			convertView.setTag(holder);
@@ -235,8 +246,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent((MainActivity) context, LikeActivity.class);
-				((MainActivity) context).startActivity(intent);
+				// Intent intent = new Intent((MainActivity) context,
+				// LikeActivity.class);
+				// ((MainActivity) context).startActivity(intent);
 			}
 		});
 
@@ -247,11 +259,40 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 			}
 		});
+
 	}
 
 	private void initCommentView(ViewHolder holder, final FeedVO feed, final int position) {
 		OnCommentClick myCommentClick = new OnCommentClick(feed);
 		holder.btn_comment.setOnClickListener(myCommentClick);
+
+		String html = "<b><a href='1'>张三</a>,<a href='2'>李四四</a>,<a href='3'>王五</a></b>";
+		setLinkClickIntercept(holder.like_text, html);
+	}
+
+	private void setLinkClickIntercept(TextView tv, String text) {
+		CharSequence charSequence = Html.fromHtml(text);
+		Spannable sp = (Spannable) charSequence;
+		int end = charSequence.length();
+		URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
+		Log.i(TAG, "length" + urls.length);
+		SpannableStringBuilder spannable = new SpannableStringBuilder(sp);
+		for (URLSpan url : urls) {
+			Log.i(TAG, "url" + url.getURL());
+			Log.i(TAG, "start" + sp.getSpanStart(url));
+			Log.i(TAG, "end" + sp.getSpanEnd(url));
+			spannable.setSpan(new MyURLSpan(), sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+		}
+		tv.setText(spannable);
+		tv.setMovementMethod(LinkMovementMethod.getInstance());
+	}
+
+	private class MyURLSpan extends ClickableSpan {
+		@Override
+		public void onClick(View widget) {
+			// TODO Auto-generated method stub
+			Toast.makeText(context, "T", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public class OnCommentClick implements OnClickListener {
