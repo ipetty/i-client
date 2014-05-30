@@ -50,6 +50,8 @@ public class LoginActivity extends BaseActivity {
 			//TODO:登录过程
             Message message=new Message();  
             message.what=1;  
+            
+            
             mHandler.sendMessage(message);  
         }  
 		
@@ -60,7 +62,6 @@ public class LoginActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-		Message m = new Message();
 		
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);

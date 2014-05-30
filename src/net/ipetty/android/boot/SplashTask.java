@@ -10,7 +10,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
-	public final static String TAG = "GetUserByIdTask";
+	public final static String TAG = "SplashTask";
 	private Activity activity;
 
 	public SplashTask(Activity activity) {
@@ -21,6 +21,7 @@ public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
 	protected Integer doInBackground(Integer... params) {
 		// TODO Auto-generated method stub
 		try {
+			Thread.sleep(1000);
 			IpetApi api= IpetApi.init(activity);
 			
 			if(api.getIsAuthorized()){
@@ -36,7 +37,7 @@ public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
 					goHasAccountLogin();
 				}
 			}
-			Thread.sleep(1000);
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

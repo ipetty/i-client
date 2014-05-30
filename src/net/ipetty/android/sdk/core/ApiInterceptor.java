@@ -2,6 +2,7 @@ package net.ipetty.android.sdk.core;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.UUID;
 
 import net.ipetty.android.core.util.DeviceUtils;
 
@@ -30,6 +31,9 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 	
 	public static final String HEADER_NAME_DEVICE_UUID = "device_uuid";
 	
+	public static final String HEADER_NAME_DEVICE_ID = "device_id";
+	public static final String HEADER_NAME_DEVICE_MAC = "device_mac";
+	
     private final String TAG = "ApiInterceptor";
 
     private final Charset charset = Charset.forName("UTF-8");
@@ -50,11 +54,16 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
     	//发送头
     	String userToken = StateManager.getUserToken(context);
     	String refreshToken = StateManager.getRefreshToken(context);
+    	UUID deviceUUID = DeviceUtils.getDeviceUUID(context);
+    	Log.i(TAG, "userToken："+userToken);
+    	Log.i(TAG, "refreshToken："+refreshToken);
+    	Log.i(TAG, "deviceUUID："+deviceUUID);
+    	
     	HttpHeaders requestHeaders = request.getHeaders();
     	requestHeaders.setAcceptEncoding(ContentCodingType.GZIP);
     	requestHeaders.set(HEADER_NAME_USER_TOKEN, userToken);
     	requestHeaders.set(HEADER_NAME_REFRESH_TOKEN, refreshToken);
-    	requestHeaders.set(HEADER_NAME_DEVICE_UUID, DeviceUtils.getDeviceUUID(context).toString());
+    	requestHeaders.set(HEADER_NAME_DEVICE_UUID, deviceUUID.toString());
     	
 //        request.getHeaders().set("Authorization",
 //                "Basic " + new String(new Base64().encode((Constant.APP_KEY + ":" + Constant.APP_SECRET).getBytes(charset)), charset));
