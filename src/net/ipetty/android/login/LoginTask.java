@@ -1,40 +1,37 @@
-package net.ipetty.android.boot;
+package net.ipetty.android.login;
 
+import net.ipetty.android.boot.WelcomeRegisterOrLoginActivity;
 import net.ipetty.android.core.util.AnimUtils;
-import net.ipetty.android.login.LoginHasAccountActivity;
-import net.ipetty.android.login.WelcomeRegisterOrLoginActivity;
 import net.ipetty.android.main.MainActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.vo.UserVO;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class GetUserByIdTask extends AsyncTask<Integer, Integer, Integer> {
+public class LoginTask extends AsyncTask<Void, Void, Void> {
 	public final static String TAG = "GetUserByIdTask";
 	private Activity activity;
+	private String loginName;
+	private String password;
 
-	public GetUserByIdTask(Activity activity) {
+	public LoginTask(Activity activity) {
 		this.activity = activity;
 	}
 
 	@Override
-	protected Integer doInBackground(Integer... params) {
+	protected Void doInBackground(Void...voids ) {
 		// TODO Auto-generated method stub
 		try {
-			UserVO u = IpetApi.init(activity).getUserApi().login("luocanfeng@ipetty.net", "888888");
-			Log.i(TAG,"登录用户："+u.getEmail());
+			
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		return null;
 	}
 
 	@Override
-	protected void onPostExecute(Integer result) {
+	protected void onPostExecute(Void result) {
 		this.goWelcomeLogin();
 	}
 

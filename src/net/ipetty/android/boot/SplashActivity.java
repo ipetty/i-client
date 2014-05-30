@@ -6,7 +6,11 @@ import net.ipetty.android.core.util.AppUtils;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-
+/**
+ * 启动引导
+ * @author Administrator
+ *
+ */
 public class SplashActivity extends BaseActivity {
 	public final static String TAG = "SplashActivity";
 
@@ -16,6 +20,9 @@ public class SplashActivity extends BaseActivity {
 		setContentView(R.layout.activity_splash);
 		Log.i(TAG, "onCreate");
 		init();
+		
+
+		
 		new SplashTask(SplashActivity.this).execute();
 	}
 
@@ -25,7 +32,8 @@ public class SplashActivity extends BaseActivity {
 		String VersionName = String.format(verStr, AppUtils.getAppVersionName(this));
 		version.setText(VersionName);
 	}
-
+	
+	
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
