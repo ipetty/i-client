@@ -91,6 +91,6 @@
            android:singleLine="true" />
 
         <include layout="@layout/list_feed_item_feedback" />
-
+        
     </LinearLayout>
 </LinearLayout>

@@ -9,4 +9,5 @@
     <color name="title_red">#C73C1C</color>
     <color name="link_text">#334D83</color>
     <color name="timestamp_text">#8A8A8A</color>
+    <color name="feed_comments_num">#A9A9A9</color>
 </resources>

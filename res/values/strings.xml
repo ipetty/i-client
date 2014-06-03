@@ -33,8 +33,11 @@
     <!-- comment -->
     <string name="title_activity_comment">评论</string>
     <string name="comment_submit">提交</string>
+    <string name="comment_num_text">查看全部  %1s 条评论</string>
+    
     <!-- like -->
     <string name="title_activity_like">赞</string>
+     <string name="liked_num_text">等 %1s 人赞</string>
     <!-- publish -->
     <string name="title_activity_feed_publish">发布</string>
     <string name="btn_publish_text">发布</string>

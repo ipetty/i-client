@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
@@ -32,6 +33,8 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -112,6 +115,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		public View btn_more;
 
 		public TextView like_text;
+		public TextView comments_num;
+		public LinearLayout comments_group_list;
 
 	}
 
@@ -159,6 +164,10 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 			// like
 			holder.like_text = (TextView) view.findViewById(R.id.row_feed_photo_textview_likes);
+
+			// 评论
+			holder.comments_num = (TextView) view.findViewById(R.id.row_feed_photo_textview_comments_num);
+			holder.comments_group_list = (LinearLayout) view.findViewById(R.id.row_feed_photo_comments_list);
 
 			convertView = view;
 			convertView.setTag(holder);
@@ -266,8 +275,35 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		OnCommentClick myCommentClick = new OnCommentClick(feed);
 		holder.btn_comment.setOnClickListener(myCommentClick);
 
+		// 赞
 		String html = "<b><a href='1'>张三</a>,<a href='2'>李四四</a>,<a href='3'>王五</a></b>";
+		String liked_num_text = this.context.getResources().getString(R.string.liked_num_text);
+		String likedNum = "10";
+		html += String.format(liked_num_text, likedNum);
 		setLinkClickIntercept(holder.like_text, html);
+
+		// 评论 总数
+		holder.comments_num.setOnClickListener(myCommentClick);
+		String commentNumStr = this.context.getResources().getString(R.string.comment_num_text);
+		String commentsNum = "10";
+		holder.comments_num.setText(String.format(commentNumStr, commentsNum));
+
+		// 动态添加评论
+		// TODO: for 循环
+		holder.comments_group_list.addView(addComment());
+		holder.comments_group_list.addView(addComment());
+	}
+
+	private RelativeLayout addComment() {
+		String username = "<b><a href='1'>小王</a></b>";
+		String text = "很好很不错";
+
+		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.list_feed_item_feedback_comment, null);
+		TextView t = (TextView) layout.findViewById(R.id.row_feed_textview_comments_item);
+		String html = username + " : " + text;
+		setLinkClickIntercept(t, html);
+
+		return layout;
 	}
 
 	private void setLinkClickIntercept(TextView tv, String text) {
@@ -292,6 +328,12 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		public void onClick(View widget) {
 			// TODO Auto-generated method stub
 			Toast.makeText(context, "T", Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		public void updateDrawState(TextPaint ds) {
+			super.updateDrawState(ds);
+			ds.setUnderlineText(false);
 		}
 	}
 
