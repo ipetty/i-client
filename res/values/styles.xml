@@ -36,6 +36,7 @@
         <item name="android:background">@drawable/action_bar_button_background</item>
         <item name="android:layout_width">@dimen/action_bar_height</item>
         <item name="android:layout_height">fill_parent</item>
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:scaleType">center</item>
     </style>
 
@@ -82,6 +83,7 @@
         <item name="android:windowEnterAnimation">@anim/push_up_in</item>
         <item name="android:windowExitAnimation">@anim/push_down_out</item>
     </style>
+    
     
 
 
