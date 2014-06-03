@@ -2,7 +2,6 @@ package net.ipetty.android.sdk.core;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.UUID;
 
 import net.ipetty.android.core.util.DeviceUtils;
 
@@ -16,6 +15,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
 import android.content.Context;
+import android.util.Base64;
 import android.util.Log;
 
 /**
@@ -54,19 +54,23 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
     	//发送头
     	String userToken = StateManager.getUserToken(context);
     	String refreshToken = StateManager.getRefreshToken(context);
-    	UUID deviceUUID = DeviceUtils.getDeviceUUID(context);
+    	String uuidB64 = StateManager.getDeviceUUID(context);
+    	if(StringUtils.isBlank(uuidB64)){
+    		String uuid = DeviceUtils.getDeviceUUID(context).toString();
+    		uuidB64 = Base64.encodeToString(uuid.getBytes(),Base64.DEFAULT);
+    		StateManager.setDeviceUUID(context,uuidB64);    		
+    	}
+
     	Log.i(TAG, "userToken："+userToken);
     	Log.i(TAG, "refreshToken："+refreshToken);
-    	Log.i(TAG, "deviceUUID："+deviceUUID);
+    	Log.i(TAG, "deviceUUID："+uuidB64);
     	
     	HttpHeaders requestHeaders = request.getHeaders();
     	requestHeaders.setAcceptEncoding(ContentCodingType.GZIP);
     	requestHeaders.set(HEADER_NAME_USER_TOKEN, userToken);
     	requestHeaders.set(HEADER_NAME_REFRESH_TOKEN, refreshToken);
-    	requestHeaders.set(HEADER_NAME_DEVICE_UUID, deviceUUID.toString());
+    	requestHeaders.set(HEADER_NAME_DEVICE_UUID, uuidB64);
     	
-//        request.getHeaders().set("Authorization",
-//                "Basic " + new String(new Base64().encode((Constant.APP_KEY + ":" + Constant.APP_SECRET).getBytes(charset)), charset));
 
         if (request.getMethod().equals(HttpMethod.GET)) {
             String url = request.getURI().toString();

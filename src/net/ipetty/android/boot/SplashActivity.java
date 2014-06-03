@@ -3,6 +3,7 @@ package net.ipetty.android.boot;
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.login.LoginTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ public class SplashActivity extends BaseActivity {
 		Log.i(TAG, "onCreate");
 		init();
 		
-
+		new LoginTask(SplashActivity.this).execute("admin@ipetty.net","888888");
 		
 		new SplashTask(SplashActivity.this).execute();
 	}

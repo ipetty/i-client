@@ -24,6 +24,15 @@ public class StateManager {
     
     private static final String REFRESH_TOKEN = "refresh_token";
     
+    private static final String DEVICE_UUID = "device_uuid";
+    
+    public static void setDeviceUUID(Context ctx, String token) {
+    	setString(ctx,DEVICE_UUID,token);
+    }
+
+    public static String getDeviceUUID(Context ctx) {
+        return getString(ctx,DEVICE_UUID);
+    }
     
     
     public static void setUserToken(Context ctx, String token) {

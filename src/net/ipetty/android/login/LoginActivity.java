@@ -3,17 +3,16 @@ package net.ipetty.android.login;
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.ActivityUtils;
-import net.ipetty.android.main.MainActivity;
-import android.app.ProgressDialog;
+import net.ipetty.android.core.util.ValidUtils;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,38 +24,8 @@ public class LoginActivity extends BaseActivity {
 	private EditText passwordView;
 	private String account = null;
 	private String password = null;
+	private int focuscont = 0;
 	
-	public Handler mHandler=new Handler()  
-    {  
-        public void handleMessage(Message msg)  
-        {  
-        	//TODO:更新界面
-            switch(msg.what)  
-            {  
-            case 1:  
-                break;  
-            default:  
-                break;        
-            }  
-            super.handleMessage(msg);  
-        }  
-    };  
-	
-	public class LoginThread implements Runnable {
-		
-		@Override  
-        public void run()  
-        {  
-			//TODO:登录过程
-            Message message=new Message();  
-            message.what=1;  
-            
-            
-            mHandler.sendMessage(message);  
-        }  
-		
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,6 +57,23 @@ public class LoginActivity extends BaseActivity {
 		});
 
 		accountView = (EditText) this.findViewById(R.id.account);
+		accountView.setOnFocusChangeListener(new OnFocusChangeListener(){
+
+            @Override
+            public void onFocusChange(View arg0, boolean hasFocus) {
+                if(hasFocus){
+                	accountView.setHint(null);
+                	if(focuscont==0){
+                		accountView.clearFocus();
+                	}
+                	focuscont++;
+                }else{
+                	accountView.setHint("Email");
+                }
+                
+            }
+            
+        });
 		passwordView = (EditText) this.findViewById(R.id.password);
 		// 登陆
 		View loginBtnView = (View) this.findViewById(R.id.button);
@@ -99,6 +85,7 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO sina Login
+				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
 
 			}
 		});
@@ -108,26 +95,48 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO qq login
+				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
 
 			}
 		});
 
 	}
 
+	//登录
 	private final OnClickListener loginOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View loginBtnView) {
 			if (!validateLogin()) {
 				return;
 			}
-
-			new LoginAsyncTask().execute();
+			new LoginTask(LoginActivity.this).execute(account,password);
 		}
 	};
-
+	
+	//登录前校验
 	private boolean validateLogin() {
 		this.account = accountView.getText().toString();
 		this.password = passwordView.getText().toString();
+		
+		if(StringUtils.isBlank(this.account)){
+			accountView.requestFocus();
+			Toast.makeText(this, "Email不能为空",Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		
+		if(!ValidUtils.isEmail(this.account)){
+			accountView.requestFocus();
+			Toast.makeText(this, "Email格式不正确",Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		
+		
+		if(StringUtils.isBlank(this.password)){
+			passwordView.requestFocus();
+			Toast.makeText(this, "密码不能为空",Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -138,41 +147,6 @@ public class LoginActivity extends BaseActivity {
 		return true;
 	}
 
-	// AsyncTask
-	public class LoginAsyncTask extends AsyncTask<Integer, Integer, Integer> {
-		private ProgressDialog progress;
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-			String str = getResources().getString(R.string.login_loading);
-			this.progress = ProgressDialog.show(LoginActivity.this, null, str);
-		}
-
-		@Override
-		protected Integer doInBackground(Integer... params) {
-			// TODO Auto-generated method stub
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			this.progress.dismiss();
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-			startActivity(intent);
-			finish();
-			ActivityUtils.getInstance().finish();// 退出所有的Activity
-		}
-
-	}
+	
 
 }
