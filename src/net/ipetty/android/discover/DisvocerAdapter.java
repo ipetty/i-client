@@ -30,7 +30,7 @@ public class DisvocerAdapter extends BaseAdapter {
 		super();
 		this.context = context;
 		this.mInflater = LayoutInflater.from(context);
-		options = AppUtils.getNormalImageOptions();
+		options = AppUtils.getCacheImageBublder().showImageForEmptyUri(R.drawable.default_image).build();
 	}
 
 	@Override
