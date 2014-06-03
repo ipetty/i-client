@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.UUID;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -18,6 +20,13 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 public class AppUtils {
 	 private static String sID = null;
 	 private static final String INSTALLATION = "INSTALLATION";
+	 
+	 //Activity跳转
+	 public static void goTo(Activity activity,Class<? extends Activity> clazz){
+		 Intent intent = new Intent(activity, clazz);
+		 activity.startActivity(intent);
+		 AnimUtils.fadeInToOut(activity);
+	 }
 	 
 	//获取应用安装ID，每次安装都不同：http://892848153.iteye.com/blog/1828565
     public synchronized static String getAppInstallId(Context context) {

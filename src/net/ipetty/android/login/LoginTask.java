@@ -1,65 +1,45 @@
 package net.ipetty.android.login;
 
-import net.ipetty.android.boot.WelcomeRegisterOrLoginActivity;
-import net.ipetty.android.core.util.AnimUtils;
+import net.ipetty.android.core.MyAsyncTask;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.ActivityUtils;
+import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.main.MainActivity;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.vo.UserVO;
 import android.util.Log;
 
-public class LoginTask extends AsyncTask<Void, Void, Void> {
-	public final static String TAG = "GetUserByIdTask";
-	private Activity activity;
-	private String loginName;
-	private String password;
+public class LoginTask extends MyAsyncTask<UserVO> {
+	
 
-	public LoginTask(Activity activity) {
-		this.activity = activity;
+	public final static String TAG = "LoginTask";
+
+	public LoginTask(BaseActivity activity) {
+		super(activity);
+	}
+
+
+	@Override
+	protected UserVO doInBackground(String...args ) {
+		String loginName = args[0];
+		String password = args[1];
+		
+		IpetApi api = IpetApi.init(activity);
+		return api.getUserApi().login(loginName, password);
 	}
 
 	@Override
-	protected Void doInBackground(Void...voids ) {
-		// TODO Auto-generated method stub
-		try {
-			
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			
-		}
-		return null;
-	}
-
-	@Override
-	protected void onPostExecute(Void result) {
-		this.goWelcomeLogin();
+	protected void onPostExecute(UserVO user) {
+		super.onPostExecute(user);
+		this.goMain();
 	}
 
 	// 转向主界面
 	public void goMain() {
 		Log.i(TAG, "to MainActivity");
-		Intent intent = new Intent(this.activity, MainActivity.class);
-		this.activity.startActivity(intent);
-		AnimUtils.fadeInToOut(this.activity);
-		this.activity.finish();
+		AppUtils.goTo(activity, MainActivity.class);
+		ActivityUtils.getInstance().finish();
 	}
 
-	// 转向登陆界面
-	public void goWelcomeLogin() {
-		Log.i(TAG, "to WelcomeRegisterOrLoginActivity");
-		Intent intent = new Intent(this.activity, WelcomeRegisterOrLoginActivity.class);
-		this.activity.startActivity(intent);
-		AnimUtils.fadeInToOut(this.activity);
-		this.activity.finish();
-	}
-
-	// 转向已有账号登陆
-	public void goHasAccountLogin() {
-		Log.i(TAG, "to LoginHasAccountActivity");
-		Intent intent = new Intent(this.activity, LoginHasAccountActivity.class);
-		this.activity.startActivity(intent);
-		AnimUtils.fadeInToOut(this.activity);
-		this.activity.finish();
-	}
 
 }
