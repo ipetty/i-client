@@ -6,26 +6,27 @@ import net.ipetty.android.core.util.ActivityUtils;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.vo.RegisterVO;
 import net.ipetty.vo.UserVO;
 import android.util.Log;
 
-public class LoginTask extends MyAsyncTask<String,UserVO> {
+public class RegisterTask extends MyAsyncTask<RegisterVO,UserVO> {
 	
 
 	public final static String TAG = "LoginTask";
 
-	public LoginTask(BaseActivity activity) {
+	public RegisterTask(BaseActivity activity) {
 		super(activity);
 	}
 
 
 	@Override
-	protected UserVO doInBackground(String...args ) {
-		String loginName = args[0];
-		String password = args[1];
+	protected UserVO doInBackground(RegisterVO...args ) {
+		//TODO
+		RegisterVO rvo = args[0];
 		
 		IpetApi api = IpetApi.init(activity);
-		return api.getUserApi().login(loginName, password);
+		return api.getUserApi().register(rvo);
 	}
 
 	@Override

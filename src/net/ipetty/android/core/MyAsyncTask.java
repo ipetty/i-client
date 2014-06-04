@@ -10,7 +10,7 @@ import android.os.AsyncTask;
  *
  * @param <T> 结果类型
  */
-public abstract class MyAsyncTask <T> extends AsyncTask<String, Integer, T> {
+public abstract class MyAsyncTask <P,T> extends AsyncTask<P, Integer, T> {
 	public final static String TAG = "MyAsyncTask";
 	
 	protected BaseActivity activity;

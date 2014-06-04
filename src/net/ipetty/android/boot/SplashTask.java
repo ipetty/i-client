@@ -1,29 +1,37 @@
 package net.ipetty.android.boot;
 
+import net.ipetty.android.core.MyAsyncTask;
+import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.login.LoginHasAccountActivity;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
 
-public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
+public class SplashTask extends MyAsyncTask<Void,Void>{
 	public final static String TAG = "SplashTask";
-	private Activity activity;
 
-	public SplashTask(Activity activity) {
-		this.activity = activity;
+	public SplashTask(BaseActivity activity) {
+		super(activity);
+	}
+	
+	//重写onPreExecute防止出现loading...
+	@Override
+	protected void onPreExecute() {
+		
 	}
 
 	@Override
-	protected Integer doInBackground(Integer... params) {
-		// TODO Auto-generated method stub
-		try {
-			Thread.sleep(1000);
+	protected Void doInBackground(Void... args) {
+			try {
+				//延时让用户看到启动画面
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+			
 			IpetApi api = IpetApi.init(activity);
-			// goMain();// TEST
+			//是否就已认证状态
 			if (api.getIsAuthorized()) {
 				// 首页
 				goMain();
@@ -38,17 +46,10 @@ public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
 				}
 			}
 
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		return null;
 	}
 
-	@Override
-	protected void onPostExecute(Integer result) {
-
-	}
 
 	// 转向主界面
 	public void goMain() {
