@@ -31,6 +31,7 @@ public class FeedPublishActivity extends Activity {
 	private EditText edit;
 	private TextView btn_publish;
 	private Integer hasCompress = null;
+	private View location;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,18 @@ public class FeedPublishActivity extends Activity {
 
 		// 图片压缩
 		new CompressTask().execute();
+
+		// location
+		location = this.findViewById(R.id.location_layout);
+		location.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(FeedPublishActivity.this, LocationActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 	private final OnClickListener onClickPublish = new OnClickListener() {

@@ -22,22 +22,22 @@ public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
 		// TODO Auto-generated method stub
 		try {
 			Thread.sleep(1000);
-			IpetApi api= IpetApi.init(activity);
-			
-			if(api.getIsAuthorized()){
-				//首页
+			IpetApi api = IpetApi.init(activity);
+			// goMain();// TEST
+			if (api.getIsAuthorized()) {
+				// 首页
 				goMain();
-			}else{
-				//以前没有登录过
-				if(api.getCurrUserId()==-1){
-					//欢迎界面
+			} else {
+				// 以前没有登录过
+				if (api.getCurrUserId() == -1) {
+					// 欢迎界面
 					goWelcomeLogin();
-				}else{
-					//有过登录帐号
+				} else {
+					// 有过登录帐号
 					goHasAccountLogin();
 				}
 			}
-			
+
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -47,7 +47,7 @@ public class SplashTask extends AsyncTask<Integer, Integer, Integer> {
 
 	@Override
 	protected void onPostExecute(Integer result) {
-		
+
 	}
 
 	// 转向主界面

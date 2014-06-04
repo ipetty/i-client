@@ -109,6 +109,10 @@
             android:name="net.ipetty.android.user.UserActivity"
             android:label="@string/title_activity_user" >
         </activity>
+        <activity
+            android:name="net.ipetty.android.feed.LocationActivity"
+            android:label="@string/title_activity_location" >
+        </activity>
     </application>
 
 </manifest>

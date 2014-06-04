@@ -10,4 +10,9 @@
     <color name="link_text">#334D83</color>
     <color name="timestamp_text">#8A8A8A</color>
     <color name="feed_comments_num">#A9A9A9</color>
+    
+    <color name="normal_text_color">#ff353535</color>
+    <color name="hint_text_color">#ff999999</color>
+    <color name="color_item_bg">#fffafafa</color>
+    <color name="color_item_bg_click">#ffdddddd</color>
 </resources>
