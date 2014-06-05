@@ -39,7 +39,7 @@
 
     <!-- like -->
     <string name="title_activity_like">赞</string>
-    <string name="liked_num_text">等 %1s 人赞</string>
+    <string name="liked_num_text">等%1s人觉得很赞</string>
     <!-- publish -->
     <string name="title_activity_feed_publish">发布</string>
     <string name="btn_publish_text">发布</string>

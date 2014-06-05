@@ -8,7 +8,9 @@ import net.ipetty.android.comment.CommentActivity;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.like.LikeActivity;
 import net.ipetty.android.main.MainActivity;
+import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.FeedVO;
 
 import org.apache.commons.lang3.StringUtils;
@@ -255,9 +257,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				// Intent intent = new Intent((MainActivity) context,
-				// LikeActivity.class);
-				// ((MainActivity) context).startActivity(intent);
+				Intent intent = new Intent((MainActivity) context, LikeActivity.class);
+				((MainActivity) context).startActivity(intent);
 			}
 		});
 
@@ -280,7 +281,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		String liked_num_text = this.context.getResources().getString(R.string.liked_num_text);
 		String likedNum = "10";
 		html += String.format(liked_num_text, likedNum);
-		setLinkClickIntercept(holder.like_text, html);
+		setLinkIntercept(holder.like_text, html);
 
 		// 评论 总数
 		holder.comments_num.setOnClickListener(myCommentClick);
@@ -306,7 +307,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		return layout;
 	}
 
-	private void setLinkClickIntercept(TextView tv, String text) {
+	private void setLinkIntercept(TextView tv, String text) {
 		CharSequence charSequence = Html.fromHtml(text);
 		Spannable sp = (Spannable) charSequence;
 		int end = charSequence.length();
@@ -320,6 +321,11 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			spannable.setSpan(new MyURLSpan(), sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 		}
 		tv.setText(spannable);
+
+	}
+
+	private void setLinkClickIntercept(TextView tv, String text) {
+		setLinkIntercept(tv, text);
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
@@ -327,7 +333,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		@Override
 		public void onClick(View widget) {
 			// TODO Auto-generated method stub
-			Toast.makeText(context, "T", Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(context, SpaceActivity.class);
+			context.startActivity(intent);
 		}
 
 		@Override
