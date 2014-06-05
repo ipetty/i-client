@@ -15,4 +15,5 @@
     <color name="hint_text_color">#ff999999</color>
     <color name="color_item_bg">#fffafafa</color>
     <color name="color_item_bg_click">#ffdddddd</color>
+    <color name="comment_btn_pressed">#7Fdddddd</color>
 </resources>
