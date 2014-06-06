@@ -28,7 +28,7 @@
     
     
     
-        <LinearLayout
+   <LinearLayout
         android:id="@+id/login_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -145,6 +145,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/ok_button"
+        android:background="@drawable/button_light_selector"
         android:textColor="@color/title_gray"
         android:textSize="16sp" />
 
