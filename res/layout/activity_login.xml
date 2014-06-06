@@ -25,76 +25,176 @@
             android:gravity="center"
             android:text="@string/register" />
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    
+    
+    
+   <LinearLayout
+        android:id="@+id/login_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/action_bar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
         android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            
-            android:orientation="vertical" >
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/setting_list_top_bg_white"
+            android:gravity="center_vertical" >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/account"
+                android:textColor="@color/text_black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/account"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/input_account_hint"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="16sp"
+                android:windowSoftInputMode="stateHidden" />
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textEmailAddress" >
-
-            <requestFocus />
-        </EditText>
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPassword" />
-
-        <TextView
-            android:id="@+id/forget_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="64dp"
-            android:text="@string/forget_password" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="28dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false" >
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/setting_list_bottom_bg_white"
+            android:gravity="center_vertical" >
 
             <TextView
-                android:id="@+id/sina"
-                android:layout_weight="1.0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="sina登录" />
+                android:layout_marginLeft="16sp"
+                android:text="@string/password"
+                android:textColor="@color/text_black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/input_password_hint"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="16sp"
+                android:windowSoftInputMode="stateHidden" />
 
             <TextView
-                android:id="@+id/qq"
-                android:layout_weight="1.0"
-                android:layout_width="wrap_content"
+                android:id="@+id/login_toggle_password"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="qq登录" />
-
+                android:layout_marginRight="16dp"
+                android:background="@drawable/login_toggle_password_bg"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/login_toggle_password_show"
+                android:textColor="@color/text_black"
+                android:textSize="14sp" />
         </LinearLayout>
-
     </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/forget_password"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/login_linearLayout"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="2dp"
+        android:text="@string/forgot_password"
+        android:textColor="@color/link_text"
+        android:textSize="16sp" />
+    
+   <Button
+        android:id="@+id/button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/forget_password"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/ok_button"
+        android:background="@drawable/button_light_selector"
+        android:textColor="@color/title_gray"
+        android:textSize="16sp" />
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentLeft="true"
+       android:orientation="vertical" >
+  		 <ImageView
+              android:layout_width="fill_parent"
+              android:layout_height="1.0px"
+              android:background="@drawable/drawable_line" />
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="48dp"
+           android:layout_gravity="center"
+           android:focusable="false"
+           android:focusableInTouchMode="false" >
+
+           <TextView
+               android:id="@+id/sina"
+               android:layout_width="wrap_content"
+               android:layout_height="48dp"
+               android:layout_weight="1.0"
+               android:gravity="center"
+               android:text="@string/sina_login" 
+               android:textColor="@color/title_gray"
+               android:background="@drawable/list_color_item_bg"
+               android:textSize="16sp" />
+           
+  			 <ImageView
+              android:layout_width="1.0px"
+              android:layout_height="fill_parent"
+              android:background="@drawable/drawable_line" />
+  			 
+           <TextView
+               android:id="@+id/qq"
+               android:layout_width="wrap_content"
+               android:layout_height="48dp"
+                 android:gravity="center"
+               android:layout_weight="1.0"
+               android:text="@string/qq_login" 
+                 android:textColor="@color/title_gray"
+                  android:background="@drawable/list_color_item_bg"
+               android:textSize="16sp" />
+
+       </LinearLayout>
+   </LinearLayout>
 
 </RelativeLayout>

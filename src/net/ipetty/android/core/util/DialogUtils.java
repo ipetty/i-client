@@ -34,11 +34,16 @@ public class DialogUtils {
 
 		for (ModDialogItem item : items) {
 			View v = dialog.getLayoutInflater().inflate(R.layout.dialog_mod_pop_item, layout, false);
+			View line = v.findViewById(R.id.line);
 			TextView tx = (TextView) v.findViewById(R.id.text);
 			ImageView img = (ImageView) v.findViewById(R.id.image);
 			if (item.getIconId() == null) {
 				img.setVisibility(View.GONE);
 			}
+			if (items.indexOf(item) == (items.size() - 1)) {
+				line.setVisibility(View.GONE);
+			}
+
 			tx.setText(item.getText());
 			v.setOnClickListener(item.getOnClickListener());
 			layout.addView(v);

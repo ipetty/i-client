@@ -9,10 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.Selection;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,14 +25,16 @@ public class LoginActivity extends BaseActivity {
 	private EditText passwordView;
 	private String account = null;
 	private String password = null;
-	private int focuscont = 0;
-	
+	private TextView toggleView = null;
+	private boolean psdDisplayFlg = false;
+
+	// private int focuscont = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
-		
+
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -47,6 +50,7 @@ public class LoginActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+
 		// 忘记密码
 		TextView forgotView = (TextView) this.findViewById(R.id.forget_password);
 		forgotView.setOnClickListener(new OnClickListener() {
@@ -56,24 +60,22 @@ public class LoginActivity extends BaseActivity {
 			}
 		});
 
-		accountView = (EditText) this.findViewById(R.id.account);
-		accountView.setOnFocusChangeListener(new OnFocusChangeListener(){
+		//
+		toggleView = (TextView) this.findViewById(R.id.login_toggle_password);
+		toggleView.setOnClickListener(togglePasswordClick);
 
-            @Override
-            public void onFocusChange(View arg0, boolean hasFocus) {
-                if(hasFocus){
-                	accountView.setHint(null);
-                	if(focuscont==0){
-                		accountView.clearFocus();
-                	}
-                	focuscont++;
-                }else{
-                	accountView.setHint("Email");
-                }
-                
-            }
-            
-        });
+		accountView = (EditText) this.findViewById(R.id.account);
+
+		/*
+		 * accountView.setOnFocusChangeListener(new OnFocusChangeListener(){
+		 * 
+		 * @Override public void onFocusChange(View arg0, boolean hasFocus) {
+		 * if(hasFocus){ accountView.setHint(null); if(focuscont==0){
+		 * accountView.clearFocus(); } focuscont++; }else{
+		 * accountView.setHint("Email"); }
+		 * 
+		 * }
+		 */
 		passwordView = (EditText) this.findViewById(R.id.password);
 		// 登陆
 		View loginBtnView = (View) this.findViewById(R.id.button);
@@ -102,51 +104,63 @@ public class LoginActivity extends BaseActivity {
 
 	}
 
-	//登录
+	// 登录
 	private final OnClickListener loginOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View loginBtnView) {
 			if (!validateLogin()) {
 				return;
 			}
-			new LoginTask(LoginActivity.this).execute(account,password);
+			new LoginTask(LoginActivity.this).execute(account, password);
 		}
 	};
-	
-	//登录前校验
+
+	// 密码可见
+	private OnClickListener togglePasswordClick = new OnClickListener() {
+		@Override
+		public void onClick(View arg0) {
+			int index = passwordView.getSelectionStart();
+			if (!psdDisplayFlg) {
+				// display password text, for example "123456"
+				// passwordView.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+				passwordView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+				toggleView.setText(R.string.login_toggle_password_hide);
+			} else {
+				// hide password, display "."
+				// passwordView.setTransformationMethod(PasswordTransformationMethod.getInstance());
+				passwordView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+				toggleView.setText(R.string.login_toggle_password_show);
+			}
+			psdDisplayFlg = !psdDisplayFlg;
+			Editable etable = passwordView.getText();
+			Selection.setSelection(etable, index);
+		}
+	};
+
+	// 登录前校验
 	private boolean validateLogin() {
 		this.account = accountView.getText().toString();
 		this.password = passwordView.getText().toString();
-		
-		if(StringUtils.isBlank(this.account)){
+
+		if (StringUtils.isBlank(this.account)) {
 			accountView.requestFocus();
-			Toast.makeText(this, "Email不能为空",Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.login_empty_account, Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		
-		if(!ValidUtils.isEmail(this.account)){
+
+		if (!ValidUtils.isEmail(this.account)) {
 			accountView.requestFocus();
-			Toast.makeText(this, "Email格式不正确",Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.login_error_invalid_email, Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		
-		
-		if(StringUtils.isBlank(this.password)){
+
+		if (StringUtils.isBlank(this.password)) {
 			passwordView.requestFocus();
-			Toast.makeText(this, "密码不能为空",Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.login_empty_password, Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		
+
 		return true;
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
-	}
-
-	
 
 }

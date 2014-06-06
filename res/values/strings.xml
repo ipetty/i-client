@@ -25,8 +25,37 @@
     <string name="forget_password">忘记密码</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
+    
+    <string name="account">账号</string>
+    <string name="input_account_hint">请输入邮箱</string>
+    <string name="password">密码</string>
+    <string name="input_password_hint">请输入密码</string>
+    <string name="login_toggle_password_show">显示</string>
+    <string name="login_toggle_password_hide">隐藏</string>
+    <string name="forgot_password">忘记密码？</string>
+    <string name="ok_button">确定</string>
+    <string name="login_empty_account">账号不能为空</string>
+    <string name="login_error_invalid_email">邮箱格式不正确</string>
+    <string name="login_empty_password">密码不能为空</string>
+    <string name="login_failure_other">登录失败</string>
+    <string name="login_failure_auth">用户名或密码不正确</string>
     <string name="login_loading">正在登录...</string>
-
+    
+     <string name="sina_login">新浪微博登录</string>
+     <string name="qq_login">QQ账号登录</string>
+     
+         <string name="user_info">用户信息</string>
+    <string name="pet_info">宠物信息</string>
+    
+      <string name="nickname">昵称</string>
+      <string name="input_nickname_hint">请输入用户昵称</string>
+      <string name="pet_name">名称</string>
+      <string name="input_pet_name_hint">请输入宠物名称</string>
+      <string name="pet_sex">性别</string>
+      <string name="input_sex_name_hint">请选择宠物性别</string>
+ 	 <string name="pet_type">类型</string>
+     <string name="input_type_name_hint">请选择宠物类型</string>
+      
     <!-- main -->
     <string name="sub_nav_title_home">主页</string>
     <string name="sub_nav_title_discover">发现</string>
@@ -74,5 +103,14 @@
     <string name="title_activity_petty">PettyActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_location">LocationActivity</string>
+
+  
+
+    
+ 
+
+
+   
+
 
 </resources>
