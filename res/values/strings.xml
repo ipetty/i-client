@@ -25,6 +25,20 @@
     <string name="forget_password">忘记密码</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
+    
+    <string name="account">账号:</string>
+    <string name="input_account_hint">请输入邮箱</string>
+    <string name="password">密码:</string>
+    <string name="input_password_hint">请输入密码</string>
+    <string name="login_toggle_password_show">显示</string>
+    <string name="login_toggle_password_hide">隐藏</string>
+    <string name="forgot_password">忘记密码？</string>
+    <string name="ok_button">确定</string>
+    <string name="login_empty_account">账号不能为空</string>
+    <string name="login_error_invalid_email">邮箱格式不正确</string>
+    <string name="login_empty_password">密码不能为空</string>
+    <string name="login_failure_other">登录失败</string>
+    <string name="login_failure_auth">用户名或密码不正确</string>
     <string name="login_loading">正在登录...</string>
 
     <!-- main -->
@@ -74,5 +88,6 @@
     <string name="title_activity_petty">PettyActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_location">LocationActivity</string>
+
 
 </resources>
