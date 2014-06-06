@@ -13,17 +13,25 @@ import android.os.AsyncTask;
 public abstract class MyAsyncTask <P,T> extends AsyncTask<P, Integer, T> {
 	public final static String TAG = "MyAsyncTask";
 	
+	private final String loadingMessage;
+	
 	protected BaseActivity activity;
 	
-	public MyAsyncTask(BaseActivity activity) {
+	//带有默认loading信息的构造
+	public MyAsyncTask(BaseActivity activity ) {
 		this.activity = activity;
+		this.loadingMessage = activity.getResources().getString(R.string.app_loging);
+	}
+	//带有自定义loading信息的构造
+	public MyAsyncTask(BaseActivity activity,String  loadingMessage) {
+		this.activity = activity;
+		this.loadingMessage = loadingMessage;
 	}
 	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		String str = activity.getResources().getString(R.string.app_loging);
-		activity.showProgressDialog(str);
+		activity.showProgressDialog(this.loadingMessage);
 	}
 
 
