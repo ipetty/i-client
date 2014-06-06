@@ -84,6 +84,8 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
         HttpHeaders responseHeaders = resp.getHeaders();
         String rut = responseHeaders.getFirst(HEADER_NAME_USER_TOKEN);
         String rrt = responseHeaders.getFirst(HEADER_NAME_USER_TOKEN);
+        Log.i(TAG, "接收到userToken:"+rut);
+        Log.i(TAG, "接收到refreshToken:" + rrt);
         if (StringUtils.isNotBlank(rut)&&!userToken.equals(rut)) {
         	StateManager.setUserToken(context, rut);
 		}

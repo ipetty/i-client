@@ -14,13 +14,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 
-public class MyApplicationErrorHandler implements UncaughtExceptionHandler {
+public class MyAppCrashHandler implements UncaughtExceptionHandler {
 
-    private static final String TAG = "ActivityErrorHandler";
+    private static final String TAG = "MyAppCrashHandler";
     private final Thread.UncaughtExceptionHandler mDefaultHandler;
     private final Context mContext;
 
-    public  MyApplicationErrorHandler(Context context) {
+    public  MyAppCrashHandler(Context context) {
     	mContext = context;
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
     }
@@ -30,9 +30,18 @@ public class MyApplicationErrorHandler implements UncaughtExceptionHandler {
     public void uncaughtException(Thread thread, Throwable ex) {
     	Log.e(TAG, ex.getMessage(), ex);
     	String msg = "亲，出错了";
-    	if (ex instanceof APIException ){
-    		msg = ex.getMessage();
+    	
+    	if(ex instanceof Throwable){
+    		try {
+    			throw ex;
+    		}catch (APIException e) {
+    			msg = ex.getMessage();
+        		Log.i(TAG, "APIException:"+msg);
+    		}catch (Throwable e) {
+    			// DO Nothing;
+    		}
     	}
+
     	final String errMsg = msg;
     	
     	new Thread() {
