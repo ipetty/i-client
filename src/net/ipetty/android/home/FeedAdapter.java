@@ -8,22 +8,18 @@ import net.ipetty.android.comment.CommentActivity;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.like.LikeActivity;
 import net.ipetty.android.main.MainActivity;
+import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.FeedVO;
 
 import org.apache.commons.lang3.StringUtils;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -239,7 +235,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			Toast.makeText(context, "暂未实现", Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(context, SpaceActivity.class);
+			context.startActivity(intent);
 		}
 	};
 
@@ -255,9 +252,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				// Intent intent = new Intent((MainActivity) context,
-				// LikeActivity.class);
-				// ((MainActivity) context).startActivity(intent);
+				Intent intent = new Intent((MainActivity) context, LikeActivity.class);
+				((MainActivity) context).startActivity(intent);
 			}
 		});
 
@@ -280,7 +276,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		String liked_num_text = this.context.getResources().getString(R.string.liked_num_text);
 		String likedNum = "10";
 		html += String.format(liked_num_text, likedNum);
-		setLinkClickIntercept(holder.like_text, html);
+		WebLinkUtils.setUserLinkIntercept((Activity) context, holder.like_text, html);
 
 		// 评论 总数
 		holder.comments_num.setOnClickListener(myCommentClick);
@@ -301,40 +297,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.list_feed_item_feedback_comment, null);
 		TextView t = (TextView) layout.findViewById(R.id.row_feed_textview_comments_item);
 		String html = username + " : " + text;
-		setLinkClickIntercept(t, html);
+		WebLinkUtils.setUserLinkClickIntercept((Activity) context, t, html);
 
 		return layout;
-	}
-
-	private void setLinkClickIntercept(TextView tv, String text) {
-		CharSequence charSequence = Html.fromHtml(text);
-		Spannable sp = (Spannable) charSequence;
-		int end = charSequence.length();
-		URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
-		Log.i(TAG, "length" + urls.length);
-		SpannableStringBuilder spannable = new SpannableStringBuilder(sp);
-		for (URLSpan url : urls) {
-			Log.i(TAG, "url" + url.getURL());
-			Log.i(TAG, "start" + sp.getSpanStart(url));
-			Log.i(TAG, "end" + sp.getSpanEnd(url));
-			spannable.setSpan(new MyURLSpan(), sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-		}
-		tv.setText(spannable);
-		tv.setMovementMethod(LinkMovementMethod.getInstance());
-	}
-
-	private class MyURLSpan extends ClickableSpan {
-		@Override
-		public void onClick(View widget) {
-			// TODO Auto-generated method stub
-			Toast.makeText(context, "T", Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
-		public void updateDrawState(TextPaint ds) {
-			super.updateDrawState(ds);
-			ds.setUnderlineText(false);
-		}
 	}
 
 	public class OnCommentClick implements OnClickListener {

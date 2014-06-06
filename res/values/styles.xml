@@ -24,14 +24,6 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="VersionText">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:shadowColor">#999999</item>
-        <item name="android:shadowDx">1.0</item>
-        <item name="android:shadowDy">1.0</item>
-        <item name="android:shadowRadius">0.5</item>
-    </style>
-
     <style name="ActionBarButton">
         <item name="android:background">@drawable/action_bar_button_background</item>
         <item name="android:layout_width">@dimen/action_bar_height</item>
@@ -82,6 +74,41 @@
     <style name="DialogAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/push_up_in</item>
         <item name="android:windowExitAnimation">@anim/push_down_out</item>
+    </style>
+    
+    
+    <style name="welcome_button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/welcome_button_text_dark</item>
+        <item name="android:background">@drawable/button_light_selector</item>
+        <item name="android:shadowColor">@color/welcome_button_shadow_white_grey</item>
+    </style>
+    
+<style name="welcome_caption">
+        <item name="android:textSize">@dimen/welcome_image_description_font_size</item>
+        <item name="android:textColor">@color/welcome_catchphrase</item>
+        <item name="android:shadowColor">@color/welcome_black_shadow</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">2.0</item>
+    </style>
+    
+    <style name="welcome_title">
+        <item name="android:textSize">@dimen/welcome_image_title_font_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/welcome_title</item>
+        <item name="android:shadowColor">@color/welcome_black_shadow</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">2.0</item>
+    </style>
+    
+    <style name="version_text">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:shadowColor">@color/hint_text_color</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">0.5</item>
     </style>
     
     

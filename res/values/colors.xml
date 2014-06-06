@@ -15,4 +15,12 @@
     <color name="hint_text_color">#ff999999</color>
     <color name="color_item_bg">#fffafafa</color>
     <color name="color_item_bg_click">#ffdddddd</color>
+    <color name="comment_btn_pressed">#7Fdddddd</color>
+    
+    <color name="welcome_button_shadow_white_grey">#ffe3e0de</color>
+    <color name="welcome_button_text_dark">#ff313131</color>
+   <color name="welcome_black_shadow">#ff000000</color>
+    <color name="welcome_catchphrase">#ffdddddd</color>
+    <color name="welcome_button_red">#ffc83122</color>
+    <color name="welcome_title">#ffffffff</color>
 </resources>

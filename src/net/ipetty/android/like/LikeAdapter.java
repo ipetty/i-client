@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.ipetty.R;
 import net.ipetty.android.demo.CommentVO;
-import net.ipetty.android.demo.UserVO;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +26,7 @@ public class LikeAdapter extends BaseAdapter implements OnScrollListener {
 
 	@Override
 	public int getCount() {
-		return list == null ? 0 : list.size();
+		return 2;// list == null ? 0 : list.size();
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class LikeAdapter extends BaseAdapter implements OnScrollListener {
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return list.get(position).getId();
+		return 0;// list.get(position).getId();
 	}
 
 	// 构建一个布局缓存的结构体 与VO对应
@@ -69,10 +68,10 @@ public class LikeAdapter extends BaseAdapter implements OnScrollListener {
 			holder = (ViewHolder) view.getTag();
 		}
 		// 数据与界面绑定
-		CommentVO vo = (CommentVO) this.getItem(position);
-		UserVO u = vo.getUser();
-		holder.text.setText(vo.getText());
-		holder.name.setText(u.getName());
+		// CommentVO vo = (CommentVO) this.getItem(position);
+		// UserVO u = vo.getUser();
+		// holder.text.setText(vo.getText());
+		// holder.name.setText(u.getName());
 		return view;
 	}
 

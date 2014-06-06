@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -66,6 +67,15 @@ public class CommentActivity extends BaseActivity {
 		listView.setAdapter(adapter);
 		loadData();
 
+		//
+		View button = this.findViewById(R.id.button);
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	// TODO:这部分方法没考虑好 是放在adapter中 还是 Activity中
