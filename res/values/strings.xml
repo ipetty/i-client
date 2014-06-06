@@ -40,6 +40,9 @@
     <string name="login_failure_other">登录失败</string>
     <string name="login_failure_auth">用户名或密码不正确</string>
     <string name="login_loading">正在登录...</string>
+    
+     <string name="sina_login">新浪微博登录</string>
+     <string name="qq_login">QQ账号登录</string>
 
     <!-- main -->
     <string name="sub_nav_title_home">主页</string>
@@ -88,6 +91,7 @@
     <string name="title_activity_petty">PettyActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_location">LocationActivity</string>
+   
 
 
 </resources>

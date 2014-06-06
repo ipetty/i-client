@@ -145,30 +145,55 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/ok_button"
-        android:background="@drawable/button_light_selector"
+        android:textColor="@color/title_gray"
         android:textSize="16sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:focusable="false"
-            android:focusableInTouchMode="false" >
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentLeft="true"
+       android:orientation="vertical" >
+  		 <ImageView
+              android:layout_width="fill_parent"
+              android:layout_height="1.0px"
+              android:background="@drawable/drawable_line" />
 
-            <TextView
-                android:id="@+id/sina"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:text="sina登录" />
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="48dp"
+           android:layout_gravity="center"
+           android:focusable="false"
+           android:focusableInTouchMode="false" >
 
-            <TextView
-                android:id="@+id/qq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:text="qq登录" />
-        </LinearLayout>
+           <TextView
+               android:id="@+id/sina"
+               android:layout_width="wrap_content"
+               android:layout_height="48dp"
+               android:layout_weight="1.0"
+               android:gravity="center"
+               android:text="@string/sina_login" 
+               android:textColor="@color/title_gray"
+               android:background="@drawable/list_color_item_bg"
+               android:textSize="16sp" />
+           
+  			 <ImageView
+              android:layout_width="1.0px"
+              android:layout_height="fill_parent"
+              android:background="@drawable/drawable_line" />
+  			 
+           <TextView
+               android:id="@+id/qq"
+               android:layout_width="wrap_content"
+               android:layout_height="48dp"
+                 android:gravity="center"
+               android:layout_weight="1.0"
+               android:text="@string/qq_login" 
+                 android:textColor="@color/title_gray"
+                  android:background="@drawable/list_color_item_bg"
+               android:textSize="16sp" />
+
+       </LinearLayout>
+   </LinearLayout>
 
 </RelativeLayout>
