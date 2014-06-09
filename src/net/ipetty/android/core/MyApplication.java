@@ -18,7 +18,7 @@ public class MyApplication extends Application {
 		super.onCreate();
 		Log.i(TAG, "onCreate");
 		initImageLoader(getApplicationContext());
-		Thread.setDefaultUncaughtExceptionHandler(new MyApplicationErrorHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new MyAppCrashHandler(this));
 	}
 
 	// imageLoader
