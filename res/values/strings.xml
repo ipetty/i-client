@@ -55,6 +55,8 @@
       <string name="input_sex_name_hint">请选择宠物性别</string>
  	 <string name="pet_type">类型</string>
      <string name="input_type_name_hint">请选择宠物类型</string>
+     
+     <string name="changeAccount">切换账号</string>
       
     <!-- main -->
     <string name="sub_nav_title_home">主页</string>
@@ -103,6 +105,7 @@
     <string name="title_activity_petty">PettyActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_location">LocationActivity</string>
+
 
   
 
