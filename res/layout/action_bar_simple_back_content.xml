@@ -4,7 +4,7 @@
              android:id="@+id/action_bar_left_image" 
              android:src="@drawable/action_bar_back"
            	 style="@style/ActionBarButton"/>
-         <include layout="@layout/vertical_divider"  />
+         <include layout="@layout/action_bar_vertical_divider"  />
          
          <TextView
              android:id="@+id/action_bar_title"

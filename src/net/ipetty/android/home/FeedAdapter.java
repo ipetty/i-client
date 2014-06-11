@@ -9,6 +9,7 @@ import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.image.LargerImageActivity;
 import net.ipetty.android.like.LikeActivity;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.space.SpaceActivity;
@@ -32,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
@@ -98,7 +98,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 	// 构建一个布局缓存的结构体 与VO对应
 	public class ViewHolder {
-		public ImageView avator;
+		public ImageView avatar;
 		public TextView nickname;
 		public TextView created_at;
 		public TextView content;
@@ -138,8 +138,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			});
 
 			// 头像
-			holder.avator = (ImageView) view.findViewById(R.id.avator);
-			holder.avator.setOnClickListener(userInfoOnClick);
+			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
+			holder.avatar.setOnClickListener(userInfoOnClick);
 			// 姓名
 			holder.nickname = (TextView) view.findViewById(R.id.nickname);
 			holder.nickname.setOnClickListener(userInfoOnClick);
@@ -223,10 +223,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				// TODO 展示大图
-				// Intent intent = new Intent((MainActivity) context,
-				// LargerImageActivity.class);
-				// ((MainActivity) context).startActivity(intent);
-				Toast.makeText(context, "暂未实现", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent((MainActivity) context, LargerImageActivity.class);
+				((MainActivity) context).startActivity(intent);
+				// Toast.makeText(context, "暂未实现", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

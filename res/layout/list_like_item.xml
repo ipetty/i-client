@@ -17,11 +17,11 @@
     android:background="@drawable/list_color_item_bg" >
 
 	   			<ImageView 
-	   			    android:id="@+id/avator" 
+	   			    android:id="@+id/avatar" 
 			        android:layout_width="32dp" 
 			        android:layout_height="32dp" 
 			        android:layout_centerVertical="true"
-			        android:src="@drawable/avator" 
+			        android:src="@drawable/avatar" 
 			        android:scaleType="fitXY"
 			      />
 
@@ -31,7 +31,7 @@
 			        android:layout_height="32dp"
 			        android:layout_centerVertical="true"
 			        android:layout_marginLeft="10dp"
-			        android:layout_toRightOf="@+id/avator"
+			        android:layout_toRightOf="@+id/avatar"
 			        android:ellipsize="end"
 			        android:gravity="left|center"
 			        android:singleLine="true"
@@ -49,8 +49,5 @@
 			        android:src="@drawable/icon_forward" />
 
 	</RelativeLayout>
-   <ImageView
-              android:layout_width="fill_parent"
-              android:layout_height="1.0px"
-              android:background="@drawable/drawable_line" />
+	<include layout="@layout/horizontal_divider"/>
 </LinearLayout>

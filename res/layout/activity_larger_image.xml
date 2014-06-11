@@ -8,11 +8,11 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:scaleType="matrix"
-        android:src="@drawable/ic_empty" />
+        android:scaleType="centerInside"
+        android:src="@drawable/default_main_header_bg" />
 
 </RelativeLayout>

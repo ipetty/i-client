@@ -7,7 +7,7 @@
     android:layout_marginBottom="0dp">
     <ImageView 
         android:id="@+id/row_feed_glyph" 
-        android:src="@drawable/avator" 
+        android:src="@drawable/avatar" 
         android:paddingTop="2.0dip" 
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content" 

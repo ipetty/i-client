@@ -87,13 +87,18 @@
     <!-- FeedbackActivity -->
     <string name="title_activity_feedback">意见反馈</string>
     <string name="feedback_no_empty">反馈内容不能为空</string>
+    <string name="feedback_hint">请填写您的意见和建议</string>
 
     <!-- space -->
     <string name="title_activity_space">我的空间</string>
+    <string name="title_space">%1s的空间</string>
     <string name="feeds">帖子</string>
     <string name="follows">关注</string>
     <string name="fans">粉丝</string>
     <string name="bonusPoint">积分</string>
+    <string name="user_edit">资料修改</string>
+     <string name="follow_text">关注</string>
+     <string name="unfollow_text">取消关注</string>
 
     <!-- fans -->
     <string name="title_activity_fans">粉丝</string>
@@ -105,6 +110,8 @@
     <string name="title_activity_petty">PettyActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_location">LocationActivity</string>
+
+  
 
 
   
