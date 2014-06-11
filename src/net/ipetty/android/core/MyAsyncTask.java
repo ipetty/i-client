@@ -17,12 +17,12 @@ import org.springframework.web.client.RestClientException;
  * 异步任务基类,规范异步任务使用方法，与acivity基类配合使用
  *
  * @author xiao
- *
- * @param <T> 结果类型
+ * @param <Params> 入参类型
+ * @param <Result> 结果类型
  */
-public abstract class MyAsyncTask<P, T> extends AsyncTask<P, Integer, T> {
+public abstract class MyAsyncTask<Params, Result> extends AsyncTask<Params, Integer, Result> {
 
-    public final static String TAG = "MyAsyncTask";
+    private final static String TAG = "MyAsyncTask";
 
     protected Boolean hasError = false;
 
@@ -38,7 +38,7 @@ public abstract class MyAsyncTask<P, T> extends AsyncTask<P, Integer, T> {
 
     //带有默认loading信息的构造
     public MyAsyncTask(Activity activity) {
-
+        super();
         if (activity instanceof BaseActivity) {
             baseActivity = (BaseActivity) activity;
         }
@@ -67,54 +67,55 @@ public abstract class MyAsyncTask<P, T> extends AsyncTask<P, Integer, T> {
 
     //不可进行UI更新
     @Override
-    protected T doInBackground(P... args) {
-        try {
-            return myDoInBackground(args);
-        } catch (HttpClientErrorException e) {				//HTTP客户端异常400
-            Log.i(TAG, "catch HttpClientErrorException");
-            hasError = true;
-            errorMsg = e.getResponseBodyAsString();
-            return null;
-        } catch (HttpServerErrorException e) {				//HTTP服务端异常500
-            Log.i(TAG, "catch HttpServerErrorException");
-            hasError = true;
-            errorMsg = e.getResponseBodyAsString();
-            return null;
-        } catch (ResourceAccessException e) {				//HTTP资源访问（IO）异常
-            Log.i(TAG, "catch ResourceAccessException");
-            hasError = true;
-            errorMsg = e.getMessage();
-            return null;
-        } catch (RestClientException e) {				//HTTP未知异常
-            Log.i(TAG, "catch RestClientException");
-            hasError = true;
-            errorMsg = e.getMessage();
-            return null;
-        } catch (Exception e) {                                         //其它异常
-            Log.i(TAG, "catch Exception");
-            hasError = true;
-            onError(Thread.currentThread(), e);
-            return null;
-        } finally {
-            if (hasError && errorMsg != null) {
-                showError(errorMsg);
-                return null;
-            }
-        }
+    protected Result doInBackground(Params... args) {
+        return myDoInBackground(args);
+//        try {
+//            return myDoInBackground(args);
+//        } catch (HttpClientErrorException e) {				//HTTP客户端异常400
+//            Log.i(TAG, "catch HttpClientErrorException");
+//            hasError = true;
+//            errorMsg = e.getResponseBodyAsString();
+//            return null;
+//        } catch (HttpServerErrorException e) {				//HTTP服务端异常500
+//            Log.i(TAG, "catch HttpServerErrorException");
+//            hasError = true;
+//            errorMsg = e.getResponseBodyAsString();
+//            return null;
+//        } catch (ResourceAccessException e) {				//HTTP资源访问（IO）异常
+//            Log.i(TAG, "catch ResourceAccessException");
+//            hasError = true;
+//            errorMsg = e.getMessage();
+//            return null;
+//        } catch (RestClientException e) {				//HTTP未知异常
+//            Log.i(TAG, "catch RestClientException");
+//            hasError = true;
+//            errorMsg = e.getMessage();
+//            return null;
+//        } catch (Exception e) {                                         //其它异常
+//            Log.i(TAG, "catch Exception");
+//            hasError = true;
+//            onError(Thread.currentThread(), e);
+//            return null;
+//        } finally {
+//            if (hasError && errorMsg != null) {
+//                showError(errorMsg);
+//                return null;
+//            }
+//        }
 
     }
 
-    //
+    //用于继承
     protected void onError(Thread thread, Exception ex) {
-
+        Log.i(TAG, "onError");
     }
 
     //不可进行UI更新
-    protected abstract T myDoInBackground(P... args);
+    protected abstract Result myDoInBackground(Params... args);
 
     //可以进度UI的更新
     @Override
-    protected void onPostExecute(T result) {
+    protected void onPostExecute(Result result) {
         super.onPostExecute(result);
         dismissProgressDialog();
     }
