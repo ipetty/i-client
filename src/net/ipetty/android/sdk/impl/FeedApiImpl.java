@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import net.ipetty.android.core.util.DateUtils;
 import net.ipetty.android.sdk.core.ApiBase;
 import net.ipetty.android.sdk.core.Constant;
 import net.ipetty.sdk.FeedApi;
-import net.ipetty.util.DateUtils;
 import net.ipetty.vo.CommentVO;
 import net.ipetty.vo.FeedFavorVO;
 import net.ipetty.vo.FeedFormVO;
@@ -148,6 +148,33 @@ public class FeedApiImpl extends ApiBase implements FeedApi {
 		super.requireAuthorization();
 
 		return getRestTemplate().postForObject(buildUri(URI_UNFAVOR), favor, FeedVO.class);
+	}
+
+	private static final String URI_DELETE_BY_ID = "/feed/delete";
+	
+	/**
+	 * 删除消息
+	 */
+	@Override
+	public boolean delete(Long id) {
+		super.requireAuthorization();
+
+		return getRestTemplate().postForObject(buildUri(URI_DELETE_BY_ID, "id", String.valueOf(id)), null,
+				Boolean.class);
+	}
+
+	
+	private static final String URI_DELETE_COMMENT = "/feed/comment/delete";
+
+	/**
+	 * 删除评论
+	 */
+	@Override
+	public boolean deleteComment(Long id) {
+		super.requireAuthorization();
+
+		return getRestTemplate().postForObject(buildUri(URI_DELETE_COMMENT, "id", String.valueOf(id)), null,
+				Boolean.class);
 	}
 
 }

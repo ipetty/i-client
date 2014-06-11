@@ -1,5 +1,6 @@
 package net.ipetty.android.core.ui;
 
+import net.ipetty.android.core.MyAppCrashHandler;
 import net.ipetty.android.core.util.ActivityUtils;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActivityUtils.getInstance().addActivity(this);
+		Thread.setDefaultUncaughtExceptionHandler(new MyAppCrashHandler(this));
 	}
 
 	@Override
