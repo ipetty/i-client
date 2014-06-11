@@ -53,8 +53,8 @@ public class LoginHasAccountActivity extends BaseActivity {
 		options = AppUtils.getRoundedImageOptions();
 
 		// avator
-		ImageView avator = (ImageView) this.findViewById(R.id.avator);
-		ImageLoader.getInstance().displayImage(textUrl, avator, options);
+		ImageView avatar = (ImageView) this.findViewById(R.id.avatar);
+		ImageLoader.getInstance().displayImage(textUrl, avatar, options);
 		// passworid
 		passwordView = (EditText) this.findViewById(R.id.password);
 		toggleView = (TextView) this.findViewById(R.id.login_toggle_password);

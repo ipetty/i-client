@@ -50,7 +50,7 @@ public class MainHomeFragment extends Fragment {
 	private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats" };
 	private Dialog cameraDialog;
 	private String mImageName;
-	private ImageView avator;
+	private ImageView avatar;
 
 	private Dialog headBgDialog;
 	private List<ModDialogItem> head_bg_items;
@@ -194,8 +194,8 @@ public class MainHomeFragment extends Fragment {
 		head_bg_items.add(new ModDialogItem(null, "更换相册封面", headBgOnClick));
 
 		View v = activity.getLayoutInflater().inflate(R.layout.list_feed_header, listView, false);
-		avator = (ImageView) v.findViewById(R.id.avator);
-		avator.setOnClickListener(new OnClickListener() {
+		avatar = (ImageView) v.findViewById(R.id.avatar);
+		avatar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub

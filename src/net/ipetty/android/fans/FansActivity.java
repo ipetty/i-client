@@ -1,17 +1,11 @@
 package net.ipetty.android.fans;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.demo.CommentVO;
-import net.ipetty.android.demo.UserVO;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -55,51 +49,15 @@ public class FansActivity extends BaseActivity {
 			@Override
 			public void onLastItemVisible() {
 				// TODO Auto-generated method stub
-				loadMoreData(getList(20));
+				// loadMoreData(getList(20));
 			}
 		});
 
 		// 初始化适配器
 		adapter = new FansAdapter(this);
 		listView.setAdapter(adapter);
-		loadData();
+		// loadData();
 
-	}
-
-	// TODO:这部分方法没考虑好 是放在adapter中 还是 Activity中
-	// 加载数据
-	public void loadData() {
-		adapter.setList(this.getList(0));
-		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-	}
-
-	public void loadData(List<CommentVO> list) {
-		adapter.setList(this.getList(0));
-		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-	}
-
-	// 加载更多数据
-	public void loadMoreData(List<CommentVO> list) {
-		adapter.getList().addAll(list);
-		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-	}
-
-	// 模拟数据
-	public List<CommentVO> getList(int x) {
-		List<CommentVO> list = new ArrayList<CommentVO>(0);
-		for (int i = x; i < x + 20; i++) {
-			CommentVO vo = new CommentVO();
-			vo.setId(i);
-			vo.setText("text" + i);
-
-			UserVO u = new UserVO();
-			u.setId(i);
-			u.setName("user" + i);
-			vo.setUser(u);
-
-			list.add(vo);
-		}
-		return list;
 	}
 
 	private class FansTask extends AsyncTask<Void, Void, String[]> {
@@ -112,17 +70,9 @@ public class FansActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(String[] result) {
-			loadData(getList(0));
 			listView.onRefreshComplete();
 			super.onPostExecute(result);
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.fans, menu);
-		return true;
 	}
 
 }

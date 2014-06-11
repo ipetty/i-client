@@ -13,7 +13,7 @@
         android:src="@drawable/default_main_header_bg"/>
 
     <ImageView
-        android:id="@+id/avator"
+        android:id="@+id/avatar"
         android:layout_width="76dp"
         android:layout_height="76dp"
         android:layout_alignParentLeft="true"
@@ -24,6 +24,6 @@
         android:background="@android:color/white"
         android:padding="2dp"
         android:scaleType="fitXY"
-        android:src="@drawable/avator" />
+        android:src="@drawable/avatar" />
 
 </RelativeLayout>

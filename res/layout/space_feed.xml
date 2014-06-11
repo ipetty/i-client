@@ -8,7 +8,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
-        android:id="@+id/avator"
+        android:id="@+id/avatar"
         android:scaleType="centerCrop"
         android:background="@drawable/mini_avatar_shadow"
         android:layout_width="40.0dip" 

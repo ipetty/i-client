@@ -12,7 +12,7 @@
         android:background="@drawable/action_bar_bg"
         android:gravity="center_vertical" >
         <include layout="@layout/action_bar_simple_back_content" />
-        <include layout="@layout/vertical_divider" />
+        <include layout="@layout/action_bar_vertical_divider" />
         <TextView
             android:id="@+id/btn_publish"
             style="@style/ActionBarButton"
@@ -34,8 +34,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:color/white"
             android:ems="10"
+            android:background="@null"
             android:gravity="center_vertical|top"
             android:hint="@string/publish_hint"
             android:inputType="textMultiLine"

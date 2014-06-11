@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -11,40 +12,43 @@
   <include
         android:id="@+id/include"
         layout="@layout/action_bar_simple_back" />
-    
-   <TextView
-       android:id="@+id/feedback_btn"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
-       android:layout_alignParentRight="true"
-       android:layout_below="@+id/feedback_linearLayout"
-       android:layout_marginLeft="10dp"
-       android:layout_marginRight="10dp"
-       android:layout_marginTop="10dp"
-       android:gravity="center"
-       android:text="提交"
-       android:textSize="18sp" />
-
+   
    <LinearLayout
-       android:id="@+id/feedback_linearLayout"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_alignParentLeft="true"
-       android:layout_below="@+id/include"
-       android:orientation="vertical"
-       android:padding="5dp" >
+        android:layout_width="match_parent"
+         android:layout_height="120dp"
+        android:background="@color/color_item_bg"
+        android:padding="8dp">
 
-       <EditText
-           android:id="@+id/editText"
-           android:layout_width="match_parent"
-           android:layout_height="200dp"
-           android:layout_gravity="top"
-           android:background="@null"
-           android:ems="10"
-           android:gravity="top|center_vertical"
-           android:inputType="textMultiLine"
-           android:scrollbarStyle="insideInset"
-           android:scrollbars="vertical" />
-   </LinearLayout>
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:background="@null"
+            android:gravity="center_vertical|top"
+            android:hint="@string/feedback_hint"
+            android:inputType="textMultiLine"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:textSize="16sp" />
 
-</RelativeLayout>
+    </LinearLayout>
+       <ImageView
+              android:layout_width="fill_parent"
+              android:layout_height="1.0px"
+              android:background="@drawable/drawable_line" />
+   <Button
+        android:id="@+id/feedback_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/ok_button"
+        android:background="@drawable/button_light_selector"
+        android:textColor="@color/title_gray"
+        android:textSize="16sp" />
+   
+</LinearLayout>

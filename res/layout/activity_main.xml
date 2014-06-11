@@ -39,7 +39,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/linearLayout"
             android:gravity="center_vertical" >
-            <include layout="@layout/vertical_divider" />
+            <include layout="@layout/action_bar_vertical_divider" />
             <ImageView
                 android:id="@+id/action_bar_right_image"
                 style="@style/ActionBarButton"
