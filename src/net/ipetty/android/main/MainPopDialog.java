@@ -3,6 +3,7 @@ package net.ipetty.android.main;
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.feedback.FeedbackActivity;
+import net.ipetty.android.setting.SettingActivity;
 import net.ipetty.android.space.SpaceActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +15,9 @@ import android.widget.TextView;
 
 public class MainPopDialog extends BaseActivity {
 
-	private View logout;
 	private View feedback;
 	private View person;
+	private View setting;
 	private ImageView avator;
 	private TextView username;
 
@@ -34,6 +35,9 @@ public class MainPopDialog extends BaseActivity {
 		// logout.setOnClickListener(myLogout);
 		feedback.setOnClickListener(myFeedback);
 		person.setOnClickListener(myPerson);
+
+		setting = this.findViewById(R.id.menu_setting_layout);
+		setting.setOnClickListener(mySetting);
 
 		// MyApp application = (MyApp) this.getApplication();
 		// IpetUser user = application.getUser();
@@ -65,6 +69,16 @@ public class MainPopDialog extends BaseActivity {
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(MainPopDialog.this, FeedbackActivity.class);
+			startActivity(intent);
+			finish();
+		}
+
+	};
+	private final OnClickListener mySetting = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(MainPopDialog.this, SettingActivity.class);
 			startActivity(intent);
 			finish();
 		}

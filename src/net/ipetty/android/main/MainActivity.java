@@ -2,6 +2,7 @@ package net.ipetty.android.main;
 
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BaseFragmentActivity;
+import net.ipetty.android.core.util.ActivityUtils;
 import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.discover.MainDiscoverFragment;
 import net.ipetty.android.home.MainHomeFragment;
@@ -15,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends BaseFragmentActivity {
 	public final static String TAG = "MainActivity";
@@ -251,5 +254,23 @@ public class MainActivity extends BaseFragmentActivity {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		Log.i(TAG, "onDestroy");
+	}
+
+	private long mExitTime;
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if ((System.currentTimeMillis() - mExitTime) > 2000) {
+				String exit_once_again = getResources().getString(R.string.exit_once_again);
+				Toast.makeText(this, exit_once_again, Toast.LENGTH_SHORT).show();
+				mExitTime = System.currentTimeMillis();
+			} else {
+				ActivityUtils.getInstance().exit();
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+
 	}
 }

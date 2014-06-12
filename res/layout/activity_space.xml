@@ -187,31 +187,34 @@
 
               <ImageView
                   android:id="@+id/space_petty_btn"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
+                  android:layout_width="0dp"
+                  android:layout_height="fill_parent"
                   android:layout_gravity="center"
                   android:layout_weight="1"
-                  android:src="@drawable/action_bar_menu" />
+                  android:scaleType="center"
+                  android:src="@drawable/profile_petty" />
 
               <ImageView
                   android:id="@+id/space_photo_btn"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
+                  android:layout_width="0dp"
+                  android:layout_height="fill_parent"
                   android:layout_gravity="center"
+                   android:scaleType="center"
                   android:layout_weight="1"
-                  android:src="@drawable/action_bar_menu" />
+                  android:src="@drawable/profile_grid" />
 
               <ImageView
                   android:id="@+id/space_feed_btn"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
+                  android:layout_width="0dp"
+                  android:layout_height="fill_parent"
                   android:layout_gravity="center"
+                   android:scaleType="center"
                   android:layout_weight="1"
-                  android:src="@drawable/action_bar_menu" />
+                  android:src="@drawable/profile_list" />
 
           </LinearLayout>
 
-               <include layout="@layout/horizontal_divider"/>
+        <include layout="@layout/horizontal_divider"/>
         <ViewFlipper
             android:id="@+id/viewFlipper"
             android:layout_width="match_parent"
