@@ -1,6 +1,5 @@
 package net.ipetty.android.login;
 
-import net.ipetty.android.register.RegisterActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +15,7 @@ import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.ValidUtils;
+import net.ipetty.android.register.RegisterActivity;
 import org.apache.commons.lang3.StringUtils;
 
 public class LoginActivity extends BaseActivity {
@@ -27,7 +27,6 @@ public class LoginActivity extends BaseActivity {
     private String password = null;
     private TextView toggleView = null;
     private boolean psdDisplayFlg = false;
-    private LoginTaskListener loginTaskListener;
 
     // private int focuscont = 0;
     @Override
@@ -81,7 +80,6 @@ public class LoginActivity extends BaseActivity {
         // 登陆
         View loginBtnView = (View) this.findViewById(R.id.button);
         loginBtnView.setOnClickListener(loginOnClick);
-        loginTaskListener = new LoginTaskListener(this);
 
         // sina
         View sina = this.findViewById(R.id.sina);
