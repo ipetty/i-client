@@ -1,4 +1,4 @@
-package net.ipetty.android.login;
+package net.ipetty.android.register;
 
 import net.ipetty.android.core.Task;
 import net.ipetty.android.core.ui.BaseActivity;
