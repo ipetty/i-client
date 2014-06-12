@@ -8,8 +8,6 @@ package net.ipetty.android.core;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 /**
  *
@@ -80,7 +78,7 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
     protected void onPostExecute(Result result) {
         Log.d(TAG, "onPostExecute");
         super.onPostExecute(result);
-        if (result != null) {
+        if (ex == null) {
             listener.onSuccess(result);
         } else {
             listener.onError(ex);

@@ -6,12 +6,8 @@
 package net.ipetty.android.core;
 
 import android.app.Activity;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.ipetty.R;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.ui.BaseFragmentActivity;
 import net.ipetty.android.sdk.core.APIException;
@@ -52,8 +48,6 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
         }
 
         this.activity = activity;
-
-        this.loadingMessage = activity.getResources().getString(R.string.app_loging);
     }
 
     /**
@@ -141,22 +135,26 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     //显示进度框
     private void showProgressDialog() {
         Log.d(TAG, "showProgressDialog");
-        if (baseActivity != null) {
-            baseActivity.showProgressDialog(loadingMessage);
-        }
-        if (baseFragmentActivity != null) {
-            baseFragmentActivity.showProgressDialog(loadingMessage);
+        if (loadingMessage != null) {
+            if (baseActivity != null) {
+                baseActivity.showProgressDialog(loadingMessage);
+            }
+            if (baseFragmentActivity != null) {
+                baseFragmentActivity.showProgressDialog(loadingMessage);
+            }
         }
     }
 
     //隐藏进度框
     private void dismissProgressDialog() {
         Log.d(TAG, "dismissProgressDialog");
-        if (baseActivity != null) {
-            baseActivity.dismissProgressDialog();
-        }
-        if (baseFragmentActivity != null) {
-            baseFragmentActivity.dismissProgressDialog();
+        if (loadingMessage != null) {
+            if (baseActivity != null) {
+                baseActivity.dismissProgressDialog();
+            }
+            if (baseFragmentActivity != null) {
+                baseFragmentActivity.dismissProgressDialog();
+            }
         }
     }
 
@@ -164,13 +162,6 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     private void showError(final String msg) {
         Log.d(TAG, "showError");
         Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
-//        new Thread() {
-//            public void run() {
-//                Looper.prepare();
-//                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
-//                Looper.loop();
-//            }
-//        }.start();
     }
 
 }

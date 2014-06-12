@@ -1,12 +1,5 @@
 package net.ipetty.android.login;
 
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.ValidUtils;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +11,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.ValidUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class LoginActivity extends BaseActivity {
 
@@ -70,12 +68,12 @@ public class LoginActivity extends BaseActivity {
 
         /*
          * accountView.setOnFocusChangeListener(new OnFocusChangeListener(){
-         * 
+         *
          * @Override public void onFocusChange(View arg0, boolean hasFocus) {
          * if(hasFocus){ accountView.setHint(null); if(focuscont==0){
          * accountView.clearFocus(); } focuscont++; }else{
          * accountView.setHint("Email"); }
-         * 
+         *
          * }
          */
         passwordView = (EditText) this.findViewById(R.id.password);
@@ -115,7 +113,7 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
 
-            new LoginTask(LoginActivity.this, loginTaskListener).execute(account, password);
+            new LoginTask(LoginActivity.this).execute(account, password);
         }
     };
 
