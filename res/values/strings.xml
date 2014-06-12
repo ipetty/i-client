@@ -106,10 +106,17 @@
     <!-- bonus_point -->
     <string name="title_activity_bonus_point">积分</string>
     <string name="title_activity_petty">PettyActivity</string>
-    <string name="title_activity_user">UserActivity</string>
+    
     <string name="title_activity_location">LocationActivity</string>
+    
+    <!-- 个人资料 -->
+        <string name="save">保存</string>
+    <string name="title_activity_user">个人资料</string>
+     <string name="nickname_hint">请输入昵称</string>
     <!-- 系统设置 -->
     <string name="title_activity_setting">设置</string>
     <string name="logout">注销</string>
+
+   
 
 </resources>
