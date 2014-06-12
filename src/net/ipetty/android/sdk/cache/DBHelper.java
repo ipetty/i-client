@@ -36,7 +36,7 @@ public class DBHelper extends SQLiteOpenHelper {
         str.append("[value] TEXT,");			//返回值
         str.append("[etag] TEXT,");				//etag
         str.append("[hits] BIGINT,");			//命中次数
-        str.append("[put_on] BIGINT,");			//保存或更新时间戳（毫秒数）
+        str.append("[put_on] BIGINT,");			//放入缓存时间戳（毫秒数）
         str.append("[expire_on] BIGINT,");		//过期时间戳（毫秒数）
         str.append("[class_type] TEXT);");		//Value所对应的Java类型
         db.execSQL(str.toString());

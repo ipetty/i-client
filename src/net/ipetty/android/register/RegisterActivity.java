@@ -1,4 +1,4 @@
-package net.ipetty.android.login;
+package net.ipetty.android.register;
 
 import java.util.ArrayList;
 import java.util.List;
