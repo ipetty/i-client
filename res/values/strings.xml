@@ -25,7 +25,6 @@
     <string name="forget_password">忘记密码</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
-    
     <string name="account">账号</string>
     <string name="input_account_hint">请输入邮箱</string>
     <string name="password">密码</string>
@@ -40,28 +39,26 @@
     <string name="login_failure_other">登录失败</string>
     <string name="login_failure_auth">用户名或密码不正确</string>
     <string name="login_loading">正在登录...</string>
-    
-     <string name="sina_login">新浪微博登录</string>
-     <string name="qq_login">QQ账号登录</string>
-     
-         <string name="user_info">用户信息</string>
+    <string name="sina_login">新浪微博登录</string>
+    <string name="qq_login">QQ账号登录</string>
+    <string name="user_info">用户信息</string>
     <string name="pet_info">宠物信息</string>
-    
-      <string name="nickname">昵称</string>
-      <string name="input_nickname_hint">请输入用户昵称</string>
-      <string name="pet_name">名称</string>
-      <string name="input_pet_name_hint">请输入宠物名称</string>
-      <string name="pet_sex">性别</string>
-      <string name="input_sex_name_hint">请选择宠物性别</string>
- 	 <string name="pet_type">类型</string>
-     <string name="input_type_name_hint">请选择宠物类型</string>
-     
-     <string name="changeAccount">切换账号</string>
-      
+    <string name="nickname">昵称</string>
+    <string name="input_nickname_hint">请输入用户昵称</string>
+    <string name="pet_name">名称</string>
+    <string name="input_pet_name_hint">请输入宠物名称</string>
+    <string name="pet_sex">性别</string>
+    <string name="input_sex_name_hint">请选择宠物性别</string>
+    <string name="pet_type">类型</string>
+    <string name="input_type_name_hint">请选择宠物类型</string>
+    <string name="changeAccount">切换账号</string>
+
     <!-- main -->
     <string name="sub_nav_title_home">主页</string>
     <string name="sub_nav_title_discover">发现</string>
     <string name="sub_nav_title_news">动态</string>
+     <string name="exit_once_again">再按一次退出程序</string>
+    
 
     <!-- comment -->
     <string name="title_activity_comment">评论</string>
@@ -83,6 +80,7 @@
     <string name="title_activity_main_pop_dialog">菜单</string>
     <string name="nav_menu_space">我的空间</string>
     <string name="nav_menu_feedback">意见反馈</string>
+    <string name="nav_menu_setting">系统设置</string>
 
     <!-- FeedbackActivity -->
     <string name="title_activity_feedback">意见反馈</string>
@@ -97,8 +95,8 @@
     <string name="fans">粉丝</string>
     <string name="bonusPoint">积分</string>
     <string name="user_edit">资料修改</string>
-     <string name="follow_text">关注</string>
-     <string name="unfollow_text">取消关注</string>
+    <string name="follow_text">关注</string>
+    <string name="unfollow_text">取消关注</string>
 
     <!-- fans -->
     <string name="title_activity_fans">粉丝</string>
@@ -110,17 +108,8 @@
     <string name="title_activity_petty">PettyActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_location">LocationActivity</string>
-
-  
-
-
-  
-
-    
- 
-
-
-   
-
+    <!-- 系统设置 -->
+    <string name="title_activity_setting">设置</string>
+    <string name="logout">注销</string>
 
 </resources>

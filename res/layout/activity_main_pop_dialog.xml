@@ -48,7 +48,6 @@
     		   >
 
     			<ImageView
-    			    android:id="@+id/imageView2"
     			    android:layout_width="32dp"
     			    android:layout_height="32dp"
     			    android:layout_gravity="center_vertical"
@@ -64,7 +63,27 @@
     			    android:textSize="18sp" />    		    
     		</LinearLayout>
     		
-    
+    		<LinearLayout
+    		    android:id="@+id/menu_setting_layout"
+    		    android:layout_width="match_parent"
+    		    android:layout_height="wrap_content"
+    		   >
+
+    			<ImageView
+    			    android:layout_width="32dp"
+    			    android:layout_height="32dp"
+    			    android:layout_gravity="center_vertical"
+    			    android:layout_marginLeft="8dp"
+    			   />
+
+    			<TextView
+    			    android:layout_width="wrap_content"
+    			    android:layout_height="wrap_content"
+    			    android:padding="8dp"
+    			    android:text="@string/nav_menu_setting"
+    			    android:textColor="#222"
+    			    android:textSize="18sp" />    		    
+    		</LinearLayout>
 
        </LinearLayout>
 
