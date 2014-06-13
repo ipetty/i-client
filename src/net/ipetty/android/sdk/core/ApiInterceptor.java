@@ -53,13 +53,13 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
             throws IOException {
 
         //发送头
-        String userToken = StateManager.getUserToken(context);
-        String refreshToken = StateManager.getRefreshToken(context);
-        String uuidB64 = StateManager.getDeviceUUID(context);
+        String userToken = SDKStateManager.getUserToken(context);
+        String refreshToken = SDKStateManager.getRefreshToken(context);
+        String uuidB64 = SDKStateManager.getDeviceUUID(context);
         if (StringUtils.isBlank(uuidB64)) {
             String uuid = DeviceUtils.getDeviceUUID(context).toString();
             uuidB64 = Base64.encodeToString(uuid.getBytes(), Base64.DEFAULT);
-            StateManager.setDeviceUUID(context, uuidB64);
+            SDKStateManager.setDeviceUUID(context, uuidB64);
         }
 
         Log.i(TAG, "userToken：" + userToken);
@@ -85,10 +85,10 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
         Log.i(TAG, "接收到userToken:" + rut);
         Log.i(TAG, "接收到refreshToken:" + rrt);
         if (StringUtils.isNotBlank(rut) && !userToken.equals(rut)) {
-            StateManager.setUserToken(context, rut);
+            SDKStateManager.setUserToken(context, rut);
         }
         if (StringUtils.isNotBlank(rrt) && !refreshToken.equals(rrt)) {
-            StateManager.setRefreshToken(context, rrt);
+            SDKStateManager.setRefreshToken(context, rrt);
         }
 
         Log.i(TAG, "<--:" + request.getURI().toString());

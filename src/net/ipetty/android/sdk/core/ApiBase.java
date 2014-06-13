@@ -85,19 +85,19 @@ public class ApiBase {
     }
 
     public boolean getIsAuthorized() {
-        return StateManager.getAuthorized(context);
+        return SDKStateManager.getAuthorized(context);
     }
 
     protected void setIsAuthorized(boolean bl) {
-        StateManager.setAuthorized(context, bl);
+        SDKStateManager.setAuthorized(context, bl);
     }
 
     public int getCurrUserId() {
-        return StateManager.getUid(context);
+        return SDKStateManager.getUid(context);
     }
 
     protected void setCurrUserId(Integer uid) {
-        StateManager.setUid(context, uid);
+        SDKStateManager.setUid(context, uid);
     }
 
     protected RestTemplate getRestTemplate() {
