@@ -1,6 +1,5 @@
 package net.ipetty.android.login;
 
-import net.ipetty.android.register.RegisterActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +15,8 @@ import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.ValidUtils;
+import net.ipetty.android.register.RegisterActivity;
+import net.ipetty.android.sdk.task.user.UserLogin;
 import org.apache.commons.lang3.StringUtils;
 
 public class LoginActivity extends BaseActivity {
@@ -114,7 +115,9 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
 
-            new LoginTask(LoginActivity.this).execute(account, password);
+            new UserLogin(LoginActivity.this)
+                    .setListener(new LoginTaskListener(LoginActivity.this))
+                    .execute(account, password);
         }
     };
 

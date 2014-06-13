@@ -8,7 +8,7 @@ public class SplashTask extends Task<Void, Void> {
     public final static String TAG = "SplashTask";
 
     public SplashTask(BaseActivity activity) {
-        super(activity, new SplashTaskListener(activity));
+        super(activity);
     }
 
     //重写onPreExecute防止出现loading...

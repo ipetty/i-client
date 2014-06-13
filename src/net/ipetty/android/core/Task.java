@@ -26,20 +26,20 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
     private final static String TAG = Task.class.getSimpleName();
 
     protected TaskListener<Result> listener;
-    protected Activity activity;
+    protected final Activity activity;
 
     //存放异常
     protected Throwable ex;
 
-    /**
-     *
-     * @param activity
-     * @param listener
-     */
-    public Task(Activity activity, TaskListener<Result> listener) {
+    public Task(Activity activity) {
         super();
         this.activity = activity;
+    }
+
+    //设置Listener
+    public Task<Params, Result> setListener(TaskListener<Result> listener) {
         this.listener = listener;
+        return this;
     }
 
     //UI线程
@@ -47,7 +47,10 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
     protected void onPreExecute() {
         Log.d(TAG, "onPreExecute");
         super.onPreExecute();
-        listener.onPreExecute();
+        if (listener != null) {
+            listener.onPreExecute();
+        }
+
     }
 
     //非UI线程
@@ -78,10 +81,12 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
     protected void onPostExecute(Result result) {
         Log.d(TAG, "onPostExecute");
         super.onPostExecute(result);
-        if (ex == null) {
-            listener.onSuccess(result);
-        } else {
-            listener.onError(ex);
+        if (listener != null) {
+            if (ex == null) {
+                listener.onSuccess(result);
+            } else {
+                listener.onError(ex);
+            }
         }
     }
 
@@ -90,7 +95,9 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
     protected void onProgressUpdate(Integer... prgrss) {
         Log.d(TAG, "onProgressUpdate");
         super.onProgressUpdate(prgrss);
-        listener.onProgressUpdate(prgrss);
+        if (listener != null) {
+            listener.onProgressUpdate(prgrss);
+        }
     }
 
     //UI线程
@@ -98,7 +105,9 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
     protected void onCancelled(Result result) {
         Log.d(TAG, "onCancelled:Result");
         super.onCancelled(result);
-        listener.onCancelled(result);
+        if (listener != null) {
+            listener.onCancelled(result);
+        }
     }
 
     //UI线程
@@ -106,7 +115,9 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
     protected void onCancelled() {
         Log.d(TAG, "onCancelled");
         super.onCancelled();
-        listener.onCancelled();
+        if (listener != null) {
+            listener.onCancelled();
+        }
     }
 
 }
