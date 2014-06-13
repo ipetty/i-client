@@ -13,11 +13,11 @@ import net.ipetty.android.core.mail.MultiMailsender;
  */
 public class MailUtils {
 
-    private static final String host = "smtp.ipetty.net";
-    private static final String port = "587";
+    private static final String host = "";
+    private static final String port = "";
     private static final Boolean isValidate = true;
-    private static final String userName = "service@ipetty.net";
-    private static final String password = "ipetty888";
+    private static final String userName = "";
+    private static final String password = "";
 
     //发给单个人
     public static void sendTextMail(String fromAddress, String toAddress, String subject, String textBody) {
@@ -32,9 +32,9 @@ public class MailUtils {
         mailInfo.setToAddress(toAddress);
         mailInfo.setSubject(subject);
         mailInfo.setContent(textBody);
-        //这个类主要来发送邮件 
+        //这个类主要来发送邮件
         MultiMailsender sms = new MultiMailsender();
-        sms.sendTextMail(mailInfo);//发送文体格式 
+        sms.sendTextMail(mailInfo);//发送文体格式
     }
 
     //发给多个接收人
@@ -51,9 +51,9 @@ public class MailUtils {
         mailInfo.setSubject(subject);
         mailInfo.setContent(textBody);
         mailInfo.setReceivers(receivers);
-        //这个类主要来发送邮件 
+        //这个类主要来发送邮件
         MultiMailsender sms = new MultiMailsender();
-        sms.sendTextMail(mailInfo);//发送文体格式 
+        sms.sendTextMail(mailInfo);//发送文体格式
     }
 
     //发给多个接收人，并带有抄送
@@ -71,8 +71,8 @@ public class MailUtils {
         mailInfo.setContent(textBody);
         mailInfo.setReceivers(receivers);
         mailInfo.setCcs(cc);
-        //这个类主要来发送邮件 
+        //这个类主要来发送邮件
         MultiMailsender sms = new MultiMailsender();
-        sms.sendTextMail(mailInfo);//发送文体格式 
+        sms.sendTextMail(mailInfo);//发送文体格式
     }
 }
