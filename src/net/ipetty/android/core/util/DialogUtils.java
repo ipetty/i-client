@@ -1,10 +1,18 @@
 package net.ipetty.android.core.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import net.ipetty.R;
 import net.ipetty.android.core.ui.ModDialogItem;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v4.view.ViewPager.LayoutParams;
@@ -20,6 +28,33 @@ import android.widget.TextView;
 
 public class DialogUtils {
 	public final static String TAG = "DialogUtils";
+
+	public static Dialog datePopupDialog(Context context, DatePickerDialog.OnDateSetListener onDateSetListener, String value, Dialog d) {
+		if (d != null && d.isShowing()) {
+			return d;
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		if (!StringUtils.isEmpty(value)) {
+			Date date;
+			try {
+				date = format.parse(value);
+			} catch (ParseException e) {
+				date = new Date();
+			}
+			c.setTime(date);
+		}
+
+		final Dialog dialog = new DatePickerDialog(context, onDateSetListener, c.get(Calendar.YEAR), // 传入年份
+				c.get(Calendar.MONTH), // 传入月份
+				c.get(Calendar.DAY_OF_MONTH) // 传入天数
+		);
+
+		if (dialog != null) {
+			dialog.show();
+		}
+		return dialog;
+	}
 
 	public static Dialog modPopupDialog(Context context, List<ModDialogItem> items, Dialog d) {
 		if (d != null && d.isShowing()) {

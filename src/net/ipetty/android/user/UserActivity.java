@@ -1,7 +1,9 @@
 package net.ipetty.android.user;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import net.ipetty.R;
@@ -11,6 +13,7 @@ import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.DeviceUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.PathUtils;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +24,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +38,8 @@ public class UserActivity extends BaseActivity {
 	private String genderValue;
 
 	private EditText gender;
+	private EditText birthday;
+	private Dialog birthdayDialog;
 	private List<ModDialogItem> sexyItems;
 
 	private static final int REQUEST_CODE_PHOTORESOULT = 20;
@@ -67,7 +73,30 @@ public class UserActivity extends BaseActivity {
 				sexDialog = DialogUtils.modPopupDialog(UserActivity.this, sexyItems, sexDialog);
 			}
 		});
+
+		birthday = (EditText) this.findViewById(R.id.birthday);
+		birthday.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				birthdayDialog = DialogUtils.datePopupDialog(UserActivity.this, onDateSetListener, birthday.getText().toString(), birthdayDialog);
+			}
+		});
 	}
+
+	private OnDateSetListener onDateSetListener = new OnDateSetListener() {
+
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+			Calendar c = Calendar.getInstance();
+			c.set(year, monthOfYear, dayOfMonth);
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			String str = format.format(c.getTime());
+			birthday.setText(str);
+
+		}
+
+	};
 
 	private OnClickListener sexOnClick = new OnClickListener() {
 		@Override
