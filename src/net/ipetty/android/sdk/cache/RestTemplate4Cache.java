@@ -35,14 +35,14 @@ public class RestTemplate4Cache extends RestTemplate {
     private static final String ETAG_HEADER = "ETag";
 
     // private final MemoryLRUCache cache = new MemoryLRUCache();
-    private final Cache cache;
+    private final Cache4L2 cache;
 
     private final Context context;
 
     public RestTemplate4Cache(Context ctx, int maxNumL1, int maxNumL2) {
         super();
         context = ctx;
-        cache = new Cache(ctx, maxNumL1, maxNumL2);
+        cache = new Cache4L2(ctx, maxNumL1, maxNumL2);
     }
 
     @Override

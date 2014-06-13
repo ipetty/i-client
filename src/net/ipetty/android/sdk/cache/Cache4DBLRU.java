@@ -11,12 +11,12 @@ import android.content.Context;
  *
  * @author Administrator
  */
-public class Cache4DB {
+public class Cache4DBLRU {
 
     private final int maxNum;
     private final CacheDAO dao;
 
-    public Cache4DB(Context cxt, int maxNum) {
+    public Cache4DBLRU(Context cxt, int maxNum) {
         dao = new CacheDAO(cxt);
         this.maxNum = maxNum;
     }

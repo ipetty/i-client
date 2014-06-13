@@ -14,7 +14,7 @@ import android.util.Log;
  *
  * @author Administrator
  */
-public class DBHelper extends SQLiteOpenHelper {
+public class CacheDBHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DBHelper";
 
@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String NAME = "cache.db";
 
-    public DBHelper(Context context) {
+    public CacheDBHelper(Context context) {
         super(context, NAME, null, VERSION);
     }
 

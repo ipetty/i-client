@@ -12,14 +12,14 @@ import android.content.Context;
  *
  * @author Administrator
  */
-public class Cache {
+public class Cache4L2 {
 
-    private final Cache4Mem l1;
-    private final Cache4DB l2;
+    private final Cache4MemLRU l1;
+    private final Cache4DBLRU l2;
 
-    public Cache(Context cxt, int maxNumL1, int maxNumL2) {
-        l1 = new Cache4Mem(maxNumL1);
-        l2 = new Cache4DB(cxt, maxNumL2);
+    public Cache4L2(Context cxt, int maxNumL1, int maxNumL2) {
+        l1 = new Cache4MemLRU(maxNumL1);
+        l2 = new Cache4DBLRU(cxt, maxNumL2);
     }
 
     public void put(CacheEntry e) {

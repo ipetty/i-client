@@ -12,12 +12,12 @@ import java.util.Map;
  *
  * @author Administrator
  */
-public class Cache4Mem {
+public class Cache4MemLRU {
 	
 	
     private final Map<String, CacheEntry> data;
 
-    public Cache4Mem(int maxNum){
+    public Cache4MemLRU(int maxNum){
     	data
         = Collections.synchronizedMap(new LRULinkedHashMap<String, CacheEntry>(maxNum));
     }
