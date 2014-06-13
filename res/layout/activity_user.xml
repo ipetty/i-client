@@ -106,5 +106,143 @@
       </LinearLayout>
 
   </LinearLayout>
-	  <include layout="@layout/horizontal_divider" />
+   <include layout="@layout/horizontal_divider" />
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="20dp" >
+   </LinearLayout>
+   
+   <include layout="@layout/horizontal_divider" />
+   <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:background="@color/color_item_bg" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/description"
+                android:textColor="@color/text_black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/description_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/link_text"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="16sp"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+        <include layout="@layout/horizontal_divider" />
+           <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="44dp"
+            android:background="@color/color_item_bg" 
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/gender"
+                android:textColor="@color/text_black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/gender"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/gender_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/link_text"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="16sp"
+                 android:focusable="false"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+         <include layout="@layout/horizontal_divider" />
+                    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="44dp"
+            android:background="@color/color_item_bg" 
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/birthday"
+                android:textColor="@color/text_black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/birthday"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/birthday_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/link_text"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="16sp"
+                 android:focusable="false"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+         <include layout="@layout/horizontal_divider" />
+       <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="44dp"
+            android:background="@color/color_item_bg" 
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/city"
+                android:textColor="@color/text_black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/city"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/city_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/link_text"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="16sp"
+                 android:focusable="false"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+         <include layout="@layout/horizontal_divider" />
 </LinearLayout>

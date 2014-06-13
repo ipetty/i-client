@@ -110,12 +110,23 @@
     <string name="title_activity_location">LocationActivity</string>
     
     <!-- 个人资料 -->
-        <string name="save">保存</string>
+    <string name="save">保存</string>
     <string name="title_activity_user">个人资料</string>
-     <string name="nickname_hint">请输入昵称</string>
+    <string name="nickname_hint">请输入昵称</string>
+    <string name="description">简介</string>
+    <string name="description_hint">一句话介绍</string>
+    <string name="gender">性别</string>
+    <string name="gender_hint">请选择性别</string>
+    <string name="birthday">生日</string>
+    <string name="birthday_hint">请选择生日</string>
+    <string name="city">城市</string>
+    <string name="city_hint">请选择城市</string>
     <!-- 系统设置 -->
     <string name="title_activity_setting">设置</string>
     <string name="logout">注销</string>
+   
+
+
 
    
 

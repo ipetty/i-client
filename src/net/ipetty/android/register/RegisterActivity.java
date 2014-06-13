@@ -107,6 +107,7 @@ public class RegisterActivity extends BaseActivity {
 		@Override
 		public void onClick(View v) {
 			String text = ((TextView) v.findViewById(R.id.text)).getText().toString();
+			String val = ((TextView) v.findViewById(R.id.value)).getText().toString(); // 这里是value值
 			btnSexy.setText(text);
 			sexDialog.cancel();
 		}

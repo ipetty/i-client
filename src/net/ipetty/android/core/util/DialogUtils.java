@@ -36,6 +36,7 @@ public class DialogUtils {
 			View v = dialog.getLayoutInflater().inflate(R.layout.dialog_mod_pop_item, layout, false);
 			View line = v.findViewById(R.id.line);
 			TextView tx = (TextView) v.findViewById(R.id.text);
+			TextView val = (TextView) v.findViewById(R.id.value);
 			ImageView img = (ImageView) v.findViewById(R.id.image);
 			if (item.getIconId() == null) {
 				img.setVisibility(View.GONE);
@@ -45,6 +46,7 @@ public class DialogUtils {
 			}
 
 			tx.setText(item.getText());
+			val.setText(item.getValue());
 			v.setOnClickListener(item.getOnClickListener());
 			layout.addView(v);
 		}
