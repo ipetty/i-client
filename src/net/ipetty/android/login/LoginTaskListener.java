@@ -8,7 +8,6 @@ package net.ipetty.android.login;
 import android.app.Activity;
 import android.util.Log;
 import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.util.ActivityUtils;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.vo.UserVO;
@@ -29,7 +28,6 @@ public class LoginTaskListener extends DefaultTaskListener<UserVO> {
     public void onSuccess(UserVO result) {
         Log.d(TAG, "onSuccess");
         AppUtils.goTo(activity, MainActivity.class);
-        ActivityUtils.getInstance().finish();
     }
 
 }

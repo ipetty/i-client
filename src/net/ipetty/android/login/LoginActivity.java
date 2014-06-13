@@ -28,7 +28,6 @@ public class LoginActivity extends BaseActivity {
     private String password = null;
     private TextView toggleView = null;
     private boolean psdDisplayFlg = false;
-    private LoginTaskListener loginTaskListener;
 
     // private int focuscont = 0;
     @Override
@@ -82,7 +81,6 @@ public class LoginActivity extends BaseActivity {
         // 登陆
         View loginBtnView = (View) this.findViewById(R.id.button);
         loginBtnView.setOnClickListener(loginOnClick);
-        loginTaskListener = new LoginTaskListener(this);
 
         // sina
         View sina = this.findViewById(R.id.sina);

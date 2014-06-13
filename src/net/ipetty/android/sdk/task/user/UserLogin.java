@@ -20,7 +20,9 @@ public class UserLogin extends Task<String, UserVO> {
         String loginName = args[0];
         String password = args[1];
 
-        IpetApi api = IpetApi.init(activity);
-        return api.getUserApi().login(loginName, password);
+        return IpetApi.
+                init(activity).
+                getUserApi().
+                login(loginName, password);
     }
 }
