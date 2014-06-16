@@ -1,6 +1,5 @@
 package net.ipetty.android.core.ui;
 
-import net.ipetty.android.core.MyAppCrashHandler;
 import net.ipetty.android.core.util.ActivityUtils;
 import android.app.ProgressDialog;
 import android.os.Bundle;

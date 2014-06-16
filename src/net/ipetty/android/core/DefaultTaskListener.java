@@ -8,6 +8,7 @@ package net.ipetty.android.core;
 import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
+import java.net.SocketTimeoutException;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.ui.BaseFragmentActivity;
 import net.ipetty.android.sdk.core.APIException;
@@ -93,7 +94,21 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
         Log.d(TAG, "onError:" + ex.getClass().getName());
         dismissProgressDialog();
 
-        //API异常
+        //应用异常 界面层
+        if (ex instanceof AppException) {
+            AppException e = (AppException) ex;
+            showError(e.getMessage());
+            return;
+        }
+
+        //超时
+        if (ex instanceof SocketTimeoutException) {
+            SocketTimeoutException e = (SocketTimeoutException) ex;
+            showError("请求超时，请重试");
+            return;
+        }
+
+        //API异常 任务层
         if (ex instanceof APIException) {
             APIException e = (APIException) ex;
             showError(e.getMessage());
@@ -103,7 +118,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
         //HTTP客户端异常400
         if (ex instanceof HttpClientErrorException) {
             HttpClientErrorException e = (HttpClientErrorException) ex;
-            showError("HTTP请求失败");
+            showError("请求失败");
             return;
         }
 
@@ -117,18 +132,18 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
         //HTTP资源访问（IO）异常
         if (ex instanceof ResourceAccessException) {
             ResourceAccessException e = (ResourceAccessException) ex;
-            showError("HTTP资源访问异常");
+            showError("无法连接到服务器");
             return;
         }
 
         //HTTP未知异常
         if (ex instanceof RestClientException) {
             RestClientException e = (RestClientException) ex;
-            showError("HTTP未知异常");
+            showError("未知HTTP异常");
             return;
         }
 
-        showError("未知的任务异常");
+        showError("未知任务异常");
 
     }
 
