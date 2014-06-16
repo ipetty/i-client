@@ -3,6 +3,7 @@ package net.ipetty.android.feedback;
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.sdk.task.feedback.Feedback;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,8 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class FeedbackActivity extends BaseActivity {
-	private View feedback_btn;
-	private EditText edit;
+
+	private View submitButton;
+	private EditText textarea;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,31 +27,28 @@ public class FeedbackActivity extends BaseActivity {
 		setContentView(R.layout.activity_feedback);
 
 		/* action bar */
-		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
-		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
-		text.setText(this.getResources().getString(R.string.title_activity_feedback));
-		btnBack.setOnClickListener(new BackClickListener(this));
+		ImageView goBackButton = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		TextView title = (TextView) this.findViewById(R.id.action_bar_title);
+		title.setText(this.getResources().getString(R.string.title_activity_feedback));
+		goBackButton.setOnClickListener(new BackClickListener(this));
 
-		feedback_btn = this.findViewById(R.id.feedback_btn);
-		edit = (EditText) this.findViewById(R.id.editText);
-		feedback_btn.setOnClickListener(sumbit);
+		submitButton = this.findViewById(R.id.feedback_btn);
+		textarea = (EditText) this.findViewById(R.id.editText);
+		submitButton.setOnClickListener(sumbit);
 	}
 
 	private final OnClickListener sumbit = new OnClickListener() {
-
 		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			Editable text = FeedbackActivity.this.edit.getText();
-			String str = text.toString();
-			if (StringUtils.isEmpty(str)) {
+		public void onClick(View view) {
+			Editable text = FeedbackActivity.this.textarea.getText();
+			String feedbackContent = text.toString();
+			if (StringUtils.isEmpty(feedbackContent)) {
 				Toast.makeText(FeedbackActivity.this, R.string.feedback_no_empty, Toast.LENGTH_SHORT).show();
 				return;
 			}
 
-			// new FeedbackAsyncTask(FeedbackActivity.this).execute(str);
+			new Feedback(FeedbackActivity.this).execute(null, feedbackContent, null);
 		}
-
 	};
 
 }
