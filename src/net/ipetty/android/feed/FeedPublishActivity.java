@@ -59,9 +59,9 @@ public class FeedPublishActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                FeedPublishActivity.this.showMessageForShortTime("位置功能暂未实现");
-                //Intent intent = new Intent(FeedPublishActivity.this, LocationActivity.class);
-                //startActivity(intent);
+                //FeedPublishActivity.this.showMessageForShortTime("位置功能暂未实现");
+                Intent intent = new Intent(FeedPublishActivity.this, LocationActivity.class);
+                startActivity(intent);
             }
         });
     }
