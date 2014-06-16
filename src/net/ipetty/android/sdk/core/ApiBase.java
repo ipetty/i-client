@@ -38,6 +38,16 @@ public class ApiBase {
         Charset charset = Charset.forName("UTF-8");
 
         restTemplate = new RestTemplate4Cache(context, 50, 500);
+        //关于HTTP组件的选择：http://www.07net01.com/program/653485.html
+        /**
+         * SimpleClientHttpRequestFactory HttpURLConnection
+         *
+         * CommonsClientHttpRequestFactory CommonsClientHttpRequest
+         *
+         * HttpComponentsClientHttpRequestFactory
+         * HttpComponentsClientHttpRequest
+         */
+
         //避免HttpURLConnection的http.keepAlive Bug
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         factory.setConnectTimeout(3 * 1000);
