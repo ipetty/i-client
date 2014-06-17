@@ -162,9 +162,11 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
         if (loadingMessage != null) {
             if (baseActivity != null) {
                 baseActivity.showProgressDialog(loadingMessage);
+                return;
             }
             if (baseFragmentActivity != null) {
                 baseFragmentActivity.showProgressDialog(loadingMessage);
+                return;
             }
         }
     }

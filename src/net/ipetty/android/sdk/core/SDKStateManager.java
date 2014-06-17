@@ -81,14 +81,14 @@ public class SDKStateManager {
         return uid;
     }
 
-    public static void setString(Context ctx, String key, String value) {
+    protected static void setString(Context ctx, String key, String value) {
         SharedPreferences sp = ctx.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(key, value);
         editor.commit();
     }
 
-    public static String getString(Context ctx, String key) {
+    protected static String getString(Context ctx, String key) {
         SharedPreferences sp = ctx.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         String str = sp.getString(key, "");
         return str;

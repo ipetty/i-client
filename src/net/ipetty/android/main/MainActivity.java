@@ -1,12 +1,5 @@
 package net.ipetty.android.main;
 
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BaseFragmentActivity;
-import net.ipetty.android.core.ActivityManager;
-import net.ipetty.android.core.util.AnimUtils;
-import net.ipetty.android.discover.MainDiscoverFragment;
-import net.ipetty.android.home.MainHomeFragment;
-import net.ipetty.android.news.MainNewsFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,250 +20,260 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
+import net.ipetty.R;
+import net.ipetty.android.core.ActivityManager;
+import net.ipetty.android.core.ui.BaseFragmentActivity;
+import net.ipetty.android.core.util.AnimUtils;
+import net.ipetty.android.discover.MainDiscoverFragment;
+import net.ipetty.android.home.MainHomeFragment;
+import net.ipetty.android.news.MainNewsFragment;
 
 public class MainActivity extends BaseFragmentActivity {
-	public final static String TAG = "MainActivity";
-	private ViewPager viewPager;
-	private ImageView mTabImg;
-	private int currIndex = 0;
-	private int zero = 0;
-	private int one;
-	private int two;
-	private final Class[] fragments = { MainHomeFragment.class, MainDiscoverFragment.class, MainNewsFragment.class };
 
-	private TextView main_text;
-	private TextView discover_text;
-	private TextView news_text;
+    public final static String TAG = MainActivity.class.getSimpleName();
+    private ViewPager viewPager;
+    private ImageView mTabImg;
+    private int currIndex = 0;
+    private int zero = 0;
+    private int one;
+    private int two;
+    private final Class[] fragments = {MainHomeFragment.class, MainDiscoverFragment.class, MainNewsFragment.class};
 
-	private int gray;
-	private int red;
+    private TextView main_text;
+    private TextView discover_text;
+    private TextView news_text;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		Log.i(TAG, "onCreate");
+    private int gray;
+    private int red;
 
-		// action_bar
-		ImageView rightBtn = (ImageView) findViewById(R.id.action_bar_right_image);
-		rightBtn.setOnClickListener(popMenuOnClick);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Log.i(TAG, "onCreate");
 
-		// sub_action_bar_now
-		DisplayMetrics dm = AnimUtils.getDefaultDisplayMetrics(this);
-		int screenWidth = dm.widthPixels;
-		one = screenWidth / 3;
-		two = one * 2;
+        // action_bar
+        ImageView rightBtn = (ImageView) findViewById(R.id.action_bar_right_image);
+        rightBtn.setOnClickListener(popMenuOnClick);
 
-		mTabImg = (ImageView) findViewById(R.id.imageTabNow);
-		RelativeLayout.LayoutParams mParams = (LayoutParams) mTabImg.getLayoutParams();
-		mParams.width = one;
-		mTabImg.setLayoutParams(mParams);
+        // sub_action_bar_now
+        DisplayMetrics dm = AnimUtils.getDefaultDisplayMetrics(this);
+        int screenWidth = dm.widthPixels;
+        one = screenWidth / 3;
+        two = one * 2;
 
-		// pager
-		viewPager = (ViewPager) findViewById(R.id.tabpager);
-		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments));
-		viewPager.setOnPageChangeListener(myPageChangeListener);
+        mTabImg = (ImageView) findViewById(R.id.imageTabNow);
+        RelativeLayout.LayoutParams mParams = (LayoutParams) mTabImg.getLayoutParams();
+        mParams.width = one;
+        mTabImg.setLayoutParams(mParams);
 
-		// viewTab
-		View main = findViewById(R.id.main);
-		View discover = findViewById(R.id.discover);
-		View news = findViewById(R.id.news);
+        // pager
+        viewPager = (ViewPager) findViewById(R.id.tabpager);
+        viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments));
+        viewPager.setOnPageChangeListener(myPageChangeListener);
 
-		main_text = (TextView) main.findViewById(R.id.textView);
-		discover_text = (TextView) discover.findViewById(R.id.textView);
-		news_text = (TextView) news.findViewById(R.id.textView);
+        // viewTab
+        View main = findViewById(R.id.main);
+        View discover = findViewById(R.id.discover);
+        View news = findViewById(R.id.news);
 
-		main.setOnClickListener(new TabClickListener(0));
-		discover.setOnClickListener(new TabClickListener(1));
-		news.setOnClickListener(new TabClickListener(2));
+        main_text = (TextView) main.findViewById(R.id.textView);
+        discover_text = (TextView) discover.findViewById(R.id.textView);
+        news_text = (TextView) news.findViewById(R.id.textView);
 
-		gray = getResources().getColor(R.color.title_gray);
-		red = getResources().getColor(R.color.title_red);
+        main.setOnClickListener(new TabClickListener(0));
+        discover.setOnClickListener(new TabClickListener(1));
+        news.setOnClickListener(new TabClickListener(2));
 
-	}
+        gray = getResources().getColor(R.color.title_gray);
+        red = getResources().getColor(R.color.title_red);
 
-	public class TabClickListener implements OnClickListener {
-		private int index = 0;
+    }
 
-		public TabClickListener(int i) {
-			index = i;
-		}
+    public class TabClickListener implements OnClickListener {
 
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			viewPager.setCurrentItem(index);
-		}
+        private int index = 0;
 
-	}
+        public TabClickListener(int i) {
+            index = i;
+        }
 
-	public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
-		private Class[] fragments;
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            viewPager.setCurrentItem(index);
+        }
 
-		public MyFragmentPagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
+    }
 
-		public MyFragmentPagerAdapter(FragmentManager fm, Class[] fragments) {
-			super(fm);
-			this.fragments = fragments;
-		}
+    public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
-		@Override
-		public int getCount() {
-			return fragments.length;
-		}
+        private Class[] fragments;
 
-		@Override
-		public Fragment getItem(int position) {
-			Fragment fragment = null;
-			try {
-				fragment = (Fragment) fragments[position].newInstance();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			return fragment;
-		}
+        public MyFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-		@Override
-		public int getItemPosition(Object object) {
-			return super.getItemPosition(object);
-		}
+        public MyFragmentPagerAdapter(FragmentManager fm, Class[] fragments) {
+            super(fm);
+            this.fragments = fragments;
+        }
 
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			super.destroyItem(container, position, object);
-		}
-	}
+        @Override
+        public int getCount() {
+            return fragments.length;
+        }
 
-	private final OnPageChangeListener myPageChangeListener = new OnPageChangeListener() {
-		@Override
-		public void onPageScrollStateChanged(int arg0) {
-			// TODO Auto-generated method stub
+        @Override
+        public Fragment getItem(int position) {
+            Fragment fragment = null;
+            try {
+                fragment = (Fragment) fragments[position].newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return fragment;
+        }
 
-		}
+        @Override
+        public int getItemPosition(Object object) {
+            return super.getItemPosition(object);
+        }
 
-		@Override
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-			// TODO Auto-generated method stub
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+        }
+    }
 
-		}
+    private final OnPageChangeListener myPageChangeListener = new OnPageChangeListener() {
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+            // TODO Auto-generated method stub
 
-		@Override
-		public void onPageSelected(int arg0) {
-			// TODO Auto-generated method stub
-			Animation animation = null;
+        }
 
-			main_text.setTextColor(gray);
-			discover_text.setTextColor(gray);
-			news_text.setTextColor(gray);
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+            // TODO Auto-generated method stub
 
-			switch (arg0) {
-			case 0: {
-				if (currIndex == 1) {
-					animation = new TranslateAnimation(one, zero, 0, 0);
-				} else if (currIndex == 2) {
-					animation = new TranslateAnimation(two, zero, 0, 0);
-				}
-				main_text.setTextColor(red);
-				break;
+        }
 
-			}
-			case 1: {
-				if (currIndex == 0) {
-					animation = new TranslateAnimation(zero, one, 0, 0);
-				} else if (currIndex == 2) {
-					animation = new TranslateAnimation(two, one, 0, 0);
-				}
-				discover_text.setTextColor(red);
-				break;
-			}
-			case 2: {
-				if (currIndex == 0) {
-					animation = new TranslateAnimation(zero, two, 0, 0);
-				} else if (currIndex == 1) {
-					animation = new TranslateAnimation(one, two, 0, 0);
-				}
-				news_text.setTextColor(red);
-				break;
-			}
+        @Override
+        public void onPageSelected(int arg0) {
+            // TODO Auto-generated method stub
+            Animation animation = null;
 
-			}
-			currIndex = arg0;
-			animation.setFillAfter(true);
-			animation.setDuration(150);
-			mTabImg.startAnimation(animation);
-		}
+            main_text.setTextColor(gray);
+            discover_text.setTextColor(gray);
+            news_text.setTextColor(gray);
 
-	};
+            switch (arg0) {
+                case 0: {
+                    if (currIndex == 1) {
+                        animation = new TranslateAnimation(one, zero, 0, 0);
+                    } else if (currIndex == 2) {
+                        animation = new TranslateAnimation(two, zero, 0, 0);
+                    }
+                    main_text.setTextColor(red);
+                    break;
 
-	public OnClickListener popMenuOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View arg0) {
-			Intent intent = new Intent(MainActivity.this, MainPopDialog.class);
-			startActivity(intent);
-		}
-	};
+                }
+                case 1: {
+                    if (currIndex == 0) {
+                        animation = new TranslateAnimation(zero, one, 0, 0);
+                    } else if (currIndex == 2) {
+                        animation = new TranslateAnimation(two, one, 0, 0);
+                    }
+                    discover_text.setTextColor(red);
+                    break;
+                }
+                case 2: {
+                    if (currIndex == 0) {
+                        animation = new TranslateAnimation(zero, two, 0, 0);
+                    } else if (currIndex == 1) {
+                        animation = new TranslateAnimation(one, two, 0, 0);
+                    }
+                    news_text.setTextColor(red);
+                    break;
+                }
 
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		Log.i(TAG, "onStart");
-	}
+            }
+            currIndex = arg0;
+            animation.setFillAfter(true);
+            animation.setDuration(150);
+            mTabImg.startAnimation(animation);
+        }
 
-	@Override
-	protected void onRestart() {
-		// TODO Auto-generated method stub
-		super.onRestart();
-		Log.i(TAG, "onRestart");
-	}
+    };
 
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		Log.i(TAG, "onResume");
-	}
+    public OnClickListener popMenuOnClick = new OnClickListener() {
+        @Override
+        public void onClick(View arg0) {
+            Intent intent = new Intent(MainActivity.this, MainPopDialog.class);
+            startActivity(intent);
+        }
+    };
 
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		Log.i(TAG, "onPause");
-	}
+    @Override
+    protected void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
 
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		Log.i(TAG, "onStop");
-	}
+    @Override
+    protected void onRestart() {
+        // TODO Auto-generated method stub
+        super.onRestart();
+        Log.i(TAG, "onRestart");
+    }
 
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Log.i(TAG, "onDestroy");
-	}
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
 
-	private long mExitTime;
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if ((System.currentTimeMillis() - mExitTime) > 2000) {
-				String exit_once_again = getResources().getString(R.string.exit_once_again);
-				Toast.makeText(this, exit_once_again, Toast.LENGTH_SHORT).show();
-				mExitTime = System.currentTimeMillis();
-			} else {
-				ActivityManager.getInstance().exit();
-			}
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
+    @Override
+    protected void onStop() {
+        // TODO Auto-generated method stub
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
 
-	}
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+    }
+
+    private long mExitTime;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if ((System.currentTimeMillis() - mExitTime) > 2000) {
+                String exit_once_again = getResources().getString(R.string.exit_once_again);
+                Toast.makeText(this, exit_once_again, Toast.LENGTH_SHORT).show();
+                mExitTime = System.currentTimeMillis();
+            } else {
+                ActivityManager.getInstance().exit();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+
+    }
 }

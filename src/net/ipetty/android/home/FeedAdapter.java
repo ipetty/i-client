@@ -1,22 +1,5 @@
 package net.ipetty.android.home;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.comment.CommentActivity;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.image.LargerImageActivity;
-import net.ipetty.android.like.LikeActivity;
-import net.ipetty.android.main.MainActivity;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.FeedVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -34,312 +17,336 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.comment.CommentActivity;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.image.LargerImageActivity;
+import net.ipetty.android.like.LikeActivity;
+import net.ipetty.android.main.MainActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
-	private DisplayImageOptions options;
-	public final static String TAG = "FeedAdapter";
-	private LayoutInflater inflater;
-	private Context context;
-	public List<ModDialogItem> more_items;
-	private List list = null; // 这个就本地dataStore
-	private ModDialogItem shareItems;
-	private ModDialogItem delItems;
-	private Dialog moreDialog;
+    private DisplayImageOptions options;
+    public final static String TAG = "FeedAdapter";
+    private LayoutInflater inflater;
+    private Context context;
+    public List<ModDialogItem> more_items;
+    private List<FeedVO> list = new ArrayList<FeedVO>(0); // 这个就本地dataStore
+    private ModDialogItem shareItems;
+    private ModDialogItem delItems;
+    private Dialog moreDialog;
 
-	public FeedAdapter(Context context) {
-		// TODO Auto-generated constructor stub
-		this.context = context;
-		this.inflater = LayoutInflater.from(context);
-		options = AppUtils.getNormalImageOptions();
-		more_items = new ArrayList<ModDialogItem>();
+    public FeedAdapter(Context context) {
+        // TODO Auto-generated constructor stub
+        this.context = context;
+        this.inflater = LayoutInflater.from(context);
+        options = AppUtils.getNormalImageOptions();
+        more_items = new ArrayList<ModDialogItem>();
 
-		shareItems = new ModDialogItem(null, "分享", shareOnClick);
-		delItems = new ModDialogItem(null, "删除", delOnClick);
+        shareItems = new ModDialogItem(null, "分享", shareOnClick);
+        delItems = new ModDialogItem(null, "删除", delOnClick);
 
-	}
+    }
 
-	private OnClickListener shareOnClick = new OnClickListener() {
+    private OnClickListener shareOnClick = new OnClickListener() {
 
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			moreDialog.cancel();
-		}
-	};
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            moreDialog.cancel();
+        }
+    };
 
-	private OnClickListener delOnClick = new OnClickListener() {
+    private OnClickListener delOnClick = new OnClickListener() {
 
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			moreDialog.cancel();
-		}
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            moreDialog.cancel();
+        }
 
-	};
+    };
 
-	@Override
-	public int getCount() {
-		return 2;// list == null ? 0 : list.size();
-	}
+    @Override
+    public int getCount() {
+        return list.size();
+    }
 
-	@Override
-	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return list.get(position);
-	}
+    @Override
+    public Object getItem(int position) {
+        // TODO Auto-generated method stub
+        return list.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public long getItemId(int position) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	// 构建一个布局缓存的结构体 与VO对应
-	public class ViewHolder {
-		public ImageView avatar;
-		public TextView nickname;
-		public TextView created_at;
-		public TextView content;
-		public ImageView content_image;
-		public TextView address;
+    // 构建一个布局缓存的结构体 与VO对应
+    public class ViewHolder {
 
-		public ImageView btn_liked;
-		public View liked_detail;
-		public ImageView btn_comment;
-		public View btn_more;
+        public ImageView avatar;
+        public TextView nickname;
+        public TextView created_at;
+        public TextView content;
+        public ImageView content_image;
+        public TextView address;
 
-		public TextView like_text;
-		public TextView comments_num;
-		public LinearLayout comments_group_list;
+        public ImageView btn_liked;
+        public View liked_detail;
+        public ImageView btn_comment;
+        public View btn_more;
 
-	}
+        public TextView like_text;
+        public TextView comments_num;
+        public LinearLayout comments_group_list;
 
-	public ViewHolder holder;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.i(TAG, "list position-->" + position);
-		// 这里开始呈现每个item的布局
-		View view;
-		if (convertView == null) {
-			Log.i(TAG, "init items View");
-			view = inflater.inflate(R.layout.list_feed_item, null);
-			holder = new ViewHolder();
+    public ViewHolder holder;
 
-			view.setOnLongClickListener(new OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					// TODO Auto-generated method stub
-					showItems();
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Log.i(TAG, "list position-->" + position);
+        // 这里开始呈现每个item的布局
+        View view;
+        if (convertView == null) {
+            Log.i(TAG, "init items View");
+            view = inflater.inflate(R.layout.list_feed_item, null);
+            holder = new ViewHolder();
 
-					return false;
-				}
+            view.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    // TODO Auto-generated method stub
+                    showItems();
 
-			});
+                    return false;
+                }
 
-			// 头像
-			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
-			holder.avatar.setOnClickListener(userInfoOnClick);
-			// 姓名
-			holder.nickname = (TextView) view.findViewById(R.id.nickname);
-			holder.nickname.setOnClickListener(userInfoOnClick);
-			// 时间
-			holder.created_at = (TextView) view.findViewById(R.id.created_at);
-			// 主题内容
-			holder.content = (TextView) view.findViewById(R.id.content);
-			holder.content_image = (ImageView) view.findViewById(R.id.content_image);
-			// 地理位置
-			holder.address = (TextView) view.findViewById(R.id.address);
+            });
 
-			// 操作区域
-			holder.btn_liked = (ImageView) view.findViewById(R.id.feed_button_like);
-			holder.btn_comment = (ImageView) view.findViewById(R.id.feed_button_comment);
-			holder.liked_detail = view.findViewById(R.id.row_feed_photo_textview_likes);
-			holder.btn_more = view.findViewById(R.id.feed_button_more);
-			holder.btn_more.setOnClickListener(moreOnClick);
+            // 头像
+            holder.avatar = (ImageView) view.findViewById(R.id.avatar);
+            holder.avatar.setOnClickListener(userInfoOnClick);
+            // 姓名
+            holder.nickname = (TextView) view.findViewById(R.id.nickname);
+            holder.nickname.setOnClickListener(userInfoOnClick);
+            // 时间
+            holder.created_at = (TextView) view.findViewById(R.id.created_at);
+            // 主题内容
+            holder.content = (TextView) view.findViewById(R.id.content);
+            holder.content_image = (ImageView) view.findViewById(R.id.content_image);
+            // 地理位置
+            holder.address = (TextView) view.findViewById(R.id.address);
 
-			// like
-			holder.like_text = (TextView) view.findViewById(R.id.row_feed_photo_textview_likes);
+            // 操作区域
+            holder.btn_liked = (ImageView) view.findViewById(R.id.feed_button_like);
+            holder.btn_comment = (ImageView) view.findViewById(R.id.feed_button_comment);
+            holder.liked_detail = view.findViewById(R.id.row_feed_photo_textview_likes);
+            holder.btn_more = view.findViewById(R.id.feed_button_more);
+            holder.btn_more.setOnClickListener(moreOnClick);
 
-			// 评论
-			holder.comments_num = (TextView) view.findViewById(R.id.row_feed_photo_textview_comments_num);
-			holder.comments_group_list = (LinearLayout) view.findViewById(R.id.row_feed_photo_comments_list);
+            // like
+            holder.like_text = (TextView) view.findViewById(R.id.row_feed_photo_textview_likes);
 
-			convertView = view;
-			convertView.setTag(holder);
-		} else {
-			view = convertView;
-			holder = (ViewHolder) view.getTag();
-		}
-		FeedVO feed = new FeedVO();
-		initDefaultView(holder, feed, position);
-		initLikedBtnView(holder, feed, position);
-		initCommentView(holder, feed, position);
-		// 数据与界面绑定
+            // 评论
+            holder.comments_num = (TextView) view.findViewById(R.id.row_feed_photo_textview_comments_num);
+            holder.comments_group_list = (LinearLayout) view.findViewById(R.id.row_feed_photo_comments_list);
 
-		return view;
-	}
+            convertView = view;
+            convertView.setTag(holder);
+        } else {
+            view = convertView;
+            holder = (ViewHolder) view.getTag();
+        }
+        FeedVO feed = list.get(position);
+        initDefaultView(holder, feed, position);
+        initLikedBtnView(holder, feed, position);
+        initCommentView(holder, feed, position);
+        // 数据与界面绑定
 
-	private void showItems() {
-		// TODO Auto-generated method stub
-		more_items.clear();
-		more_items.add(shareItems);
-		// TODO:按条件添加删除按钮
+        return view;
+    }
 
-		moreDialog = DialogUtils.modPopupDialog(context, more_items, moreDialog);
-	}
+    private void showItems() {
+        // TODO Auto-generated method stub
+        more_items.clear();
+        more_items.add(shareItems);
+        // TODO:按条件添加删除按钮
 
-	private OnClickListener moreOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			showItems();
-		}
-	};
+        moreDialog = DialogUtils.modPopupDialog(context, more_items, moreDialog);
+    }
 
-	private void initDefaultView(ViewHolder holder, FeedVO feed, int position) {
-		// TODO 基本内容信息修改
-		// ImageLoader.getInstance().displayImage(url, holder.avator, options);
-		// holder.nickname.setText(text);
-		// holder.created_at.setText(text);
-		// holder.content.setText(text);
-		// 内容空不显示内容区域
-		if (StringUtils.isEmpty("")) {
-			holder.content.setVisibility(View.GONE);
-		} else {
-			holder.content.setVisibility(View.VISIBLE);
-		}
+    private OnClickListener moreOnClick = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            showItems();
+        }
+    };
 
-		// 地理位置
-		if (StringUtils.isEmpty("")) {
-			holder.address.setVisibility(View.GONE);
-		} else {
-			holder.address.setVisibility(View.VISIBLE);
-		}
+    private void initDefaultView(ViewHolder holder, FeedVO feed, int position) {
+        Integer uid = feed.getCreatedBy();
+        UserVO user = IpetApi.init(context).getUserApi().getById(uid);
 
-		// ImageLoader.getInstance().displayImage(url, holder.content_image,
-		// options);
-		holder.content_image.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO 展示大图
-				Intent intent = new Intent((MainActivity) context, LargerImageActivity.class);
-				((MainActivity) context).startActivity(intent);
-				// Toast.makeText(context, "暂未实现", Toast.LENGTH_SHORT).show();
-			}
-		});
-	}
+        // TODO 基本内容信息修改
+        ImageLoader.getInstance().displayImage(user.getAvatar(), holder.avatar, options);
+        holder.nickname.setText(user.getNickname());
+        String creatAt = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(feed.getCreatedOn());
+        holder.created_at.setText(creatAt);
+        holder.content.setText(feed.getText());
+        ImageLoader.getInstance().displayImage(feed.getImageSmallURL(), holder.content_image, options);
+        //内容空不显示内容区域
+        if (StringUtils.isEmpty(feed.getText())) {
+            holder.content.setVisibility(View.GONE);
+        } else {
+            holder.content.setVisibility(View.VISIBLE);
+        }
 
-	private OnClickListener userInfoOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			Intent intent = new Intent(context, SpaceActivity.class);
-			context.startActivity(intent);
-		}
-	};
+        // 地理位置
+        if (StringUtils.isEmpty("")) {
+            holder.address.setVisibility(View.GONE);
+        } else {
+            holder.address.setVisibility(View.VISIBLE);
+        }
 
-	private void initLikedBtnView(ViewHolder holder, final FeedVO feed, int position) {
-		if (feed.isFavored()) {
-			holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_active);
-		} else {
-			holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_background);
-		}
+        // ImageLoader.getInstance().displayImage(url, holder.content_image,
+        // options);
+        holder.content_image.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO 展示大图
+                Intent intent = new Intent((MainActivity) context, LargerImageActivity.class);
+                ((MainActivity) context).startActivity(intent);
+                // Toast.makeText(context, "暂未实现", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-		holder.liked_detail.setOnClickListener(new OnClickListener() {
+    private OnClickListener userInfoOnClick = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            Intent intent = new Intent(context, SpaceActivity.class);
+            context.startActivity(intent);
+        }
+    };
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent((MainActivity) context, LikeActivity.class);
-				((MainActivity) context).startActivity(intent);
-			}
-		});
+    private void initLikedBtnView(ViewHolder holder, final FeedVO feed, int position) {
+        if (feed.isFavored()) {
+            holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_active);
+        } else {
+            holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_background);
+        }
 
-		holder.btn_liked.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+        holder.liked_detail.setOnClickListener(new OnClickListener() {
 
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent((MainActivity) context, LikeActivity.class);
+                ((MainActivity) context).startActivity(intent);
+            }
+        });
 
-	}
+        holder.btn_liked.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
 
-	private void initCommentView(ViewHolder holder, final FeedVO feed, final int position) {
-		OnCommentClick myCommentClick = new OnCommentClick(feed);
-		holder.btn_comment.setOnClickListener(myCommentClick);
+            }
+        });
 
-		// 赞
-		String html = "<b><a href='1'>张三</a>,<a href='2'>李四四</a>,<a href='3'>王五</a></b>";
-		String liked_num_text = this.context.getResources().getString(R.string.liked_num_text);
-		String likedNum = "10";
-		html += String.format(liked_num_text, likedNum);
-		WebLinkUtils.setUserLinkIntercept((Activity) context, holder.like_text, html);
+    }
 
-		// 评论 总数
-		holder.comments_num.setOnClickListener(myCommentClick);
-		String commentNumStr = this.context.getResources().getString(R.string.comment_num_text);
-		String commentsNum = "10";
-		holder.comments_num.setText(String.format(commentNumStr, commentsNum));
+    private void initCommentView(ViewHolder holder, final FeedVO feed, final int position) {
+        OnCommentClick myCommentClick = new OnCommentClick(feed);
+        holder.btn_comment.setOnClickListener(myCommentClick);
 
-		// 动态添加评论
-		// TODO: for 循环
-		holder.comments_group_list.addView(addComment());
-		holder.comments_group_list.addView(addComment());
-	}
+        // 赞
+        String html = "<b><a href='1'>张三</a>,<a href='2'>李四四</a>,<a href='3'>王五</a></b>";
+        String liked_num_text = this.context.getResources().getString(R.string.liked_num_text);
+        String likedNum = "10";
+        html += String.format(liked_num_text, likedNum);
+        WebLinkUtils.setUserLinkIntercept((Activity) context, holder.like_text, html);
 
-	private RelativeLayout addComment() {
-		String username = "<b><a href='1'>小王</a></b>";
-		String text = "很好很不错";
+        // 评论 总数
+        holder.comments_num.setOnClickListener(myCommentClick);
+        String commentNumStr = this.context.getResources().getString(R.string.comment_num_text);
+        String commentsNum = String.valueOf(feed.getCommentCount());
+        holder.comments_num.setText(String.format(commentNumStr, commentsNum));
 
-		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.list_feed_item_feedback_comment, null);
-		TextView t = (TextView) layout.findViewById(R.id.row_feed_textview_comments_item);
-		String html = username + " : " + text;
-		WebLinkUtils.setUserLinkClickIntercept((Activity) context, t, html);
+        // 动态添加评论
+        // TODO: for 循环
+        holder.comments_group_list.addView(addComment());
+        holder.comments_group_list.addView(addComment());
+    }
 
-		return layout;
-	}
+    private RelativeLayout addComment() {
+        String username = "<b><a href='1'>小王</a></b>";
+        String text = "很好很不错";
 
-	public class OnCommentClick implements OnClickListener {
-		private FeedVO feed;
+        RelativeLayout layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.list_feed_item_feedback_comment, null);
+        TextView t = (TextView) layout.findViewById(R.id.row_feed_textview_comments_item);
+        String html = username + " : " + text;
+        WebLinkUtils.setUserLinkClickIntercept((Activity) context, t, html);
 
-		public OnCommentClick(FeedVO feed) {
-			this.feed = feed;
-		}
+        return layout;
+    }
 
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			Intent intent = new Intent((MainActivity) context, CommentActivity.class);
-			// Bundle mBundle = new Bundle();
-			// mBundle.putSerializable(Constant.IPET_PHOTO_SERIALIZABLE,
-			// (Serializable) feed);
-			// intent.putExtras(mBundle);
-			((MainActivity) context).startActivity(intent);
-		}
-	}
+    public class OnCommentClick implements OnClickListener {
 
-	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// TODO Auto-generated method stub
+        private FeedVO feed;
 
-	}
+        public OnCommentClick(FeedVO feed) {
+            this.feed = feed;
+        }
 
-	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		// TODO Auto-generated method stub
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            Intent intent = new Intent((MainActivity) context, CommentActivity.class);
+            // Bundle mBundle = new Bundle();
+            // mBundle.putSerializable(Constant.IPET_PHOTO_SERIALIZABLE,
+            // (Serializable) feed);
+            // intent.putExtras(mBundle);
+            ((MainActivity) context).startActivity(intent);
+        }
+    }
 
-	}
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        // TODO Auto-generated method stub
 
-	public List getList() {
-		return list;
-	}
+    }
 
-	public void setList(List list) {
-		this.list = list;
-	}
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public List getList() {
+        return list;
+    }
+
+    public void setList(List list) {
+        this.list = list;
+    }
 
 }
