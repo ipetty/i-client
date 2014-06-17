@@ -49,7 +49,7 @@
     <string name="input_pet_name_hint">请输入宠物名称</string>
     <string name="pet_sex">性别</string>
     <string name="input_sex_name_hint">请选择宠物性别</string>
-    <string name="pet_type">类型</string>
+    <string name="pet_family">类型</string>
     <string name="input_type_name_hint">请选择宠物类型</string>
     <string name="changeAccount">切换账号</string>
 

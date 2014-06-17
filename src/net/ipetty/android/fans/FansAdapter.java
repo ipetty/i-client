@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -27,7 +28,7 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 
 	@Override
 	public int getCount() {
-		return 2;// list == null ? 0 : list.size();
+		return 20;// list == null ? 0 : list.size();
 	}
 
 	@Override
@@ -64,6 +65,8 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
 			holder.name = (TextView) view.findViewById(R.id.name);
 			holder.follow = (ImageView) view.findViewById(R.id.follow);
+			holder.follow.setOnClickListener(followClick);
+
 			convertView = view;
 			convertView.setTag(holder);
 		} else {
@@ -75,6 +78,16 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 		return view;
 	}
 
+	private OnClickListener followClick = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			// test
+			((ImageView) v).setImageResource(R.drawable.following_avatar);
+		}
+	};
+
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
@@ -85,14 +98,6 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
 
-	}
-
-	public List<CommentVO> getList() {
-		return list;
-	}
-
-	public void setList(List<CommentVO> list) {
-		this.list = list;
 	}
 
 }

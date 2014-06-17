@@ -4,15 +4,16 @@ import java.util.List;
 
 import net.ipetty.R;
 import net.ipetty.android.demo.CommentVO;
-import net.ipetty.android.demo.UserVO;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
@@ -27,25 +28,27 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 
 	@Override
 	public int getCount() {
-		return list == null ? 0 : list.size();
+		return 2;// list == null ? 0 : list.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return list.get(position);
+		return 0;// list.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return list.get(position).getId();
+		return 0;// list.get(position).getId();
 	}
 
 	// 构建一个布局缓存的结构体 与VO对应
+	// 构建一个布局缓存的结构体 与VO对应
 	public class ViewHolder {
-		public TextView text;
+		public ImageView avatar;
 		public TextView name;
+		public ImageView follow;
 	}
 
 	public ViewHolder holder;
@@ -60,8 +63,11 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 			Log.i(TAG, "init items View");
 			view = inflater.inflate(R.layout.list_follows_item, null);
 			holder = new ViewHolder();
-			holder.text = (TextView) view.findViewById(R.id.text);
+			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
 			holder.name = (TextView) view.findViewById(R.id.name);
+			holder.follow = (ImageView) view.findViewById(R.id.follow);
+			holder.follow.setOnClickListener(followClick);
+
 			convertView = view;
 			convertView.setTag(holder);
 		} else {
@@ -69,12 +75,19 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 			holder = (ViewHolder) view.getTag();
 		}
 		// 数据与界面绑定
-		CommentVO vo = (CommentVO) this.getItem(position);
-		UserVO u = vo.getUser();
-		holder.text.setText(vo.getText());
-		holder.name.setText(u.getName());
+
 		return view;
 	}
+
+	private OnClickListener followClick = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			// test
+			((ImageView) v).setImageResource(R.drawable.following_avatar);
+		}
+	};
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {

@@ -6,6 +6,7 @@ import net.ipetty.android.core.ui.BaseActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ public class FansActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fans);
+
+		Log.i(TAG, "onCreate");
 
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
