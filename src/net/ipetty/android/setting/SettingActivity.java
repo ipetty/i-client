@@ -2,17 +2,18 @@ package net.ipetty.android.setting;
 
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.sdk.task.user.Logout;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SettingActivity extends Activity {
 
-	private View logout;
+	private Button logout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +27,11 @@ public class SettingActivity extends Activity {
 		btnBack.setOnClickListener(new BackClickListener(this));
 
 		/* logout */
-		logout = this.findViewById(R.id.logout);
+		logout = (Button) this.findViewById(R.id.logout);
 		logout.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "暂未实现", Toast.LENGTH_SHORT).show();
+			public void onClick(View view) {
+				new Logout(SettingActivity.this).setListener(new LogoutTaskListener(SettingActivity.this)).execute();
 			}
 		});
 	}
