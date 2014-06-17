@@ -19,14 +19,14 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class DisvocerAdapter extends BaseAdapter {
-	public final static String TAG = "DisvocerAdapter";
+public class DiscoverAdapter extends BaseAdapter {
+	public final static String TAG = "DiscoverAdapter";
 	private LayoutInflater mInflater;
 	private Context context;
 	private List list = null; // 这个就本地dataStore
 	DisplayImageOptions options;
 
-	public DisvocerAdapter(Context context) {
+	public DiscoverAdapter(Context context) {
 		super();
 		this.context = context;
 		this.mInflater = LayoutInflater.from(context);

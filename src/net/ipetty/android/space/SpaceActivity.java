@@ -3,6 +3,7 @@ package net.ipetty.android.space;
 import net.ipetty.R;
 import net.ipetty.android.bonuspoint.BonusPointActivity;
 import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.discover.DiscoverAdapter;
 import net.ipetty.android.fans.FansActivity;
 import net.ipetty.android.follow.FollowsActivity;
 import net.ipetty.android.petty.PettyActivity;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,8 @@ public class SpaceActivity extends Activity {
 	public final static String TAG = "SpaceActivity";
 	private ViewFlipper viewFlipper;
 	private View space_petty_view;
+	private GridView space_photo_grid;
+	private DiscoverAdapter space_photo_grid_adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +102,13 @@ public class SpaceActivity extends Activity {
 		viewFlipper = (ViewFlipper) this.findViewById(R.id.viewFlipper);
 		viewFlipper.setDisplayedChild(0);
 
-		View space_petty_layout = this.findViewById(R.id.space_petty_btn);
-		View space_photo_layout = this.findViewById(R.id.space_photo_btn);
-		View space_feed_layout = this.findViewById(R.id.space_feed_btn);
+		View space_petty_layout_btn = this.findViewById(R.id.space_petty_btn);
+		View space_photo_layout_btn = this.findViewById(R.id.space_photo_btn);
+		View space_feed_layout_btn = this.findViewById(R.id.space_feed_btn);
 
-		space_petty_layout.setOnClickListener(new TabClickListener(0));
-		space_photo_layout.setOnClickListener(new TabClickListener(1));
-		space_feed_layout.setOnClickListener(new TabClickListener(2));
+		space_petty_layout_btn.setOnClickListener(new TabClickListener(0));
+		space_photo_layout_btn.setOnClickListener(new TabClickListener(1));
+		space_feed_layout_btn.setOnClickListener(new TabClickListener(2));
 
 		space_petty_view = this.findViewById(R.id.list_space_petty_item);
 		View pet_edit_view = space_petty_view.findViewById(R.id.pet_edit_view);
@@ -120,6 +124,12 @@ public class SpaceActivity extends Activity {
 				}
 			});
 		}
+
+		// 图形
+		View space_photo_layout = this.findViewById(R.id.space_photo_layout);
+		space_photo_grid = (GridView) space_photo_layout.findViewById(R.id.gridview);
+		space_photo_grid_adapter = new DiscoverAdapter(this);
+		space_photo_grid.setAdapter(space_photo_grid_adapter);
 	}
 
 	public class TabClickListener implements OnClickListener {

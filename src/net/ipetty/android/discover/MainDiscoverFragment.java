@@ -14,7 +14,7 @@ public class MainDiscoverFragment extends Fragment {
 	public final static String TAG = "MainDiscoverFragment";
 	private Activity activity;
 	private GridView gridview;
-	private DisvocerAdapter adapter;
+	private DiscoverAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MainDiscoverFragment extends Fragment {
 		Log.i(TAG, "onActivityCreated");
 		this.activity = getActivity();
 		gridview = (GridView) this.activity.findViewById(R.id.gridview);
-		adapter = new DisvocerAdapter(this.activity);
+		adapter = new DiscoverAdapter(this.activity);
 		gridview.setAdapter(adapter);
 
 	}
