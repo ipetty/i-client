@@ -1,10 +1,11 @@
 package net.ipetty.android.sdk.core;
 
+import android.content.Context;
+import android.util.Base64;
+import android.util.Log;
 import java.io.IOException;
 import java.nio.charset.Charset;
-
 import net.ipetty.android.core.util.DeviceUtils;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ContentCodingType;
 import org.springframework.http.HttpHeaders;
@@ -12,10 +13,6 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
-
-import android.content.Context;
-import android.util.Base64;
-import android.util.Log;
 
 /**
  * Api请求拦截
@@ -92,6 +89,7 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 
         Log.i(TAG, "<--:" + request.getURI().toString());
         Log.i(TAG, "Etag头：" + resp.getHeaders().getETag());
+        Log.i(TAG, "过期头：" + resp.getHeaders().getCacheControl());
         Log.i(TAG, "状态：" + resp.getRawStatusCode());
 
         //Log.i(TAG, "-->" + request.getURI() + ":" + resp.getRawStatusCode());

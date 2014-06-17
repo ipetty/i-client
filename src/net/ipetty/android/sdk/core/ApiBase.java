@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.ipetty.android.core.util.URIBuilder;
 import net.ipetty.android.sdk.cache.RestTemplate4Cache;
+import net.ipetty.vo.Constant;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -52,7 +53,7 @@ public class ApiBase {
         factory.setConnectTimeout(10 * 1000);
         factory.setReadTimeout(60 * 1000);
 
-        //避免HttpURLConnection的http.keepAlive Bug  
+        //避免HttpURLConnection的http.keepAlive Bug
         if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
             System.setProperty("http.keepAlive", "false");
         }
