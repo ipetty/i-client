@@ -5,6 +5,7 @@ import net.ipetty.android.bonuspoint.BonusPointActivity;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.fans.FansActivity;
 import net.ipetty.android.follow.FollowsActivity;
+import net.ipetty.android.petty.PettyActivity;
 import net.ipetty.android.user.UserActivity;
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.widget.ViewFlipper;
 public class SpaceActivity extends Activity {
 	public final static String TAG = "SpaceActivity";
 	private ViewFlipper viewFlipper;
+	private View space_petty_view;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +101,25 @@ public class SpaceActivity extends Activity {
 		View space_petty_layout = this.findViewById(R.id.space_petty_btn);
 		View space_photo_layout = this.findViewById(R.id.space_photo_btn);
 		View space_feed_layout = this.findViewById(R.id.space_feed_btn);
+
 		space_petty_layout.setOnClickListener(new TabClickListener(0));
 		space_photo_layout.setOnClickListener(new TabClickListener(1));
 		space_feed_layout.setOnClickListener(new TabClickListener(2));
+
+		space_petty_view = this.findViewById(R.id.list_space_petty_item);
+		View pet_edit_view = space_petty_view.findViewById(R.id.pet_edit_view);
+
+		if (isCurrentUser()) {
+			pet_edit_view.setVisibility(View.VISIBLE);
+			pet_edit_view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(SpaceActivity.this, PettyActivity.class);
+					startActivity(intent);
+				}
+			});
+		}
 	}
 
 	public class TabClickListener implements OnClickListener {
