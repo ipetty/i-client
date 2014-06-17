@@ -8,6 +8,12 @@ import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.ValidUtils;
+import net.ipetty.android.sdk.task.user.UserRegister;
+import net.ipetty.vo.RegisterVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,22 +21,30 @@ import android.text.InputType;
 import android.text.Selection;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+// FIXME 从基础数据中加载性别、家族等基础数据
+// FIXME 性别、家族等数据应该传递value而非text，但界面上选中后应该显示text
 public class RegisterActivity extends BaseActivity {
 
-	private Dialog petGenderDialog;
-	private Dialog petFamilyDialog;
-	private EditText emailText;
-	private EditText passwordText;
-	private TextView petGenderText;
-	private TextView petFamilyText;
+	private EditText emailEditor;
+	private EditText passwordEditor;
 	private TextView passwordToggleView = null;
-	private boolean displayPasswordFlag = false;
+	private EditText nicknameEditor;
+	private EditText petNameEditor;
+	private Dialog petGenderDialog;
 	private List<ModDialogItem> petGenderItems;
+	private TextView petGenderText;
+	private Dialog petFamilyDialog;
 	private List<ModDialogItem> petFamilyItems;
+	private TextView petFamilyText;
+	private Button submitButton;
+
+	private boolean displayPasswordFlag = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +57,15 @@ public class RegisterActivity extends BaseActivity {
 		text.setText(this.getResources().getString(R.string.title_activity_register));
 		btnBack.setOnClickListener(new BackClickListener(this));
 
-		emailText = (EditText) this.findViewById(R.id.account);
-		passwordText = (EditText) this.findViewById(R.id.password);
+		emailEditor = (EditText) this.findViewById(R.id.account);
+		passwordEditor = (EditText) this.findViewById(R.id.password);
 
 		passwordToggleView = (TextView) this.findViewById(R.id.login_toggle_password);
 		passwordToggleView.setOnClickListener(passwordToggleClick);
+
+		nicknameEditor = (EditText) this.findViewById(R.id.nickname);
+
+		petNameEditor = (EditText) this.findViewById(R.id.pet_name);
 
 		petGenderItems = new ArrayList<ModDialogItem>();
 		petGenderItems.add(new ModDialogItem(null, "男生", petGenderClick));
@@ -76,26 +94,29 @@ public class RegisterActivity extends BaseActivity {
 				petFamilyDialog = DialogUtils.modPopupDialog(RegisterActivity.this, petFamilyItems, petFamilyDialog);
 			}
 		});
+
+		submitButton = (Button) this.findViewById(R.id.button);
+		submitButton.setOnClickListener(sumbit);
 	}
 
 	// 密码可见
 	private OnClickListener passwordToggleClick = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			int index = passwordText.getSelectionStart();
+			int index = passwordEditor.getSelectionStart();
 			if (!displayPasswordFlag) {
 				// display password text, for example "123456"
 				// passwordView.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-				passwordText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+				passwordEditor.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 				passwordToggleView.setText(R.string.login_toggle_password_hide);
 			} else {
 				// hide password, display "."
 				// passwordView.setTransformationMethod(PasswordTransformationMethod.getInstance());
-				passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+				passwordEditor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 				passwordToggleView.setText(R.string.login_toggle_password_show);
 			}
 			displayPasswordFlag = !displayPasswordFlag;
-			Editable etable = passwordText.getText();
+			Editable etable = passwordEditor.getText();
 			Selection.setSelection(etable, index);
 		}
 	};
@@ -104,7 +125,8 @@ public class RegisterActivity extends BaseActivity {
 		@Override
 		public void onClick(View view) {
 			String text = ((TextView) view.findViewById(R.id.text)).getText().toString();
-			String value = ((TextView) view.findViewById(R.id.value)).getText().toString(); // 这里是value值
+			// String value = ((TextView)
+			// view.findViewById(R.id.value)).getText().toString(); // 这里是value值
 			petGenderText.setText(text);
 			petGenderDialog.cancel();
 		}
@@ -118,6 +140,57 @@ public class RegisterActivity extends BaseActivity {
 			petFamilyDialog.cancel();
 		}
 	};
+
+	private final OnClickListener sumbit = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			RegisterVO register = new RegisterVO();
+
+			// email
+			String email = RegisterActivity.this.emailEditor.getText().toString();
+			register.setEmail(email);
+			if (StringUtils.isEmpty(email)) {
+				RegisterActivity.this.emailEditor.requestFocus();
+				Toast.makeText(RegisterActivity.this, R.string.login_empty_account, Toast.LENGTH_SHORT).show();
+				return;
+			}
+			if (!ValidUtils.isEmail(email)) {
+				RegisterActivity.this.emailEditor.requestFocus();
+				Toast.makeText(RegisterActivity.this, R.string.login_error_invalid_email, Toast.LENGTH_SHORT).show();
+				return;
+			}
+
+			// password
+			String password = RegisterActivity.this.passwordEditor.getText().toString();
+			register.setPassword(password);
+			if (StringUtils.isEmpty(password)) {
+				RegisterActivity.this.passwordEditor.requestFocus();
+				Toast.makeText(RegisterActivity.this, R.string.login_empty_password, Toast.LENGTH_SHORT).show();
+				return;
+			}
+
+			// nickname
+			String nickname = RegisterActivity.this.nicknameEditor.getText().toString();
+			register.setNickname(nickname);
+
+			// TODO gender
+
+			// pet name
+			String petName = RegisterActivity.this.petNameEditor.getText().toString();
+			register.setPetName(petName);
+
+			// pet gender
+			String petGender = RegisterActivity.this.petGenderText.getText().toString();
+			register.setPetGender(petGender);
+
+			// pet family
+			String petFamily = RegisterActivity.this.petFamilyText.getText().toString();
+			register.setPetFamily(petFamily);
+
+			new UserRegister(RegisterActivity.this).execute(register);
+		}
+	};
+
 	/*
 	 * @Override public boolean onCreateOptionsMenu(Menu menu) { // Inflate the
 	 * menu; this adds items to the action bar if it is present.
