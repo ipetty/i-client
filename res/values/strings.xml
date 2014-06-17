@@ -87,6 +87,9 @@
     <string name="title_activity_feedback">意见反馈</string>
     <string name="feedback_no_empty">反馈内容不能为空</string>
     <string name="feedback_hint">请填写您的意见和建议</string>
+    <string name="submitting">正在提交...</string>
+    <string name="feedback_success">意见反馈提交成功</string>
+    <string name="feedback_failure">意见反馈提交失败</string>
 
     <!-- space -->
     <string name="title_activity_space">我的空间</string>

@@ -46,7 +46,8 @@ public class FeedbackActivity extends BaseActivity {
 				return;
 			}
 
-			new Feedback(FeedbackActivity.this).execute(null, feedbackContent, null);
+			new Feedback(FeedbackActivity.this).setListener(new FeedbackTaskListener(FeedbackActivity.this)).execute(
+					null, feedbackContent, null);
 		}
 	};
 
