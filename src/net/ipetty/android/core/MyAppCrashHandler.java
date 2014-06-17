@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.concurrent.CountDownLatch;
 
 public class MyAppCrashHandler implements UncaughtExceptionHandler {
 
@@ -27,6 +28,31 @@ public class MyAppCrashHandler implements UncaughtExceptionHandler {
         Log.e(TAG, ex.getMessage(), ex);
         String msg = "亲，出错了";
         showError(msg);
+        waitFor(3 * 1000);
+        ActivityManager.getInstance().exit();
+    }
+
+    //另启线程进行等待，防止阻塞UI线程
+    private void waitFor(long time) {
+        //异步转同步
+        final CountDownLatch latch = new CountDownLatch(1);
+        final Long waitTime = time;
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(waitTime);
+                } catch (InterruptedException ex) {
+
+                }
+                latch.countDown();
+            }
+        }.start();
+        try {
+            latch.await();
+        } catch (InterruptedException ex) {
+
+        }
     }
 
     private void showError(final String msg) {

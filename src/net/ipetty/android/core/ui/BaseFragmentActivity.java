@@ -1,6 +1,6 @@
 package net.ipetty.android.core.ui;
 
-import net.ipetty.android.core.util.ActivityUtils;
+import net.ipetty.android.core.ActivityManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -32,12 +32,12 @@ public class BaseFragmentActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityUtils.getInstance().addActivity(this);
+        ActivityManager.getInstance().addActivity(this);
     }
 
     @Override
     protected void onDestroy() {
-        ActivityUtils.getInstance().distoryActivity(this);
+        ActivityManager.getInstance().distoryActivity(this);
         super.onDestroy();
     }
 }

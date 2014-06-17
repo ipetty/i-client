@@ -1,21 +1,21 @@
-package net.ipetty.android.core.util;
+package net.ipetty.android.core;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
 
-public class ActivityUtils {
+public class ActivityManager {
 	public final static String TAG = "ActivityUtils";
 	private final List<Activity> activityList = new LinkedList<Activity>();
-	private static ActivityUtils instance;
+	private static ActivityManager instance;
 
-	private ActivityUtils() {
+	private ActivityManager() {
 	}
 
-	public static ActivityUtils getInstance() {
+	public static ActivityManager getInstance() {
 		if (null == instance) {
-			instance = new ActivityUtils();
+			instance = new ActivityManager();
 		}
 		return instance;
 	}

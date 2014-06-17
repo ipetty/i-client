@@ -2,7 +2,7 @@ package net.ipetty.android.main;
 
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BaseFragmentActivity;
-import net.ipetty.android.core.util.ActivityUtils;
+import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.discover.MainDiscoverFragment;
 import net.ipetty.android.home.MainHomeFragment;
@@ -266,7 +266,7 @@ public class MainActivity extends BaseFragmentActivity {
 				Toast.makeText(this, exit_once_again, Toast.LENGTH_SHORT).show();
 				mExitTime = System.currentTimeMillis();
 			} else {
-				ActivityUtils.getInstance().exit();
+				ActivityManager.getInstance().exit();
 			}
 			return true;
 		}
