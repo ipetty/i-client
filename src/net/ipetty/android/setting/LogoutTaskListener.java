@@ -20,6 +20,7 @@ public class LogoutTaskListener extends DefaultTaskListener<Void> {
 	@Override
 	public void onSuccess(Void result) {
 		AppUtils.goTo(activity, LoginHasAccountActivity.class);
+		activity.finish();
 	}
 
 }

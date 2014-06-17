@@ -187,7 +187,8 @@ public class RegisterActivity extends BaseActivity {
 			String petFamily = RegisterActivity.this.petFamilyText.getText().toString();
 			register.setPetFamily(petFamily);
 
-			new UserRegister(RegisterActivity.this).execute(register);
+			new UserRegister(RegisterActivity.this).setListener(
+					new RegisterTaskListener(RegisterActivity.this, register)).execute(register);
 		}
 	};
 

@@ -21,7 +21,6 @@
     <application
         android:name="net.ipetty.android.core.MyApplication"
         android:allowBackup="true"
-        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/IPettyTheme" >
@@ -49,7 +48,7 @@
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name="net.ipetty.android.login.RegisterActivity"
+            android:name="net.ipetty.android.register.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
         <activity
