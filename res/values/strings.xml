@@ -97,6 +97,7 @@
     <string name="user_edit">资料修改</string>
     <string name="follow_text">关注</string>
     <string name="unfollow_text">取消关注</string>
+    <string name="pet_edit">编辑宠物资料</string>
 
     <!-- fans -->
     <string name="title_activity_fans">粉丝</string>
@@ -105,7 +106,8 @@
     <string name="title_activity_follows">关注</string>
     <!-- bonus_point -->
     <string name="title_activity_bonus_point">积分</string>
-    <string name="title_activity_petty">PettyActivity</string>
+    <!-- petty -->
+    <string name="title_activity_petty">我的宠物</string>
     
     <string name="title_activity_location">LocationActivity</string>
     
@@ -124,6 +126,7 @@
     <!-- 系统设置 -->
     <string name="title_activity_setting">设置</string>
     <string name="logout">注销</string>
+    
    
 
 
