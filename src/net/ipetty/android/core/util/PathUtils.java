@@ -1,16 +1,14 @@
 package net.ipetty.android.core.util;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import java.io.File;
+import java.io.IOException;
 import net.ipetty.android.core.AppException;
+import org.apache.commons.lang3.StringUtils;
 
 public class PathUtils {
 
@@ -65,6 +63,14 @@ public class PathUtils {
 
     public static String getCarmerDir() {
         File file = new File(createAppDir() + File.separator + SAVE_PICTURE_IN_SDCARD + File.separator);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return file.getAbsolutePath() + File.separator;
+    }
+
+    public static String getCrashDir() {
+        File file = new File(createAppDir() + File.separator + CRASH_DIR + File.separator);
         if (!file.exists()) {
             file.mkdirs();
         }
