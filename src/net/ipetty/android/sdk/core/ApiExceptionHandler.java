@@ -7,10 +7,7 @@ import java.nio.charset.Charset;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResponseErrorHandler;
-import org.springframework.web.client.RestClientException;
 
 /**
  * 异常处理
@@ -39,9 +36,12 @@ public class ApiExceptionHandler implements ResponseErrorHandler {
         byte[] body = getResponseBody(response);
         HttpStatus statusCode = response.getStatusCode();
         Log.i(TAG, "statusCode:" + statusCode.series());
-        String str = "请求失败";
+        String str = null;
         if (body != null) {
             str = new String(body, charset);
+        }
+        if (null == str || "".equals(str)) {
+            str = "未知异常";
         }
         throw new APIException(str);
 //        switch (statusCode.series()) {

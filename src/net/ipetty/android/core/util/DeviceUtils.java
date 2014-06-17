@@ -12,6 +12,7 @@ import android.telephony.TelephonyManager;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+import net.ipetty.android.core.MyAppStateManager;
 import org.apache.commons.lang3.StringUtils;
 
 public class DeviceUtils {
@@ -93,7 +94,7 @@ public class DeviceUtils {
         if (context == null) {
             return;
         }
-        Intent intent = getPhotoIntent(path, filename);
+        Intent intent = getPhotoIntent(path, filename, context);
         ((Activity) context).startActivityForResult(intent, REQUEST_CODE_TAKE_IMAGE);
 
     }
@@ -106,11 +107,11 @@ public class DeviceUtils {
         if (fragment.getActivity() == null) {
             return;
         }
-        Intent intent = getPhotoIntent(path, filename);
+        Intent intent = getPhotoIntent(path, filename, fragment.getActivity());
         fragment.startActivityForResult(intent, REQUEST_CODE_TAKE_IMAGE);
     }
 
-    public static Intent getPhotoIntent(String path, String filename) {
+    public static Intent getPhotoIntent(String path, String filename, Context context) {
         if (StringUtils.isEmpty(path)) {
             path = PathUtils.getCarmerDir();
         }
@@ -121,6 +122,7 @@ public class DeviceUtils {
         File file = new File(path, filename);
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        MyAppStateManager.setCameraTempFile(context, file.getAbsolutePath());
         return intent;
     }
 

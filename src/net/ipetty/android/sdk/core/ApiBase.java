@@ -1,6 +1,7 @@
 package net.ipetty.android.sdk.core;
 
 import android.content.Context;
+import android.os.Build;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import net.ipetty.android.core.util.URIBuilder;
 import net.ipetty.android.sdk.cache.RestTemplate4Cache;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -38,10 +39,24 @@ public class ApiBase {
         Charset charset = Charset.forName("UTF-8");
 
         restTemplate = new RestTemplate4Cache(context, 50, 500);
-        //避免HttpURLConnection的http.keepAlive Bug
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setConnectTimeout(3 * 1000);
-        factory.setReadTimeout(5 * 1000);
+        //关于HTTP组件的选择：http://www.07net01.com/program/653485.html
+        /**
+         * SimpleClientHttpRequestFactory HttpURLConnection --推荐
+         *
+         * CommonsClientHttpRequestFactory CommonsClientHttpRequest --不推荐
+         *
+         * HttpComponentsClientHttpRequestFactory HttpUriRequest --?
+         */
+
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(10 * 1000);
+        factory.setReadTimeout(60 * 1000);
+
+        //避免HttpURLConnection的http.keepAlive Bug  
+        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
+            System.setProperty("http.keepAlive", "false");
+        }
+
         restTemplate.setRequestFactory(factory);
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         messageConverters.add(new ByteArrayHttpMessageConverter());

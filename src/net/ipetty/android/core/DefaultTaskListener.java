@@ -8,10 +8,10 @@ package net.ipetty.android.core;
 import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
-import java.net.SocketTimeoutException;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.ui.BaseFragmentActivity;
 import net.ipetty.android.sdk.core.APIException;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -102,23 +102,32 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
         }
 
         //超时
-        if (ex instanceof SocketTimeoutException) {
-            SocketTimeoutException e = (SocketTimeoutException) ex;
-            showError("请求超时，请重试");
+        if (ex instanceof ConnectTimeoutException) {
+            ConnectTimeoutException e = (ConnectTimeoutException) ex;
+            showError("请求超时，请检查网络后重试");
             return;
         }
 
         //API异常 任务层
         if (ex instanceof APIException) {
             APIException e = (APIException) ex;
-            showError(e.getMessage());
+            if (null == e.getMessage() || "".equals(e.getMessage())) {
+                showError("未知异常");
+            } else {
+                showError(e.getMessage());
+            }
+
             return;
         }
 
         //HTTP客户端异常400
         if (ex instanceof HttpClientErrorException) {
             HttpClientErrorException e = (HttpClientErrorException) ex;
-            showError("请求失败");
+            if (null == e.getMessage() || "".equals(e.getMessage())) {
+                showError(e.getStatusText());
+            } else {
+                showError(e.getMessage());
+            }
             return;
         }
 

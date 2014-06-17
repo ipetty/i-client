@@ -8,7 +8,6 @@ import net.ipetty.android.core.util.DeviceUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ContentCodingType;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -81,7 +80,7 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
         //接收头
         HttpHeaders responseHeaders = resp.getHeaders();
         String rut = responseHeaders.getFirst(HEADER_NAME_USER_TOKEN);
-        String rrt = responseHeaders.getFirst(HEADER_NAME_USER_TOKEN);
+        String rrt = responseHeaders.getFirst(HEADER_NAME_REFRESH_TOKEN);
         Log.i(TAG, "接收到userToken:" + rut);
         Log.i(TAG, "接收到refreshToken:" + rrt);
         if (StringUtils.isNotBlank(rut) && !userToken.equals(rut)) {

@@ -8,7 +8,7 @@ package net.ipetty.android.register;
 import android.app.Activity;
 import android.util.Log;
 import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.util.ActivityUtils;
+import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.vo.UserVO;
@@ -35,7 +35,7 @@ public class RegisterTaskListener extends DefaultTaskListener<UserVO> {
     public void goMain() {
         Log.i(TAG, "to MainActivity");
         AppUtils.goTo(activity, MainActivity.class);
-        ActivityUtils.getInstance().finish();
+        ActivityManager.getInstance().finish();
     }
 
 }

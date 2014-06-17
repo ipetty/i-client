@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.Toast;
-import net.ipetty.android.core.util.ActivityUtils;
+import net.ipetty.android.core.ActivityManager;
 
 public class BaseActivity extends Activity {
 
@@ -41,12 +41,12 @@ public class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityUtils.getInstance().addActivity(this);
+        ActivityManager.getInstance().addActivity(this);
     }
 
     @Override
     protected void onDestroy() {
-        ActivityUtils.getInstance().distoryActivity(this);
+        ActivityManager.getInstance().distoryActivity(this);
         super.onDestroy();
     }
 
