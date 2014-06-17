@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 // FIXME 从基础数据中加载性别、家族等基础数据
-// FIXME 性别、家族等数据应该传递value而非text，但界面上选中后应该显示text
 public class RegisterActivity extends BaseActivity {
 
 	private EditText emailEditor;
@@ -39,9 +38,11 @@ public class RegisterActivity extends BaseActivity {
 	private Dialog petGenderDialog;
 	private List<ModDialogItem> petGenderItems;
 	private TextView petGenderText;
+	private String petGender;
 	private Dialog petFamilyDialog;
 	private List<ModDialogItem> petFamilyItems;
 	private TextView petFamilyText;
+	private String petFamily;
 	private Button submitButton;
 
 	private boolean displayPasswordFlag = false;
@@ -68,9 +69,9 @@ public class RegisterActivity extends BaseActivity {
 		petNameEditor = (EditText) this.findViewById(R.id.pet_name);
 
 		petGenderItems = new ArrayList<ModDialogItem>();
-		petGenderItems.add(new ModDialogItem(null, "男生", petGenderClick));
-		petGenderItems.add(new ModDialogItem(null, "女生", petGenderClick));
-		petGenderItems.add(new ModDialogItem(null, "男女生", petGenderClick));
+		petGenderItems.add(new ModDialogItem(null, "male", "男生", petGenderClick));
+		petGenderItems.add(new ModDialogItem(null, "female", "女生", petGenderClick));
+		petGenderItems.add(new ModDialogItem(null, "other", "男女生", petGenderClick));
 
 		petGenderText = (TextView) this.findViewById(R.id.pet_gender);
 		petGenderText.setOnClickListener(new OnClickListener() {
@@ -81,11 +82,9 @@ public class RegisterActivity extends BaseActivity {
 		});
 
 		petFamilyItems = new ArrayList<ModDialogItem>();
-		petFamilyItems.add(new ModDialogItem(null, "汪星人", petFamilyClick));
-		petFamilyItems.add(new ModDialogItem(null, "喵星人", petFamilyClick));
-		petFamilyItems.add(new ModDialogItem(null, "水星人", petFamilyClick));
-		petFamilyItems.add(new ModDialogItem(null, "冷星人", petFamilyClick));
-		petFamilyItems.add(new ModDialogItem(null, "异星人", petFamilyClick));
+		petFamilyItems.add(new ModDialogItem(null, "dog", "汪星人", petFamilyClick));
+		petFamilyItems.add(new ModDialogItem(null, "cat", "喵星人", petFamilyClick));
+		petFamilyItems.add(new ModDialogItem(null, "other", "异星人", petFamilyClick));
 
 		petFamilyText = (TextView) this.findViewById(R.id.pet_family);
 		petFamilyText.setOnClickListener(new OnClickListener() {
@@ -125,8 +124,7 @@ public class RegisterActivity extends BaseActivity {
 		@Override
 		public void onClick(View view) {
 			String text = ((TextView) view.findViewById(R.id.text)).getText().toString();
-			// String value = ((TextView)
-			// view.findViewById(R.id.value)).getText().toString(); // 这里是value值
+			petGender = ((TextView) view.findViewById(R.id.value)).getText().toString();
 			petGenderText.setText(text);
 			petGenderDialog.cancel();
 		}
@@ -134,8 +132,9 @@ public class RegisterActivity extends BaseActivity {
 
 	private OnClickListener petFamilyClick = new OnClickListener() {
 		@Override
-		public void onClick(View v) {
-			String text = ((TextView) v.findViewById(R.id.text)).getText().toString();
+		public void onClick(View view) {
+			String text = ((TextView) view.findViewById(R.id.text)).getText().toString();
+			petFamily = ((TextView) view.findViewById(R.id.value)).getText().toString();
 			petFamilyText.setText(text);
 			petFamilyDialog.cancel();
 		}
@@ -180,11 +179,9 @@ public class RegisterActivity extends BaseActivity {
 			register.setPetName(petName);
 
 			// pet gender
-			String petGender = RegisterActivity.this.petGenderText.getText().toString();
 			register.setPetGender(petGender);
 
 			// pet family
-			String petFamily = RegisterActivity.this.petFamilyText.getText().toString();
 			register.setPetFamily(petFamily);
 
 			new UserRegister(RegisterActivity.this).setListener(
