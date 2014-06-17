@@ -72,7 +72,7 @@ public class RegisterActivity extends BaseActivity {
 		petGenderItems.add(new ModDialogItem(null, "女生", petGenderClick));
 		petGenderItems.add(new ModDialogItem(null, "男女生", petGenderClick));
 
-		petGenderText = (TextView) this.findViewById(R.id.sex);
+		petGenderText = (TextView) this.findViewById(R.id.pet_gender);
 		petGenderText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -87,7 +87,7 @@ public class RegisterActivity extends BaseActivity {
 		petFamilyItems.add(new ModDialogItem(null, "冷星人", petFamilyClick));
 		petFamilyItems.add(new ModDialogItem(null, "异星人", petFamilyClick));
 
-		petFamilyText = (TextView) this.findViewById(R.id.type);
+		petFamilyText = (TextView) this.findViewById(R.id.pet_family);
 		petFamilyText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {

@@ -44,14 +44,15 @@
     <string name="user_info">用户信息</string>
     <string name="pet_info">宠物信息</string>
     <string name="nickname">昵称</string>
-    <string name="input_nickname_hint">请输入用户昵称</string>
+    <string name="nickname_hint">请输入用户昵称</string>
     <string name="pet_name">名称</string>
-    <string name="input_pet_name_hint">请输入宠物名称</string>
-    <string name="pet_sex">性别</string>
-    <string name="input_sex_name_hint">请选择宠物性别</string>
+    <string name="pet_name_hint">请输入宠物名称</string>
+    <string name="pet_gender">性别</string>
+    <string name="pet_gender_hint">请选择宠物性别</string>
     <string name="pet_family">类型</string>
-    <string name="input_type_name_hint">请选择宠物类型</string>
+    <string name="pet_family_hint">请选择宠物类型</string>
     <string name="changeAccount">切换账号</string>
+    <string name="pet_birthday">生日</string>
 
     <!-- main -->
     <string name="sub_nav_title_home">主页</string>
@@ -98,6 +99,9 @@
     <string name="follow_text">关注</string>
     <string name="unfollow_text">取消关注</string>
     <string name="pet_edit">编辑宠物资料</string>
+    
+    <!-- petty -->
+
 
     <!-- fans -->
     <string name="title_activity_fans">粉丝</string>
@@ -126,6 +130,9 @@
     <!-- 系统设置 -->
     <string name="title_activity_setting">设置</string>
     <string name="logout">注销</string>
+    
+
+    
     
    
 

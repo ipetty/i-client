@@ -45,7 +45,7 @@
                 android:layout_height="72dp"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"
-                android:src="@drawable/avatar" />
+                android:src="@drawable/default_image" />
         </FrameLayout>
 
         <LinearLayout
@@ -76,20 +76,21 @@
                 android:textColor="@color/text_black"
                 android:textSize="16sp" />
 
-          	<TextView
-				    android:id="@+id/pet_name"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="16dp"
-                	android:layout_marginRight="16dp"
-                	android:layout_weight="1.0"
-               		 android:background="@null"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="小旺旺"
-				    android:textSize="16sp" />
+	             <EditText
+	                     android:layout_marginLeft="16dp"
+	                 android:id="@+id/pet_name"
+	                 android:layout_width="match_parent"
+	                 android:layout_height="wrap_content"
+	                 android:layout_gravity="center"
+	                 android:background="@null"
+	                 android:ems="10"
+	                 android:hint="@string/pet_name_hint"
+	                 android:singleLine="true"
+	                 android:textSize="16sp"
+	                 android:text="小旺旺"
+	                 android:textColor="@color/link_text" >
+	                <requestFocus />
+	          </EditText> 
         </LinearLayout>
             <include layout="@layout/horizontal_divider"/>
        <LinearLayout
@@ -102,24 +103,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="@string/pet_sex"
+                android:text="@string/pet_gender"
                 android:textColor="@color/text_black"
                 android:textSize="16sp" />
 
-          	<TextView
-				    android:id="@+id/pet_sex"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="16dp"
-                	android:layout_marginRight="16dp"
-                	android:layout_weight="1.0"
-               		 android:background="@null"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="男生"
-				    android:textSize="16sp" />
+			<EditText
+                android:id="@+id/pet_gender"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/gender_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/link_text"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="16sp"
+                 android:focusable="false"
+                android:windowSoftInputMode="stateHidden" />
         </LinearLayout>
 	</LinearLayout>
 	</LinearLayout>
@@ -136,24 +140,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="生日"
+                android:text="@string/pet_birthday"
                 android:textColor="@color/text_black"
                 android:textSize="16sp" />
 
-          	<TextView
-				    android:id="@+id/pet_birthday"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="16dp"
-                	android:layout_marginRight="16dp"
-                	android:layout_weight="1.0"
-               		 android:background="@null"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="2010-11-11"
-				    android:textSize="16sp" />
+            <EditText
+                android:id="@+id/pet_birthday"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/birthday_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/link_text"
+                android:textColorHint="@color/hint_text_color"
+                android:textSize="16sp"
+                 android:focusable="false"
+                android:windowSoftInputMode="stateHidden" />
         </LinearLayout>
         <include layout="@layout/horizontal_divider"/>
         
@@ -171,20 +178,22 @@
                 android:textColor="@color/text_black"
                 android:textSize="16sp" />
 
-          	<TextView
-				    android:id="@+id/pet_family"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="16dp"
-                	android:layout_marginRight="16dp"
-                	android:layout_weight="1.0"
-               		 android:background="@null"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="汪星人"
-				    android:textSize="16sp" />
+          	<EditText
+                android:id="@+id/pet_family"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/pet_family_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/hint_text_color"
+                android:focusable="false"
+                android:textSize="16sp"/>
         </LinearLayout>
         <include layout="@layout/horizontal_divider"/>
           	<include layout="@layout/horizontal_divider"/>
