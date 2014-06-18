@@ -61,7 +61,6 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
             return myDoInBackground(paramss);
         } catch (Throwable e) {
             ex = e;
-            Log.i(TAG, "Error Calss Name:" + e.getClass().getName());
             String msg = e.getMessage() == null ? "" : e.getMessage();
             Log.e(TAG, msg, e);
             return null;
@@ -83,7 +82,7 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
         super.onPostExecute(result);
         if (listener != null) {
             if (ex == null) {
-                listener.onSuccess(result);
+                listener.doSuccess(result);
             } else {
                 listener.onError(ex);
             }

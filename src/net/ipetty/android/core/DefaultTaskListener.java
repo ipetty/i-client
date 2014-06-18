@@ -6,6 +6,7 @@
 package net.ipetty.android.core;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.util.Log;
 import android.widget.Toast;
 import net.ipetty.android.core.ui.BaseActivity;
@@ -34,20 +35,14 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 
     protected String loadingMessage;
 
+    private ProgressDialog progressDialog;
+
     /**
      * 带有默认loading信息的构造
      *
      * @param activity
      */
     public DefaultTaskListener(Activity activity) {
-        if (activity instanceof BaseActivity) {
-            baseActivity = (BaseActivity) activity;
-        }
-
-        if (activity instanceof BaseFragmentActivity) {
-            baseFragmentActivity = (BaseFragmentActivity) activity;
-        }
-
         this.activity = activity;
     }
 
@@ -60,6 +55,8 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     public DefaultTaskListener(Activity activity, String loadingMessage) {
         this(activity);
         this.loadingMessage = loadingMessage;
+        this.progressDialog = new ProgressDialog(this.activity);
+        this.progressDialog.setIndeterminate(true);
     }
 
     public void onPreExecute() {
@@ -160,14 +157,8 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     private void showProgressDialog() {
         Log.d(TAG, "showProgressDialog");
         if (loadingMessage != null) {
-            if (baseActivity != null) {
-                baseActivity.showProgressDialog(loadingMessage);
-                return;
-            }
-            if (baseFragmentActivity != null) {
-                baseFragmentActivity.showProgressDialog(loadingMessage);
-                return;
-            }
+            this.progressDialog.setMessage(loadingMessage);
+            this.progressDialog.show();
         }
     }
 
@@ -175,12 +166,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     private void dismissProgressDialog() {
         Log.d(TAG, "dismissProgressDialog");
         if (loadingMessage != null) {
-            if (baseActivity != null) {
-                baseActivity.dismissProgressDialog();
-            }
-            if (baseFragmentActivity != null) {
-                baseFragmentActivity.dismissProgressDialog();
-            }
+            this.progressDialog.dismiss();
         }
     }
 
