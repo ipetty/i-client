@@ -11,13 +11,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp" >
+            android:layout_height="48dp" 
+            android:background="@drawable/news_bg">
            
            <LinearLayout
              android:id="@+id/related_me"
              android:layout_width="wrap_content"
              android:layout_height="match_parent"
+             android:layout_margin="5dp"
              android:layout_weight="1"
+             android:background="@drawable/news_tab_selected"
              android:gravity="center" >
 
             <TextView
@@ -25,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="与我相关的" />
+                android:text="@string/related_me" />
 
         </LinearLayout>
                 
@@ -34,6 +37,7 @@
              android:layout_width="wrap_content"
              android:layout_height="match_parent"
              android:layout_weight="1"
+             android:layout_margin="5dp"
               android:gravity="center" >
 
             <TextView
@@ -41,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="我关注的" />
+                android:text="@string/my_follows" />
 
         </LinearLayout>
         </LinearLayout>
