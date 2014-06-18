@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.ipetty.R;
 import net.ipetty.android.comment.CommentActivity;
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
@@ -38,8 +39,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
+    public final static String TAG = FeedAdapter.class.getSimpleName();
     private DisplayImageOptions options;
-    public final static String TAG = "FeedAdapter";
     private LayoutInflater inflater;
     private Context context;
     public List<ModDialogItem> more_items;
@@ -81,19 +82,21 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
     @Override
     public int getCount() {
+        Log.d(TAG, "getCount" + list.size());
         return list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
+        Log.d(TAG, "getItem:" + position);
         return list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
-        return 0;
+        FeedVO feed = list.get(position);
+        Log.d(TAG, "getItemId" + feed.getId());
+        return feed.getId();
     }
 
     // 构建一个布局缓存的结构体 与VO对应
@@ -201,16 +204,23 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
     };
 
     private void initDefaultView(ViewHolder holder, final FeedVO feed, int position) {
+        Log.d(TAG, "--initDefaultView--");
         Integer uid = feed.getCreatedBy();
         UserVO user = IpetApi.init(context).getUserApi().getById(uid);
 
-        // TODO 基本内容信息修改
-        ImageLoader.getInstance().displayImage(user.getAvatar(), holder.avatar, options);
+        // 发布人头像
+        Log.d(TAG, "发布人头像：" + user.getAvatar());
+        if (StringUtils.isEmpty(user.getAvatar())) {
+            ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+        }
+        Log.d(TAG, "发布昵称：" + user.getNickname());
         holder.nickname.setText(user.getNickname());
         String creatAt = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(feed.getCreatedOn());
         holder.created_at.setText(creatAt);
         holder.content.setText(feed.getText());
-        ImageLoader.getInstance().displayImage(feed.getImageSmallURL(), holder.content_image, options);
+        Log.d(TAG, "发布图片small：" + feed.getImageSmallURL());
+        Log.d(TAG, "发布图片Original：" + feed.getImageOriginalURL());
+        ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(), holder.content_image, options);
         //内容空不显示内容区域
         if (StringUtils.isEmpty(feed.getText())) {
             holder.content.setVisibility(View.GONE);
@@ -232,7 +242,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
             public void onClick(View v) {
                 // TODO 展示大图
                 Intent intent = new Intent((MainActivity) context, LargerImageActivity.class);
-                intent.putExtra("url", feed.getImageOriginalURL());
+                intent.putExtra("url", Constant.FILE_SERVER_BASE + feed.getImageOriginalURL());
                 ((MainActivity) context).startActivity(intent);
                 // Toast.makeText(context, "暂未实现", Toast.LENGTH_SHORT).show();
             }

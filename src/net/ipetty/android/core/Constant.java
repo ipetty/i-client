@@ -2,15 +2,23 @@ package net.ipetty.android.core;
 
 public class Constant {
 
-	public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";
-	public final static String INTENT_PHOTO_OUT_PATH_KEY = "publish_photo_out_path";
+    // 文件服务器地址
+    public static final String FILE_SERVER_BASE = "http://api.ipetty.tk";
+    //public static final String FILE_SERVER_BASE = "http://192.168.253.1:8080";
 
-	public final static float HOME_HEAD_BG_SCALE = 1.5f;
+    // API服务器地址
+    public static final String API_SERVER_BASE = "http://api.ipetty.tk/api";
+    //public static final String API_SERVER_BASE = "http://192.168.253.1:8080/api";
 
-	public final static float COMPRESS_IMAGE_MAX_WIDTH = 960f;
-	public final static float COMPRESS_IMAGE_MAX_HEIGHT = 1280f;
-	public final static float COMPRESS_IMAGE_MIN_WIDTH = 64f;
-	public final static float COMPRESS_IMAGE_MIN_HEIGHT = 64f;
-	public final static int COMPRESS_IMAGE_KB = 100;
+    public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";
+    public final static String INTENT_PHOTO_OUT_PATH_KEY = "publish_photo_out_path";
+
+    public final static float HOME_HEAD_BG_SCALE = 1.5f;
+
+    public final static float COMPRESS_IMAGE_MAX_WIDTH = 960f;
+    public final static float COMPRESS_IMAGE_MAX_HEIGHT = 1280f;
+    public final static float COMPRESS_IMAGE_MIN_WIDTH = 64f;
+    public final static float COMPRESS_IMAGE_MIN_HEIGHT = 64f;
+    public final static int COMPRESS_IMAGE_KB = 100;
 
 }

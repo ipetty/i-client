@@ -38,6 +38,7 @@ import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class MainHomeFragment extends Fragment {
 
@@ -170,8 +171,8 @@ public class MainHomeFragment extends Fragment {
         View v = this.getActivity().getLayoutInflater().inflate(R.layout.list_feed_header, listView, false);
         avatar = (ImageView) v.findViewById(R.id.avatar);
         //设置头像
-        if (null != currUser.getAvatar()) {
-            ImageLoader.getInstance().displayImage(currUser.getAvatar(), avatar, options);
+        if (StringUtils.isEmpty(currUser.getAvatar())) {
+            ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + currUser.getAvatar(), avatar, options);
         }
 
         avatar.setOnClickListener(new OnClickListener() {
@@ -194,8 +195,8 @@ public class MainHomeFragment extends Fragment {
         });
 
         // 根据个人信息加载背景
-        if (null != currUser.getBackground()) {
-            ImageLoader.getInstance().displayImage(currUser.getBackground(), header_bg, options);
+        if (StringUtils.isEmpty(currUser.getBackground())) {
+            ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + currUser.getBackground(), header_bg, options);
         }
         listView.addHeaderView(v);
 
