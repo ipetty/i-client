@@ -8,17 +8,21 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         layout="@layout/action_bar_simple_back" />
- 	
- 	<LinearLayout
- 	    android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/include"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical" >
+
+ 	<ScrollView
+ 	    android:id="@+id/scrollView"
+ 	    android:layout_width="match_parent"
+ 	    android:layout_height="wrap_content"
+ 	    android:layout_alignParentLeft="true"
+ 	    android:layout_below="@+id/include"
+>
+
+ 	    <LinearLayout
+ 	        android:layout_width="match_parent"
+ 	        android:layout_height="match_parent"
+ 	        android:layout_margin="10dp"
+ 	        android:orientation="vertical" >
+
 
  		<TextView
  		    android:layout_width="wrap_content"
@@ -194,7 +198,7 @@
             <EditText
                 android:id="@+id/pet_gender"
                 android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_marginLeft="26dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1.0"
@@ -226,7 +230,7 @@
             <EditText
                 android:id="@+id/pet_family"
                 android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_marginLeft="26dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1.0"
@@ -254,6 +258,6 @@
  	   	 		
  	</LinearLayout>
 
-
+ 	</ScrollView>
 
 </RelativeLayout>
