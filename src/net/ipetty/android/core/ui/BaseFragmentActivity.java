@@ -1,15 +1,13 @@
 package net.ipetty.android.core.ui;
 
-import net.ipetty.android.core.ActivityManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import net.ipetty.android.core.ActivityManager;
 
 public class BaseFragmentActivity extends FragmentActivity {
 
     private ProgressDialog progressDialog;
-
-    private boolean destroyed = false;
 
     //显示异步加载提示对话框
     public void showProgressDialog(CharSequence message) {
@@ -24,7 +22,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     //销毁异步加载提示对话框
     public void dismissProgressDialog() {
-        if (this.progressDialog != null && !this.destroyed) {
+        if (this.progressDialog != null) {
             this.progressDialog.dismiss();
         }
     }

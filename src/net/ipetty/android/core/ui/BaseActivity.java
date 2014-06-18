@@ -10,8 +10,7 @@ public class BaseActivity extends Activity {
 
     private ProgressDialog progressDialog;
 
-    private boolean destroyed = false;
-
+    //private boolean destroyed = false;
     public void showMessageForShortTime(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
@@ -33,7 +32,7 @@ public class BaseActivity extends Activity {
 
     //销毁异步加载提示对话框
     public void dismissProgressDialog() {
-        if (this.progressDialog != null && !this.destroyed) {
+        if (this.progressDialog != null) {
             this.progressDialog.dismiss();
         }
     }

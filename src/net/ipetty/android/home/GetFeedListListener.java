@@ -24,7 +24,7 @@ public class GetFeedListListener extends DefaultTaskListener<List<FeedVO>> {
     private final Boolean isRefresh;
 
     public GetFeedListListener(Activity activity, FeedAdapter adapter) {
-        super(activity);
+        super(activity, "加载中...");
         ap = adapter;
         prv = null;
         isRefresh = false;
