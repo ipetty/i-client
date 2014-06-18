@@ -59,6 +59,8 @@ public class MainHomeFragment extends Fragment {
 
     DisplayImageOptions options;
 
+    private Boolean hasMore = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,15 +120,15 @@ public class MainHomeFragment extends Fragment {
 
                 // Update the LastUpdatedLabel
                 refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-                //下拉刷新数据
+                //刷新数据
                 new ListByTimelineForHomePage(MainHomeFragment.this.getActivity())
                         .setListener(new GetFeedListListener(MainHomeFragment.this.getActivity(),
                                         mAdapter,
-                                        mPullRefreshListView,
-                                        true))
+                                        mPullRefreshListView))
                         .execute(getRefreshTime().toString(), pageNumber.toString(), pageSize.toString());
                 //重置页号
                 pageNumber = 0;
+                hasMore = true;
             }
         });
 
@@ -139,7 +141,7 @@ public class MainHomeFragment extends Fragment {
                         .setListener(new GetFeedListListener(MainHomeFragment.this.getActivity(),
                                         mAdapter,
                                         mPullRefreshListView,
-                                        false))
+                                        hasMore))
                         .execute(getRefreshTime().toString(), pageNumber.toString(), pageSize.toString());
                 pageNumber++;
             }

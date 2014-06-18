@@ -23,6 +23,9 @@ public class GetFeedListListener extends DefaultTaskListener<List<FeedVO>> {
     private final PullToRefreshListView prv;
     private final Boolean isRefresh;
 
+    private Boolean hasMore;
+
+    //刷新
     public GetFeedListListener(Activity activity, FeedAdapter adapter) {
         super(activity, "加载中...");
         ap = adapter;
@@ -30,16 +33,21 @@ public class GetFeedListListener extends DefaultTaskListener<List<FeedVO>> {
         isRefresh = false;
     }
 
-    public GetFeedListListener(Activity activity, FeedAdapter adapter, PullToRefreshListView pullToRefreshListView, Boolean isRefresh) {
-        super(activity, "");
-        String msg = "正在刷新...";
-        if (!isRefresh) {
-            msg = "加载更多...";
-        }
-        loadingMessage = msg;
+    //下接刷新
+    public GetFeedListListener(Activity activity, FeedAdapter adapter, PullToRefreshListView pullToRefreshListView) {
+        super(activity, "正在刷新...");
         this.ap = adapter;
         this.prv = pullToRefreshListView;
-        this.isRefresh = isRefresh;
+        this.isRefresh = true;
+    }
+
+    //加载更多
+    public GetFeedListListener(Activity activity, FeedAdapter adapter, PullToRefreshListView pullToRefreshListView, Boolean hasMore) {
+        super(activity, "加载更多...");
+        this.ap = adapter;
+        this.prv = pullToRefreshListView;
+        this.isRefresh = false;
+        this.hasMore = hasMore;
     }
 
     @Override
@@ -47,6 +55,10 @@ public class GetFeedListListener extends DefaultTaskListener<List<FeedVO>> {
         Log.d(TAG, "onSuccess");
         if (isRefresh) {
             ap.getList().clear();
+        } else {
+            if (result.size() > 0 && hasMore != null) {
+                hasMore = false;
+            }
         }
         ap.getList().addAll(result);
         ap.notifyDataSetChanged();
