@@ -7,9 +7,10 @@ import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.ValidUtils;
+import net.ipetty.android.sdk.task.foundation.ListOptions;
 import net.ipetty.android.sdk.task.user.UserRegister;
+import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.RegisterVO;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,11 +37,11 @@ public class RegisterActivity extends BaseActivity {
 	private EditText nicknameEditor;
 	private EditText petNameEditor;
 	private Dialog petGenderDialog;
-	private List<ModDialogItem> petGenderItems;
+	private List<ModDialogItem> petGenderItems = new ArrayList<ModDialogItem>();
 	private TextView petGenderText;
 	private String petGender;
 	private Dialog petFamilyDialog;
-	private List<ModDialogItem> petFamilyItems;
+	private List<ModDialogItem> petFamilyItems = new ArrayList<ModDialogItem>();
 	private TextView petFamilyText;
 	private String petFamily;
 	private Button submitButton;
@@ -68,31 +69,15 @@ public class RegisterActivity extends BaseActivity {
 
 		petNameEditor = (EditText) this.findViewById(R.id.pet_name);
 
-		petGenderItems = new ArrayList<ModDialogItem>();
-		petGenderItems.add(new ModDialogItem(null, "male", "男生", petGenderClick));
-		petGenderItems.add(new ModDialogItem(null, "female", "女生", petGenderClick));
-		petGenderItems.add(new ModDialogItem(null, "other", "男女生", petGenderClick));
-
 		petGenderText = (TextView) this.findViewById(R.id.pet_gender);
-		petGenderText.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				petGenderDialog = DialogUtils.modPopupDialog(RegisterActivity.this, petGenderItems, petGenderDialog);
-			}
-		});
-
-		petFamilyItems = new ArrayList<ModDialogItem>();
-		petFamilyItems.add(new ModDialogItem(null, "dog", "汪星人", petFamilyClick));
-		petFamilyItems.add(new ModDialogItem(null, "cat", "喵星人", petFamilyClick));
-		petFamilyItems.add(new ModDialogItem(null, "other", "异星人", petFamilyClick));
-
 		petFamilyText = (TextView) this.findViewById(R.id.pet_family);
-		petFamilyText.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				petFamilyDialog = DialogUtils.modPopupDialog(RegisterActivity.this, petFamilyItems, petFamilyDialog);
-			}
-		});
+
+		new ListOptions(RegisterActivity.this).setListener(
+				new ListOptionsTaskListener(RegisterActivity.this, OptionGroup.PET_GENDER)).execute(
+				OptionGroup.PET_GENDER);
+		new ListOptions(RegisterActivity.this).setListener(
+				new ListOptionsTaskListener(RegisterActivity.this, OptionGroup.PET_FAMILY)).execute(
+				OptionGroup.PET_FAMILY);
 
 		submitButton = (Button) this.findViewById(R.id.button);
 		submitButton.setOnClickListener(sumbit);
@@ -117,26 +102,6 @@ public class RegisterActivity extends BaseActivity {
 			displayPasswordFlag = !displayPasswordFlag;
 			Editable etable = passwordEditor.getText();
 			Selection.setSelection(etable, index);
-		}
-	};
-
-	private OnClickListener petGenderClick = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			String text = ((TextView) view.findViewById(R.id.text)).getText().toString();
-			petGender = ((TextView) view.findViewById(R.id.value)).getText().toString();
-			petGenderText.setText(text);
-			petGenderDialog.cancel();
-		}
-	};
-
-	private OnClickListener petFamilyClick = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			String text = ((TextView) view.findViewById(R.id.text)).getText().toString();
-			petFamily = ((TextView) view.findViewById(R.id.value)).getText().toString();
-			petFamilyText.setText(text);
-			petFamilyDialog.cancel();
 		}
 	};
 
@@ -188,6 +153,38 @@ public class RegisterActivity extends BaseActivity {
 					new RegisterTaskListener(RegisterActivity.this, register)).execute(register);
 		}
 	};
+
+	public List<ModDialogItem> getPetGenderItems() {
+		return petGenderItems;
+	}
+
+	public List<ModDialogItem> getPetFamilyItems() {
+		return petFamilyItems;
+	}
+
+	public Dialog getPetGenderDialog() {
+		return petGenderDialog;
+	}
+
+	public Dialog getPetFamilyDialog() {
+		return petFamilyDialog;
+	}
+
+	public TextView getPetGenderText() {
+		return petGenderText;
+	}
+
+	public TextView getPetFamilyText() {
+		return petFamilyText;
+	}
+
+	public void setPetGender(String petGender) {
+		this.petGender = petGender;
+	}
+
+	public void setPetFamily(String petFamily) {
+		this.petFamily = petFamily;
+	}
 
 	/*
 	 * @Override public boolean onCreateOptionsMenu(Menu menu) { // Inflate the
