@@ -59,8 +59,9 @@
     <string name="sub_nav_title_discover">发现</string>
     <string name="sub_nav_title_news">动态</string>
      <string name="exit_once_again">再按一次退出程序</string>
+    <string name="related_me">与我相关</string>
+    <string name="my_follows">我关注的</string>
     
-
     <!-- comment -->
     <string name="title_activity_comment">评论</string>
     <string name="comment_submit">提交</string>
@@ -133,6 +134,9 @@
     <!-- 系统设置 -->
     <string name="title_activity_setting">设置</string>
     <string name="logout">注销</string>
+
+    
+
     
 
     
