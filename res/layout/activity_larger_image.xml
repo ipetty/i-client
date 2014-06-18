@@ -12,7 +12,6 @@
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/default_main_header_bg" />
+        android:scaleType="centerInside"/>
 
 </RelativeLayout>

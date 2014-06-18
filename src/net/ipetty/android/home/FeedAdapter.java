@@ -28,7 +28,6 @@ import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.image.LargerImageActivity;
 import net.ipetty.android.like.LikeActivity;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
@@ -201,7 +200,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
         }
     };
 
-    private void initDefaultView(ViewHolder holder, FeedVO feed, int position) {
+    private void initDefaultView(ViewHolder holder, final FeedVO feed, int position) {
         Integer uid = feed.getCreatedBy();
         UserVO user = IpetApi.init(context).getUserApi().getById(uid);
 
@@ -233,6 +232,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
             public void onClick(View v) {
                 // TODO 展示大图
                 Intent intent = new Intent((MainActivity) context, LargerImageActivity.class);
+                intent.putExtra("url", feed.getImageOriginalURL());
                 ((MainActivity) context).startActivity(intent);
                 // Toast.makeText(context, "暂未实现", Toast.LENGTH_SHORT).show();
             }

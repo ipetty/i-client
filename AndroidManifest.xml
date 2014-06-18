@@ -69,7 +69,7 @@
             android:label="@string/title_activity_feed_publish" >
         </activity>
         <activity
-            android:name="net.ipetty.android.image.LargerImageActivity"
+            android:name="net.ipetty.android.home.LargerImageActivity"
             android:label="@string/title_activity_larger_image" >
         </activity>
         <activity
