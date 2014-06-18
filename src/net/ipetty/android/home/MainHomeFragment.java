@@ -59,16 +59,16 @@ public class MainHomeFragment extends Fragment {
     DisplayImageOptions options;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView");
-        return inflater.inflate(R.layout.main_fragment_home, container, false);
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(TAG, "onCreateView");
+        return inflater.inflate(R.layout.main_fragment_home, container, false);
     }
 
     @Override
@@ -80,6 +80,20 @@ public class MainHomeFragment extends Fragment {
         initListView();
         initCamera();
 
+    }
+
+    @Override
+    public void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        Log.i(TAG, "onResume");
     }
 
     //获取刷新时间，若网络不可用则取最后一次刷新时间
@@ -147,6 +161,8 @@ public class MainHomeFragment extends Fragment {
         IpetApi api = IpetApi.init(this.getActivity());
         //此API特殊处理，可以在UI线程调用
         UserVO currUser = api.getUserApi().getById(api.getCurrUserId());
+        Log.i(TAG, "getAvatar:" + currUser.getAvatar());
+        Log.i(TAG, "getBackground:" + currUser.getBackground());
 
         head_bg_items = new ArrayList<ModDialogItem>();
         head_bg_items.add(new ModDialogItem(null, "更换相册封面", headBgOnClick));
@@ -154,7 +170,9 @@ public class MainHomeFragment extends Fragment {
         View v = this.getActivity().getLayoutInflater().inflate(R.layout.list_feed_header, listView, false);
         avatar = (ImageView) v.findViewById(R.id.avatar);
         //设置头像
-        ImageLoader.getInstance().displayImage(currUser.getAvatar(), avatar, options);
+        if (null != currUser.getAvatar()) {
+            ImageLoader.getInstance().displayImage(currUser.getAvatar(), avatar, options);
+        }
 
         avatar.setOnClickListener(new OnClickListener() {
             @Override
@@ -169,13 +187,16 @@ public class MainHomeFragment extends Fragment {
         header_bg.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                // 修改背景图片
                 headBgDialog = DialogUtils.modPopupDialog(MainHomeFragment.this.getActivity(), head_bg_items, headBgDialog);
+                headBgDialog.cancel();
             }
         });
 
-        // 根据个人信息修改背景
-        ImageLoader.getInstance().displayImage(currUser.getBackground(), header_bg, options);
+        // 根据个人信息加载背景
+        if (null != currUser.getBackground()) {
+            ImageLoader.getInstance().displayImage(currUser.getBackground(), header_bg, options);
+        }
         listView.addHeaderView(v);
 
     }
@@ -254,20 +275,6 @@ public class MainHomeFragment extends Fragment {
             headBgDialog.cancel();
         }
     };
-
-    @Override
-    public void onStart() {
-        // TODO Auto-generated method stub
-        super.onStart();
-        Log.i(TAG, "onStart");
-    }
-
-    @Override
-    public void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-        Log.i(TAG, "onResume");
-    }
 
     @Override
     public void onPause() {

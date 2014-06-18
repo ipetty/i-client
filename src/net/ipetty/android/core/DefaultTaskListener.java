@@ -9,8 +9,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.widget.Toast;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.ui.BaseFragmentActivity;
 import net.ipetty.android.sdk.core.APIException;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.web.client.HttpClientErrorException;
@@ -28,10 +26,6 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     private final static String TAG = DefaultTaskListener.class.getSimpleName();
 
     protected Activity activity;
-
-    protected BaseActivity baseActivity;
-
-    protected BaseFragmentActivity baseFragmentActivity;
 
     protected String loadingMessage;
 

@@ -31,7 +31,12 @@ public class GetFeedListListener extends DefaultTaskListener<List<FeedVO>> {
     }
 
     public GetFeedListListener(Activity activity, FeedAdapter adapter, PullToRefreshListView pullToRefreshListView, Boolean isRefresh) {
-        super(activity);
+        super(activity, "");
+        String msg = "正在刷新...";
+        if (!isRefresh) {
+            msg = "加载更多...";
+        }
+        loadingMessage = msg;
         this.ap = adapter;
         this.prv = pullToRefreshListView;
         this.isRefresh = isRefresh;
