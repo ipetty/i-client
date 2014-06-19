@@ -43,7 +43,7 @@
                 android:textColorLink="@color/link_text"
                 android:textColor="@color/normal_text_color"
                 android:autoLink="all"
-                android:text="张三"
+                android:text="无名氏"
 			    android:textSize="16sp" />
 
             <TextView

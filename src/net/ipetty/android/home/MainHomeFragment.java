@@ -37,6 +37,7 @@ import net.ipetty.android.feed.FeedPublishActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
 import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,7 +58,7 @@ public class MainHomeFragment extends Fragment {
     private Dialog headBgDialog;
     private List<ModDialogItem> head_bg_items;
 
-    DisplayImageOptions options;
+    DisplayImageOptions options = AppUtils.getNormalImageOptions();
 
     private Boolean hasMore = true;
 
@@ -79,7 +80,6 @@ public class MainHomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated");
 
-        options = AppUtils.getNormalImageOptions();
         initListView();
         initCamera();
 
@@ -97,6 +97,18 @@ public class MainHomeFragment extends Fragment {
         // TODO Auto-generated method stub
         super.onResume();
         Log.i(TAG, "onResume");
+    }
+
+    public void loadMoreForResult(List<FeedVO> result) {
+        Log.i(TAG, "loadMoreForResult:" + result.size());
+        if (result.size() > 0) {
+            this.hasMore = true;
+            mAdapter.getList().addAll(result);
+            mAdapter.notifyDataSetChanged();
+            mPullRefreshListView.onRefreshComplete();
+        } else {
+            this.hasMore = false;
+        }
     }
 
     //获取刷新时间，若网络不可用则取最后一次刷新时间
@@ -122,10 +134,10 @@ public class MainHomeFragment extends Fragment {
                 refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
                 //刷新数据
                 new ListByTimelineForHomePage(MainHomeFragment.this.getActivity())
-                        .setListener(new GetFeedListListener(MainHomeFragment.this.getActivity(),
+                        .setListener(new PullToRefreshFeedListListener(MainHomeFragment.this.getActivity(),
                                         mAdapter,
                                         mPullRefreshListView))
-                        .execute(getRefreshTime().toString(), pageNumber.toString(), pageSize.toString());
+                        .execute(getRefreshTime().toString(), "0", pageSize.toString());
                 //重置页号
                 pageNumber = 0;
                 hasMore = true;
@@ -137,13 +149,12 @@ public class MainHomeFragment extends Fragment {
             @Override
             public void onLastItemVisible() {
                 //加载更多
-                new ListByTimelineForHomePage(MainHomeFragment.this.getActivity())
-                        .setListener(new GetFeedListListener(MainHomeFragment.this.getActivity(),
-                                        mAdapter,
-                                        mPullRefreshListView,
-                                        hasMore))
-                        .execute(getRefreshTime().toString(), pageNumber.toString(), pageSize.toString());
-                pageNumber++;
+                if (hasMore) {
+                    new ListByTimelineForHomePage(MainHomeFragment.this.getActivity())
+                            .setListener(new LoadMoreFeedListListener(MainHomeFragment.this))
+                            .execute(getRefreshTime().toString(), (++pageNumber).toString(), pageSize.toString());
+
+                }
             }
         });
 
@@ -153,10 +164,14 @@ public class MainHomeFragment extends Fragment {
 
         mAdapter = new FeedAdapter(this.getActivity());
         actualListView.setAdapter(mAdapter);
-        //初始加载数据
+        reloadFeedList();
+
+    }
+
+    private void reloadFeedList() {
         new ListByTimelineForHomePage(this.getActivity())
-                .setListener(new GetFeedListListener(this.getActivity(), mAdapter))
-                .execute(getRefreshTime().toString(), pageNumber.toString(), pageSize.toString());
+                .setListener(new InitFeedListListener(this.getActivity(), mAdapter))
+                .execute(getRefreshTime().toString(), "0", pageSize.toString());
     }
 
     private void initHeaderView(ListView listView) {

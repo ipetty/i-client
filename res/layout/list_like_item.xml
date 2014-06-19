@@ -35,7 +35,7 @@
 			        android:ellipsize="end"
 			        android:gravity="left|center"
 			        android:singleLine="true"
-			        android:text="张三"
+			        android:text="无名氏"
 			        android:textColor="@color/normal_text_color"
 			        android:textSize="16dp" />
 			    

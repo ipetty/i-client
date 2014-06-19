@@ -15,9 +15,9 @@ import net.ipetty.vo.FeedVO;
  *
  * @author Administrator
  */
-public class Comment extends Task<CommentVO, FeedVO> {
+public class PublishComment extends Task<CommentVO, FeedVO> {
 
-    public Comment(Activity activity) {
+    public PublishComment(Activity activity) {
         super(activity);
     }
 

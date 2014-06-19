@@ -33,7 +33,7 @@
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="张三"
+                android:text="无名氏"
                 android:textColor="@color/link_text"
                 android:textSize="16sp"
                 android:textStyle="bold" />

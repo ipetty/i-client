@@ -39,7 +39,7 @@ public class ApiBase {
         //restTemplate = new RestTemplateWrap(ctx);
         Charset charset = Charset.forName("UTF-8");
 
-        restTemplate = new RestTemplate4Cache(context, 50, 500);
+        restTemplate = new RestTemplate4Cache(context, 50, 5000);
         //关于HTTP组件的选择：http://www.07net01.com/program/653485.html
         /**
          * SimpleClientHttpRequestFactory HttpURLConnection --推荐

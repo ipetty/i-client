@@ -25,7 +25,7 @@ public class SplashActivity extends BaseActivity {
         init();
 
         new SplashTask(SplashActivity.this)
-                .setListener(new SplashTaskListener(SplashActivity.this))
+                //.setListener(new SplashTaskListener(SplashActivity.this))
                 .execute();
     }
 

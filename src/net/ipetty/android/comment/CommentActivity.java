@@ -1,181 +1,180 @@
 package net.ipetty.android.comment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.demo.CommentVO;
-import net.ipetty.android.demo.UserVO;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import net.ipetty.R;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
+import net.ipetty.android.sdk.task.feed.PublishComment;
+import net.ipetty.vo.CommentVO;
+import net.ipetty.vo.FeedVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class CommentActivity extends BaseActivity {
-	public final static String TAG = "CommentActivity";
-	private CommentAdapter adapter; // 定义适配器
-	private PullToRefreshListView listView;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_comment);
-		Log.i(TAG, "onCreate");
+    public final static String TAG = CommentActivity.class.getSimpleName();
+    private CommentAdapter adapter; // 定义适配器
+    private PullToRefreshListView listView;
+    private EditText pulishTextView;
+    private Long feedId;
 
-		/* action bar */
-		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
-		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
-		text.setText(this.getResources().getString(R.string.title_activity_comment));
-		btnBack.setOnClickListener(new BackClickListener(this));
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_comment);
+        Log.i(TAG, "onCreate");
+        feedId = this.getIntent().getExtras().getLong("feedId");
 
-		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
-		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+        /* action bar */
+        ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
+        TextView text = (TextView) this.findViewById(R.id.action_bar_title);
+        text.setText(this.getResources().getString(R.string.title_activity_comment));
+        btnBack.setOnClickListener(new BackClickListener(this));
 
-				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+        listView = (PullToRefreshListView) this.findViewById(R.id.listView);
+        pulishTextView = (EditText) this.findViewById(R.id.editText);
 
-				// Do work to refresh the list here.
-				new CommentTask().execute();
-			}
-		});
+        //下拉刷新
+        listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
-		listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
-			@Override
-			public void onLastItemVisible() {
-				// TODO Auto-generated method stub
-				loadMoreData(getList(20));
-			}
-		});
+                // Update the LastUpdatedLabel
+                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-		// 初始化适配器
-		adapter = new CommentAdapter(this);
-		listView.setAdapter(adapter);
-		loadData();
+                new GetFeedById(CommentActivity.this)
+                        .setListener(new DefaultTaskListener<FeedVO>(CommentActivity.this, "刷新中") {
+                            @Override
+                            public void onSuccess(FeedVO result) {
+                                adapter.setList(result.getComments());
+                                adapter.notifyDataSetChanged();
+                                listView.onRefreshComplete();
+                            }
+                        })
+                        .execute(feedId);
+            }
+        });
 
-		//
-		View button = this.findViewById(R.id.button);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+        //最后一条记录
+        listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
 
-			}
-		});
-	}
+            }
+        });
 
-	// TODO:这部分方法没考虑好 是放在adapter中 还是 Activity中
-	// 加载数据
-	public void loadData() {
-		adapter.setList(this.getList(0));
-		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-	}
+        // 初始化适配器
+        adapter = new CommentAdapter(this);
+        listView.setAdapter(adapter);
 
-	public void loadData(List<CommentVO> list) {
-		adapter.setList(this.getList(0));
-		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-	}
+        //发布评论
+        View button = this.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = pulishTextView.getText().toString();
 
-	// 加载更多数据
-	public void loadMoreData(List<CommentVO> list) {
-		adapter.getList().addAll(list);
-		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-	}
+                if (!StringUtils.isEmpty(str)) {
+                    CommentVO vo = new CommentVO();
+                    vo.setFeedId(feedId);
+                    vo.setText(str);
+                    new PublishComment(CommentActivity.this)
+                            .setListener(new DefaultTaskListener<FeedVO>(CommentActivity.this, "正在发布") {
+                                @Override
+                                public void onSuccess(FeedVO result) {
+                                    adapter.setList(result.getComments());
+                                    adapter.notifyDataSetChanged();
+                                    pulishTextView.setText("");
+                                    CommentActivity.this.reloadData(result);
+                                }
+                            })
+                            .execute(vo);
+                }
 
-	// 模拟数据
-	public List<CommentVO> getList(int x) {
-		List<CommentVO> list = new ArrayList<CommentVO>(0);
-		for (int i = x; i < x + 20; i++) {
-			CommentVO vo = new CommentVO();
-			vo.setId(i);
-			vo.setText("text" + i);
+            }
+        });
+        loadData();
+    }
 
-			UserVO u = new UserVO();
-			u.setId(i);
-			u.setName("user" + i);
-			vo.setUser(u);
+    public void loadData() {
 
-			list.add(vo);
-		}
-		return list;
-	}
+        new GetFeedById(this)
+                .setListener(new DefaultTaskListener<FeedVO>(this, "加载中") {
+                    @Override
+                    public void onSuccess(FeedVO result) {
+                        adapter.setList(result.getComments());
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .execute(feedId);
 
-	private class CommentTask extends AsyncTask<Void, Void, String[]> {
+    }
 
-		@Override
-		protected String[] doInBackground(Void... params) {
+    public void reloadData(FeedVO feed) {
+        adapter.setList(feed.getComments());
+        adapter.notifyDataSetChanged();
+    }
 
-			return null;
-		}
+    @Override
+    protected void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
 
-		@Override
-		protected void onPostExecute(String[] result) {
-			loadData(getList(0));
-			listView.onRefreshComplete();
-			super.onPostExecute(result);
-		}
-	}
+    @Override
+    protected void onRestart() {
+        // TODO Auto-generated method stub
+        super.onRestart();
+        Log.i(TAG, "onRestart");
+    }
 
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		Log.i(TAG, "onStart");
-	}
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
 
-	@Override
-	protected void onRestart() {
-		// TODO Auto-generated method stub
-		super.onRestart();
-		Log.i(TAG, "onRestart");
-	}
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
 
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		Log.i(TAG, "onResume");
-	}
+    @Override
+    protected void onStop() {
+        // TODO Auto-generated method stub
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
 
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		Log.i(TAG, "onPause");
-	}
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+    }
 
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		Log.i(TAG, "onStop");
-	}
-
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Log.i(TAG, "onDestroy");
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.comment, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.comment, menu);
+        return true;
+    }
 }

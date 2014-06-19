@@ -14,9 +14,9 @@ import net.ipetty.vo.FeedVO;
  *
  * @author Administrator
  */
-public class GetById extends Task<Long, FeedVO> {
+public class GetFeedById extends Task<Long, FeedVO> {
 
-    public GetById(Activity activity) {
+    public GetFeedById(Activity activity) {
         super(activity);
     }
 
