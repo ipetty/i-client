@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.MyAppStateManager;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
@@ -36,6 +37,7 @@ import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.feed.FeedPublishActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
+import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
@@ -57,6 +59,9 @@ public class MainHomeFragment extends Fragment {
 
     private Dialog headBgDialog;
     private List<ModDialogItem> head_bg_items;
+
+    //背景图片
+    private ImageView header_bg;
 
     DisplayImageOptions options = AppUtils.getNormalImageOptions();
 
@@ -94,9 +99,9 @@ public class MainHomeFragment extends Fragment {
 
     @Override
     public void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
         Log.i(TAG, "onResume");
+        super.onResume();
+        loadData();
     }
 
     public void loadMoreForResult(List<FeedVO> result) {
@@ -164,33 +169,40 @@ public class MainHomeFragment extends Fragment {
 
         mAdapter = new FeedAdapter(this.getActivity());
         actualListView.setAdapter(mAdapter);
-        reloadFeedList();
 
     }
 
-    private void reloadFeedList() {
-        new ListByTimelineForHomePage(this.getActivity())
-                .setListener(new InitFeedListListener(this.getActivity(), mAdapter))
-                .execute(getRefreshTime().toString(), "0", pageSize.toString());
+    private void loadData() {
+        //获取UserVO
+        IpetApi api = IpetApi.init(this.getActivity());
+        new GetUserById(this.getActivity())
+                .setListener(new DefaultTaskListener<UserVO>(this.getActivity()) {
+                    @Override
+                    public void onSuccess(UserVO result) {
+                        //设置头像
+                        if (StringUtils.isEmpty(result.getAvatar())) {
+                            ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getAvatar(), avatar, options);
+                        }
+                        // 根据个人信息加载背景
+                        if (StringUtils.isEmpty(result.getBackground())) {
+                            ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getBackground(), header_bg, options);
+                        }
+
+                        new ListByTimelineForHomePage(MainHomeFragment.this.getActivity())
+                        .setListener(new InitFeedListListener(MainHomeFragment.this.getActivity(), mAdapter))
+                        .execute(getRefreshTime().toString(), "0", pageSize.toString());
+                    }
+                })
+                .execute(api.getCurrUserId());
     }
 
     private void initHeaderView(ListView listView) {
-        //获取UserVO
-        IpetApi api = IpetApi.init(this.getActivity());
-        //此API特殊处理，可以在UI线程调用
-        UserVO currUser = api.getUserApi().getById(api.getCurrUserId());
-        Log.i(TAG, "getAvatar:" + currUser.getAvatar());
-        Log.i(TAG, "getBackground:" + currUser.getBackground());
 
         head_bg_items = new ArrayList<ModDialogItem>();
         head_bg_items.add(new ModDialogItem(null, "更换相册封面", headBgOnClick));
 
         View v = this.getActivity().getLayoutInflater().inflate(R.layout.list_feed_header, listView, false);
         avatar = (ImageView) v.findViewById(R.id.avatar);
-        //设置头像
-        if (StringUtils.isEmpty(currUser.getAvatar())) {
-            ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + currUser.getAvatar(), avatar, options);
-        }
 
         avatar.setOnClickListener(new OnClickListener() {
             @Override
@@ -201,7 +213,7 @@ public class MainHomeFragment extends Fragment {
             }
         });
 
-        ImageView header_bg = (ImageView) v.findViewById(R.id.header_bg);
+        header_bg = (ImageView) v.findViewById(R.id.header_bg);
         header_bg.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,12 +223,7 @@ public class MainHomeFragment extends Fragment {
             }
         });
 
-        // 根据个人信息加载背景
-        if (StringUtils.isEmpty(currUser.getBackground())) {
-            ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + currUser.getBackground(), header_bg, options);
-        }
         listView.addHeaderView(v);
-
     }
 
     private void initCamera() {
