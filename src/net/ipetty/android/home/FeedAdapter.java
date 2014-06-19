@@ -321,7 +321,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
                                         sb.append("<a href='")
                                         .append(i)
                                         .append("'>")
-                                        .append(resultUser.getNickname())
+                                        .append(nickName)
                                         .append("</a> ");
                                     }
                                     if (currUserId == fvo.getCreatedBy()) {
