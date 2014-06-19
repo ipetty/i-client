@@ -4,9 +4,7 @@ import android.content.Context;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import net.ipetty.android.core.Constant;
-import net.ipetty.android.sdk.core.APIException;
 import net.ipetty.android.sdk.core.ApiBase;
 import net.ipetty.sdk.UserApi;
 import net.ipetty.vo.RegisterVO;
@@ -23,8 +21,7 @@ import org.springframework.util.MultiValueMap;
  */
 public class UserApiImpl extends ApiBase implements UserApi {
 
-    private UserVO user;
-
+    //private UserVO user;
     public UserApiImpl(Context context) {
         super(context);
     }
@@ -76,25 +73,32 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
     private static final String URI_GET_BY_ID = "/user/id/{id}";
 
+//    /**
+//     * 根据ID获取用户帐号
+//     */
+//    @Override
+//    public UserVO getById(final Integer id) {
+//        final CountDownLatch latch = new CountDownLatch(1);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                user = getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_ID, UserVO.class, id);
+//                latch.countDown();
+//            }
+//        }).start();
+//        try {
+//            latch.await();
+//        } catch (InterruptedException ex) {
+//            throw new APIException(ex);
+//        }
+//        return user;
+//    }
     /**
      * 根据ID获取用户帐号
      */
     @Override
     public UserVO getById(final Integer id) {
-        final CountDownLatch latch = new CountDownLatch(1);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                user = getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_ID, UserVO.class, id);
-                latch.countDown();
-            }
-        }).start();
-        try {
-            latch.await();
-        } catch (InterruptedException ex) {
-            throw new APIException(ex);
-        }
-        return user;
+        return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_ID, UserVO.class, id);
     }
 
     private static final String URI_GET_BY_UID = "/user/uid/{uid}";
@@ -105,21 +109,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
     @Override
     public UserVO getByUid(final int uid) {
 
-        final CountDownLatch latch = new CountDownLatch(1);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UID, UserVO.class, uid);
-                latch.countDown();
-            }
-        }).start();
-        try {
-            latch.await();
-        } catch (InterruptedException ex) {
-            throw new APIException(ex);
-        }
-
-        return user;
+        return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UID, UserVO.class, uid);
     }
 
     private static final String URI_GET_BY_UNIQUE_NAME = "/user/{uniqueName}";

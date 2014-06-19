@@ -14,12 +14,15 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import net.ipetty.R;
+import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.android.sdk.task.user.UserLogin;
 import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class LoginHasAccountActivity extends BaseActivity {
 
@@ -29,6 +32,7 @@ public class LoginHasAccountActivity extends BaseActivity {
     private TextView toggleView = null;
     private boolean psdDisplayFlg = false;
     private TextView account = null;
+    private ImageView avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +55,12 @@ public class LoginHasAccountActivity extends BaseActivity {
             }
         });
 
-        IpetApi api = IpetApi.init(this);
-        UserVO user = api.getUserApi().getById(api.getCurrUserId());
-
         options = AppUtils.getRoundedImageOptions();
         account = (TextView) this.findViewById(R.id.account);
-        account.setText(user.getEmail());
 
         // avator
-        ImageView avatar = (ImageView) this.findViewById(R.id.avatar);
-        ImageLoader.getInstance().displayImage(user.getAvatar(), avatar, options);
+        avatar = (ImageView) this.findViewById(R.id.avatar);
+
         // passworid
         passwordView = (EditText) this.findViewById(R.id.password);
         toggleView = (TextView) this.findViewById(R.id.login_toggle_password);
@@ -76,7 +76,25 @@ public class LoginHasAccountActivity extends BaseActivity {
                         .execute(account.getText().toString(), passwordView.getText().toString());
             }
         });
+        loadData();
+    }
 
+    private void loadData() {
+        IpetApi api = IpetApi.init(this);
+        new GetUserById(this)
+                .setListener(new DefaultTaskListener<UserVO>(this) {
+                    @Override
+                    public void onSuccess(UserVO result) {
+                        if (!StringUtils.isEmpty(result.getEmail())) {
+                            account.setText(result.getEmail());
+                        }
+                        if (!StringUtils.isEmpty(result.getAvatar())) {
+                            ImageLoader.getInstance().displayImage(result.getAvatar(), avatar, options);
+                        }
+
+                    }
+                })
+                .execute(api.getCurrUserId());
     }
 
     // 密码可见
