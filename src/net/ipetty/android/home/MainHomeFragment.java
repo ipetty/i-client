@@ -119,7 +119,9 @@ public class MainHomeFragment extends Fragment {
     //获取刷新时间，若网络不可用则取最后一次刷新时间
     private Long getRefreshTime() {
         if (NetWorkUtils.isNetworkConnected(this.getActivity())) {
-            return System.currentTimeMillis();
+            long lastTimeMillis = System.currentTimeMillis();
+            MyAppStateManager.setLastRefrsh4Home(this.getActivity(), lastTimeMillis);
+            return lastTimeMillis;
         }
 
         return MyAppStateManager.getLastRefrsh4Home(this.getActivity());

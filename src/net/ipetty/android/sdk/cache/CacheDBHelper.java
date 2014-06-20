@@ -16,7 +16,7 @@ import android.util.Log;
  */
 public class CacheDBHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = "DBHelper";
+    private static final String TAG = CacheDBHelper.class.getSimpleName();
 
     private static final int VERSION = 1;
 

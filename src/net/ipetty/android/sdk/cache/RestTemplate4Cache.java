@@ -1,18 +1,17 @@
 package net.ipetty.android.sdk.cache;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpStatus.NOT_MODIFIED;
-
+import android.content.Context;
+import android.util.Log;
 import java.io.IOException;
 import java.net.URI;
-
 import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.sdk.core.APIException;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import static org.springframework.http.HttpMethod.GET;
 import org.springframework.http.HttpStatus;
+import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.Assert;
@@ -21,9 +20,6 @@ import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import android.content.Context;
-import android.util.Log;
-
 /**
  *
  *
@@ -31,7 +27,7 @@ import android.util.Log;
  */
 public class RestTemplate4Cache extends RestTemplate {
 
-    private final String TAG = "ETagCachingRestTemplate";
+    private final String TAG = RestTemplate4Cache.class.getSimpleName();
     private static final String ETAG_HEADER = "ETag";
 
     // private final MemoryLRUCache cache = new MemoryLRUCache();
@@ -59,18 +55,18 @@ public class RestTemplate4Cache extends RestTemplate {
             CacheEntry e = cache.get(url.toString());
 
             if (null != e) {
-                Log.i(TAG, "doExecute:" + "找到离线缓存:" + e.getValue());
+                Log.i(TAG, "doExecute:" + url + "找到离线缓存:" + e.getValue());
                 T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
                 return t;
             } else {
-                Log.i(TAG, "doExecute:" + "没找到离线缓存");
+                Log.i(TAG, "doExecute:" + url + "没找到离线缓存");
                 throw new APIException("网络不可用");
             }
 
         }
         //非get请求，则透传给父类正常请求
         if (!isCacheableRequest(method)) {
-            Log.i(TAG, "doExecute:" + "不可缓存方法");
+            Log.i(TAG, "doExecute:" + url + "不可缓存方法");
             return super.doExecute(url, method, requestCallback,
                     responseExtractor);
         }
@@ -79,15 +75,14 @@ public class RestTemplate4Cache extends RestTemplate {
         CacheEntry e = cache.get(url.toString());
 
         if (null != e && System.currentTimeMillis() < e.getExpireOn()) {
-            Log.i(TAG, "doExecute:" + "找到未过期缓存");
+            Log.i(TAG, "doExecute:" + url + "找到未过期缓存");
             T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
-            Log.i(TAG, "doExecute:" + "未过期缓存JSON:" + e.getValue());
-            Log.i(TAG, "doExecute:" + "转换后:" + t.getClass());
+            Log.i(TAG, "doExecute:" + url + "未过期缓存JSON:" + e.getValue());
             return t;
         }
 
         //如果是get请求，则使用自定义的代理对像，以处理缓存
-        Log.i(TAG, "doExecute:" + "缓存为空或已过期");
+        Log.i(TAG, "doExecute:" + url + "缓存为空或已过期");
         return super.doExecute(url, method, new DelegatingRequestCallback(url,
                 requestCallback), new DelegatingResponseExtractor<T>(url,
                         method, responseExtractor));

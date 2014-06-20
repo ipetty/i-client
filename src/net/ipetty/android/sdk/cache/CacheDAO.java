@@ -16,7 +16,7 @@ import android.util.Log;
  */
 public class CacheDAO {
 
-    private static final String TAG = "CacheDAO";
+    private static final String TAG = CacheDAO.class.getSimpleName();
 
     private CacheDBHelper helper = null;
 
