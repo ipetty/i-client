@@ -16,7 +16,7 @@ import org.springframework.web.client.ResponseErrorHandler;
  */
 public class ApiExceptionHandler implements ResponseErrorHandler {
 
-    private static final String TAG = "ApiExceptionHandler";
+    private static final String TAG = ApiExceptionHandler.class.getSimpleName();
 
     private static final Charset charset = Charset.forName("utf-8");
 

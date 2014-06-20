@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.DeviceUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ContentCodingType;
@@ -22,8 +20,6 @@ import org.springframework.http.client.ClientHttpResponse;
  */
 class ApiInterceptor implements ClientHttpRequestInterceptor {
 
-    public static final String LOGIN_URL = Constant.API_SERVER_BASE + "/api/login";
-
     public static final String HEADER_NAME_USER_TOKEN = "user_token";
 
     public static final String HEADER_NAME_REFRESH_TOKEN = "refresh_token";
@@ -34,10 +30,9 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 
     public static final String HEADER_NAME_DEVICE_MAC = "device_mac";
 
-    private final String TAG = "ApiInterceptor";
+    private final String TAG = ApiInterceptor.class.getSimpleName();
 
-    private final Charset charset = Charset.forName("UTF-8");
-
+	// private final Charset charset = Charset.forName("UTF-8");
     private final Context context;
 
     public ApiInterceptor(Context context) {
@@ -50,8 +45,7 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-
-        //发送头
+        // 发送头
         String userToken = SDKStateManager.getUserToken(context);
         String refreshToken = SDKStateManager.getRefreshToken(context);
         String uuidB64 = SDKStateManager.getDeviceUUID(context);
@@ -60,6 +54,10 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
             uuidB64 = Base64.encodeToString(uuid.getBytes(), Base64.DEFAULT);
             SDKStateManager.setDeviceUUID(context, uuidB64);
         }
+
+        Log.i(TAG, "userToken：" + userToken);
+        Log.i(TAG, "refreshToken：" + refreshToken);
+        Log.i(TAG, "deviceUUID：" + uuidB64);
 
         HttpHeaders requestHeaders = request.getHeaders();
         requestHeaders.setAcceptEncoding(ContentCodingType.GZIP);
@@ -70,17 +68,15 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
         String url = request.getURI().toString();
         Log.i(TAG, "-->：" + url);
         Log.i(TAG, "Etag头：" + request.getHeaders().getIfNoneMatch());
-        Log.i(TAG, "userToken：" + userToken);
-        Log.i(TAG, "refreshToken：" + refreshToken);
-        Log.i(TAG, "deviceUUID：" + uuidB64);
 
         ClientHttpResponse resp = execution.execute(request, body);
 
-        //接收头
+        // 接收头
         HttpHeaders responseHeaders = resp.getHeaders();
         String rut = responseHeaders.getFirst(HEADER_NAME_USER_TOKEN);
         String rrt = responseHeaders.getFirst(HEADER_NAME_REFRESH_TOKEN);
-
+        Log.i(TAG, "接收到userToken:" + rut);
+        Log.i(TAG, "接收到refreshToken:" + rrt);
         if (StringUtils.isNotBlank(rut) && !userToken.equals(rut)) {
             SDKStateManager.setUserToken(context, rut);
         }
@@ -88,14 +84,16 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
             SDKStateManager.setRefreshToken(context, rrt);
         }
 
+        if (StringUtils.isBlank(resp.getHeaders().getCacheControl())) {
+            resp.getHeaders().add("Cache-Control", "max-age=180");
+        }
+
         Log.i(TAG, "<--:" + request.getURI().toString());
         Log.i(TAG, "Etag头：" + resp.getHeaders().getETag());
         Log.i(TAG, "过期头：" + resp.getHeaders().getCacheControl());
         Log.i(TAG, "状态：" + resp.getRawStatusCode());
-        Log.i(TAG, "userToken:" + rut);
-        Log.i(TAG, "refreshToken:" + rrt);
 
-        //Log.i(TAG, "-->" + request.getURI() + ":" + resp.getRawStatusCode());
+        // Log.i(TAG, "-->" + request.getURI() + ":" + resp.getRawStatusCode());
         return resp;
     }
 
