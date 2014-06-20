@@ -209,7 +209,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
     private void initDefaultView(ViewHolder holder, final FeedVO feed, int position) {
         Log.d(TAG, "--initDefaultView--");
 
-        String creatAt = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(feed.getCreatedOn());
+        String creatAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(feed.getCreatedOn());
         holder.created_at.setText(creatAt);
         holder.content.setText(feed.getText());
         Log.d(TAG, "发布图片small：" + feed.getImageSmallURL());

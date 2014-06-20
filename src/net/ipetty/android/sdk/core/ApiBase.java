@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import net.ipetty.android.core.Constant;
@@ -67,6 +68,7 @@ public class ApiBase {
 
         MappingJacksonHttpMessageConverter mjm = new MappingJacksonHttpMessageConverter();
         mjm.getObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mjm.getObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         messageConverters.add(mjm);
 
         restTemplate.setMessageConverters(messageConverters);
