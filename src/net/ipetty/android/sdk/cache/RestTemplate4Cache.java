@@ -60,7 +60,7 @@ public class RestTemplate4Cache extends RestTemplate {
                 return t;
             } else {
                 Log.i(TAG, "doExecute:" + url + "没找到离线缓存");
-                throw new APIException("网络不可用");
+                throw new APIException("没找到离线缓存");
             }
 
         }

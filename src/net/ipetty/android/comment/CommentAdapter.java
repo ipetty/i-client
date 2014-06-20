@@ -85,7 +85,7 @@ public class CommentAdapter extends BaseAdapter implements OnScrollListener {
         }
 
         CommentVO commentVo = list.get(position);
-        String creatAt = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(commentVo.getCreatedOn());
+        String creatAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(commentVo.getCreatedOn());
         holder.timestamp.setText(creatAt);
 
         asynLoadUserInfo((Activity) context, holder, commentVo);
