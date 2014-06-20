@@ -56,6 +56,7 @@ public class MainHomeFragment extends Fragment {
     private ImageView avatar;
     private Integer pageNumber = 0;
     private final Integer pageSize = 5;
+    private Long lastTimeMillis;
 
     private Dialog headBgDialog;
     private List<ModDialogItem> head_bg_items;
@@ -70,6 +71,7 @@ public class MainHomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lastTimeMillis = MyAppStateManager.getLastRefrsh4Home(this.getActivity());
         Log.i(TAG, "onCreate");
 
     }
@@ -119,9 +121,9 @@ public class MainHomeFragment extends Fragment {
     //获取刷新时间，若网络不可用则取最后一次刷新时间
     private Long getRefreshTime() {
         if (NetWorkUtils.isNetworkConnected(this.getActivity())) {
-            long lastTimeMillis = System.currentTimeMillis();
-            MyAppStateManager.setLastRefrsh4Home(this.getActivity(), lastTimeMillis);
-            return lastTimeMillis;
+            this.lastTimeMillis = System.currentTimeMillis();
+            MyAppStateManager.setLastRefrsh4Home(this.getActivity(), this.lastTimeMillis);
+            return this.lastTimeMillis;
         }
 
         return MyAppStateManager.getLastRefrsh4Home(this.getActivity());
@@ -159,7 +161,7 @@ public class MainHomeFragment extends Fragment {
                 if (hasMore) {
                     new ListByTimelineForHomePage(MainHomeFragment.this.getActivity())
                             .setListener(new LoadMoreFeedListListener(MainHomeFragment.this))
-                            .execute(getRefreshTime().toString(), (++pageNumber).toString(), pageSize.toString());
+                            .execute(MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(), pageSize.toString());
 
                 }
             }
