@@ -28,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// FIXME 从基础数据中加载性别、家族等基础数据
 public class RegisterActivity extends BaseActivity {
 
 	private EditText emailEditor;
