@@ -2,8 +2,11 @@ package net.ipetty.android.setting;
 
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.feedback.FeedbackActivity;
 import net.ipetty.android.sdk.task.user.Logout;
+import net.ipetty.android.user.UserActivity;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +35,26 @@ public class SettingActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				new Logout(SettingActivity.this).setListener(new LogoutTaskListener(SettingActivity.this)).execute();
+			}
+		});
+
+		/* userinfo */
+		View user = this.findViewById(R.id.user_layout);
+		user.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, UserActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		/* feedback */
+		View feedback = this.findViewById(R.id.feedback_layout);
+		feedback.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, FeedbackActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
