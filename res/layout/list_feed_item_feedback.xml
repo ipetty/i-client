@@ -68,7 +68,6 @@
             android:textSize="14sp"
             android:autoLink="all"
             android:textColorLink="@color/link_text"
-            android:text="赞"
             />
     </RelativeLayout>
     
@@ -90,7 +89,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/feed_comment_detail_list2"
-        android:orientation="vertical" />
+        android:orientation="vertical" 
+        android:visibility="gone"/>
    
 </LinearLayout>
 	 

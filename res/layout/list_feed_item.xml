@@ -33,7 +33,6 @@
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="无名氏"
                 android:textColor="@color/link_text"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -56,8 +55,7 @@
 				        android:layout_centerVertical="true"
 				        android:gravity="right"
 				        android:textSize="12sp" 
-				        android:textColor="@color/timestamp_text"
-				        android:text="上午 10:10"/>
+				        android:textColor="@color/timestamp_text"/>
     
         </RelativeLayout>
         
@@ -78,7 +76,7 @@
             android:layout_marginTop="6.0dip"
             android:adjustViewBounds="true"
             android:scaleType="fitStart"
-            android:src="@drawable/splash" />
+            android:src="@drawable/default_image" />
         
         <TextView android:textSize="12sp" 
            android:id="@+id/address" 
@@ -87,7 +85,6 @@
            android:layout_marginTop="10.0dip" 
            android:layout_marginBottom="3.0dip" 
            android:textColor="@color/timestamp_text"
-           android:text="苏州" 
            android:singleLine="true" />
 
         <include layout="@layout/list_feed_item_feedback" />

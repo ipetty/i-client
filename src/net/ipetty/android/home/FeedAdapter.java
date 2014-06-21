@@ -385,6 +385,14 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			holder.feed_list_line.setVisibility(View.GONE);
 		}
 
+		if (feed.getCommentCount() > 0) {
+			holder.comments_num.setVisibility(View.VISIBLE);
+			holder.comments_group_list.setVisibility(View.VISIBLE);
+		} else {
+			holder.comments_num.setVisibility(View.GONE);
+			holder.comments_group_list.setVisibility(View.GONE);
+		}
+
 		// 赞
 		if (feed.getFavorCount() == 0) {
 			holder.row_feed_photo_likes_group.setVisibility(View.GONE);
@@ -412,27 +420,27 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		UserVO user = cacheUserMap.get(id);
 		if (user == null) {
 			user = new UserVO();
-		}
 
-		// TODO：有点变态的改写方法，不知道这样大量的异步同步刷新界面，会不会导致界面卡死
-		new GetUserById((Activity) context).setListener(new DefaultTaskListener<UserVO>((Activity) context) {
-			@Override
-			public void onCancelled(UserVO result) {
-				// TODO Auto-generated method stub
+			// TODO：有点变态的改写方法，不知道这样大量的异步同步刷新界面，会不会导致界面卡死
+			new GetUserById((Activity) context).setListener(new DefaultTaskListener<UserVO>((Activity) context) {
+				@Override
+				public void onCancelled(UserVO result) {
+					// TODO Auto-generated method stub
 
-			}
-
-			@Override
-			public void onSuccess(UserVO result) {
-				// TODO Auto-generated method stub
-				if (FeedAdapter.this.cacheUserMap.containsKey(result.getId())) {
-					return;
 				}
-				FeedAdapter.this.cacheUserMap.put(result.getId(), result);
-				FeedAdapter.this.notifyDataSetChanged();
-			}
 
-		}).execute(id);
+				@Override
+				public void onSuccess(UserVO result) {
+					// TODO Auto-generated method stub
+					if (FeedAdapter.this.cacheUserMap.containsKey(result.getId())) {
+						return;
+					}
+					FeedAdapter.this.cacheUserMap.put(result.getId(), result);
+					FeedAdapter.this.notifyDataSetChanged();
+				}
+
+			}).execute(id);
+		}
 
 		return user;
 	}
@@ -450,7 +458,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		}
 		html.append("</b>");
 		String liked_num_text = context.getResources().getString(R.string.liked_num_text);
-		Integer likedNum = feedVO.getFavors().size();
+		Integer likedNum = feedVO.getFavorCount();
 		html.append(String.format(liked_num_text, likedNum));
 		Log.d(TAG, html.toString());
 		WebLinkUtils.setUserLinkIntercept((Activity) context, tv, html.toString());
