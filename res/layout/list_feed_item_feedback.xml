@@ -30,7 +30,7 @@
    </RelativeLayout>
 
 <LinearLayout
-    android:id="@+id/feed_list_fatherview"
+    android:id="@+id/feed_list_father_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="13.0dip"
@@ -38,13 +38,15 @@
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingLeft="6.0dip"
-    android:paddingRight="3.0dip" >
+    android:paddingRight="3.0dip"
+    android:visibility="gone" >
 				    
     <RelativeLayout android:id="@+id/row_feed_photo_likes_group" 
       	    android:textSize="14.0dip"  
       	    android:gravity="bottom" 
       		android:layout_width="fill_parent" 
-      		android:layout_height="wrap_content" >
+      		android:layout_height="wrap_content" 
+      		android:visibility="gone">
       		
         <ImageView 
             android:id="@+id/row_feed_photo_textview_likes_glyph" 
@@ -66,10 +68,11 @@
             android:textSize="14sp"
             android:autoLink="all"
             android:textColorLink="@color/link_text"
-            android:text="赞"/>
+            android:text="赞"
+            />
     </RelativeLayout>
     
-    <View android:gravity="center" android:id="@+id/feed_list_line" android:background="@drawable/feed_comment_detail_line" android:layout_width="fill_parent" android:layout_height="2.0dip" android:layout_marginTop="1.0dip" android:layout_marginBottom="1.0dip" />
+    <View android:visibility="gone" android:gravity="center" android:id="@+id/feed_list_line" android:background="@drawable/feed_comment_detail_line" android:layout_width="fill_parent" android:layout_height="2.0dip" android:layout_marginTop="1.0dip" android:layout_marginBottom="1.0dip" />
     
     
      <TextView
