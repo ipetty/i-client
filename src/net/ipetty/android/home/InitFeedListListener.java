@@ -21,7 +21,7 @@ public class InitFeedListListener extends DefaultTaskListener<List<FeedVO>> {
     private final FeedAdapter adapter;
 
     public InitFeedListListener(Activity activity, FeedAdapter adapter) {
-        super(activity, "加载中...");
+        super(activity);
         this.adapter = adapter;
     }
 

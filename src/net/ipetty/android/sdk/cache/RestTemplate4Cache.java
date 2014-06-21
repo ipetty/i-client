@@ -49,7 +49,7 @@ public class RestTemplate4Cache extends RestTemplate {
 
             if (!isCacheableRequest(method)) {
                 Log.i(TAG, "doExecute:" + "非get方法网络不可用");
-                throw new APIException("网络不可用");
+                throw new APIException("离线状态，只能浏览");
             }
 
             CacheEntry e = cache.get(url.toString());
@@ -60,7 +60,7 @@ public class RestTemplate4Cache extends RestTemplate {
                 return t;
             } else {
                 Log.i(TAG, "doExecute:" + url + "没找到离线缓存");
-                throw new APIException("网络不可用");
+                throw new APIException("没找到离线缓存");
             }
 
         }
