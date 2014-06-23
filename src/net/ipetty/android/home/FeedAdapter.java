@@ -89,7 +89,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
     // 获取当前用户id
     private int getCurrUserId() {
-        IpetApi api = IpetApi.init(this.context.getApplicationContext());
+        IpetApi api = IpetApi.init(this.context);
         return api.getCurrUserId();
     }
 
@@ -148,12 +148,29 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
             view = inflater.inflate(R.layout.list_feed_item, null);
             holder = new ViewHolder();
 
+            final FeedVO feed = (FeedVO) this.getItem(position);
+
             // 头像
             holder.avatar = (ImageView) view.findViewById(R.id.avatar);
-            holder.avatar.setOnClickListener(userInfoOnClick);
+            holder.avatar.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, SpaceActivity.class);
+                    intent.putExtra("id", feed.getId());
+                    context.startActivity(intent);
+                }
+            });
             // 姓名
             holder.nickname = (TextView) view.findViewById(R.id.nickname);
-            holder.nickname.setOnClickListener(userInfoOnClick);
+            holder.nickname.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, SpaceActivity.class);
+                    intent.putExtra("id", feed.getId());
+                    context.startActivity(intent);
+                }
+            });
+
             // 时间
             holder.created_at = (TextView) view.findViewById(R.id.created_at);
             // 主题内容
@@ -415,22 +432,22 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
         // user = IpetApi.init((MainActivity) context).getUserApi().getById(id);
         UserVO user = cacheUserMap.get(id);
         if (user == null) {
-            user = IpetApi.init((MainActivity) context).getUserApi().getById(id);
+            //user = IpetApi.init((MainActivity) context).getUserApi().getById(id);
 
-            // TODO：有点变态的改写方法，不知道这样大量的异步同步刷新界面，会不会导致界面卡死
-//            new GetUserById((Activity) context).setListener(new DefaultTaskListener<UserVO>((Activity) context) {
-//
-//                @Override
-//                public void onSuccess(UserVO result) {
-//                    // TODO Auto-generated method stub
-//                    if (FeedAdapter.this.cacheUserMap.containsKey(result.getId())) {
-//                        return;
-//                    }
-//                    FeedAdapter.this.cacheUserMap.put(result.getId(), result);
-//                    FeedAdapter.this.notifyDataSetChanged();
-//                }
-//
-//            }).execute(id);
+            //TODO：有点变态的改写方法，不知道这样大量的异步同步刷新界面，会不会导致界面卡死
+            new GetUserById((Activity) context).setListener(new DefaultTaskListener<UserVO>((Activity) context) {
+
+                @Override
+                public void onSuccess(UserVO result) {
+                    // TODO Auto-generated method stub
+                    if (FeedAdapter.this.cacheUserMap.containsKey(result.getId())) {
+                        return;
+                    }
+                    FeedAdapter.this.cacheUserMap.put(result.getId(), result);
+                    FeedAdapter.this.notifyDataSetChanged();
+                }
+
+            }).execute(id);
         }
         return user;
     }
