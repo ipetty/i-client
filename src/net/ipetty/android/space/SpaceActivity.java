@@ -26,13 +26,16 @@ public class SpaceActivity extends Activity {
     private View space_petty_view;
     private GridView space_photo_grid;
     private DiscoverAdapter space_photo_grid_adapter;
-    private Integer userId;
+    private Integer uid;
+    private String uniqueName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space);
-        userId = this.getIntent().getExtras().getInt("id");
+        uid = this.getIntent().getExtras().getInt("uid");
+        uniqueName = this.getIntent().getExtras().getString("uniqueName");
+
         /* action bar */
         ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
         btnBack.setOnClickListener(new BackClickListener(this));

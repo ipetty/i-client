@@ -148,15 +148,12 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
             view = inflater.inflate(R.layout.list_feed_item, null);
             holder = new ViewHolder();
 
-            final FeedVO feed = (FeedVO) this.getItem(position);
-
             // 头像
             holder.avatar = (ImageView) view.findViewById(R.id.avatar);
             holder.avatar.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, SpaceActivity.class);
-                    intent.putExtra("id", feed.getId());
                     context.startActivity(intent);
                 }
             });
@@ -166,7 +163,6 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, SpaceActivity.class);
-                    intent.putExtra("id", feed.getId());
                     context.startActivity(intent);
                 }
             });
