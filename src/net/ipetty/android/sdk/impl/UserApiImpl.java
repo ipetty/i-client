@@ -46,11 +46,15 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		return user;
 	}
 
+	private static final String URI_LOGOUT = "/logout";
+
 	/**
 	 * 用户登出
 	 */
 	@Override
 	public void logout() {
+		getRestTemplate().getForObject(buildUri(URI_LOGOUT), Boolean.class);
+		setCurrUserId(null);
 		setIsAuthorized(false);
 	}
 
@@ -76,27 +80,6 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
 	private static final String URI_GET_BY_ID = "/user/id/{id}";
 
-	// /**
-	// * 根据ID获取用户帐号
-	// */
-	// @Override
-	// public UserVO getById(final Integer id) {
-	// final CountDownLatch latch = new CountDownLatch(1);
-	// new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// user = getRestTemplate().getForObject(Constant.API_SERVER_BASE +
-	// URI_GET_BY_ID, UserVO.class, id);
-	// latch.countDown();
-	// }
-	// }).start();
-	// try {
-	// latch.await();
-	// } catch (InterruptedException ex) {
-	// throw new APIException(ex);
-	// }
-	// return user;
-	// }
 	/**
 	 * 根据ID获取用户帐号
 	 */
@@ -198,47 +181,6 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		return getRestTemplate().postForObject(buildUri(URI_IS_UNFOLLOW), request, Boolean.class);
 	}
 
-	private static final String URI_UPDATE_AVATAR = "/user/updateAvatar";
-
-	/**
-	 * 更新用户头像
-	 */
-	@Override
-	public String updateAvatar(String imagePath) {
-		super.requireAuthorization();
-
-		URI updateAvatarUri = buildUri(URI_UPDATE_AVATAR);
-		LinkedMultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
-		request.add("imageFile", new FileSystemResource(imagePath));
-		return getRestTemplate().postForObject(updateAvatarUri, request, String.class);
-	}
-
-	private static final String URI_UPDATE_BACKGROUD = "/user/updateBackground";
-
-	/**
-	 * 更新个人空间背景图片
-	 */
-	@Override
-	public String updateBackground(String imagePath) {
-		super.requireAuthorization();
-
-		URI updateBackgroundUri = buildUri(URI_UPDATE_BACKGROUD);
-		LinkedMultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
-		request.add("imageFile", new FileSystemResource(imagePath));
-		return getRestTemplate().postForObject(updateBackgroundUri, request, String.class);
-	}
-
-	private static final String URI_UPDATE = "/user/update";
-
-	/**
-	 * 修改用户个人信息
-	 */
-	@Override
-	public UserVO update(UserFormVO userFormVo) {
-		super.requireAuthorization();
-		return getRestTemplate().postForObject(buildUri(URI_UPDATE), userFormVo, UserVO.class);
-	}
-
 	private static final String URI_LIST_FRIENDS = "/user/friends";
 
 	/**
@@ -288,6 +230,47 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		request.add("pageSize", String.valueOf(pageSize));
 		URI uri = buildUri(URI_LIST_BIFRIENDS, request);
 		return Arrays.asList(getRestTemplate().getForObject(uri, UserVO[].class));
+	}
+
+	private static final String URI_UPDATE_AVATAR = "/user/updateAvatar";
+
+	/**
+	 * 更新用户头像
+	 */
+	@Override
+	public String updateAvatar(String imagePath) {
+		super.requireAuthorization();
+
+		URI updateAvatarUri = buildUri(URI_UPDATE_AVATAR);
+		LinkedMultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
+		request.add("imageFile", new FileSystemResource(imagePath));
+		return getRestTemplate().postForObject(updateAvatarUri, request, String.class);
+	}
+
+	private static final String URI_UPDATE_BACKGROUD = "/user/updateBackground";
+
+	/**
+	 * 更新个人空间背景图片
+	 */
+	@Override
+	public String updateBackground(String imagePath) {
+		super.requireAuthorization();
+
+		URI updateBackgroundUri = buildUri(URI_UPDATE_BACKGROUD);
+		LinkedMultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
+		request.add("imageFile", new FileSystemResource(imagePath));
+		return getRestTemplate().postForObject(updateBackgroundUri, request, String.class);
+	}
+
+	private static final String URI_UPDATE = "/user/update";
+
+	/**
+	 * 修改用户个人信息
+	 */
+	@Override
+	public UserVO update(UserFormVO userFormVo) {
+		super.requireAuthorization();
+		return getRestTemplate().postForObject(buildUri(URI_UPDATE), userFormVo, UserVO.class);
 	}
 
 }
