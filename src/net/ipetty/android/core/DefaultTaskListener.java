@@ -27,7 +27,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 
     protected Activity activity;
 
-    protected String loadingMessage;
+    private String loadingMessage;
 
     private ProgressDialog progressDialog;
 
@@ -150,8 +150,8 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     //显示进度框
     private void showProgressDialog() {
         Log.d(TAG, "showProgressDialog");
-        if (loadingMessage != null) {
-            this.progressDialog.setMessage(loadingMessage);
+        if (getLoadingMessage() != null) {
+            this.progressDialog.setMessage(getLoadingMessage());
             this.progressDialog.show();
         }
     }
@@ -159,7 +159,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     //隐藏进度框
     private void dismissProgressDialog() {
         Log.d(TAG, "dismissProgressDialog");
-        if (loadingMessage != null) {
+        if (getLoadingMessage() != null) {
             this.progressDialog.dismiss();
         }
     }
@@ -168,6 +168,13 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
     private void showError(final String msg) {
         Log.d(TAG, "showError");
         Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * @return the loadingMessage
+     */
+    public String getLoadingMessage() {
+        return loadingMessage;
     }
 
 }

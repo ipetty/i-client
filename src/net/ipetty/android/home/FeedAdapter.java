@@ -22,10 +22,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.comment.CommentActivity;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
@@ -150,22 +149,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
             // 头像
             holder.avatar = (ImageView) view.findViewById(R.id.avatar);
-            holder.avatar.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, SpaceActivity.class);
-                    context.startActivity(intent);
-                }
-            });
+
             // 姓名
             holder.nickname = (TextView) view.findViewById(R.id.nickname);
-            holder.nickname.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, SpaceActivity.class);
-                    context.startActivity(intent);
-                }
-            });
 
             // 时间
             holder.created_at = (TextView) view.findViewById(R.id.created_at);
@@ -287,7 +273,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
         final FeedVO feed = (FeedVO) this.getItem(position);
 
         // 用户信息
-        UserVO user = this.getCacheUserById(feed.getCreatedBy());
+        final UserVO user = this.getCacheUserById(feed.getCreatedBy());
         Log.d(TAG, "发布人头像：" + user.getAvatar());
         if (!StringUtils.isEmpty(user.getAvatar())) {
             ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
@@ -296,6 +282,28 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
         if (!StringUtils.isEmpty(user.getNickname())) {
             holder.nickname.setText(user.getNickname());
         }
+        // 头像
+        holder.avatar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SpaceActivity.class);
+                intent.putExtra("id", user.getId());
+                intent.putExtra("uid", user.getUid());
+                intent.putExtra("uniqueName", user.getUniqueName());
+                context.startActivity(intent);
+            }
+        });
+        // 姓名
+        holder.nickname.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SpaceActivity.class);
+                intent.putExtra("id", user.getId());
+                intent.putExtra("uid", user.getUid());
+                intent.putExtra("uniqueName", user.getUniqueName());
+                context.startActivity(intent);
+            }
+        });
 
         // 发布时间
         String creatAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(feed.getCreatedOn());
@@ -420,32 +428,34 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
     }
 
-    public Map<Integer, UserVO> cacheUserMap = new HashMap<Integer, UserVO>();
-
+    //public Map<Integer, UserVO> cacheUserMap = new HashMap<Integer, UserVO>();
     private UserVO getCacheUserById(Integer id) {
         Log.d(TAG, "getUSER-->" + id);
+        return UserApiWithCache.getUserById4Synchronous(context, id);
         // TODO: 这里代码有问题~没有办法直接调用
         // user = IpetApi.init((MainActivity) context).getUserApi().getById(id);
-        UserVO user = cacheUserMap.get(id);
-        if (user == null) {
-            //user = IpetApi.init((MainActivity) context).getUserApi().getById(id);
 
-            //TODO：有点变态的改写方法，不知道这样大量的异步同步刷新界面，会不会导致界面卡死
-            new GetUserById((Activity) context).setListener(new DefaultTaskListener<UserVO>((Activity) context) {
-
-                @Override
-                public void onSuccess(UserVO result) {
-                    // TODO Auto-generated method stub
-                    if (FeedAdapter.this.cacheUserMap.containsKey(result.getId())) {
-                        return;
-                    }
-                    FeedAdapter.this.cacheUserMap.put(result.getId(), result);
-                    FeedAdapter.this.notifyDataSetChanged();
-                }
-
-            }).execute(id);
-        }
-        return user;
+//        UserVO user = cacheUserMap.get(id);
+//        if (user == null) {
+//            user = IpetApi.init((MainActivity) context).getUserApi().getById(id);
+//            cacheUserMap.put(user.getId(), user);
+//
+//            //TODO：有点变态的改写方法，不知道这样大量的异步同步刷新界面，会不会导致界面卡死
+////            new GetUserById((Activity) context).setListener(new DefaultTaskListener<UserVO>((Activity) context) {
+////
+////                @Override
+////                public void onSuccess(UserVO result) {
+////                    // TODO Auto-generated method stub
+////                    if (FeedAdapter.this.cacheUserMap.containsKey(result.getId())) {
+////                        return;
+////                    }
+////                    FeedAdapter.this.cacheUserMap.put(result.getId(), result);
+////                    FeedAdapter.this.notifyDataSetChanged();
+////                }
+////
+////            }).execute(id);
+//        }
+//        return user;
     }
 
     public void renderFavorUserView(TextView tv, FeedVO feedVO) {
@@ -517,6 +527,25 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
             @Override
             public void onSuccess(final UserVO resultUser) {
+                // 头像
+                holder.avatar.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, SpaceActivity.class);
+                        intent.putExtra("id", resultUser.getId());
+                        context.startActivity(intent);
+                    }
+                });
+                // 姓名
+                holder.nickname.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, SpaceActivity.class);
+                        intent.putExtra("id", resultUser.getId());
+                        context.startActivity(intent);
+                    }
+                });
+
                 // 发布人信息
                 Log.d(TAG, "发布人头像：" + resultUser.getAvatar());
                 if (!StringUtils.isEmpty(resultUser.getAvatar())) {

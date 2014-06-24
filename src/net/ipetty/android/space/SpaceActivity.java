@@ -10,14 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import net.ipetty.R;
-import net.ipetty.android.bonuspoint.BonusPointActivity;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.discover.DiscoverAdapter;
 import net.ipetty.android.fans.FansActivity;
 import net.ipetty.android.follow.FollowsActivity;
 import net.ipetty.android.petty.PettyActivity;
+import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.user.UserActivity;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class SpaceActivity extends Activity {
 
@@ -26,25 +33,29 @@ public class SpaceActivity extends Activity {
     private View space_petty_view;
     private GridView space_photo_grid;
     private DiscoverAdapter space_photo_grid_adapter;
-    private Integer uid;
-    private String uniqueName;
+    private Integer userId;
+    private Integer currUserId;
+    private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space);
-        uid = this.getIntent().getExtras().getInt("uid");
-        uniqueName = this.getIntent().getExtras().getString("uniqueName");
+
+        userId = this.getIntent().getExtras().getInt("id");
+        currUserId = IpetApi.init(this).getCurrUserId();
 
         /* action bar */
         ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
         btnBack.setOnClickListener(new BackClickListener(this));
 
+        UserVO user = UserApiWithCache.getUserById4Synchronous(this, userId);
+
         String title = this.getResources().getString(R.string.title_activity_space);
         // 标题
         if (!isCurrentUser()) {
             String title_space = getResources().getString(R.string.title_space);
-            String username = "张三";
+            String username = user.getNickname();
             title = String.format(title_space, username);
         }
         TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -66,6 +77,9 @@ public class SpaceActivity extends Activity {
 
         // 头像
         ImageView avatar = (ImageView) this.findViewById(R.id.avatar);
+        if (!StringUtils.isEmpty(user.getAvatar())) {
+            ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+        }
         if (isCurrentUser()) {
             avatar.setOnClickListener(userEditClick);
         }
@@ -97,8 +111,8 @@ public class SpaceActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent intent = new Intent(SpaceActivity.this, BonusPointActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(SpaceActivity.this, BonusPointActivity.class);
+                //startActivity(intent);
                 // finish();
             }
         });
@@ -153,8 +167,7 @@ public class SpaceActivity extends Activity {
     }
 
     private boolean isCurrentUser() {
-        // TODO 判断是否当前用户
-        return true;
+        return currUserId == userId;
     }
 
     private OnClickListener userEditClick = new OnClickListener() {

@@ -19,7 +19,7 @@ public class LRULinkedHashMap<K, V> extends LinkedHashMap<K, V> {
     private final int capacity;   //定义缓存的容量
     private static final long serialVersionUID = 1L;
 
-    LRULinkedHashMap(int capacity) {
+    public LRULinkedHashMap(int capacity) {
         // initialCapacity   初始容量
         //loadFactor    加载因子，一般是 0.75f
         //设置成 true 时，为最近最少使用（LRU）算法实现, 设置成 false 时，为先进入先过期
