@@ -30,12 +30,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class UserActivity extends BaseActivity {
-	public final static String TAG = "UserActivity";
+
+	public static final String TAG = UserActivity.class.getSimpleName();
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 	private ImageView avatar;
 	private String mImageName = "cacheHead.jpg";
 	private Dialog dialog;
-	private Dialog sexDialog;
+	private Dialog genderDialog;
 	private String genderValue;
+
+	// nickname, email
+	// signature, gender, birthday, stateAndRegion
 
 	private EditText gender;
 	private EditText birthday;
@@ -70,7 +76,7 @@ public class UserActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				sexDialog = DialogUtils.modPopupDialog(UserActivity.this, sexyItems, sexDialog);
+				genderDialog = DialogUtils.modPopupDialog(UserActivity.this, sexyItems, genderDialog);
 			}
 		});
 
@@ -79,23 +85,20 @@ public class UserActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				birthdayDialog = DialogUtils.datePopupDialog(UserActivity.this, onDateSetListener, birthday.getText().toString(), birthdayDialog);
+				birthdayDialog = DialogUtils.datePopupDialog(UserActivity.this, onDateSetListener, birthday.getText()
+						.toString(), birthdayDialog);
 			}
 		});
 	}
 
 	private OnDateSetListener onDateSetListener = new OnDateSetListener() {
-
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			Calendar c = Calendar.getInstance();
 			c.set(year, monthOfYear, dayOfMonth);
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			String str = format.format(c.getTime());
+			String str = dateFormat.format(c.getTime());
 			birthday.setText(str);
-
 		}
-
 	};
 
 	private OnClickListener sexOnClick = new OnClickListener() {
@@ -106,7 +109,7 @@ public class UserActivity extends BaseActivity {
 			gender.setText(text);
 			genderValue = val;
 			Log.i(TAG, "v->" + genderValue);
-			sexDialog.cancel();
+			genderDialog.cancel();
 		}
 	};
 
@@ -129,7 +132,8 @@ public class UserActivity extends BaseActivity {
 
 	public void showCameraDialog(View v) {
 		OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
-		this.dialog = DialogUtils.bottomPopupDialog(this, Listener, R.array.alert_camera, getString(R.string.camera_title), this.dialog);
+		this.dialog = DialogUtils.bottomPopupDialog(this, Listener, R.array.alert_camera,
+				getString(R.string.camera_title), this.dialog);
 	}
 
 	private final OnClickListener takePhotoClick = new OnClickListener() {
