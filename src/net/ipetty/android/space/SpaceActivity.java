@@ -101,20 +101,6 @@ public class SpaceActivity extends Activity {
         follow_num_text = (TextView) this.findViewById(R.id.follow_num_text);
         fan_num_text = (TextView) this.findViewById(R.id.fan_num_text);
 
-        new IsFollow(this)
-                .setListener(new DefaultTaskListener<Boolean>(SpaceActivity.this) {
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        if (result) {
-                            action_bar_right_text.setText(R.string.follow_text);
-                        } else {
-                            action_bar_right_text.setText(R.string.unfollow_text);
-                        }
-                        action_bar_right_text.setOnClickListener(toggleFollowClick);
-                    }
-                })
-                .execute(this.userId);
-
         new GetUserStatisticsByUserId(this)
                 .setListener(new DefaultTaskListener<UserStatisticsVO>(SpaceActivity.this) {
                     @Override
