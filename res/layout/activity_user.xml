@@ -14,11 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_height"
         android:background="@drawable/action_bar_bg"
-
         android:gravity="center_vertical" >
 
         <include layout="@layout/action_bar_simple_back_content" />
-        <include layout="@layout/action_bar_vertical_divider" />
+        <include layout="@layout/action_bar_vertical_divider" />
+
         <TextView
             android:id="@+id/save"
             style="@style/ActionBarButton"
@@ -29,220 +29,224 @@
             android:text="@string/save" />
     </LinearLayout>
 
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="96dp" 
-      android:background="@color/color_item_bg">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="@color/color_item_bg" >
 
-      <FrameLayout
-          android:layout_width="96dp"
-          android:layout_height="96dp" >
+        <FrameLayout
+            android:layout_width="96dp"
+            android:layout_height="96dp" >
 
-          <ImageView
-              android:id="@+id/avatar"
-              android:layout_width="72dp"
-              android:layout_height="72dp"
-              android:layout_gravity="center"
-              android:scaleType="fitXY"
-              android:src="@drawable/avatar" />
-		          
-      </FrameLayout>
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/avatar" />
+        </FrameLayout>
 
- 	  <include layout="@layout/vertical_divider" />
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical" >
+        <include layout="@layout/vertical_divider" />
 
-          <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="48dp" 
-              android:paddingLeft="8dp"
-   			  android:paddingRight="8dp"
-              android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-             <EditText
-                 android:id="@+id/nickname"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_gravity="center"
-                 android:background="@null"
-                 android:ems="10"
-                 android:hint="@string/nickname_hint"
-                 android:singleLine="true"
-                 android:textSize="16sp"
-                 android:text="张三"
-                 android:textColor="@color/link_text" >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" >
 
-              <requestFocus />
-          </EditText>
-          </LinearLayout>
+                <EditText
+                    android:id="@+id/nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:ems="10"
+                    android:hint="@string/nickname_hint"
+                    android:singleLine="true"
+                    android:text="张三"
+                    android:textColor="@color/link_text"
+                    android:textSize="16sp" >
 
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
 
+            <include layout="@layout/horizontal_divider" />
 
-			<include layout="@layout/horizontal_divider" />
-          <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="48dp" 
-                  android:paddingLeft="8dp"
-   			  android:paddingRight="8dp"
-               android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" >
 
-				<TextView
-				    android:id="@+id/email"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="kongchun.cn@gmail.com"
-				    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="kongchun.cn@gmail.com"
+                    android:textColor="@color/title_gray"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
-          </LinearLayout>
+    <include layout="@layout/horizontal_divider" />
 
-          
-          
-      </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp" >
+    </LinearLayout>
 
-  </LinearLayout>
-   <include layout="@layout/horizontal_divider" />
+    <include layout="@layout/horizontal_divider" />
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="20dp" >
-   </LinearLayout>
-   
-   <include layout="@layout/horizontal_divider" />
-   <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="44dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="@color/color_item_bg"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/description"
+            android:textColor="@color/text_black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1.0"
+            android:background="@null"
             android:gravity="center_vertical"
-            android:background="@color/color_item_bg" >
+            android:hint="@string/description_hint"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="@color/link_text"
+            android:textColorHint="@color/hint_text_color"
+            android:textSize="16sp"
+            android:windowSoftInputMode="stateHidden" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/description"
-                android:textColor="@color/text_black"
-                android:textSize="16sp" />
+    <include layout="@layout/horizontal_divider" />
 
-            <EditText
-                android:id="@+id/description"
-                android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1.0"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:hint="@string/description_hint"
-                android:inputType="text"
-                android:singleLine="true"
-                android:textColor="@color/link_text"
-                android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp"
-                android:windowSoftInputMode="stateHidden" />
-        </LinearLayout>
-        <include layout="@layout/horizontal_divider" />
-           <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="44dp"
-            android:background="@color/color_item_bg" 
-            android:gravity="center_vertical" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="@color/color_item_bg"
+        android:gravity="center_vertical" >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/gender"
-                android:textColor="@color/text_black"
-                android:textSize="16sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/gender"
+            android:textColor="@color/text_black"
+            android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/gender"
-                android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1.0"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:hint="@string/gender_hint"
-                android:inputType="text"
-                android:singleLine="true"
-                android:textColor="@color/link_text"
-                android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp"
-                 android:focusable="false"
-                android:windowSoftInputMode="stateHidden" />
-        </LinearLayout>
-         <include layout="@layout/horizontal_divider" />
-                    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="44dp"
-            android:background="@color/color_item_bg" 
-            android:gravity="center_vertical" >
+        <EditText
+            android:id="@+id/gender"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1.0"
+            android:background="@null"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:hint="@string/gender_hint"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="@color/link_text"
+            android:textColorHint="@color/hint_text_color"
+            android:textSize="16sp"
+            android:windowSoftInputMode="stateHidden" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/birthday"
-                android:textColor="@color/text_black"
-                android:textSize="16sp" />
+    <include layout="@layout/horizontal_divider" />
 
-            <EditText
-                android:id="@+id/birthday"
-                android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1.0"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:hint="@string/birthday_hint"
-                android:inputType="text"
-                android:singleLine="true"
-                android:textColor="@color/link_text"
-                android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp"
-                 android:focusable="false"
-                android:windowSoftInputMode="stateHidden" />
-        </LinearLayout>
-         <include layout="@layout/horizontal_divider" />
-       <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="44dp"
-            android:background="@color/color_item_bg" 
-            android:gravity="center_vertical" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="@color/color_item_bg"
+        android:gravity="center_vertical" >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/city"
-                android:textColor="@color/text_black"
-                android:textSize="16sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/birthday"
+            android:textColor="@color/text_black"
+            android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/city"
-                android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1.0"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:hint="@string/city_hint"
-                android:inputType="text"
-                android:singleLine="true"
-                android:textColor="@color/link_text"
-                android:textColorHint="@color/hint_text_color"
-                android:textSize="16sp"
-                 android:focusable="false"
-                android:windowSoftInputMode="stateHidden" />
-        </LinearLayout>
-         <include layout="@layout/horizontal_divider" />
+        <EditText
+            android:id="@+id/birthday"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1.0"
+            android:background="@null"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:hint="@string/birthday_hint"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="@color/link_text"
+            android:textColorHint="@color/hint_text_color"
+            android:textSize="16sp"
+            android:windowSoftInputMode="stateHidden" />
+    </LinearLayout>
+
+    <include layout="@layout/horizontal_divider" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="@color/color_item_bg"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/city"
+            android:textColor="@color/text_black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/city"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1.0"
+            android:background="@null"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:hint="@string/city_hint"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="@color/link_text"
+            android:textColorHint="@color/hint_text_color"
+            android:textSize="16sp"
+            android:windowSoftInputMode="stateHidden" />
+    </LinearLayout>
+
+    <include layout="@layout/horizontal_divider" />
+
 </LinearLayout>

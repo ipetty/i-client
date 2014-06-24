@@ -2,17 +2,16 @@ package net.ipetty.android.user;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.DeviceUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.PathUtils;
+import net.ipetty.android.sdk.task.foundation.ListOptions;
+import net.ipetty.vo.OptionGroup;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.content.Intent;
@@ -37,16 +36,18 @@ public class UserActivity extends BaseActivity {
 	private ImageView avatar;
 	private String mImageName = "cacheHead.jpg";
 	private Dialog dialog;
-	private Dialog genderDialog;
-	private String genderValue;
+
+	private EditText nicknameText;
 
 	// nickname, email
 	// signature, gender, birthday, stateAndRegion
 
-	private EditText gender;
-	private EditText birthday;
+	private Dialog genderDialog;
+	private EditText genderText;
+	private String gender;
+
 	private Dialog birthdayDialog;
-	private List<ModDialogItem> sexyItems;
+	private EditText birthday;
 
 	private static final int REQUEST_CODE_PHOTORESOULT = 20;
 
@@ -67,18 +68,10 @@ public class UserActivity extends BaseActivity {
 		avatar = (ImageView) this.findViewById(R.id.avatar);
 		avatar.setOnClickListener(avatarClick);
 
-		sexyItems = new ArrayList<ModDialogItem>();
-		sexyItems.add(new ModDialogItem(null, "1", "男", sexOnClick));
-		sexyItems.add(new ModDialogItem(null, "2", "女", sexOnClick));
+		genderText = (EditText) this.findViewById(R.id.gender);
 
-		gender = (EditText) this.findViewById(R.id.gender);
-		gender.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				genderDialog = DialogUtils.modPopupDialog(UserActivity.this, sexyItems, genderDialog);
-			}
-		});
+		new ListOptions(UserActivity.this).setListener(new ListOptionsTaskListener(UserActivity.this)).execute(
+				OptionGroup.HUMAN_GENDER);
 
 		birthday = (EditText) this.findViewById(R.id.birthday);
 		birthday.setOnClickListener(new OnClickListener() {
@@ -101,18 +94,6 @@ public class UserActivity extends BaseActivity {
 		}
 	};
 
-	private OnClickListener sexOnClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			String text = ((TextView) v.findViewById(R.id.text)).getText().toString();
-			String val = ((TextView) v.findViewById(R.id.value)).getText().toString();
-			gender.setText(text);
-			genderValue = val;
-			Log.i(TAG, "v->" + genderValue);
-			genderDialog.cancel();
-		}
-	};
-
 	private OnClickListener saveClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -122,7 +103,6 @@ public class UserActivity extends BaseActivity {
 	};
 
 	private OnClickListener avatarClick = new OnClickListener() {
-
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
@@ -201,6 +181,18 @@ public class UserActivity extends BaseActivity {
 		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
 		intent.putExtra("return-data", false);
 		startActivityForResult(intent, REQUEST_CODE_PHOTORESOULT);
+	}
+
+	public Dialog getGenderDialog() {
+		return genderDialog;
+	}
+
+	public EditText getGenderText() {
+		return genderText;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 }
