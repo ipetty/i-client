@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
@@ -19,7 +20,7 @@ public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
 	private UserActivity userActivity;
 	private Dialog genderDialog;
 	private List<ModDialogItem> dialogItems;
-	private TextView genderText;
+	private EditText genderEditor;
 
 	public ListOptionsTaskListener(Activity activity) {
 		super(activity);
@@ -28,7 +29,7 @@ public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
 	@Override
 	public void onSuccess(List<Option> result) {
 		userActivity = (UserActivity) super.activity;
-		genderText = userActivity.getGenderText();
+		genderEditor = userActivity.getGenderEditor();
 		genderDialog = userActivity.getGenderDialog();
 
 		dialogItems = new ArrayList<ModDialogItem>();
@@ -36,7 +37,7 @@ public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
 			dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
 		}
 
-		genderText.setOnClickListener(new OnClickListener() {
+		genderEditor.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				genderDialog = DialogUtils.modPopupDialog(userActivity, dialogItems, genderDialog);
@@ -49,7 +50,7 @@ public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
 		public void onClick(View view) {
 			String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
 			String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
-			userActivity.getGenderText().setText(label);
+			userActivity.getGenderEditor().setText(label);
 			userActivity.setGender(value);
 			genderDialog.cancel();
 		}

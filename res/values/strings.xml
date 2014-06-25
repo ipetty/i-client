@@ -58,10 +58,10 @@
     <string name="sub_nav_title_home">主页</string>
     <string name="sub_nav_title_discover">发现</string>
     <string name="sub_nav_title_news">动态</string>
-     <string name="exit_once_again">再按一次退出程序</string>
+    <string name="exit_once_again">再按一次退出程序</string>
     <string name="related_me">与我相关</string>
     <string name="my_follows">我关注的</string>
-    
+
     <!-- comment -->
     <string name="title_activity_comment">评论</string>
     <string name="comment_submit">提交</string>
@@ -83,13 +83,12 @@
     <string name="nav_menu_space">我的空间</string>
     <string name="nav_menu_feedback">意见反馈</string>
     <string name="nav_menu_setting">系统设置</string>
-    
-     <string name="item_share">分享</string>
-     <string name="item_delete">删除</string>
-    
-	<!-- simpleFeed -->
-     <string name="title_activity_simple_feed">消息详情</string>
-       
+    <string name="item_share">分享</string>
+    <string name="item_delete">删除</string>
+
+    <!-- simpleFeed -->
+    <string name="title_activity_simple_feed">消息详情</string>
+
     <!-- FeedbackActivity -->
     <string name="title_activity_feedback">意见反馈</string>
     <string name="feedback_no_empty">反馈内容不能为空</string>
@@ -109,7 +108,7 @@
     <string name="follow_text">关注</string>
     <string name="unfollow_text">取消关注</string>
     <string name="pet_edit">编辑宠物资料</string>
-    
+
     <!-- petty -->
 
 
@@ -122,13 +121,12 @@
     <string name="title_activity_bonus_point">积分</string>
     <!-- petty -->
     <string name="title_activity_petty">我的宠物</string>
-    
     <string name="title_activity_location">LocationActivity</string>
-    
+
     <!-- 个人资料 -->
     <string name="save">保存</string>
     <string name="title_activity_user">个人资料</string>
-    <string name="nickname_hint">请输入昵称</string>
+    <string name="nickname_empty">昵称不能为空</string>
     <string name="description">简介</string>
     <string name="description_hint">一句话介绍</string>
     <string name="gender">性别</string>
@@ -137,20 +135,9 @@
     <string name="birthday_hint">请选择生日</string>
     <string name="city">城市</string>
     <string name="city_hint">请选择城市</string>
-    <!-- 系统设置 -->
+    <string name="save_success">保存成功</string>
+    <!-- 系统设置 -->
     <string name="title_activity_setting">设置</string>
     <string name="logout">注销</string>
-
-    
-
-    
-
-    
-    
-   
-
-
-
-   
 
 </resources>

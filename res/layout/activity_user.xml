@@ -70,7 +70,6 @@
                     android:ems="10"
                     android:hint="@string/nickname_hint"
                     android:singleLine="true"
-                    android:text="张三"
                     android:textColor="@color/link_text"
                     android:textSize="16sp" >
 
@@ -94,7 +93,6 @@
                     android:layout_gravity="center"
                     android:ellipsize="marquee"
                     android:singleLine="true"
-                    android:text="kongchun.cn@gmail.com"
                     android:textColor="@color/title_gray"
                     android:textSize="16sp" />
             </LinearLayout>
