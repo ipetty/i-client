@@ -87,7 +87,9 @@
      <string name="item_share">分享</string>
      <string name="item_delete">删除</string>
     
-
+	<!-- simpleFeed -->
+     <string name="title_activity_simple_feed">消息详情</string>
+       
     <!-- FeedbackActivity -->
     <string name="title_activity_feedback">意见反馈</string>
     <string name="feedback_no_empty">反馈内容不能为空</string>

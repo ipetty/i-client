@@ -17,6 +17,10 @@ public class Constant {
 	public final static String INTENT_IMAGE_ORIGINAL_KEY = "url";
 	public final static String INTENT_FEED_ID_KEY = "feedId";
 
+	// BROADCAST
+	public final static String BROADCAST_INTENT_FEED_COMMENT = "BROADCAST_INTENT_FEED_COMMENT";
+	public static final String FEEDVO_JSON_SERIALIZABLE = "FEEDVO_JSON_SERIALIZABLE";
+
 	public final static float HOME_HEAD_BG_SCALE = 1.5f;
 
 	public final static float COMPRESS_IMAGE_MAX_WIDTH = 960f;
