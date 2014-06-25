@@ -1,29 +1,5 @@
 package net.ipetty.android.user;
 
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Map;
-
-import net.ipetty.R;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.DeviceUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.PathUtils;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
-import net.ipetty.android.sdk.task.foundation.ListOptions;
-import net.ipetty.android.sdk.task.user.GetUserById;
-import net.ipetty.android.sdk.task.user.UpdateUser;
-import net.ipetty.vo.OptionGroup;
-import net.ipetty.vo.UserFormVO;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
@@ -41,274 +17,330 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Map;
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DeviceUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.PathUtils;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
+import net.ipetty.android.sdk.task.foundation.ListOptions;
+import net.ipetty.android.sdk.task.user.GetUserById;
+import net.ipetty.android.sdk.task.user.UpdateUser;
+import net.ipetty.android.sdk.task.user.UpdateUserAvatar;
+import net.ipetty.vo.OptionGroup;
+import net.ipetty.vo.UserFormVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class UserActivity extends BaseActivity {
 
-	public static final String TAG = UserActivity.class.getSimpleName();
-	@SuppressLint("SimpleDateFormat")
-	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static final String TAG = UserActivity.class.getSimpleName();
+    @SuppressLint("SimpleDateFormat")
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	private Integer currUserId;
+    private Integer currUserId;
 
-	private ImageView avatar; // 头像
-	private String mImageName = "cacheHead.jpg"; // 默认头像值
-	private Dialog changeAvatarDialog; // 更换头像对话框
+    private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 
-	private EditText nicknameEditor; // 昵称
-	private TextView emailText; // 邮箱地址
+    private ImageView avatar; // 头像
+    private String mImageName = "cacheHead.jpg"; // 默认头像值
+    private Dialog changeAvatarDialog; // 更换头像对话框
 
-	private EditText signatureEditor; // 个性签名
+    private EditText nicknameEditor; // 昵称
+    private TextView emailText; // 邮箱地址
 
-	private Dialog genderDialog; // 性别选择对话框
-	private EditText genderEditor; // 性别展现
-	private String gender; // 性别传值
+    private EditText signatureEditor; // 个性签名
 
-	private Dialog birthdayDialog; // 生日选择对话框
-	private EditText birthday; // 生日
+    private Dialog genderDialog; // 性别选择对话框
+    private EditText genderEditor; // 性别展现
+    private String gender; // 性别传值
 
-	private EditText stateAndRegionEditor; // 地区
+    private Dialog birthdayDialog; // 生日选择对话框
+    private EditText birthday; // 生日
 
-	private static final int REQUEST_CODE_PHOTORESOULT = 20;
+    private EditText stateAndRegionEditor; // 地区
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_user);
+    private static final int REQUEST_CODE_PHOTORESOULT = 20;
 
-		currUserId = IpetApi.init(this).getCurrUserId();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user);
 
-		// Title & Back
-		TextView titleText = (TextView) this.findViewById(R.id.action_bar_title);
-		titleText.setText(this.getResources().getString(R.string.title_activity_user));
-		ImageView backButton = (ImageView) this.findViewById(R.id.action_bar_left_image);
-		backButton.setOnClickListener(new BackClickListener(this));
+        currUserId = IpetApi.init(this).getCurrUserId();
 
-		// 保存
-		TextView saveButton = (TextView) this.findViewById(R.id.save);
-		saveButton.setOnClickListener(saveClick);
+        // Title & Back
+        TextView titleText = (TextView) this.findViewById(R.id.action_bar_title);
+        titleText.setText(this.getResources().getString(R.string.title_activity_user));
+        ImageView backButton = (ImageView) this.findViewById(R.id.action_bar_left_image);
+        backButton.setOnClickListener(new BackClickListener(this));
 
-		// 头像
-		avatar = (ImageView) this.findViewById(R.id.avatar);
-		avatar.setOnClickListener(changeAvatarClick);
+        // 保存
+        TextView saveButton = (TextView) this.findViewById(R.id.save);
+        saveButton.setOnClickListener(saveClick);
 
-		// 昵称
-		nicknameEditor = (EditText) this.findViewById(R.id.nickname);
+        // 头像
+        avatar = (ImageView) this.findViewById(R.id.avatar);
+        avatar.setOnClickListener(changeAvatarClick);
 
-		// 邮箱地址
-		emailText = (TextView) this.findViewById(R.id.email);
+        // 昵称
+        nicknameEditor = (EditText) this.findViewById(R.id.nickname);
 
-		// 个性签名
-		signatureEditor = (EditText) this.findViewById(R.id.description);
+        // 邮箱地址
+        emailText = (TextView) this.findViewById(R.id.email);
 
-		// 性别
-		genderEditor = (EditText) this.findViewById(R.id.gender);
-		new ListOptions(UserActivity.this).setListener(new ListOptionsTaskListener(UserActivity.this)).execute(
-				OptionGroup.HUMAN_GENDER);
+        // 个性签名
+        signatureEditor = (EditText) this.findViewById(R.id.description);
 
-		// 生日
-		birthday = (EditText) this.findViewById(R.id.birthday);
-		birthday.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				birthdayDialog = DialogUtils.datePopupDialog(UserActivity.this, selectBirthdayClick, birthday.getText()
-						.toString(), birthdayDialog);
-			}
-		});
+        // 性别
+        genderEditor = (EditText) this.findViewById(R.id.gender);
+        new ListOptions(UserActivity.this).setListener(new ListOptionsTaskListener(UserActivity.this)).execute(
+                OptionGroup.HUMAN_GENDER);
 
-		// 地区
-		stateAndRegionEditor = (EditText) this.findViewById(R.id.city);
+        // 生日
+        birthday = (EditText) this.findViewById(R.id.birthday);
+        birthday.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                birthdayDialog = DialogUtils.datePopupDialog(UserActivity.this, selectBirthdayClick, birthday.getText()
+                        .toString(), birthdayDialog);
+            }
+        });
 
-		// 填充用户信息
-		new GetUserById(UserActivity.this).setListener(new DefaultTaskListener<UserVO>(UserActivity.this) {
-			@Override
-			public void onSuccess(UserVO user) {
+        // 地区
+        stateAndRegionEditor = (EditText) this.findViewById(R.id.city);
+
+        // 填充用户信息
+        new GetUserById(UserActivity.this).setListener(new DefaultTaskListener<UserVO>(UserActivity.this) {
+            @Override
+            public void onSuccess(UserVO user) {
 				// 头像
-				// FIXME UserActivity.this.avatar.setImageURI(uri);
+                // FIXME UserActivity.this.avatar.setImageURI(uri);
 
-				// 昵称
-				UserActivity.this.nicknameEditor.setText(user.getNickname() == null ? "" : user.getNickname());
+                // 昵称
+                UserActivity.this.nicknameEditor.setText(user.getNickname() == null ? "" : user.getNickname());
 
-				// 邮箱地址
-				UserActivity.this.emailText.setText(user.getEmail() == null ? "" : user.getEmail());
+                // 邮箱地址
+                UserActivity.this.emailText.setText(user.getEmail() == null ? "" : user.getEmail());
 
-				// 个性签名
-				UserActivity.this.signatureEditor.setText(user.getSignature() == null ? "" : user.getSignature());
+                // 个性签名
+                UserActivity.this.signatureEditor.setText(user.getSignature() == null ? "" : user.getSignature());
 
-				// 性别
-				if (StringUtils.isNoneBlank(user.getGender())) {
-					UserActivity.this.setGender(user.getGender());
-					new GetOptionValueLabelMap(UserActivity.this).setListener(
-							new DefaultTaskListener<Map<String, String>>(UserActivity.this) {
-								@Override
-								public void onSuccess(Map<String, String> optionValueLabelMap) {
-									String label = optionValueLabelMap.get(UserActivity.this.gender);
-									UserActivity.this.genderEditor.setText(label);
-								}
-							}).execute(OptionGroup.HUMAN_GENDER);
-				}
+                // 性别
+                if (StringUtils.isNotBlank(user.getGender())) {
+                    UserActivity.this.setGender(user.getGender());
+                    new GetOptionValueLabelMap(UserActivity.this).setListener(
+                            new DefaultTaskListener<Map<String, String>>(UserActivity.this) {
+                                @Override
+                                public void onSuccess(Map<String, String> optionValueLabelMap) {
+                                    String label = optionValueLabelMap.get(UserActivity.this.gender);
+                                    UserActivity.this.genderEditor.setText(label);
+                                }
+                            }).execute(OptionGroup.HUMAN_GENDER);
+                }
 
-				// 生日
-				if (user.getBirthday() != null) {
-					UserActivity.this.birthday.setText(dateFormat.format(user.getBirthday()));
-				}
+                // 生日
+                if (user.getBirthday() != null) {
+                    UserActivity.this.birthday.setText(dateFormat.format(user.getBirthday()));
+                }
 
-				// 地区
-				UserActivity.this.stateAndRegionEditor.setText(user.getStateAndRegion() == null ? "" : user
-						.getStateAndRegion());
-			}
-		}).execute(currUserId);
-	}
+                // 地区
+                UserActivity.this.stateAndRegionEditor.setText(user.getStateAndRegion() == null ? "" : user
+                        .getStateAndRegion());
+            }
+        }).execute(currUserId);
+    }
 
-	/** 更改头像 */
-	private OnClickListener changeAvatarClick = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			// TODO Auto-generated method stub
-			showCameraDialog(view);
-		}
-	};
+    /**
+     * 更改头像
+     */
+    private OnClickListener changeAvatarClick = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // TODO Auto-generated method stub
+            showCameraDialog(view);
+        }
+    };
 
-	/** 选择生日 */
-	private OnDateSetListener selectBirthdayClick = new OnDateSetListener() {
-		@Override
-		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			Calendar c = Calendar.getInstance();
-			c.set(year, monthOfYear, dayOfMonth);
-			String str = dateFormat.format(c.getTime());
-			birthday.setText(str);
-		}
-	};
+    /**
+     * 选择生日
+     */
+    private OnDateSetListener selectBirthdayClick = new OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            Calendar c = Calendar.getInstance();
+            c.set(year, monthOfYear, dayOfMonth);
+            String str = dateFormat.format(c.getTime());
+            birthday.setText(str);
+        }
+    };
 
-	/** 保存 */
-	private OnClickListener saveClick = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			UserFormVO user = new UserFormVO();
-			user.setId(UserActivity.this.currUserId);
+    /**
+     * 保存
+     */
+    private OnClickListener saveClick = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            UserFormVO user = new UserFormVO();
+            user.setId(UserActivity.this.currUserId);
 
-			// nickname
-			String nickname = UserActivity.this.nicknameEditor.getText().toString();
-			user.setNickname(nickname);
-			if (StringUtils.isEmpty(nickname)) {
-				UserActivity.this.nicknameEditor.requestFocus();
-				Toast.makeText(UserActivity.this, R.string.nickname_empty, Toast.LENGTH_SHORT).show();
-				return;
-			}
+            // nickname
+            String nickname = UserActivity.this.nicknameEditor.getText().toString();
+            user.setNickname(nickname);
+            if (StringUtils.isEmpty(nickname)) {
+                UserActivity.this.nicknameEditor.requestFocus();
+                Toast.makeText(UserActivity.this, R.string.nickname_empty, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-			// gender
-			user.setGender(UserActivity.this.gender);
+            // gender
+            user.setGender(UserActivity.this.gender);
 
-			// stateAndRegion
-			user.setStateAndRegion(UserActivity.this.stateAndRegionEditor.getText().toString());
+            // stateAndRegion
+            user.setStateAndRegion(UserActivity.this.stateAndRegionEditor.getText().toString());
 
-			// signature
-			user.setSignature(UserActivity.this.signatureEditor.getText().toString());
+            // signature
+            user.setSignature(UserActivity.this.signatureEditor.getText().toString());
 
-			// birthday
-			String birthday = UserActivity.this.birthday.getText().toString();
-			if (StringUtils.isNotBlank(birthday)) {
-				try {
-					user.setBirthday(dateFormat.parse(birthday));
-				} catch (ParseException e) {
-					Log.e(TAG, e.getMessage());
-				}
-			}
+            // birthday
+            String birthday = UserActivity.this.birthday.getText().toString();
+            if (StringUtils.isNotBlank(birthday)) {
+                try {
+                    user.setBirthday(dateFormat.parse(birthday));
+                } catch (ParseException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
 
-			new UpdateUser(UserActivity.this)
-					.setListener(
-							new DefaultTaskListener<UserVO>(UserActivity.this, UserActivity.this
-									.getString(R.string.submitting)) {
-								@Override
-								public void onSuccess(UserVO result) {
-									Toast.makeText(activity, R.string.save_success, Toast.LENGTH_SHORT).show();
-								}
-							}).execute(user);
-		}
+            new UpdateUser(UserActivity.this)
+                    .setListener(
+                            new DefaultTaskListener<UserVO>(UserActivity.this, UserActivity.this
+                                    .getString(R.string.submitting)) {
+                                @Override
+                                public void onSuccess(UserVO result) {
+                                    Toast.makeText(activity, R.string.save_success, Toast.LENGTH_SHORT).show();
+                                }
+                            }).execute(user);
+        }
 
-		// TODO 更新缓存
-	};
+        // TODO 更新缓存
+    };
 
-	public void showCameraDialog(View view) {
-		OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
-		this.changeAvatarDialog = DialogUtils.bottomPopupDialog(this, Listener, R.array.alert_camera,
-				getString(R.string.camera_title), this.changeAvatarDialog);
-	}
+    public void showCameraDialog(View view) {
+        OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
+        this.changeAvatarDialog = DialogUtils.bottomPopupDialog(this, Listener, R.array.alert_camera,
+                getString(R.string.camera_title), this.changeAvatarDialog);
+    }
 
-	private final OnClickListener takePhotoClick = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			// TODO Auto-generated method stub
-			DeviceUtils.takePicture(UserActivity.this, PathUtils.getCarmerDir(), UserActivity.this.mImageName);
-			UserActivity.this.changeAvatarDialog.cancel();
-		}
-	};
+    private final OnClickListener takePhotoClick = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // TODO Auto-generated method stub
+            DeviceUtils.takePicture(UserActivity.this, PathUtils.getCarmerDir(), UserActivity.this.mImageName);
+            UserActivity.this.changeAvatarDialog.cancel();
+        }
+    };
 
-	private final OnClickListener pickPhotoClick = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			// TODO Auto-generated method stub
-			DeviceUtils.chooserSysPics(UserActivity.this);
-			UserActivity.this.changeAvatarDialog.cancel();
-		}
-	};
+    private final OnClickListener pickPhotoClick = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // TODO Auto-generated method stub
+            DeviceUtils.chooserSysPics(UserActivity.this);
+            UserActivity.this.changeAvatarDialog.cancel();
+        }
+    };
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		Log.i("Photo", "finish");
-		Log.i("Photo", "requestCode" + requestCode);
-		Log.i("Photo", "resultCode" + resultCode);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "finish");
+        Log.i(TAG, "requestCode" + requestCode);
+        Log.i(TAG, "resultCode" + resultCode);
 
-		String path = PathUtils.getCarmerDir() + this.mImageName;
-		File picture = new File(path);
-		Uri pathUri = Uri.fromFile(picture);
+        String path = PathUtils.getCarmerDir() + this.mImageName;
+        File picture = new File(path);
+        Uri pathUri = Uri.fromFile(picture);
 
-		if (requestCode == DeviceUtils.REQUEST_CODE_PICK_IMAGE) {
-			if (resultCode == FragmentActivity.RESULT_OK) {
-				Uri uri = data.getData();
-				Log.i("Photo", "finish" + uri);
-				startPhotoZoom(uri, pathUri);
-			}
-		}
-		if (requestCode == DeviceUtils.REQUEST_CODE_TAKE_IMAGE) {
-			if (resultCode == FragmentActivity.RESULT_OK) {
-				Log.i("Photo", "finish" + picture);
-				startPhotoZoom(Uri.fromFile(picture), pathUri);
-			}
+        if (requestCode == DeviceUtils.REQUEST_CODE_PICK_IMAGE) {
+            if (resultCode == FragmentActivity.RESULT_OK) {
+                Uri uri = data.getData();
+                Log.i(TAG, "finish" + uri);
+                startPhotoZoom(uri, pathUri);
+            }
+        }
+        if (requestCode == DeviceUtils.REQUEST_CODE_TAKE_IMAGE) {
+            if (resultCode == FragmentActivity.RESULT_OK) {
+                Log.i(TAG, "finish" + picture);
+                startPhotoZoom(Uri.fromFile(picture), pathUri);
+            }
 
-		}
-		if (requestCode == REQUEST_CODE_PHOTORESOULT) {
-			Log.i("Photo", "crop" + pathUri);
-			avatar.setImageURI(pathUri);
-		}
-	}
+        }
+        if (requestCode == REQUEST_CODE_PHOTORESOULT) {
+            Log.i(TAG, "crop" + pathUri);
 
-	public void startPhotoZoom(Uri uri, Uri photoUri) {
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		intent.putExtra("crop", "true");
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		intent.putExtra("outputX", 120);
-		intent.putExtra("outputY", 120);
-		intent.putExtra("noFaceDetection", true);
-		intent.putExtra("scale", true);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-		intent.putExtra("return-data", false);
-		startActivityForResult(intent, REQUEST_CODE_PHOTORESOULT);
-	}
+            avatar.setImageURI(pathUri);
+            updateAvatar(picture.getAbsolutePath());
+        }
+    }
 
-	public Dialog getGenderDialog() {
-		return genderDialog;
-	}
+    public void updateAvatar(final String filePath) {
+        new UpdateUserAvatar(this)
+                .setListener(new DefaultTaskListener<String>(this) {
+                    @Override
+                    public void onSuccess(String result) {
+                        Log.i(TAG, "updateAvatar.onSuccess:" + result);
+                        ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result, avatar, options);
+                        UserActivity.this.showMessageForLongTime("更新头像成功");
+                    }
 
-	public EditText getGenderEditor() {
-		return genderEditor;
-	}
+                    @Override
+                    public void onError(Throwable ex) {
+                        super.onError(ex);
+                        UserActivity.this.showMessageForLongTime("更新头像失败");
+                        ImageLoader.getInstance().displayImage("", avatar, options);
+                    }
+                })
+                .execute(filePath);
+    }
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    public void startPhotoZoom(Uri uri, Uri photoUri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 120);
+        intent.putExtra("outputY", 120);
+        intent.putExtra("noFaceDetection", true);
+        intent.putExtra("scale", true);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("return-data", false);
+        startActivityForResult(intent, REQUEST_CODE_PHOTORESOULT);
+    }
+
+    public Dialog getGenderDialog() {
+        return genderDialog;
+    }
+
+    public EditText getGenderEditor() {
+        return genderEditor;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
 }

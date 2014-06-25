@@ -13,9 +13,9 @@ import net.ipetty.android.sdk.core.IpetApi;
  *
  * @author Administrator
  */
-public class UpdateAvatar extends Task<String, String> {
+public class UpdateUserAvatar extends Task<String, String> {
 
-    public UpdateAvatar(Activity activity) {
+    public UpdateUserAvatar(Activity activity) {
         super(activity);
     }
 
