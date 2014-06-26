@@ -12,7 +12,7 @@ import net.ipetty.android.core.util.URIBuilder;
 import net.ipetty.android.sdk.cache.RestTemplate4Cache;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -50,8 +50,8 @@ public class ApiBase {
 		 * HttpComponentsClientHttpRequestFactory HttpUriRequest --?
 		 */
 
-		//SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+		//HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
 		factory.setConnectTimeout(10 * 1000);
 		factory.setReadTimeout(60 * 1000);
 
