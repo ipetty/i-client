@@ -124,11 +124,10 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		public TextView address;
 
 		public ImageView btn_liked;
-		public View liked_detail;
+		public TextView liked_detail;
 		public ImageView btn_comment;
 		public View btn_more;
 
-		public TextView like_text;
 		public TextView comments_num;
 		public LinearLayout comments_group_list;
 
@@ -168,14 +167,13 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			// 操作区域
 			holder.btn_liked = (ImageView) view.findViewById(R.id.feed_button_like);
 			holder.btn_comment = (ImageView) view.findViewById(R.id.feed_button_comment);
-			holder.liked_detail = view.findViewById(R.id.row_feed_photo_textview_likes);
+			holder.liked_detail = (TextView) view.findViewById(R.id.row_feed_photo_textview_likes);
 			holder.btn_more = view.findViewById(R.id.feed_button_more);
 
 			holder.feed_list_father_view = view.findViewById(R.id.feed_list_father_view);
 
 			// like
 			holder.row_feed_photo_likes_group = view.findViewById(R.id.row_feed_photo_likes_group);
-			holder.like_text = (TextView) view.findViewById(R.id.row_feed_photo_textview_likes);
 			holder.feed_list_line = view.findViewById(R.id.feed_list_line);
 
 			// 评论
@@ -280,7 +278,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		final UserVO user = this.getCacheUserById(feed.getCreatedBy());
 		Log.d(TAG, "发布人头像：" + user.getAvatar());
 		if (!StringUtils.isEmpty(user.getAvatar())) {
-			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+			ImageLoader.getInstance()
+					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
 		}
 		Log.d(TAG, "发布人昵称：" + user.getNickname());
 		if (!StringUtils.isEmpty(user.getNickname())) {
@@ -291,9 +290,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, SpaceActivity.class);
-				intent.putExtra("id", user.getId());
-				intent.putExtra("uid", user.getUid());
-				intent.putExtra("uniqueName", user.getUniqueName());
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, user.getId());
+				// intent.putExtra("uid", user.getUid());
+				// intent.putExtra("uniqueName", user.getUniqueName());
 				context.startActivity(intent);
 			}
 		});
@@ -302,9 +301,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, SpaceActivity.class);
-				intent.putExtra("id", user.getId());
-				intent.putExtra("uid", user.getUid());
-				intent.putExtra("uniqueName", user.getUniqueName());
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, user.getId());
+				// intent.putExtra("uid", user.getUid());
+				// intent.putExtra("uniqueName", user.getUniqueName());
 				context.startActivity(intent);
 			}
 		});
@@ -318,7 +317,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		holder.content.setText(feed.getText());
 
 		// 图片显示
-		ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(), holder.content_image, options);
+		ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(),
+				holder.content_image, options);
 
 		// 内容空不显示内容区域
 		if (StringUtils.isEmpty(feed.getText())) {
@@ -343,7 +343,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			public void onClick(View v) {
 				// 展示大图
 				Intent intent = new Intent((MainActivity) context, LargerImageActivity.class);
-				intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY, Constant.FILE_SERVER_BASE + feed.getImageOriginalURL());
+				intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY,
+						Constant.FILE_SERVER_BASE + feed.getImageOriginalURL());
 				((MainActivity) context).startActivity(intent);
 			}
 		});
@@ -427,7 +428,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			holder.btn_liked.setBackgroundResource(R.drawable.feed_button_like_background);
 		}
 
-		renderFavorUserView(holder.like_text, feed);
+		renderFavorUserView(holder.liked_detail, feed);
 		renderCommentView(holder, feed);
 
 	}
@@ -502,7 +503,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 		String html = "<b><a href='" + id + "'>" + nickname + "</a></b>";
 		String text = commentVO.getText();
-		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.list_feed_item_feedback_comment, null);
+		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(context).inflate(
+				R.layout.list_feed_item_feedback_comment, null);
 		TextView t = (TextView) layout.findViewById(R.id.row_feed_textview_comments_item);
 		html = html + " : " + text;
 		WebLinkUtils.setUserLinkClickIntercept((Activity) context, t, html);
@@ -565,7 +567,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 				// 发布人信息
 				Log.d(TAG, "发布人头像：" + resultUser.getAvatar());
 				if (!StringUtils.isEmpty(resultUser.getAvatar())) {
-					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + resultUser.getAvatar(), holder.avatar, options);
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + resultUser.getAvatar(),
+							holder.avatar, options);
 				}
 				Log.d(TAG, "发布人昵称：" + resultUser.getNickname());
 				if (!StringUtils.isEmpty(resultUser.getNickname())) {
@@ -599,7 +602,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 						String liked_num_text = activity.getResources().getString(R.string.liked_num_text);
 						Integer likedNum = result.getFavors().size();
 						sb.append(String.format(liked_num_text, likedNum));
-						WebLinkUtils.setUserLinkIntercept(activity, holder.like_text, sb.toString());
+						WebLinkUtils.setUserLinkIntercept(activity, holder.liked_detail, sb.toString());
 
 						// 是否赞过的图标
 						if (isFavored) {
@@ -630,7 +633,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		String username = "<b><a href='1'>" + nickName + "</a></b>";
 		String text = commentVO.getText();
 
-		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.list_feed_item_feedback_comment, null);
+		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(context).inflate(
+				R.layout.list_feed_item_feedback_comment, null);
 		TextView t = (TextView) layout.findViewById(R.id.row_feed_textview_comments_item);
 		String html = username + " : " + text;
 		WebLinkUtils.setUserLinkClickIntercept((Activity) context, t, html);

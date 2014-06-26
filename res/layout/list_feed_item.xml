@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:orientation="horizontal" 
+  android:id="@+id/list_feed_item"
   android:paddingLeft="10.0dip" 
   android:paddingTop="13.0dip" 
   android:paddingRight="14.0dip" 
