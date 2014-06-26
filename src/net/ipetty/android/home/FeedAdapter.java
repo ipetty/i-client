@@ -13,6 +13,7 @@ import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
 import net.ipetty.android.like.LikeActivity;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
@@ -312,6 +313,16 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		String creatAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(feed.getCreatedOn());
 		// TODO: 日期需要处理为 多少分钟前 多少秒前
 		holder.created_at.setText(creatAt); // 发布时间
+		holder.created_at.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent((MainActivity) context, SimpleFeedActivity.class);
+				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feed.getId());
+				((MainActivity) context).startActivity(intent);
+			}
+		});
 
 		// 发布内容
 		holder.content.setText(feed.getText());

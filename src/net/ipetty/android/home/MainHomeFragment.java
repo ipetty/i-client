@@ -81,7 +81,7 @@ public class MainHomeFragment extends Fragment {
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_COMMENT);
-		// filter.addAction(Constant.BROADCAST_INTENT_IPET_PHOTO_COMMENT);
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_FAVORED);
 		this.getActivity().registerReceiver(broadcastreciver, filter);
 	}
 
@@ -146,14 +146,16 @@ public class MainHomeFragment extends Fragment {
 		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(MainHomeFragment.this.getActivity().getApplicationContext(), getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
+				String label = DateUtils.formatDateTime(MainHomeFragment.this.getActivity().getApplicationContext(),
+						getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
 						| DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				// 刷新数据
-				new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(new PullToRefreshFeedListListener(MainHomeFragment.this.getActivity(), mAdapter, mPullRefreshListView))
-						.execute(getRefreshTime().toString(), "0", pageSize.toString());
+				new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
+						new PullToRefreshFeedListListener(MainHomeFragment.this.getActivity(), mAdapter,
+								mPullRefreshListView)).execute(getRefreshTime().toString(), "0", pageSize.toString());
 				// 重置页号
 				pageNumber = 0;
 				hasMore = true;
@@ -166,8 +168,10 @@ public class MainHomeFragment extends Fragment {
 			public void onLastItemVisible() {
 				// 加载更多
 				if (hasMore) {
-					new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(new LoadMoreFeedListListener(MainHomeFragment.this)).execute(
-							MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(), pageSize.toString());
+					new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
+							new LoadMoreFeedListListener(MainHomeFragment.this)).execute(
+									MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
+									pageSize.toString());
 
 				}
 			}
@@ -180,28 +184,6 @@ public class MainHomeFragment extends Fragment {
 		mAdapter = new FeedAdapter(this.getActivity());
 		actualListView.setAdapter(mAdapter);
 
-	}
-
-	private void loadData() {
-		// 获取UserVO
-		IpetApi api = IpetApi.init(this.getActivity());
-
-		UserApiWithCache.getUserById4Asynchronous(this.getActivity(), api.getCurrUserId(), new DefaultTaskListener<UserVO>(this.getActivity()) {
-			@Override
-			public void onSuccess(UserVO result) {
-				// 设置头像
-				if (StringUtils.isNotEmpty(result.getAvatar())) {
-					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getAvatar(), avatar, options);
-				}
-				// 根据个人信息加载背景
-				if (StringUtils.isNotEmpty(result.getBackground())) {
-					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getBackground(), header_bg, options);
-				}
-
-				new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(new InitFeedListListener(MainHomeFragment.this.getActivity(), mAdapter)).execute(
-						getRefreshTime().toString(), "0", pageSize.toString());
-			}
-		});
 	}
 
 	private void refreshData() {
@@ -223,6 +205,32 @@ public class MainHomeFragment extends Fragment {
 				mAdapter.notifyDataSetChanged();
 			}
 		});
+	}
+
+	private void loadData() {
+		// 获取UserVO
+		IpetApi api = IpetApi.init(this.getActivity());
+
+		UserApiWithCache.getUserById4Asynchronous(this.getActivity(), api.getCurrUserId(), new DefaultTaskListener<UserVO>(this.getActivity()) {
+			@Override
+			public void onSuccess(UserVO result) {
+				// 设置头像
+				if (StringUtils.isNotEmpty(result.getAvatar())) {
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getAvatar(), avatar,
+							options);
+				}
+				// 根据个人信息加载背景
+				if (StringUtils.isNotEmpty(result.getBackground())) {
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getBackground(),
+							header_bg, options);
+				}
+
+				new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
+						new InitFeedListListener(MainHomeFragment.this.getActivity(), mAdapter)).execute(
+								getRefreshTime().toString(), "0", pageSize.toString());
+			}
+		});
+
 	}
 
 	private void initHeaderView(ListView listView) {
@@ -247,7 +255,8 @@ public class MainHomeFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// 修改背景图片
-				headBgDialog = DialogUtils.modPopupDialog(MainHomeFragment.this.getActivity(), head_bg_items, headBgDialog);
+				headBgDialog = DialogUtils.modPopupDialog(MainHomeFragment.this.getActivity(), head_bg_items,
+						headBgDialog);
 				headBgDialog.cancel();
 			}
 		});
@@ -265,7 +274,8 @@ public class MainHomeFragment extends Fragment {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
-			cameraDialog = DialogUtils.bottomPopupDialog(MainHomeFragment.this.getActivity(), Listener, R.array.alert_camera, getString(R.string.camera_title), cameraDialog);
+			cameraDialog = DialogUtils.bottomPopupDialog(MainHomeFragment.this.getActivity(), Listener,
+					R.array.alert_camera, getString(R.string.camera_title), cameraDialog);
 		}
 	};
 
@@ -309,7 +319,9 @@ public class MainHomeFragment extends Fragment {
 
 	private void compressImage(String path) {
 		if (!ImageUtils.isCorrectSize(path)) {
-			Toast.makeText(this.getActivity(), "您选择的图片过小，请大于" + Constant.COMPRESS_IMAGE_MIN_WIDTH + "x" + Constant.COMPRESS_IMAGE_MIN_HEIGHT, Toast.LENGTH_LONG).show();
+			Toast.makeText(this.getActivity(),
+					"您选择的图片过小，请大于" + Constant.COMPRESS_IMAGE_MIN_WIDTH + "x" + Constant.COMPRESS_IMAGE_MIN_HEIGHT,
+					Toast.LENGTH_LONG).show();
 			return;
 		}
 		Intent intent = new Intent(this.getActivity(), FeedPublishActivity.class);
@@ -333,6 +345,11 @@ public class MainHomeFragment extends Fragment {
 	private void updateFeedVO(FeedVO feedVO) {
 		// TODO Auto-generated method stub
 		this.mAdapter.updateFeedVO(feedVO);
+	}
+
+	protected void updateFavor(FeedVO feedVO) {
+		// TODO Auto-generated method stub
+		this.mAdapter.updateFavor(feedVO);
 	}
 
 	@Override
@@ -370,6 +387,12 @@ public class MainHomeFragment extends Fragment {
 				String jsonStr = intent.getStringExtra(Constant.FEEDVO_JSON_SERIALIZABLE);
 				FeedVO feedVO = JSONUtils.fromJSON(jsonStr, FeedVO.class);
 				MainHomeFragment.this.updateFeedVO(feedVO);
+			}
+
+			if (Constant.BROADCAST_INTENT_FEED_FAVORED.equals(action)) {
+				String jsonStr = intent.getStringExtra(Constant.FEEDVO_JSON_SERIALIZABLE);
+				FeedVO feedVO = JSONUtils.fromJSON(jsonStr, FeedVO.class);
+				MainHomeFragment.this.updateFavor(feedVO);
 			}
 		}
 

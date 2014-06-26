@@ -120,6 +120,10 @@
             android:name="net.ipetty.android.setting.SettingActivity"
             android:label="@string/title_activity_setting" >
         </activity>
+       <activity
+            android:name="net.ipetty.android.feed.SimpleFeedActivity"
+            android:label="@string/title_activity_simple_feed" >
+        </activity>
     </application>
 
 </manifest>

@@ -13,11 +13,13 @@ import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.home.LargerImageActivity;
 import net.ipetty.android.like.LikeActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.Favor;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.CommentVO;
 import net.ipetty.vo.FeedFavorVO;
@@ -28,7 +30,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -80,8 +85,14 @@ public class SimpleFeedActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_simple_feed);
 
-		Log.i(TAG, "onCreate");
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_COMMENT);
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_FAVORED);
+		this.registerReceiver(broadcastreciver, filter);
+
+		Log.d(TAG, "onCreate");
 		feedId = this.getIntent().getExtras().getLong(Constant.INTENT_FEED_ID_KEY);
+		Log.d(TAG, feedId + "");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -130,7 +141,15 @@ public class SimpleFeedActivity extends Activity {
 		view.setOnLongClickListener(new ViewOnLongClickListener());
 
 		// 初始化界面操作
-		initDefaultView();
+		//
+		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
+
+			@Override
+			public void onSuccess(FeedVO result) {
+				SimpleFeedActivity.this.feed = result;
+				SimpleFeedActivity.this.initDefaultView();
+			}
+		}).execute(feedId);
 	}
 
 	private class ViewOnLongClickListener implements OnLongClickListener {
@@ -179,7 +198,6 @@ public class SimpleFeedActivity extends Activity {
 
 	private void initDefaultView() {
 		// TODO Auto-generated method stub
-		final FeedVO feed = this.feed;
 
 		// 用户信息
 		final UserVO user = this.getCacheUserById(feed.getCreatedBy());
@@ -214,10 +232,10 @@ public class SimpleFeedActivity extends Activity {
 		String creatAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(feed.getCreatedOn());
 		// TODO: 日期需要处理为 多少分钟前 多少秒前
 		created_at.setText(creatAt); // 发布时间
-
 		// 发布内容
 		content.setText(feed.getText());
 
+		Log.d(TAG, "imgURL" + Constant.FILE_SERVER_BASE + feed.getImageSmallURL());
 		// 图片显示
 		ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(), content_image,
 				options);
@@ -262,10 +280,12 @@ public class SimpleFeedActivity extends Activity {
 						new DefaultTaskListener<FeedVO>(SimpleFeedActivity.this) {
 							@Override
 							public void onSuccess(FeedVO result) {
-								// FeedAdapter.this.notifyDataSetChanged();
-								// TODO: 这里没看懂上面怎样更新liked部分图形的
-								// 重新增加对Favor变化操作 2014/6/21
-								SimpleFeedActivity.this.updateFavor(result);
+
+								Intent intent = new Intent(Constant.BROADCAST_INTENT_FEED_FAVORED);
+								Bundle mBundle = new Bundle();
+								mBundle.putSerializable(Constant.FEEDVO_JSON_SERIALIZABLE, JSONUtils.toJson(result));
+								intent.putExtras(mBundle);
+								this.activity.sendBroadcast(intent);
 							}
 						}).execute(ffvo);
 			}
@@ -300,7 +320,7 @@ public class SimpleFeedActivity extends Activity {
 		// 评论视图区域
 		renderArea();
 		renderFavor();
-		renderCommentView(feed);
+		renderCommentView();
 
 	}
 
@@ -369,14 +389,14 @@ public class SimpleFeedActivity extends Activity {
 		WebLinkUtils.setUserLinkIntercept(this, tv, html.toString());
 	}
 
-	public void renderCommentView(FeedVO feedVO) {
+	public void renderCommentView() {
 		// 评论 总数
 		String commentNumStr = this.getResources().getString(R.string.comment_num_text);
-		Integer commentsNum = feedVO.getCommentCount();
+		Integer commentsNum = feed.getCommentCount();
 		comments_num.setText(String.format(commentNumStr, commentsNum));
 
 		comments_group_list.removeAllViews();
-		for (CommentVO cvo : feedVO.getComments()) {
+		for (CommentVO cvo : feed.getComments()) {
 			comments_group_list.addView(addComment(cvo));
 		}
 
@@ -404,14 +424,48 @@ public class SimpleFeedActivity extends Activity {
 	};
 
 	// updateFavor
-	public void updateFavor(FeedVO result) {
+	public void updateFavor() {
 		// TODO Auto-generated method stub
-		feed.setFavorCount(result.getFavorCount());
-		feed.setFavored(result.isFavored());
-		feed.setFavors(result.getFavors());
-
 		renderArea();
 		renderFavor();
 	}
 
+	private void updateComment() {
+		// TODO Auto-generated method stub
+		renderArea();
+		renderCommentView();
+	}
+
+	private BroadcastReceiver broadcastreciver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			String action = intent.getAction();
+
+			if (Constant.BROADCAST_INTENT_FEED_COMMENT.equals(action)) {
+				String jsonStr = intent.getStringExtra(Constant.FEEDVO_JSON_SERIALIZABLE);
+				FeedVO feedVO = JSONUtils.fromJSON(jsonStr, FeedVO.class);
+				SimpleFeedActivity.this.feed = feedVO;
+				updateComment();
+
+			}
+
+			if (Constant.BROADCAST_INTENT_FEED_FAVORED.equals(action)) {
+				String jsonStr = intent.getStringExtra(Constant.FEEDVO_JSON_SERIALIZABLE);
+				FeedVO feedVO = JSONUtils.fromJSON(jsonStr, FeedVO.class);
+				SimpleFeedActivity.this.feed = feedVO;
+				updateFavor();
+			}
+		}
+
+	};
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.i(TAG, "onDestroy");
+		this.unregisterReceiver(broadcastreciver);
+	}
 }
