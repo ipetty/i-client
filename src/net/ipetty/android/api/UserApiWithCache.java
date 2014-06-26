@@ -93,4 +93,8 @@ public class UserApiWithCache {
 	public static synchronized void updateCache(UserVO user) {
 		cache.put(user);
 	}
+
+	public static synchronized void removeCache(Integer id) {
+		cache.remove(id);
+	}
 }

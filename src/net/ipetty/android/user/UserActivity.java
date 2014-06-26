@@ -37,7 +37,6 @@ import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
 import net.ipetty.android.sdk.task.foundation.ListOptions;
-import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.android.sdk.task.user.UpdateUser;
 import net.ipetty.android.sdk.task.user.UpdateUserAvatar;
 import net.ipetty.vo.OptionGroup;
@@ -95,6 +94,7 @@ public class UserActivity extends BaseActivity {
 
 		// 头像
 		avatar = (ImageView) this.findViewById(R.id.avatar);
+
 		avatar.setOnClickListener(changeAvatarClick);
 
 		// 昵称
@@ -125,11 +125,14 @@ public class UserActivity extends BaseActivity {
 		stateAndRegionEditor = (EditText) this.findViewById(R.id.city);
 
 		// 填充用户信息
-		new GetUserById(UserActivity.this).setListener(new DefaultTaskListener<UserVO>(UserActivity.this) {
+		UserApiWithCache.getUserById4Asynchronous(this, currUserId, new DefaultTaskListener<UserVO>(UserActivity.this) {
 			@Override
 			public void onSuccess(UserVO user) {
 				// 头像
-				// FIXME UserActivity.this.avatar.setImageURI(uri);
+				if (StringUtils.isNotEmpty(user.getAvatar())) {
+					Log.i(TAG, "设置用户头像：" + Constant.FILE_SERVER_BASE + user.getAvatar());
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+				}
 
 				// 昵称
 				UserActivity.this.nicknameEditor.setText(user.getNickname() == null ? "" : user.getNickname());
@@ -162,7 +165,8 @@ public class UserActivity extends BaseActivity {
 				UserActivity.this.stateAndRegionEditor.setText(user.getStateAndRegion() == null ? "" : user
 						.getStateAndRegion());
 			}
-		}).execute(currUserId);
+		});
+
 	}
 
 	/**
@@ -233,12 +237,11 @@ public class UserActivity extends BaseActivity {
 								@Override
 								public void onSuccess(UserVO result) {
 									Toast.makeText(activity, R.string.save_success, Toast.LENGTH_SHORT).show();
+									//更新缓存
 									UserApiWithCache.updateCache(result);
 								}
 							}).execute(user);
 		}
-
-		// TODO 更新缓存
 	};
 
 	public void showCameraDialog(View view) {
@@ -304,7 +307,9 @@ public class UserActivity extends BaseActivity {
 					@Override
 					public void onSuccess(String result) {
 						Log.i(TAG, "updateAvatar.onSuccess:" + result);
-						ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result, avatar, options);
+						UserApiWithCache.removeCache(currUserId);
+						UserVO user = UserApiWithCache.getUserById4Synchronous(UserActivity.this, currUserId);
+						ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
 						UserActivity.this.showMessageForLongTime("更新头像成功");
 					}
 

@@ -1,30 +1,5 @@
 package net.ipetty.android.home;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DeviceUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.ImageUtils;
-import net.ipetty.android.core.util.JSONUtils;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.core.util.PathUtils;
-import net.ipetty.android.feed.FeedPublishActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
-import net.ipetty.android.sdk.task.user.GetUserById;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.FeedVO;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -43,13 +18,34 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DeviceUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.ImageUtils;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.core.util.PathUtils;
+import net.ipetty.android.feed.FeedPublishActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class MainHomeFragment extends Fragment {
 
@@ -102,6 +98,7 @@ public class MainHomeFragment extends Fragment {
 
 		initListView();
 		initCamera();
+		loadData();
 
 	}
 
@@ -117,7 +114,7 @@ public class MainHomeFragment extends Fragment {
 	public void onResume() {
 		Log.i(TAG, "onResume");
 		super.onResume();
-		loadData();
+		refreshData();
 	}
 
 	public void loadMoreForResult(List<FeedVO> result) {
@@ -188,22 +185,44 @@ public class MainHomeFragment extends Fragment {
 	private void loadData() {
 		// 获取UserVO
 		IpetApi api = IpetApi.init(this.getActivity());
-		new GetUserById(this.getActivity()).setListener(new DefaultTaskListener<UserVO>(this.getActivity()) {
+
+		UserApiWithCache.getUserById4Asynchronous(this.getActivity(), api.getCurrUserId(), new DefaultTaskListener<UserVO>(this.getActivity()) {
 			@Override
 			public void onSuccess(UserVO result) {
 				// 设置头像
-				if (StringUtils.isEmpty(result.getAvatar())) {
+				if (StringUtils.isNotEmpty(result.getAvatar())) {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getAvatar(), avatar, options);
 				}
 				// 根据个人信息加载背景
-				if (StringUtils.isEmpty(result.getBackground())) {
+				if (StringUtils.isNotEmpty(result.getBackground())) {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getBackground(), header_bg, options);
 				}
 
 				new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(new InitFeedListListener(MainHomeFragment.this.getActivity(), mAdapter)).execute(
 						getRefreshTime().toString(), "0", pageSize.toString());
 			}
-		}).execute(api.getCurrUserId());
+		});
+	}
+
+	private void refreshData() {
+		// 获取UserVO
+		IpetApi api = IpetApi.init(this.getActivity());
+
+		UserApiWithCache.getUserById4Asynchronous(this.getActivity(), api.getCurrUserId(), new DefaultTaskListener<UserVO>(this.getActivity()) {
+			@Override
+			public void onSuccess(UserVO result) {
+				// 设置头像
+				if (StringUtils.isNotEmpty(result.getAvatar())) {
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getAvatar(), avatar, options);
+				}
+				// 根据个人信息加载背景
+				if (StringUtils.isNotEmpty(result.getBackground())) {
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getBackground(), header_bg, options);
+				}
+
+				mAdapter.notifyDataSetChanged();
+			}
+		});
 	}
 
 	private void initHeaderView(ListView listView) {
@@ -245,7 +264,7 @@ public class MainHomeFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
+			OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
 			cameraDialog = DialogUtils.bottomPopupDialog(MainHomeFragment.this.getActivity(), Listener, R.array.alert_camera, getString(R.string.camera_title), cameraDialog);
 		}
 	};
