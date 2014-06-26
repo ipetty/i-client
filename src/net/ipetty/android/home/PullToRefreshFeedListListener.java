@@ -18,26 +18,34 @@ import net.ipetty.vo.FeedVO;
  */
 public class PullToRefreshFeedListListener extends DefaultTaskListener<List<FeedVO>> {
 
-    private final static String TAG = PullToRefreshFeedListListener.class.getSimpleName();
-    private final FeedAdapter adapter;
-    private final PullToRefreshListView pullToRefreshListView;
+	private final static String TAG = PullToRefreshFeedListListener.class.getSimpleName();
+	private final FeedAdapter adapter;
+	private final PullToRefreshListView pullToRefreshListView;
 
-    //下接刷新
-    public PullToRefreshFeedListListener(Activity activity, FeedAdapter adapter, PullToRefreshListView pullToRefreshListView) {
-        super(activity, "正在刷新...");
-        this.adapter = adapter;
-        this.pullToRefreshListView = pullToRefreshListView;
-    }
+	//下接刷新
+	public PullToRefreshFeedListListener(Activity activity, FeedAdapter adapter, PullToRefreshListView pullToRefreshListView) {
+		super(activity, "正在刷新...");
+		this.adapter = adapter;
+		this.pullToRefreshListView = pullToRefreshListView;
+	}
 
-    @Override
-    public void onSuccess(List<FeedVO> result) {
-        Log.d(TAG, "onSuccess:" + result.size());
-        adapter.getList().clear();
-        adapter.getList().addAll(result);
-        adapter.notifyDataSetChanged();
-        if (null != pullToRefreshListView) {
-            pullToRefreshListView.onRefreshComplete();
-        }
-    }
+	@Override
+	public void onSuccess(List<FeedVO> result) {
+		Log.d(TAG, "onSuccess:" + result.size());
+		adapter.getList().clear();
+		adapter.getList().addAll(result);
+		adapter.notifyDataSetChanged();
+		if (null != pullToRefreshListView) {
+			pullToRefreshListView.onRefreshComplete();
+		}
+	}
+
+	@Override
+	public void onError(Throwable ex) {
+		super.onError(ex);
+		if (null != pullToRefreshListView) {
+			pullToRefreshListView.onRefreshComplete();
+		}
+	}
 
 }
