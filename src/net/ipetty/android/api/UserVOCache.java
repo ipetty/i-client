@@ -16,42 +16,29 @@ import net.ipetty.vo.UserVO;
  */
 public class UserVOCache {
 
-    private final Map<Integer, UserVOCacheEntry> data;
-    private final Integer expireIn = 60 * 1000; //过期时间(毫秒)
+	private final Map<Integer, UserVOCacheEntry> data;
 
-    public UserVOCache(int maxNum) {
-        data = Collections.synchronizedMap(new LRULinkedHashMap<Integer, UserVOCacheEntry>(maxNum));
-    }
+	public UserVOCache(int maxNum) {
+		data = Collections.synchronizedMap(new LRULinkedHashMap<Integer, UserVOCacheEntry>(maxNum));
+	}
 
-    public void put(UserVO user) {
-        //不重复更新
-        if (data.containsKey(user.getId())) {
-            return;
-        }
+	public void put(UserVO user) {
+		UserVOCacheEntry entry = new UserVOCacheEntry();
+		entry.setId(user.getId());
+		entry.setData(user);
+		data.put(user.getId(), entry);
+	}
 
-        UserVOCacheEntry entry = new UserVOCacheEntry();
-        entry.setId(user.getId());
-        entry.setData(user);
-        entry.setExpireOn(System.currentTimeMillis() + expireIn);
-        data.put(user.getId(), entry);
-    }
+	public UserVO get(Integer id) {
+		//有缓存
+		if (data.containsKey(id)) {
+			UserVOCacheEntry entry = data.get(id);
+			return entry.getData();
+		}
+		return null;
+	}
 
-    public UserVO get(Integer id) {
-        //有缓存
-        if (data.containsKey(id)) {
-            UserVOCacheEntry entry = data.get(id);
-            //已超时
-            if (System.currentTimeMillis() > entry.getExpireOn()) {
-                data.remove(id);
-                return null;
-            } else {
-                return entry.getData();
-            }
-        }
-        return null;
-    }
-
-    public void remove(Integer id) {
-        data.remove(id);
-    }
+	public void remove(Integer id) {
+		data.remove(id);
+	}
 }
