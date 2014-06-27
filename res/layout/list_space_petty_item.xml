@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_space_petty_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/list_space_petty_item">
+    android:orientation="vertical" >
 
-    <include layout="@layout/horizontal_divider"/>
+    <include layout="@layout/horizontal_divider" />
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="96dp" 
-        android:background="@color/color_item_bg">
+        android:layout_height="96dp"
+        android:background="@color/color_item_bg" >
 
         <FrameLayout
             android:id="@+id/frameLayout"
@@ -18,7 +19,9 @@
             android:layout_height="96dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true" >
-			<include layout="@layout/vertical_divider"/>
+
+            <include layout="@layout/vertical_divider" />
+
             <ImageView
                 android:id="@+id/pet_avatar"
                 android:layout_width="72dp"
@@ -37,155 +40,157 @@
             android:layout_toLeftOf="@+id/frameLayout"
             android:orientation="vertical" >
 
-            
-         <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical" >
-         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="46dp"
-            android:gravity="center_vertical"
-            android:background="@color/color_item_bg" >
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/pet_name"
-                android:textColor="@color/text_black"
-                android:textSize="16sp" />
+                android:orientation="vertical" >
 
-          	<TextView
-				    android:id="@+id/pet_name"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="16dp"
-                	android:layout_marginRight="16dp"
-                	android:layout_weight="1.0"
-               		 android:background="@null"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="小旺旺"
-				    android:textSize="16sp" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="46dp"
+                    android:background="@color/color_item_bg"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:text="@string/pet_name"
+                        android:textColor="@color/text_black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/pet_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1.0"
+                        android:background="@null"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"
+                        android:textColor="@color/title_gray"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_divider" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="46dp"
+                    android:background="@color/color_item_bg"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:text="@string/pet_gender"
+                        android:textColor="@color/text_black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/pet_sex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1.0"
+                        android:background="@null"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"
+                        android:textColor="@color/title_gray"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-            <include layout="@layout/horizontal_divider"/>
-       <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="46dp"
-            android:gravity="center_vertical"
-            android:background="@color/color_item_bg" >
+    </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/pet_gender"
-                android:textColor="@color/text_black"
-                android:textSize="16sp" />
-
-          	<TextView
-				    android:id="@+id/pet_sex"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="16dp"
-                	android:layout_marginRight="16dp"
-                	android:layout_weight="1.0"
-               		 android:background="@null"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="男生"
-				    android:textSize="16sp" />
-        </LinearLayout>
-	</LinearLayout>
-	</LinearLayout>
-    </RelativeLayout>	 
-      <include layout="@layout/horizontal_divider"/>
+    <include layout="@layout/horizontal_divider" />
 
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="46dp"
+        android:background="@color/color_item_bg"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/pet_birthday"
+            android:textColor="@color/text_black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/pet_birthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1.0"
+            android:background="@null"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="@color/title_gray"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <include layout="@layout/horizontal_divider" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="46dp"
+        android:background="@color/color_item_bg"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/pet_family"
+            android:textColor="@color/text_black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/pet_family"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1.0"
+            android:background="@null"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="@color/title_gray"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <include layout="@layout/horizontal_divider" />
+
+    <LinearLayout
+        android:id="@+id/pet_edit_view"
+        android:layout_width="fill_parent"
+        android:layout_height="46dp"
+        android:layout_gravity="center"
+        android:background="@drawable/list_color_item_bg"
+        android:gravity="center_vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/pet_edit"
             android:layout_width="fill_parent"
-            android:layout_height="46dp"
-            android:gravity="center_vertical"
-            android:background="@color/color_item_bg" >
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/pet_edit"
+            android:textColor="@color/link_text" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="生日"
-                android:textColor="@color/text_black"
-                android:textSize="16sp" />
+    <include layout="@layout/horizontal_divider" />
 
-          	<TextView
-				    android:id="@+id/pet_birthday"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="16dp"
-                	android:layout_marginRight="16dp"
-                	android:layout_weight="1.0"
-               		 android:background="@null"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="2010-11-11"
-				    android:textSize="16sp" />
-        </LinearLayout>
-        <include layout="@layout/horizontal_divider"/>
-        
-         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="46dp"
-            android:gravity="center_vertical"
-            android:background="@color/color_item_bg" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/pet_family"
-                android:textColor="@color/text_black"
-                android:textSize="16sp" />
-
-          	<TextView
-				    android:id="@+id/pet_family"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="16dp"
-                	android:layout_marginRight="16dp"
-                	android:layout_weight="1.0"
-               		 android:background="@null"
-				    android:layout_gravity="center"
-				    android:textColor="@color/title_gray" 
-				    android:singleLine="true"
-				    android:ellipsize="marquee"
-				    android:text="汪星人"
-				    android:textSize="16sp" />
-        </LinearLayout>
-        <include layout="@layout/horizontal_divider"/>
-        
-            <LinearLayout
-                android:id="@+id/pet_edit_view"
-                android:layout_width="fill_parent"
-                android:layout_height="46dp"
-                android:layout_gravity="center"
-                android:background="@drawable/list_color_item_bg"
-                android:gravity="center_vertical" 
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/pet_edit"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/link_text"
-                    android:text="@string/pet_edit" />
-
-          	</LinearLayout>
-          	<include layout="@layout/horizontal_divider"/>
 </LinearLayout>

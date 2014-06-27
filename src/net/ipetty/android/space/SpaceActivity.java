@@ -1,5 +1,8 @@
 package net.ipetty.android.space;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.bonuspoint.BonusPointActivity;
@@ -12,14 +15,21 @@ import net.ipetty.android.fans.FansActivity;
 import net.ipetty.android.follow.FollowsActivity;
 import net.ipetty.android.petty.PettyActivity;
 import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
+import net.ipetty.android.sdk.task.foundation.SetOptionLabelTaskListener;
+import net.ipetty.android.sdk.task.pet.ListPetsByUserId;
 import net.ipetty.android.sdk.task.user.GetUserStatisticsByUserId;
 import net.ipetty.android.sdk.task.user.IsFollow;
 import net.ipetty.android.user.UserActivity;
+import net.ipetty.vo.OptionGroup;
+import net.ipetty.vo.PetVO;
 import net.ipetty.vo.UserStatisticsVO;
 import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,9 +48,16 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class SpaceActivity extends Activity {
 
 	public final static String TAG = SpaceActivity.class.getSimpleName();
+
+	@SuppressLint("SimpleDateFormat")
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 	private Integer userId;
 	private Integer currUserId;
 	private Boolean isCurrentUser;
+
+	private Integer petId;
+
 	private ViewFlipper viewFlipper;
 	private View space_petty_view;
 	private GridView space_photo_grid;
@@ -104,18 +121,17 @@ public class SpaceActivity extends Activity {
 
 		}
 
-		// TODO:用户统计信息
+		// 用户统计信息
 		feed_num_text = (TextView) this.findViewById(R.id.feed_num_text);
 		follow_num_text = (TextView) this.findViewById(R.id.follow_num_text);
 		fan_num_text = (TextView) this.findViewById(R.id.fan_num_text);
 
 		new GetUserStatisticsByUserId(this).setListener(new DefaultTaskListener<UserStatisticsVO>(SpaceActivity.this) {
 			@Override
-			public void onSuccess(UserStatisticsVO result) {
-				feed_num_text.setText(String.valueOf(result.getFeedNum()));
-				follow_num_text.setText(String.valueOf(result.getFollowerNum()));
-				fan_num_text.setText(String.valueOf(result.getFollowerNum()));
-
+			public void onSuccess(UserStatisticsVO userStatistics) {
+				feed_num_text.setText(String.valueOf(userStatistics.getFeedNum()));
+				follow_num_text.setText(String.valueOf(userStatistics.getFollowerNum()));
+				fan_num_text.setText(String.valueOf(userStatistics.getFollowerNum()));
 			}
 		}).execute(this.userId);
 
@@ -171,20 +187,69 @@ public class SpaceActivity extends Activity {
 		space_photo_layout_btn.setOnClickListener(new TabClickListener(1));
 		space_feed_layout_btn.setOnClickListener(new TabClickListener(2));
 
+		/* ==== init space_petty_view start ==== */
 		space_petty_view = this.findViewById(R.id.list_space_petty_item);
-		View pet_edit_view = space_petty_view.findViewById(R.id.pet_edit_view);
-
-		if (isCurrentUser) {
-			pet_edit_view.setVisibility(View.VISIBLE);
-			pet_edit_view.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(SpaceActivity.this, PettyActivity.class);
-					// intent.putExtra("id", SpaceActivity.this.currUserId);
-					startActivity(intent);
+		new ListPetsByUserId(SpaceActivity.this).setListener(new DefaultTaskListener<List<PetVO>>(SpaceActivity.this) {
+			@Override
+			public void onSuccess(List<PetVO> pets) {
+				if (CollectionUtils.isEmpty(pets)) {
+					// TODO 无宠物情况下的展现
+					return;
 				}
-			});
-		}
+
+				// TODO 多个宠物的展现
+
+				// 只展现一个宠物
+				PetVO pet = pets.get(0);
+
+				// FIXME 多个宠物时，目前这种赋值方法明显是错误的
+				SpaceActivity.this.petId = pet.getId();
+
+				ImageView petAvatar = (ImageView) space_petty_view.findViewById(R.id.pet_avatar);
+				if (StringUtils.isNotBlank(pet.getAvatar())) {
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + pet.getAvatar(), petAvatar,
+							options);
+				}
+
+				TextView petName = (TextView) space_petty_view.findViewById(R.id.pet_name);
+				petName.setText(pet.getNickname());
+
+				TextView petGender = (TextView) space_petty_view.findViewById(R.id.pet_sex);
+				// TODO 缓存OptionValueLabelMap
+				if (StringUtils.isNotBlank(pet.getGender())) {
+					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
+							new SetOptionLabelTaskListener(SpaceActivity.this, petGender, pet.getGender())).execute(
+							OptionGroup.PET_GENDER);
+				}
+
+				TextView petBirthday = (TextView) space_petty_view.findViewById(R.id.pet_birthday);
+				if (pet.getBirthday() != null) {
+					petBirthday.setText(dateFormat.format(pet.getBirthday()));
+				}
+
+				TextView petFamily = (TextView) space_petty_view.findViewById(R.id.pet_family);
+				// TODO 缓存OptionValueLabelMap
+				if (StringUtils.isNotBlank(pet.getFamily())) {
+					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
+							new SetOptionLabelTaskListener(SpaceActivity.this, petFamily, pet.getFamily())).execute(
+							OptionGroup.PET_FAMILY);
+				}
+
+				if (isCurrentUser) {
+					View pet_edit_view = space_petty_view.findViewById(R.id.pet_edit_view);
+					pet_edit_view.setVisibility(View.VISIBLE);
+					pet_edit_view.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(SpaceActivity.this, PettyActivity.class);
+							intent.putExtra(Constant.INTENT_PET_ID_KEY, SpaceActivity.this.petId);
+							startActivity(intent);
+						}
+					});
+				}
+			}
+		}).execute(SpaceActivity.this.userId);
+		/* ==== init space_petty_view end ==== */
 
 		// 图形
 		View space_photo_layout = this.findViewById(R.id.space_photo_layout);
