@@ -59,23 +59,27 @@ public class UserActivity extends BaseActivity {
 
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 
+	private TextView title; // 标题
+	private ImageView backButton; // 返回
+	private TextView saveButton; // 保存
+
 	private ImageView avatar; // 头像
 	private String mImageName = "cacheHead.jpg"; // 默认头像值
 	private Dialog changeAvatarDialog; // 更换头像对话框
 
-	private EditText nicknameEditor; // 昵称
-	private TextView emailText; // 邮箱地址
+	private EditText nickname; // 昵称
+	private TextView email; // 邮箱地址
 
-	private EditText signatureEditor; // 个性签名
+	private EditText signature; // 个性签名
 
 	private Dialog genderDialog; // 性别选择对话框
-	private EditText genderEditor; // 性别展现
-	private String gender; // 性别传值
+	private EditText gender; // 性别展现
+	private String genderValue; // 性别传值
 
 	private Dialog birthdayDialog; // 生日选择对话框
 	private EditText birthday; // 生日
 
-	private EditText stateAndRegionEditor; // 地区
+	private EditText stateAndRegion; // 地区
 
 	private static final int REQUEST_CODE_PHOTORESOULT = 20;
 
@@ -87,31 +91,30 @@ public class UserActivity extends BaseActivity {
 		currUserId = IpetApi.init(this).getCurrUserId();
 
 		// Title & Back
-		TextView titleText = (TextView) this.findViewById(R.id.action_bar_title);
-		titleText.setText(this.getResources().getString(R.string.title_activity_user));
-		ImageView backButton = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		title = (TextView) this.findViewById(R.id.action_bar_title);
+		title.setText(this.getResources().getString(R.string.title_activity_user));
+		backButton = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		backButton.setOnClickListener(new BackClickListener(this));
 
 		// 保存
-		TextView saveButton = (TextView) this.findViewById(R.id.save);
+		saveButton = (TextView) this.findViewById(R.id.save);
 		saveButton.setOnClickListener(saveClick);
 
 		// 头像
 		avatar = (ImageView) this.findViewById(R.id.avatar);
-
 		avatar.setOnClickListener(changeAvatarClick);
 
 		// 昵称
-		nicknameEditor = (EditText) this.findViewById(R.id.nickname);
+		nickname = (EditText) this.findViewById(R.id.nickname);
 
 		// 邮箱地址
-		emailText = (TextView) this.findViewById(R.id.email);
+		email = (TextView) this.findViewById(R.id.email);
 
 		// 个性签名
-		signatureEditor = (EditText) this.findViewById(R.id.description);
+		signature = (EditText) this.findViewById(R.id.description);
 
 		// 性别
-		genderEditor = (EditText) this.findViewById(R.id.gender);
+		gender = (EditText) this.findViewById(R.id.gender);
 		new ListOptions(UserActivity.this).setListener(new ListOptionsTaskListener(UserActivity.this)).execute(
 				OptionGroup.HUMAN_GENDER);
 
@@ -126,7 +129,7 @@ public class UserActivity extends BaseActivity {
 		});
 
 		// 地区
-		stateAndRegionEditor = (EditText) this.findViewById(R.id.city);
+		stateAndRegion = (EditText) this.findViewById(R.id.city);
 
 		// 填充用户信息
 		UserApiWithCache.getUserById4Asynchronous(this, currUserId, new DefaultTaskListener<UserVO>(UserActivity.this) {
@@ -140,23 +143,23 @@ public class UserActivity extends BaseActivity {
 				}
 
 				// 昵称
-				UserActivity.this.nicknameEditor.setText(user.getNickname() == null ? "" : user.getNickname());
+				UserActivity.this.nickname.setText(user.getNickname() == null ? "" : user.getNickname());
 
 				// 邮箱地址
-				UserActivity.this.emailText.setText(user.getEmail() == null ? "" : user.getEmail());
+				UserActivity.this.email.setText(user.getEmail() == null ? "" : user.getEmail());
 
 				// 个性签名
-				UserActivity.this.signatureEditor.setText(user.getSignature() == null ? "" : user.getSignature());
+				UserActivity.this.signature.setText(user.getSignature() == null ? "" : user.getSignature());
 
 				// 性别
 				if (StringUtils.isNotBlank(user.getGender())) {
-					UserActivity.this.setGender(user.getGender());
+					UserActivity.this.setGenderValue(user.getGender());
 					new GetOptionValueLabelMap(UserActivity.this).setListener(
 							new DefaultTaskListener<Map<String, String>>(UserActivity.this) {
 								@Override
 								public void onSuccess(Map<String, String> optionValueLabelMap) {
-									String label = optionValueLabelMap.get(UserActivity.this.gender);
-									UserActivity.this.genderEditor.setText(label);
+									String label = optionValueLabelMap.get(UserActivity.this.genderValue);
+									UserActivity.this.gender.setText(label);
 								}
 							}).execute(OptionGroup.HUMAN_GENDER);
 				}
@@ -167,7 +170,7 @@ public class UserActivity extends BaseActivity {
 				}
 
 				// 地区
-				UserActivity.this.stateAndRegionEditor.setText(user.getStateAndRegion() == null ? "" : user
+				UserActivity.this.stateAndRegion.setText(user.getStateAndRegion() == null ? "" : user
 						.getStateAndRegion());
 			}
 		});
@@ -180,7 +183,6 @@ public class UserActivity extends BaseActivity {
 	private OnClickListener changeAvatarClick = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			// TODO Auto-generated method stub
 			showCameraDialog(view);
 		}
 	};
@@ -208,22 +210,22 @@ public class UserActivity extends BaseActivity {
 			user.setId(UserActivity.this.currUserId);
 
 			// nickname
-			String nickname = UserActivity.this.nicknameEditor.getText().toString();
+			String nickname = UserActivity.this.nickname.getText().toString();
 			user.setNickname(nickname);
 			if (StringUtils.isEmpty(nickname)) {
-				UserActivity.this.nicknameEditor.requestFocus();
+				UserActivity.this.nickname.requestFocus();
 				Toast.makeText(UserActivity.this, R.string.nickname_empty, Toast.LENGTH_SHORT).show();
 				return;
 			}
 
 			// gender
-			user.setGender(UserActivity.this.gender);
+			user.setGender(UserActivity.this.genderValue);
 
 			// stateAndRegion
-			user.setStateAndRegion(UserActivity.this.stateAndRegionEditor.getText().toString());
+			user.setStateAndRegion(UserActivity.this.stateAndRegion.getText().toString());
 
 			// signature
-			user.setSignature(UserActivity.this.signatureEditor.getText().toString());
+			user.setSignature(UserActivity.this.signature.getText().toString());
 
 			// birthday
 			String birthday = UserActivity.this.birthday.getText().toString();
@@ -258,7 +260,6 @@ public class UserActivity extends BaseActivity {
 	private final OnClickListener takePhotoClick = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			// TODO Auto-generated method stub
 			DeviceUtils.takePicture(UserActivity.this, PathUtils.getCarmerDir(), UserActivity.this.mImageName);
 			UserActivity.this.changeAvatarDialog.cancel();
 		}
@@ -267,7 +268,6 @@ public class UserActivity extends BaseActivity {
 	private final OnClickListener pickPhotoClick = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			// TODO Auto-generated method stub
 			DeviceUtils.chooserSysPics(UserActivity.this);
 			UserActivity.this.changeAvatarDialog.cancel();
 		}
@@ -348,12 +348,12 @@ public class UserActivity extends BaseActivity {
 		return genderDialog;
 	}
 
-	public EditText getGenderEditor() {
-		return genderEditor;
+	public EditText getGender() {
+		return gender;
 	}
 
-	public void setGender(String gender) {
-		this.gender = gender;
+	public void setGenderValue(String gender) {
+		this.genderValue = gender;
 	}
 
 }

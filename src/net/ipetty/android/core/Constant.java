@@ -12,6 +12,7 @@ public class Constant {
 	// public static final String API_SERVER_BASE =
 	// "http://192.168.253.1:8080/api";
 
+
 	public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";
 	public final static String INTENT_PHOTO_OUT_PATH_KEY = "publish_photo_out_path";
 	public final static String INTENT_IMAGE_ORIGINAL_KEY = "url";

@@ -20,7 +20,7 @@ public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
 	private UserActivity userActivity;
 	private Dialog genderDialog;
 	private List<ModDialogItem> dialogItems;
-	private EditText genderEditor;
+	private EditText gender;
 
 	public ListOptionsTaskListener(Activity activity) {
 		super(activity);
@@ -29,7 +29,7 @@ public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
 	@Override
 	public void onSuccess(List<Option> result) {
 		userActivity = (UserActivity) super.activity;
-		genderEditor = userActivity.getGenderEditor();
+		gender = userActivity.getGender();
 		genderDialog = userActivity.getGenderDialog();
 
 		dialogItems = new ArrayList<ModDialogItem>();
@@ -37,7 +37,7 @@ public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
 			dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
 		}
 
-		genderEditor.setOnClickListener(new OnClickListener() {
+		gender.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				genderDialog = DialogUtils.modPopupDialog(userActivity, dialogItems, genderDialog);
@@ -50,8 +50,8 @@ public class ListOptionsTaskListener extends DefaultTaskListener<List<Option>> {
 		public void onClick(View view) {
 			String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
 			String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
-			userActivity.getGenderEditor().setText(label);
-			userActivity.setGender(value);
+			userActivity.getGender().setText(label);
+			userActivity.setGenderValue(value);
 			genderDialog.cancel();
 		}
 	};
