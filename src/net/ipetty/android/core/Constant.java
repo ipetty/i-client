@@ -3,14 +3,10 @@ package net.ipetty.android.core;
 public class Constant {
 
 	// 文件服务器地址
-	public static final String FILE_SERVER_BASE = "http://58.247.70.212";
-	// public static final String FILE_SERVER_BASE =
-	// "http://192.168.253.1:8080";
+	public static final String FILE_SERVER_BASE = "http://api.ipetty.tk";
 
 	// API服务器地址
-	public static final String API_SERVER_BASE = "http://58.247.70.212/api";
-	// public static final String API_SERVER_BASE =
-	// "http://192.168.253.1:8080/api";
+	public static final String API_SERVER_BASE = "http://api.ipetty.tk/api";
 
 	public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";
 	public final static String INTENT_PHOTO_OUT_PATH_KEY = "publish_photo_out_path";

@@ -4,11 +4,13 @@ import net.ipetty.android.sdk.impl.ActivityApiImpl;
 import net.ipetty.android.sdk.impl.FeedApiImpl;
 import net.ipetty.android.sdk.impl.FeedbackApiImpl;
 import net.ipetty.android.sdk.impl.FoundationApiImpl;
+import net.ipetty.android.sdk.impl.PetApiImpl;
 import net.ipetty.android.sdk.impl.UserApiImpl;
 import net.ipetty.sdk.ActivityApi;
 import net.ipetty.sdk.FeedApi;
 import net.ipetty.sdk.FeedbackApi;
 import net.ipetty.sdk.FoundationApi;
+import net.ipetty.sdk.PetApi;
 import net.ipetty.sdk.UserApi;
 import android.content.Context;
 
@@ -22,6 +24,7 @@ public class IpetApi extends ApiBase {
 	private static IpetApi instance;
 
 	private final UserApi userApi;
+	private final PetApi petApi;
 	private final FeedApi feedApi;
 	private final ActivityApi activityApi;
 	private final FeedbackApi feedbackApi;
@@ -30,6 +33,7 @@ public class IpetApi extends ApiBase {
 	private IpetApi(Context context) {
 		super(context);
 		userApi = new UserApiImpl(context);
+		petApi = new PetApiImpl(context);
 		feedApi = new FeedApiImpl(context);
 		activityApi = new ActivityApiImpl(context);
 		feedbackApi = new FeedbackApiImpl(context);
@@ -45,6 +49,10 @@ public class IpetApi extends ApiBase {
 
 	public UserApi getUserApi() {
 		return userApi;
+	}
+
+	public PetApi getPetApi() {
+		return petApi;
 	}
 
 	public FeedApi getFeedApi() {
