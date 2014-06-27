@@ -546,6 +546,12 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		this.notifyDataSetChanged();
 	}
 
+	public void prependFeedVO(FeedVO feedVO) {
+		// TODO Auto-generated method stub
+		this.list.add(0, feedVO);
+		this.notifyDataSetChanged();
+	}
+
 	// TODO: 这里的代码暂时不使用~
 	// 需要异步加载的内容
 	public void asynLoad(final Activity activity, final ViewHolder holder, final FeedVO vo) {

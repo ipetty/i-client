@@ -21,10 +21,8 @@ public class WebLinkUtils {
 		Log.i(TAG, "length" + urls.length);
 		SpannableStringBuilder spannable = new SpannableStringBuilder(sp);
 		for (URLSpan url : urls) {
-			Log.i(TAG, "url" + url.getURL());
-			Log.i(TAG, "start" + sp.getSpanStart(url));
-			Log.i(TAG, "end" + sp.getSpanEnd(url));
-			spannable.setSpan(new UserURLSpan(activity, Integer.valueOf(url.getURL().toString())), sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+			spannable.setSpan(new UserURLSpan(activity, Integer.valueOf(url.getURL().toString())),
+					sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 		}
 		tv.setText(spannable);
 	}

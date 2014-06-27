@@ -1,5 +1,6 @@
 package net.ipetty.android.core.ui;
 
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.space.SpaceActivity;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,6 +26,7 @@ public class UserURLSpan extends ClickableSpan {
 	public void onClick(View widget) {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(activity, SpaceActivity.class);
+		intent.putExtra(Constant.INTENT_USER_ID_KEY, userId);
 		activity.startActivity(intent);
 	}
 

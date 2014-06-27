@@ -5,27 +5,37 @@
  */
 package net.ipetty.android.feed;
 
-import android.app.Activity;
-import android.util.Log;
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.vo.FeedVO;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 
 /**
- *
+ * 
  * @author yneos
  */
 public class PublishListener extends DefaultTaskListener<FeedVO> {
 
-    private final static String TAG = PublishListener.class.getSimpleName();
+	private final static String TAG = PublishListener.class.getSimpleName();
 
-    public PublishListener(Activity activity) {
-        super(activity, "正在发布...");
-    }
+	public PublishListener(Activity activity) {
+		super(activity, "正在发布...");
+	}
 
-    @Override
-    public void onSuccess(FeedVO result) {
-        Log.d(TAG, "onSuccess");
-        activity.finish();
-    }
+	@Override
+	public void onSuccess(FeedVO result) {
+		Log.d(TAG, "onSuccess");
+		Intent intent = new Intent(Constant.BROADCAST_INTENT_FEED_PUBLISH);
+		Bundle mBundle = new Bundle();
+		mBundle.putString(Constant.FEEDVO_JSON_SERIALIZABLE, JSONUtils.toJson(result));
+		intent.putExtras(mBundle);
+		activity.sendBroadcast(intent);
+		Log.d(TAG, "send publish");
+		activity.finish();
+	}
 
 }

@@ -103,6 +103,8 @@ public class SimpleFeedActivity extends Activity {
 		shareItems = new ModDialogItem(null, getResources().getString(R.string.item_share), shareOnClick);
 		delItems = new ModDialogItem(null, getResources().getString(R.string.item_delete), delOnClick);
 
+		View item_horizontal_divider = this.findViewById(R.id.horizontal_divider);
+		item_horizontal_divider.setVisibility(View.GONE);
 		initView();
 	}
 
@@ -147,6 +149,8 @@ public class SimpleFeedActivity extends Activity {
 			@Override
 			public void onSuccess(FeedVO result) {
 				SimpleFeedActivity.this.feed = result;
+				Log.d(TAG, "FAVER" + result.isFavored());
+
 				SimpleFeedActivity.this.initDefaultView();
 			}
 		}).execute(feedId);

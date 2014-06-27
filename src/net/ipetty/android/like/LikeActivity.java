@@ -48,19 +48,21 @@ public class LikeActivity extends BaseActivity {
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-				new GetFeedById(LikeActivity.this).setListener(new DefaultTaskListener<FeedVO>(LikeActivity.this, "刷新中") {
-					@Override
-					public void onSuccess(FeedVO result) {
-						adapter.setList(result.getFavors());
-						adapter.notifyDataSetChanged();
-						listView.onRefreshComplete();
-					}
-				}).execute(feedId);
+				new GetFeedById(LikeActivity.this).setListener(
+						new DefaultTaskListener<FeedVO>(LikeActivity.this, "刷新中") {
+							@Override
+							public void onSuccess(FeedVO result) {
+								adapter.setList(result.getFavors());
+								adapter.notifyDataSetChanged();
+								listView.onRefreshComplete();
+							}
+						}).execute(feedId);
 
 			}
 		});
@@ -78,7 +80,10 @@ public class LikeActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
+				long userId = id;
+				Log.d(TAG, "id->" + id);
 				Intent intent = new Intent(LikeActivity.this, SpaceActivity.class);
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, (int) userId);
 				startActivity(intent);
 			}
 		});
