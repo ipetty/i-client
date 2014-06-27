@@ -69,7 +69,7 @@ public class PettyActivity extends BaseActivity {
 	private TextView saveButton; // 保存
 
 	private ImageView avatar; // 头像
-	private String mImageName = "cacheHead.jpg"; // 默认头像值
+	private String mImageName = "cachePetHead.jpg"; // 默认头像值
 	private Dialog changeAvatarDialog; // 更换头像对话框
 
 	private EditText nickname; // 昵称
