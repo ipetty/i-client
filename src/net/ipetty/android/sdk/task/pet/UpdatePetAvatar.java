@@ -18,7 +18,7 @@ public class UpdatePetAvatar extends Task<String, String> {
 
 	@Override
 	protected String myDoInBackground(String... args) {
-		return IpetApi.init(activity).getUserApi().updateAvatar(args[0]);
+		return IpetApi.init(activity).getPetApi().updateAvatar(args[0], args[1]);
 	}
 
 }

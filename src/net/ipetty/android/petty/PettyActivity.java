@@ -6,10 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.BackClickListener;
@@ -21,13 +19,13 @@ import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
 import net.ipetty.android.sdk.task.foundation.ListOptions;
+import net.ipetty.android.sdk.task.foundation.SetOptionLabelTaskListener;
 import net.ipetty.android.sdk.task.pet.GetPetById;
 import net.ipetty.android.sdk.task.pet.UpdatePet;
-import net.ipetty.android.sdk.task.user.UpdateUserAvatar;
+import net.ipetty.android.sdk.task.pet.UpdatePetAvatar;
 import net.ipetty.vo.Option;
 import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.PetVO;
-import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -62,7 +60,6 @@ public class PettyActivity extends BaseActivity {
 	@SuppressLint("SimpleDateFormat")
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	private Integer currUserId;
 	private Integer petId;
 
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
@@ -135,48 +132,36 @@ public class PettyActivity extends BaseActivity {
 		// TODO 从缓存中获取宠物信息
 		new GetPetById(PettyActivity.this).setListener(new DefaultTaskListener<PetVO>(PettyActivity.this) {
 			@Override
-			public void onSuccess(PetVO user) {
+			public void onSuccess(PetVO pet) {
 				// 头像
-				if (StringUtils.isNotEmpty(user.getAvatar())) {
-					Log.i(TAG, "设置用户头像：" + Constant.FILE_SERVER_BASE + user.getAvatar());
-					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
-							options);
+				if (StringUtils.isNotBlank(pet.getAvatar())) {
+					ImageLoader.getInstance()
+							.displayImage(Constant.FILE_SERVER_BASE + pet.getAvatar(), avatar, options);
 				}
 
 				// 昵称
-				PettyActivity.this.nickname.setText(user.getNickname() == null ? "" : user.getNickname());
+				PettyActivity.this.nickname.setText(pet.getNickname() == null ? "" : pet.getNickname());
 
 				// 性别
-				if (StringUtils.isNotBlank(user.getGender())) {
-					PettyActivity.this.genderValue = user.getGender();
+				if (StringUtils.isNotBlank(pet.getGender())) {
+					PettyActivity.this.genderValue = pet.getGender();
 					new GetOptionValueLabelMap(PettyActivity.this).setListener(
-							new DefaultTaskListener<Map<String, String>>(PettyActivity.this) {
-								@Override
-								public void onSuccess(Map<String, String> optionValueLabelMap) {
-									String label = optionValueLabelMap.get(PettyActivity.this.genderValue);
-									PettyActivity.this.gender.setText(label);
-								}
-							}).execute(OptionGroup.HUMAN_GENDER);
+							new SetOptionLabelTaskListener(PettyActivity.this, PettyActivity.this.gender,
+									PettyActivity.this.genderValue)).execute(OptionGroup.PET_GENDER);
 				}
 
 				// 生日
-				if (user.getBirthday() != null) {
-					PettyActivity.this.birthday.setText(dateFormat.format(user.getBirthday()));
+				if (pet.getBirthday() != null) {
+					PettyActivity.this.birthday.setText(dateFormat.format(pet.getBirthday()));
 				}
 
 				// 家族
-				if (StringUtils.isNotBlank(user.getGender())) {
-					PettyActivity.this.genderValue = user.getGender();
+				if (StringUtils.isNotBlank(pet.getFamily())) {
+					PettyActivity.this.familyValue = pet.getFamily();
 					new GetOptionValueLabelMap(PettyActivity.this).setListener(
-							new DefaultTaskListener<Map<String, String>>(PettyActivity.this) {
-								@Override
-								public void onSuccess(Map<String, String> optionValueLabelMap) {
-									String label = optionValueLabelMap.get(PettyActivity.this.genderValue);
-									PettyActivity.this.gender.setText(label);
-								}
-							}).execute(OptionGroup.HUMAN_GENDER);
+							new SetOptionLabelTaskListener(PettyActivity.this, PettyActivity.this.family,
+									PettyActivity.this.familyValue)).execute(OptionGroup.PET_FAMILY);
 				}
-
 			}
 		}).execute(PettyActivity.this.petId);
 	}
@@ -313,26 +298,24 @@ public class PettyActivity extends BaseActivity {
 	}
 
 	public void updateAvatar(final String filePath) {
-		// TODO
-		new UpdateUserAvatar(this).setListener(new DefaultTaskListener<String>(this) {
+		new UpdatePetAvatar(this).setListener(new DefaultTaskListener<String>(this) {
 			@Override
 			public void onSuccess(String result) {
 				Log.i(TAG, "updateAvatar.onSuccess:" + result);
-				UserApiWithCache.removeCache(currUserId);
-				UserVO user = UserApiWithCache.getUserById4Synchronous(PettyActivity.this, currUserId);
-				ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
-				PettyActivity.this.showMessageForLongTime("更新头像成功");
+				// TODO 更新缓存
+				ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result, avatar, options);
+				PettyActivity.this.showMessageForLongTime("更新宠物头像成功");
 			}
 
 			@Override
 			public void onError(Throwable ex) {
 				super.onError(ex);
-				PettyActivity.this.showMessageForLongTime("更新头像失败");
+				PettyActivity.this.showMessageForLongTime("更新宠物头像失败");
 				avatar.setImageResource(R.drawable.avatar);
 				// ImageLoader.getInstance().displayImage(R.drawable.avatar,
 				// avatar, options);
 			}
-		}).execute(filePath);
+		}).execute(String.valueOf(PettyActivity.this.petId), filePath);
 	}
 
 	public void startPhotoZoom(Uri uri, Uri photoUri) {

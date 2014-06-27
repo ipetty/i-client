@@ -212,7 +212,7 @@ public class SpaceActivity extends Activity {
 				}
 
 				TextView petName = (TextView) space_petty_view.findViewById(R.id.pet_name);
-				petName.setText(pet.getNickname());
+				petName.setText(pet.getNickname() == null ? "" : pet.getNickname());
 
 				TextView petGender = (TextView) space_petty_view.findViewById(R.id.pet_sex);
 				// TODO 缓存OptionValueLabelMap
