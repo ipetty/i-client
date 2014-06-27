@@ -93,7 +93,8 @@ public class PettyActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_petty);
 
-		// TODO init petId from Intent
+		// init petId from Intent
+		petId = this.getIntent().getExtras().getInt(Constant.INTENT_PET_ID_KEY);
 
 		// Title & Back
 		backButton = (ImageView) this.findViewById(R.id.action_bar_left_image);
