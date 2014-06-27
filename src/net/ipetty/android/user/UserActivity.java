@@ -321,7 +321,9 @@ public class UserActivity extends BaseActivity {
 			public void onError(Throwable ex) {
 				super.onError(ex);
 				UserActivity.this.showMessageForLongTime("更新头像失败");
-				ImageLoader.getInstance().displayImage("", avatar, options);
+				avatar.setImageResource(R.drawable.avatar);
+				// ImageLoader.getInstance().displayImage(R.drawable.avatar,
+				// avatar, options);
 			}
 		}).execute(filePath);
 	}
