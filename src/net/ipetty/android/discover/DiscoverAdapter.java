@@ -1,13 +1,17 @@
 package net.ipetty.android.discover;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.ipetty.R;
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.vo.FeedVO;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +27,7 @@ public class DiscoverAdapter extends BaseAdapter {
 	public final static String TAG = "DiscoverAdapter";
 	private LayoutInflater mInflater;
 	private Context context;
-	private List list = null; // 这个就本地dataStore
+	private List<FeedVO> list = new ArrayList<FeedVO>(0); // 这个就本地dataStore
 	DisplayImageOptions options;
 
 	public DiscoverAdapter(Context context) {
@@ -36,7 +40,7 @@ public class DiscoverAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return 18;
+		return list.size();
 	}
 
 	@Override
@@ -46,7 +50,7 @@ public class DiscoverAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int index) {
-		return index;
+		return ((FeedVO) getItem(index)).getCreatedBy();
 	}
 
 	private class GridHolder {
@@ -71,9 +75,18 @@ public class DiscoverAdapter extends BaseAdapter {
 		} else {
 			holder = (GridHolder) convertView.getTag();
 		}
-		String str = "http://image.zcool.com.cn/img3/19/24/m_1330054314883.jpg";
+		FeedVO feed = (FeedVO) this.getItem(index);
+		String str = Constant.FILE_SERVER_BASE + feed.getImageSmallURL();
+		Log.d(TAG, str);
 		ImageLoader.getInstance().displayImage(str, holder.image, options);
 
 		return convertView;
+	}
+
+	public void loadDate(List<FeedVO> result) {
+		// TODO Auto-generated method stub
+		this.list.clear();
+		this.list.addAll(result);
+		this.notifyDataSetChanged();
 	}
 }

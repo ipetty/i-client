@@ -1,6 +1,9 @@
 package net.ipetty.android.discover;
 
 import net.ipetty.R;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +18,8 @@ public class MainDiscoverFragment extends Fragment {
 	private Activity activity;
 	private GridView gridview;
 	private DiscoverAdapter adapter;
+	private Long lastTimeMillis;
+	private final Integer pageSize = 20;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,6 +41,23 @@ public class MainDiscoverFragment extends Fragment {
 		adapter = new DiscoverAdapter(this.activity);
 		gridview.setAdapter(adapter);
 
+		loadDate();
+	}
+
+	private void loadDate() {
+		// TODO Auto-generated method stub
+		new ListByTimelineForSquare(MainDiscoverFragment.this.getActivity()).setListener(
+				new DiscoverListener(MainDiscoverFragment.this.getActivity(), adapter)).execute(
+				getRefreshTime().toString(), "0", pageSize.toString());
+	}
+
+	private Long getRefreshTime() {
+		if (NetWorkUtils.isNetworkConnected(this.getActivity())) {
+			this.lastTimeMillis = System.currentTimeMillis();
+			MyAppStateManager.setLastRefrsh4Discover(this.getActivity(), this.lastTimeMillis);
+			return this.lastTimeMillis;
+		}
+		return MyAppStateManager.getLastRefrsh4Discover(this.getActivity());
 	}
 
 	@Override
