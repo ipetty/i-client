@@ -1,9 +1,10 @@
 package net.ipetty.android.sdk.core;
 
+import android.content.Context;
+import android.util.Base64;
+import android.util.Log;
 import java.io.IOException;
-
 import net.ipetty.android.core.util.DeviceUtils;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ContentCodingType;
 import org.springframework.http.HttpHeaders;
@@ -12,13 +13,9 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-import android.content.Context;
-import android.util.Base64;
-import android.util.Log;
-
 /**
  * Api请求拦截
- * 
+ *
  * @author xiaojinghai
  */
 class ApiInterceptor implements ClientHttpRequestInterceptor {
@@ -67,6 +64,7 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 		requestHeaders.set(HEADER_NAME_USER_TOKEN, userToken);
 		requestHeaders.set(HEADER_NAME_REFRESH_TOKEN, refreshToken);
 		requestHeaders.set(HEADER_NAME_DEVICE_UUID, uuidB64);
+		requestHeaders.set("Connection", "close");
 
 		String url = request.getURI().toString();
 		Log.i(TAG, "-->：" + url);
@@ -87,10 +85,9 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 			SDKStateManager.setRefreshToken(context, rrt);
 		}
 
-		if (StringUtils.isBlank(resp.getHeaders().getCacheControl())) {
-			resp.getHeaders().add("Cache-Control", "max-age=15");
-		}
-
+//		if (StringUtils.isBlank(resp.getHeaders().getCacheControl())) {
+//			resp.getHeaders().add("Cache-Control", "max-age=15");
+//		}
 		Log.i(TAG, "<--:" + request.getURI().toString());
 		Log.i(TAG, "Etag头：" + resp.getHeaders().getETag());
 		Log.i(TAG, "过期头：" + resp.getHeaders().getCacheControl());

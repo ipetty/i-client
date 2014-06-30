@@ -1,9 +1,9 @@
 package net.ipetty.android.sdk.impl;
 
+import android.content.Context;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.sdk.core.ApiBase;
 import net.ipetty.sdk.UserApi;
@@ -11,16 +11,13 @@ import net.ipetty.vo.RegisterVO;
 import net.ipetty.vo.UserFormVO;
 import net.ipetty.vo.UserStatisticsVO;
 import net.ipetty.vo.UserVO;
-
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import android.content.Context;
-
 /**
  * UserApiImpl
- * 
+ *
  * @author luocanfeng
  * @date 2014年5月6日
  */
@@ -55,7 +52,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	@Override
 	public void logout() {
 		getRestTemplate().getForObject(buildUri(URI_LOGOUT), Boolean.class);
-		setCurrUserId(null);
+		//setCurrUserId(Constant.EMPTY_USER_ID);
 		setIsAuthorized(false);
 	}
 
@@ -196,9 +193,8 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
 	/**
 	 * 分页获取关注列表
-	 * 
-	 * @param pageNumber
-	 *            分页页码，从0开始
+	 *
+	 * @param pageNumber 分页页码，从0开始
 	 */
 	public List<UserVO> listFriends(Integer userId, int pageNumber, int pageSize) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
@@ -213,9 +209,8 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
 	/**
 	 * 获取粉丝列表
-	 * 
-	 * @param pageNumber
-	 *            分页页码，从0开始
+	 *
+	 * @param pageNumber 分页页码，从0开始
 	 */
 	public List<UserVO> listFollowers(Integer userId, int pageNumber, int pageSize) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
@@ -230,9 +225,8 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
 	/**
 	 * 获取好友列表（双向关注）
-	 * 
-	 * @param pageNumber
-	 *            分页页码，从0开始
+	 *
+	 * @param pageNumber 分页页码，从0开始
 	 */
 	public List<UserVO> listBiFriends(Integer userId, int pageNumber, int pageSize) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();

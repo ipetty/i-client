@@ -8,6 +8,8 @@ public class Constant {
 	// API服务器地址
 	public static final String API_SERVER_BASE = "http://api.ipetty.tk/api";
 
+	public static final Integer EMPTY_USER_ID = -1;
+
 	public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";
 	public final static String INTENT_PHOTO_OUT_PATH_KEY = "publish_photo_out_path";
 	public final static String INTENT_IMAGE_ORIGINAL_KEY = "url";
