@@ -7,6 +7,7 @@ package net.ipetty.android.core;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 import net.ipetty.android.sdk.core.APIException;
@@ -40,6 +41,10 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 		this.activity = activity;
 	}
 
+	public DefaultTaskListener(Fragment fragment) {
+		this.activity = fragment.getActivity();
+	}
+
 	/**
 	 * 带有自定义loading信息的构造
 	 *
@@ -48,6 +53,13 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 	 */
 	public DefaultTaskListener(Activity activity, String loadingMessage) {
 		this(activity);
+		this.loadingMessage = loadingMessage;
+		this.progressDialog = new ProgressDialog(this.activity);
+		this.progressDialog.setIndeterminate(true);
+	}
+
+	public DefaultTaskListener(Fragment fragment, String loadingMessage) {
+		this(fragment);
 		this.loadingMessage = loadingMessage;
 		this.progressDialog = new ProgressDialog(this.activity);
 		this.progressDialog.setIndeterminate(true);
