@@ -51,7 +51,6 @@
 			        android:ellipsize="end"
 			        android:gravity="left|center"
 			        android:singleLine="true"
-			        android:text="无名氏"
 			        android:textColor="@color/normal_text_color"
 			        android:textSize="24dp" />
 			    
