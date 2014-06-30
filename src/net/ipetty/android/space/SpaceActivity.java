@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -115,9 +114,9 @@ public class SpaceActivity extends Activity {
 				public void onSuccess(Boolean result) {
 					SpaceActivity.this.isFollow = result;
 					if (SpaceActivity.this.isFollow) {
-						action_bar_right_text.setText(R.string.follow_text);
-					} else {
 						action_bar_right_text.setText(R.string.unfollow_text);
+					} else {
+						action_bar_right_text.setText(R.string.follow_text);
 					}
 					action_bar_right_text.setOnClickListener(toggleFollowClick);
 				}
@@ -260,9 +259,6 @@ public class SpaceActivity extends Activity {
 						})
 						.execute(SpaceActivity.this.userId);
 			}
-			// TODO 关注与反关注的操作
-			TextView view = (TextView) v;
-			Toast.makeText(SpaceActivity.this, "暂无", Toast.LENGTH_SHORT).show();
 		}
 	};
 
@@ -362,9 +358,9 @@ public class SpaceActivity extends Activity {
 				@Override
 				public void onSuccess(Boolean result) {
 					if (result) {
-						action_bar_right_text.setText(R.string.follow_text);
-					} else {
 						action_bar_right_text.setText(R.string.unfollow_text);
+					} else {
+						action_bar_right_text.setText(R.string.follow_text);
 					}
 					action_bar_right_text.setOnClickListener(toggleFollowClick);
 				}
