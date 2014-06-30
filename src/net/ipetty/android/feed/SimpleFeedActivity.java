@@ -1,33 +1,5 @@
 package net.ipetty.android.feed;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.comment.CommentActivity;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.JSONUtils;
-import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.home.LargerImageActivity;
-import net.ipetty.android.like.LikeActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.Favor;
-import net.ipetty.android.sdk.task.feed.GetFeedById;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.CommentVO;
-import net.ipetty.vo.FeedFavorVO;
-import net.ipetty.vo.FeedVO;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -45,11 +17,37 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.comment.CommentActivity;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.home.LargerImageActivity;
+import net.ipetty.android.like.LikeActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.Favor;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.CommentVO;
+import net.ipetty.vo.FeedFavorVO;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
-public class SimpleFeedActivity extends Activity {
+public class SimpleFeedActivity extends BaseActivity {
+
 	public final static String TAG = SimpleFeedActivity.class.getSimpleName();
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 
@@ -157,6 +155,7 @@ public class SimpleFeedActivity extends Activity {
 	}
 
 	private class ViewOnLongClickListener implements OnLongClickListener {
+
 		@Override
 		public boolean onLongClick(View v) {
 			SimpleFeedActivity.this.showItems();
@@ -421,6 +420,7 @@ public class SimpleFeedActivity extends Activity {
 	}
 
 	private class MoreOperateOnClickListener implements OnClickListener {
+
 		@Override
 		public void onClick(View v) {
 			showItems();
