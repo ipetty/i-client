@@ -50,7 +50,7 @@ public class DiscoverAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int index) {
-		return ((FeedVO) getItem(index)).getCreatedBy();
+		return ((FeedVO) getItem(index)).getId();
 	}
 
 	private class GridHolder {

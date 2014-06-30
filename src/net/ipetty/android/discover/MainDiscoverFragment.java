@@ -1,16 +1,22 @@
 package net.ipetty.android.discover;
 
 import net.ipetty.R;
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.MyAppStateManager;
 import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 public class MainDiscoverFragment extends Fragment {
@@ -40,6 +46,16 @@ public class MainDiscoverFragment extends Fragment {
 		gridview = (GridView) this.activity.findViewById(R.id.gridview);
 		adapter = new DiscoverAdapter(this.activity);
 		gridview.setAdapter(adapter);
+		gridview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent((MainActivity) getActivity(), SimpleFeedActivity.class);
+				intent.putExtra(Constant.INTENT_FEED_ID_KEY, id);
+				((MainActivity) getActivity()).startActivity(intent);
+			}
+		});
 
 		loadDate();
 	}
