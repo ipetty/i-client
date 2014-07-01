@@ -34,7 +34,6 @@ import net.ipetty.android.core.util.PrettyDateFormat;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.feed.SimpleFeedActivity;
 import net.ipetty.android.like.LikeActivity;
-import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.Favor;
 import net.ipetty.android.sdk.task.feed.GetFeedById;
@@ -315,9 +314,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent((MainActivity) context, SimpleFeedActivity.class);
+				Intent intent = new Intent(context, SimpleFeedActivity.class);
 				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feed.getId());
-				((MainActivity) context).startActivity(intent);
+				context.startActivity(intent);
 			}
 		});
 
@@ -350,10 +349,10 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				// 展示大图
-				Intent intent = new Intent((MainActivity) context, LargerImageActivity.class);
+				Intent intent = new Intent(context, LargerImageActivity.class);
 				intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY,
 						Constant.FILE_SERVER_BASE + feed.getImageOriginalURL());
-				((MainActivity) context).startActivity(intent);
+				context.startActivity(intent);
 			}
 		});
 
@@ -381,9 +380,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent((MainActivity) context, LikeActivity.class);
+				Intent intent = new Intent(context, LikeActivity.class);
 				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feed.getId());
-				((MainActivity) context).startActivity(intent);
+				context.startActivity(intent);
 			}
 		});
 
@@ -391,9 +390,9 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		OnClickListener myCommentClick = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent((MainActivity) context, CommentActivity.class);
+				Intent intent = new Intent(context, CommentActivity.class);
 				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feed.getId());
-				((MainActivity) context).startActivity(intent);
+				context.startActivity(intent);
 			}
 		};
 		holder.btn_comment.setOnClickListener(myCommentClick);
