@@ -273,12 +273,12 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		// 用户信息
 		final UserVO user = this.getCacheUserById(feed.getCreatedBy());
 		Log.d(TAG, "发布人头像：" + user.getAvatar());
-		if (!StringUtils.isEmpty(user.getAvatar())) {
+		if (StringUtils.isNotBlank(user.getAvatar())) {
 			ImageLoader.getInstance()
 					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
 		}
 		Log.d(TAG, "发布人昵称：" + user.getNickname());
-		if (!StringUtils.isEmpty(user.getNickname())) {
+		if (StringUtils.isNotBlank(user.getNickname())) {
 			holder.nickname.setText(user.getNickname());
 		}
 		// 头像
@@ -328,7 +328,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 				holder.content_image, options);
 
 		// 内容空不显示内容区域
-		if (StringUtils.isEmpty(feed.getText())) {
+		if (StringUtils.isBlank(feed.getText())) {
 			holder.content.setVisibility(View.GONE);
 		} else {
 			holder.content.setVisibility(View.VISIBLE);
@@ -336,7 +336,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 		// TODO: 地理位置如何显示
 		// 地理位置
-		if (StringUtils.isEmpty("")) {
+		if (StringUtils.isBlank("")) {
 			holder.address.setVisibility(View.GONE);
 		} else {
 			holder.address.setVisibility(View.VISIBLE);
@@ -579,12 +579,12 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 				// 发布人信息
 				Log.d(TAG, "发布人头像：" + resultUser.getAvatar());
-				if (!StringUtils.isEmpty(resultUser.getAvatar())) {
+				if (StringUtils.isNotBlank(resultUser.getAvatar())) {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + resultUser.getAvatar(),
 							holder.avatar, options);
 				}
 				Log.d(TAG, "发布人昵称：" + resultUser.getNickname());
-				if (!StringUtils.isEmpty(resultUser.getNickname())) {
+				if (StringUtils.isNotBlank(resultUser.getNickname())) {
 					holder.nickname.setText(resultUser.getNickname());
 				}
 
