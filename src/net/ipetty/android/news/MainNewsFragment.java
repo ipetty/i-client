@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ViewFlipper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import java.util.List;
 import net.ipetty.R;
@@ -22,7 +23,7 @@ import net.ipetty.vo.UserVO;
 
 public class MainNewsFragment extends Fragment {
 
-	public final static String TAG = "MainNewsFragment";
+	public final static String TAG = MainNewsFragment.class.getSimpleName();
 	private Activity activity;
 	private ViewFlipper viewFlipper;
 
@@ -37,9 +38,11 @@ public class MainNewsFragment extends Fragment {
 
 	private Integer activitiePageNumber = 0;
 	private final Integer activitiePageSize = 5;
+	private Boolean activitieHasMore = true;
 
 	private Integer followerPageNumber = 0;
 	private final Integer followerPageSize = 5;
+	private Boolean followerHasMore = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,14 +74,63 @@ public class MainNewsFragment extends Fragment {
 
 		related_me_adapter = new RelatedMeAdapter(this.getActivity());
 		related_me_listView.setAdapter(related_me_adapter);
+		related_me_listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+			@Override
+			public void onLastItemVisible() {
+				// 加载更多
+				if (activitieHasMore) {
+					new ListActivities(MainNewsFragment.this.getActivity())
+							.setListener(new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
+								@Override
+								public void onSuccess(List<ActivityVO> result) {
+									if (result.isEmpty() || result.size() < activitiePageSize) {
+										activitieHasMore = false;
+									}
+									related_me_adapter.getList().addAll(result);
+									related_me_adapter.notifyDataSetChanged();
+								}
+							})
+							.execute(++activitiePageNumber, activitiePageSize);
+
+				}
+			}
+		});
 
 		my_follows_listView = (PullToRefreshListView) activity.findViewById(R.id.my_follows_listView);
 		my_follows_listView.setMode(Mode.PULL_FROM_END);
 		my_follows_adapter = new MyFollowsAdapter(this.getActivity());
 		my_follows_listView.setAdapter(my_follows_adapter);
+		my_follows_listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+			@Override
+			public void onLastItemVisible() {
+				// 加载更多
+				if (followerHasMore) {
+					new ListFollowers(MainNewsFragment.this.getActivity())
+							.setListener(new DefaultTaskListener<List<UserVO>>(MainNewsFragment.this, "加载中...") {
+								@Override
+								public void onSuccess(List<UserVO> result) {
+									if (result.isEmpty() || result.size() < followerPageSize) {
+										followerHasMore = false;
+										return;
+									}
+									my_follows_adapter.getList().addAll(result);
+									my_follows_adapter.notifyDataSetChanged();
+								}
+							})
+							.execute(IpetApi
+									.init(MainNewsFragment.this.getActivity())
+									.getCurrUserId(), ++followerPageNumber, followerPageSize);
+
+				}
+			}
+		});
 	}
 
 	private void loadData() {
+		activitieHasMore = true;
+		followerHasMore = true;
+		activitiePageNumber = 0;
+		followerPageNumber = 0;
 		new ListActivities(this.getActivity())
 				.setListener(new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
 					@Override
@@ -87,7 +139,7 @@ public class MainNewsFragment extends Fragment {
 						related_me_adapter.notifyDataSetChanged();
 					}
 				})
-				.execute(this.activitiePageNumber, this.activitiePageSize);
+				.execute(activitiePageNumber, this.activitiePageSize);
 		new ListFollowers(this.getActivity())
 				.setListener(new DefaultTaskListener<List<UserVO>>(MainNewsFragment.this, "加载中...") {
 					@Override

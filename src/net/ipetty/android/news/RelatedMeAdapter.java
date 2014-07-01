@@ -72,7 +72,8 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			view = convertView;
 			holder = (ViewHolder) view.getTag();
 		}
-		// 数据与界面绑定
+		// TODO：数据与界面绑定
+		ActivityVO act = list.get(position);
 
 		return view;
 	}
