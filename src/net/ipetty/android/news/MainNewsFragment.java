@@ -83,11 +83,13 @@ public class MainNewsFragment extends Fragment {
 							.setListener(new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
 								@Override
 								public void onSuccess(List<ActivityVO> result) {
-									if (result.isEmpty() || result.size() < activitiePageSize) {
+									if (result.size() < activitiePageSize) {
 										activitieHasMore = false;
 									}
-									related_me_adapter.getList().addAll(result);
-									related_me_adapter.notifyDataSetChanged();
+									if (result.size() > 0) {
+										related_me_adapter.getList().addAll(result);
+										related_me_adapter.notifyDataSetChanged();
+									}
 								}
 							})
 							.execute(++activitiePageNumber, activitiePageSize);
@@ -109,12 +111,14 @@ public class MainNewsFragment extends Fragment {
 							.setListener(new DefaultTaskListener<List<UserVO>>(MainNewsFragment.this, "加载中...") {
 								@Override
 								public void onSuccess(List<UserVO> result) {
-									if (result.isEmpty() || result.size() < followerPageSize) {
+									if (result.size() < followerPageSize) {
 										followerHasMore = false;
 										return;
 									}
-									my_follows_adapter.getList().addAll(result);
-									my_follows_adapter.notifyDataSetChanged();
+									if (result.size() > 0) {
+										my_follows_adapter.getList().addAll(result);
+										my_follows_adapter.notifyDataSetChanged();
+									}
 								}
 							})
 							.execute(IpetApi
