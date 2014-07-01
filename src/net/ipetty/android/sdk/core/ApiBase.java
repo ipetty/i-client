@@ -10,6 +10,7 @@ import java.util.List;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.URIBuilder;
 import net.ipetty.android.sdk.cache.RestTemplate4Cache;
+import net.ipetty.vo.UserVO;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -106,6 +107,16 @@ public class ApiBase {
 
 	protected void setIsAuthorized(boolean bl) {
 		SDKStateManager.setAuthorized(context, bl);
+		SDKStateManager.setUserToken(context, "");
+		SDKStateManager.setRefreshToken(context, "");
+	}
+
+	public UserVO getCurrUserInfo() {
+		return SDKStateManager.getCurrentUserInfo(context);
+	}
+
+	public void setCurrUserInfo(UserVO user) {
+		SDKStateManager.setCurrentUserInfo(context, user);
 	}
 
 	public int getCurrUserId() {

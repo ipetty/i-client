@@ -8,6 +8,9 @@ package net.ipetty.android.sdk.core;
 import android.content.Context;
 import android.content.SharedPreferences;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -27,9 +30,29 @@ public class SDKStateManager {
 
 	private static final String DEVICE_UUID = "device_uuid";
 
+	private static final String CURRENT_USER_INFO = "current_user_info";
+
+	//当前用户信息
+	public static void setCurrentUserInfo(Context ctx, UserVO user) {
+		if (user == null) {
+			return;
+		}
+		String str = JSONUtils.toJson(user);
+		setString(ctx, CURRENT_USER_INFO, str);
+	}
+
+	public static UserVO getCurrentUserInfo(Context ctx) {
+		String str = getString(ctx, CURRENT_USER_INFO);
+		if (StringUtils.isBlank(str)) {
+			return null;
+		}
+		UserVO user = JSONUtils.fromJSON(str, UserVO.class);
+		return user;
+	}
+
 	//设备UUID
-	public static void setDeviceUUID(Context ctx, String token) {
-		setString(ctx, DEVICE_UUID, token);
+	public static void setDeviceUUID(Context ctx, String str) {
+		setString(ctx, DEVICE_UUID, str);
 	}
 
 	public static String getDeviceUUID(Context ctx) {

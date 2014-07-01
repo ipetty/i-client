@@ -41,6 +41,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN), request, UserVO.class);
 		setIsAuthorized(true);
 		setCurrUserId(user.getId());
+		this.setCurrUserInfo(user);
 		return user;
 	}
 
