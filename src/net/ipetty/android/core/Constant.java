@@ -3,10 +3,10 @@ package net.ipetty.android.core;
 public class Constant {
 
 	// 文件服务器地址
-	public static final String FILE_SERVER_BASE = "http://api.ipetty.tk";
+	public static final String FILE_SERVER_BASE = "http://api.ipetty.net";
 
 	// API服务器地址
-	public static final String API_SERVER_BASE = "http://api.ipetty.tk/api";
+	public static final String API_SERVER_BASE = "http://api.ipetty.net/api";
 
 	public static final Integer EMPTY_USER_ID = -1;
 

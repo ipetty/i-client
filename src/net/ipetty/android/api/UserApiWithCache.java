@@ -5,19 +5,22 @@
  */
 package net.ipetty.android.api;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
 import java.util.concurrent.CountDownLatch;
+
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.sdk.core.APIException;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+
 /**
- *
+ * 
  * @author yneos
  */
 public class UserApiWithCache {
@@ -28,7 +31,7 @@ public class UserApiWithCache {
 
 	/**
 	 * 同步获取用户
-	 *
+	 * 
 	 * @param context
 	 * @param userId
 	 * @return
@@ -58,7 +61,8 @@ public class UserApiWithCache {
 
 	}
 
-	public static synchronized void getUserById4Asynchronous(final Context context, final Integer userId, final DefaultTaskListener<UserVO> listenner) {
+	public static synchronized void getUserById4Asynchronous(final Context context, final Integer userId,
+			final DefaultTaskListener<UserVO> listenner) {
 		UserVO user = cache.get(userId);
 		if (null != user) {
 			listenner.onSuccess(user);
@@ -66,7 +70,7 @@ public class UserApiWithCache {
 		}
 
 		String loadingMsg = listenner.getLoadingMessage();
-		DefaultTaskListener myListener = null;
+		DefaultTaskListener<UserVO> myListener = null;
 		if (StringUtils.isEmpty(loadingMsg)) {
 			myListener = new DefaultTaskListener<UserVO>((Activity) context) {
 				@Override
@@ -85,9 +89,7 @@ public class UserApiWithCache {
 			};
 		}
 
-		new GetUserById((Activity) context)
-				.setListener(myListener)
-				.execute(userId);
+		new GetUserById((Activity) context).setListener(myListener).execute(userId);
 	}
 
 	public static synchronized void updateCache(UserVO user) {

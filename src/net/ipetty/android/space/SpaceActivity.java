@@ -1,8 +1,21 @@
 package net.ipetty.android.space;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.bonuspoint.BonusPointActivity;
@@ -13,6 +26,7 @@ import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.discover.DiscoverAdapter;
 import net.ipetty.android.fans.FansActivity;
 import net.ipetty.android.follow.FollowsActivity;
+import net.ipetty.android.home.FeedAdapter;
 import net.ipetty.android.petty.PettyActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
@@ -29,25 +43,8 @@ import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.PetVO;
 import net.ipetty.vo.UserStatisticsVO;
 import net.ipetty.vo.UserVO;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SpaceActivity extends Activity {
 
@@ -77,6 +74,9 @@ public class SpaceActivity extends Activity {
 	private Boolean isFollow;// 记录当前用户是否已关注被查看用户
 	private Integer pageNumber = 0;// 我的feed
 	private final Integer pageSize = 5;// 我的feed
+	private View space_feed_layout;	//feed列表布局
+	private ListView space_feed_list;//feed列表View
+	private FeedAdapter feedListAdapter;//feed列表适配
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -205,16 +205,20 @@ public class SpaceActivity extends Activity {
 		space_photo_grid = (GridView) space_photo_layout.findViewById(R.id.gridview);
 		space_photo_grid_adapter = new DiscoverAdapter(this);
 		space_photo_grid.setAdapter(space_photo_grid_adapter);
+		// 列表
+		space_feed_layout = this.findViewById(R.id.space_feed_layout);
+		space_feed_list = (ListView) space_feed_layout.findViewById(R.id.space_feed_list);
+		feedListAdapter = new FeedAdapter(this);
+		space_feed_list.setAdapter(feedListAdapter);
 		new ListByTimelineForHomePage(this).setListener(new DefaultTaskListener<List<FeedVO>>(SpaceActivity.this) {
 			@Override
 			public void onSuccess(List<FeedVO> result) {
 				space_photo_grid_adapter.loadDate(result);
+				feedListAdapter.setList(result);
+				feedListAdapter.notifyDataSetChanged();
 			}
 		}).execute(String.valueOf(System.currentTimeMillis()), "0", pageSize.toString());
 
-		// 列表
-		View space_feed_layout = this.findViewById(R.id.space_feed_layout);
-		ListView space_feed_list = (ListView) space_feed_layout.findViewById(R.id.space_feed_list);
 		// TODO: list
 	}
 
@@ -298,7 +302,7 @@ public class SpaceActivity extends Activity {
 				if (StringUtils.isNotBlank(pet.getGender())) {
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petGender, pet.getGender())).execute(
-							OptionGroup.PET_GENDER);
+									OptionGroup.PET_GENDER);
 				}
 
 				TextView petBirthday = (TextView) space_petty_view.findViewById(R.id.pet_birthday);
@@ -311,7 +315,7 @@ public class SpaceActivity extends Activity {
 				if (StringUtils.isNotBlank(pet.getFamily())) {
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petFamily, pet.getFamily())).execute(
-							OptionGroup.PET_FAMILY);
+									OptionGroup.PET_FAMILY);
 				}
 
 				if (isCurrentUser) {
@@ -375,6 +379,7 @@ public class SpaceActivity extends Activity {
 		// 9宫格
 		space_photo_grid_adapter.notifyDataSetChanged();
 		// feed列表
+		feedListAdapter.notifyDataSetChanged();
 	}
 
 }
