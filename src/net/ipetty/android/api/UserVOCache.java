@@ -17,6 +17,7 @@ import net.ipetty.vo.UserVO;
 public class UserVOCache {
 
 	private final Map<Integer, UserVOCacheEntry> data;
+	private final Long expireIn = 3 * 60 * 1000l;//3分钟过期
 
 	public UserVOCache(int maxNum) {
 		data = Collections.synchronizedMap(new LRULinkedHashMap<Integer, UserVOCacheEntry>(maxNum));
@@ -26,13 +27,18 @@ public class UserVOCache {
 		UserVOCacheEntry entry = new UserVOCacheEntry();
 		entry.setId(user.getId());
 		entry.setData(user);
+		entry.setExpireOn(System.currentTimeMillis() + expireIn);
 		data.put(user.getId(), entry);
 	}
 
 	public UserVO get(Integer id) {
-		//有缓存
 		if (data.containsKey(id)) {
 			UserVOCacheEntry entry = data.get(id);
+			//如果过期
+			if (System.currentTimeMillis() > entry.getExpireOn()) {
+				data.remove(id);
+				return null;
+			}
 			return entry.getData();
 		}
 		return null;
