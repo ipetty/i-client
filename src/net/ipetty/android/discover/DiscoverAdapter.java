@@ -68,7 +68,7 @@ public class DiscoverAdapter extends BaseAdapter {
 			holder.image = (ImageView) convertView.findViewById(R.id.image);
 			LayoutParams ps = (LayoutParams) holder.image.getLayoutParams();
 			DisplayMetrics dm = AnimUtils.getDefaultDisplayMetrics((Activity) context);
-			int width = dm.widthPixels / 3 - AnimUtils.dip2px(context, 5);
+			int width = dm.widthPixels / 3;// - AnimUtils.dip2px(context, 5);
 			ps.height = width;
 			holder.image.setLayoutParams(ps);
 			convertView.setTag(holder);
