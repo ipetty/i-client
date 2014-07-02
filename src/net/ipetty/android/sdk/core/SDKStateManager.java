@@ -7,6 +7,7 @@ package net.ipetty.android.sdk.core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.vo.UserVO;
@@ -34,6 +35,7 @@ public class SDKStateManager {
 
 	//当前用户信息
 	public static void setCurrentUserInfo(Context ctx, UserVO user) {
+		Log.i(TAG, "setCurrentUserInfo");
 		if (user == null) {
 			return;
 		}
@@ -42,6 +44,7 @@ public class SDKStateManager {
 	}
 
 	public static UserVO getCurrentUserInfo(Context ctx) {
+		Log.i(TAG, "getCurrentUserInfo");
 		String str = getString(ctx, CURRENT_USER_INFO);
 		if (StringUtils.isBlank(str)) {
 			return null;
@@ -52,29 +55,38 @@ public class SDKStateManager {
 
 	//设备UUID
 	public static void setDeviceUUID(Context ctx, String str) {
+		Log.i(TAG, "setDeviceUUID:" + str);
 		setString(ctx, DEVICE_UUID, str);
 	}
 
 	public static String getDeviceUUID(Context ctx) {
-		return getString(ctx, DEVICE_UUID);
+		String str = getString(ctx, DEVICE_UUID);
+		Log.i(TAG, "getDeviceUUID:" + str);
+		return str;
 	}
 
 	//用户Token
 	public static void setUserToken(Context ctx, String token) {
+		Log.i(TAG, "setUserToken:" + token);
 		setString(ctx, USER_TOKEN, token);
 	}
 
 	public static String getUserToken(Context ctx) {
-		return getString(ctx, USER_TOKEN);
+		String str = getString(ctx, USER_TOKEN);
+		Log.i(TAG, "getUserToken:" + str);
+		return str;
 	}
 
 	//刷新Token
 	public static void setRefreshToken(Context ctx, String token) {
+		Log.i(TAG, "setRefreshToken:" + token);
 		setString(ctx, REFRESH_TOKEN, token);
 	}
 
 	public static String getRefreshToken(Context ctx) {
-		return getString(ctx, REFRESH_TOKEN);
+		String str = getString(ctx, REFRESH_TOKEN);
+		Log.i(TAG, "getRefreshToken:" + str);
+		return str;
 	}
 
 	//验证状态

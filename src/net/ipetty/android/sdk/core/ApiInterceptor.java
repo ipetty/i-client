@@ -45,7 +45,7 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 	@Override
 	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
 			throws IOException {
-		// 发送头
+
 		String userToken = SDKStateManager.getUserToken(context);
 		String refreshToken = SDKStateManager.getRefreshToken(context);
 		String uuidB64 = SDKStateManager.getDeviceUUID(context);
@@ -54,11 +54,12 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 			uuidB64 = Base64.encodeToString(uuid.getBytes(), Base64.DEFAULT);
 			SDKStateManager.setDeviceUUID(context, uuidB64);
 		}
-
+		String url = request.getURI().toString();
+		Log.i(TAG, "-->：" + url);
 		Log.i(TAG, "userToken：" + userToken);
 		Log.i(TAG, "refreshToken：" + refreshToken);
 		Log.i(TAG, "deviceUUID：" + uuidB64);
-
+		// 发送头
 		HttpHeaders requestHeaders = request.getHeaders();
 		requestHeaders.setAcceptEncoding(ContentCodingType.GZIP);
 		requestHeaders.set(HEADER_NAME_USER_TOKEN, userToken);
@@ -66,12 +67,10 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 		requestHeaders.set(HEADER_NAME_DEVICE_UUID, uuidB64);
 		requestHeaders.set("Connection", "close");
 
-		String url = request.getURI().toString();
-		Log.i(TAG, "-->：" + url);
-		Log.i(TAG, "Etag头：" + request.getHeaders().getIfNoneMatch());
-
+		//执行请求
 		ClientHttpResponse resp = execution.execute(request, body);
 
+		Log.i(TAG, "<--:" + request.getURI().toString());
 		// 接收头
 		HttpHeaders responseHeaders = resp.getHeaders();
 		String rut = responseHeaders.getFirst(HEADER_NAME_USER_TOKEN);
@@ -79,16 +78,17 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 		Log.i(TAG, "接收到userToken:" + rut);
 		Log.i(TAG, "接收到refreshToken:" + rrt);
 		if (StringUtils.isNotBlank(rut) && !userToken.equals(rut)) {
+			Log.i(TAG, "设置userToken:" + rut);
 			SDKStateManager.setUserToken(context, rut);
 		}
 		if (StringUtils.isNotBlank(rrt) && !refreshToken.equals(rrt)) {
+			Log.i(TAG, "设置refreshToken:" + rrt);
 			SDKStateManager.setRefreshToken(context, rrt);
 		}
 
 //		if (StringUtils.isBlank(resp.getHeaders().getCacheControl())) {
 //			resp.getHeaders().add("Cache-Control", "max-age=15");
 //		}
-		Log.i(TAG, "<--:" + request.getURI().toString());
 		Log.i(TAG, "Etag头：" + resp.getHeaders().getETag());
 		Log.i(TAG, "过期头：" + resp.getHeaders().getCacheControl());
 		Log.i(TAG, "状态：" + resp.getRawStatusCode());
