@@ -47,7 +47,7 @@
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="48dp"
                     android:background="@color/color_item_bg"
                     android:gravity="center_vertical" >
 
@@ -78,7 +78,7 @@
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="48dp"
                     android:background="@color/color_item_bg"
                     android:gravity="center_vertical" >
 
@@ -93,7 +93,7 @@
                     <TextView
                         android:id="@+id/pet_sex"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="fill_parent"
                         android:layout_gravity="center"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
@@ -127,7 +127,7 @@
         <TextView
             android:id="@+id/pet_birthday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -158,7 +158,7 @@
         <TextView
             android:id="@+id/pet_family"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
