@@ -176,8 +176,8 @@ public class RestTemplate4Cache extends RestTemplate {
 					String s = null == t[1] ? "0" : t[1];
 					expireOn = System.currentTimeMillis() + (Long.valueOf(s) * 1000);
 				}
-				//临时处理，只为避免客户端3秒内发起重复请求，不利用这个特性做较长时间的缓存
-				expireOn = System.currentTimeMillis() + (3 * 1000);
+				//临时处理，只为避免客户端1秒内发起重复请求，不利用这个特性做较长时间的缓存
+				expireOn = System.currentTimeMillis() + (1000);
 
 				String str = JSONUtils.toJson(result);
 				String classType = result.getClass().getName();
