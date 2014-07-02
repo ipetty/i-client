@@ -21,15 +21,17 @@ import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.bonuspoint.BonusPointActivity;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.MyAppStateManager;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.discover.DiscoverAdapter;
 import net.ipetty.android.fans.FansActivity;
 import net.ipetty.android.follow.FollowsActivity;
 import net.ipetty.android.home.FeedAdapter;
 import net.ipetty.android.petty.PettyActivity;
 import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForSpace;
 import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
 import net.ipetty.android.sdk.task.foundation.SetOptionLabelTaskListener;
 import net.ipetty.android.sdk.task.pet.ListPetsByUserId;
@@ -77,12 +79,29 @@ public class SpaceActivity extends Activity {
 	private View space_feed_layout;	//feed列表布局
 	private ListView space_feed_list;//feed列表View
 	private FeedAdapter feedListAdapter;//feed列表适配
+	private Long lastTimeMillis;
+
+	// 获取刷新时间，若网络不可用则取最后一次刷新时间
+	private void getRefreshTime() {
+
+		if (NetWorkUtils.isNetworkConnected(this)) {
+			lastTimeMillis = System.currentTimeMillis();
+			MyAppStateManager.setLastRefrsh4Space(this, lastTimeMillis);
+			return;
+		}
+
+		lastTimeMillis = MyAppStateManager.getLastRefrsh4Space(this);
+		if (lastTimeMillis == -1l) {
+			lastTimeMillis = System.currentTimeMillis();
+		}
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_space);
-
+		getRefreshTime();
 		currUserId = IpetApi.init(this).getCurrUserId();
 		if (this.getIntent().getExtras() == null) {
 			this.userId = currUserId;
@@ -210,16 +229,15 @@ public class SpaceActivity extends Activity {
 		space_feed_list = (ListView) space_feed_layout.findViewById(R.id.space_feed_list);
 		feedListAdapter = new FeedAdapter(this);
 		space_feed_list.setAdapter(feedListAdapter);
-		new ListByTimelineForHomePage(this).setListener(new DefaultTaskListener<List<FeedVO>>(SpaceActivity.this) {
+		new ListByTimelineForSpace(this).setListener(new DefaultTaskListener<List<FeedVO>>(SpaceActivity.this) {
 			@Override
 			public void onSuccess(List<FeedVO> result) {
 				space_photo_grid_adapter.loadDate(result);
 				feedListAdapter.setList(result);
 				feedListAdapter.notifyDataSetChanged();
 			}
-		}).execute(String.valueOf(System.currentTimeMillis()), "0", pageSize.toString());
+		}).execute(userId.toString(), lastTimeMillis.toString(), "0", pageSize.toString());
 
-		// TODO: list
 	}
 
 	public class TabClickListener implements OnClickListener {

@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 
 /**
  * 应用持久化状态
- * 
+ *
  * @author yneos
  */
 public class MyAppStateManager {
@@ -19,18 +19,27 @@ public class MyAppStateManager {
 	// 拍照时临时文件的整路径
 	private static final String CAMERA_TEMP_FILE = "CAMERA_TEMP_FILE";
 
-	// home页列表最后刷新时间
+	// 首页列表最后刷新时间
 	private static final String LAST_REFRESH_FOR_HOME = "LAST_REFRESH_FOR_HOME";
 
-	// discover
+	// 发现列表最后刷新时间
 	private static final String LAST_REFRESH_FOR_DISCOVER = "LAST_REFRESH_FOR_DISCOVER";
 
-	// 设置拍照时临时文件完整路径，默认为空。
+	// 我的空间列表最后刷新时间
+	private static final String LAST_REFRESH_FOR_SPACE = "LAST_REFRESH_FOR_SPACE";
+
+	public static void setLastRefrsh4Space(Context ctx, Long value) {
+		setLong(ctx, LAST_REFRESH_FOR_SPACE, value);
+	}
+
+	public static Long getLastRefrsh4Space(Context ctx) {
+		return getLong(ctx, LAST_REFRESH_FOR_SPACE);
+	}
+
 	public static void setLastRefrsh4Home(Context ctx, Long value) {
 		setLong(ctx, LAST_REFRESH_FOR_HOME, value);
 	}
 
-	// 获取拍照时临时文件完整路径
 	public static Long getLastRefrsh4Home(Context ctx) {
 		return getLong(ctx, LAST_REFRESH_FOR_HOME);
 	}
