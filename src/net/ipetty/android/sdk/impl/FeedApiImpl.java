@@ -116,6 +116,25 @@ public class FeedApiImpl extends ApiBase implements FeedApi {
 		return Arrays.asList(getRestTemplate().getForObject(uri, FeedVO[].class));
 	}
 
+	private static final String URI_LIST_BY_TIMELINE_FOR_SPACE = "/feed/space";
+
+	/**
+	 * 根据时间线分页获取指定用户空间的消息
+	 * 
+	 * @param pageNumber
+	 *            分页页码，从0开始
+	 */
+	@Override
+	public List<FeedVO> listByTimelineForSpace(Integer userId, Date timeline, int pageNumber, int pageSize) {
+		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+		request.add("userId", String.valueOf(userId));
+		request.add("timeline", DateUtils.toDatetimeString(timeline));
+		request.add("pageNumber", String.valueOf(pageNumber));
+		request.add("pageSize", String.valueOf(pageSize));
+		URI uri = buildUri(URI_LIST_BY_TIMELINE_FOR_SPACE, request);
+		return Arrays.asList(getRestTemplate().getForObject(uri, FeedVO[].class));
+	}
+
 	// private static final String URI_LIST_BY_TIMELINE_FOR_SQUARE2 =
 	// "/feed/square2";
 
@@ -139,6 +158,16 @@ public class FeedApiImpl extends ApiBase implements FeedApi {
 		super.requireAuthorization();
 		return getRestTemplate()
 				.postForObject(buildUri(URI_LIST_BY_TIMELINE_FOR_HOMEPAGE), queryParams, FeedList.class);
+	}
+
+	/**
+	 * 根据时间线分页获取指定用户空间的消息
+	 * 
+	 * @param pageNumber
+	 *            分页页码，从0开始
+	 */
+	public FeedList listByTimelineForSpace(FeedTimelineQueryParams queryParams) {
+		return getRestTemplate().postForObject(buildUri(URI_LIST_BY_TIMELINE_FOR_SPACE), queryParams, FeedList.class);
 	}
 
 	private static final String URI_LIST_COMMENTS_BY_FEED_ID = "/feed/comments/{feedId}";
