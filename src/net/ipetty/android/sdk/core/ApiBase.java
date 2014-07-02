@@ -107,8 +107,11 @@ public class ApiBase {
 
 	protected void setIsAuthorized(boolean bl) {
 		SDKStateManager.setAuthorized(context, bl);
-		SDKStateManager.setUserToken(context, "");
-		SDKStateManager.setRefreshToken(context, "");
+		//设置退出时清空UserToken、RefreshToken
+		if (!bl) {
+			SDKStateManager.setUserToken(context, "");
+			SDKStateManager.setRefreshToken(context, "");
+		}
 	}
 
 	public UserVO getCurrUserInfo() {
