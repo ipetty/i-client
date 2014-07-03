@@ -10,6 +10,9 @@ import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.Logout;
 import net.ipetty.android.user.UserActivity;
 import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -72,9 +75,10 @@ public class SettingActivity extends Activity {
 		UserVO user = UserApiWithCache.getUserById4Synchronous(this, id);
 
 		ImageView avatar = (ImageView) this.findViewById(R.id.avatar);
-		String str = Constant.FILE_SERVER_BASE + user.getAvatar();
-		ImageLoader.getInstance().displayImage(str, avatar, options);
-
+		if (StringUtils.isNotBlank(user.getAvatar())) {
+			String str = Constant.FILE_SERVER_BASE + user.getAvatar();
+			ImageLoader.getInstance().displayImage(str, avatar, options);
+		}
 		TextView name = (TextView) this.findViewById(R.id.name);
 		name.setText(user.getNickname());
 	}

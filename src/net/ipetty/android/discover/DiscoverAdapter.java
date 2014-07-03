@@ -8,6 +8,9 @@ import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.vo.FeedVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -76,9 +79,11 @@ public class DiscoverAdapter extends BaseAdapter {
 			holder = (GridHolder) convertView.getTag();
 		}
 		FeedVO feed = (FeedVO) this.getItem(index);
-		String str = Constant.FILE_SERVER_BASE + feed.getImageSmallURL();
-		Log.d(TAG, str);
-		ImageLoader.getInstance().displayImage(str, holder.image, options);
+		if (StringUtils.isNoneBlank(feed.getImageSmallURL())) {
+			String str = Constant.FILE_SERVER_BASE + feed.getImageSmallURL();
+			Log.d(TAG, str);
+			ImageLoader.getInstance().displayImage(str, holder.image, options);
+		}
 
 		return convertView;
 	}

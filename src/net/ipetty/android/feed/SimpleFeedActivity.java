@@ -240,8 +240,10 @@ public class SimpleFeedActivity extends BaseActivity {
 
 		Log.d(TAG, "imgURL" + Constant.FILE_SERVER_BASE + feed.getImageSmallURL());
 		// 图片显示
+		if (StringUtils.isNoneBlank(feed.getImageSmallURL())) {
 		ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(), content_image,
 				options);
+		}
 
 		// 内容空不显示内容区域
 		if (StringUtils.isEmpty(feed.getText())) {

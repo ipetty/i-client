@@ -313,7 +313,9 @@ public class UserActivity extends BaseActivity {
 				Log.i(TAG, "updateAvatar.onSuccess:" + result);
 				UserApiWithCache.removeCache(currUserId);
 				UserVO user = UserApiWithCache.getUserById4Synchronous(UserActivity.this, currUserId);
-				ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+				if (StringUtils.isNotBlank(user.getAvatar())) {
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+				}
 				UserActivity.this.showMessageForLongTime("更新头像成功");
 			}
 

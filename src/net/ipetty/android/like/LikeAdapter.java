@@ -11,6 +11,9 @@ import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.vo.FeedFavorVO;
 import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -87,7 +90,10 @@ public class LikeAdapter extends BaseAdapter implements OnScrollListener {
 		// asynLoadUserInfo((Activity) context, holder, vo);
 		UserVO user = UserApiWithCache.getUserById4Synchronous(context, vo.getCreatedBy());
 		holder.name.setText(user.getNickname());
-		ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+		if (StringUtils.isNotBlank(user.getAvatar())) {
+			ImageLoader.getInstance()
+					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+		}
 		return view;
 	}
 

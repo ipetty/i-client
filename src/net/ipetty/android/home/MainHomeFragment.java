@@ -268,7 +268,9 @@ public class MainHomeFragment extends Fragment {
 
 		int id = IpetApi.init(this.getActivity()).getCurrUserId();
 		UserVO user = UserApiWithCache.getUserById4Synchronous(getActivity(), id);
-		ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+		if (StringUtils.isNotBlank(user.getAvatar())) {
+			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+		}
 
 		listView.addHeaderView(v);
 	}
