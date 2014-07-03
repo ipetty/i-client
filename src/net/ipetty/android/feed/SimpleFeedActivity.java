@@ -1,5 +1,34 @@
 package net.ipetty.android.feed;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.comment.CommentActivity;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.PrettyDateFormat;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.home.LargerImageActivity;
+import net.ipetty.android.like.LikeActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.Favor;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.CommentVO;
+import net.ipetty.vo.FeedFavorVO;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -17,34 +46,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.comment.CommentActivity;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.JSONUtils;
-import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.home.LargerImageActivity;
-import net.ipetty.android.like.LikeActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.Favor;
-import net.ipetty.android.sdk.task.feed.GetFeedById;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.CommentVO;
-import net.ipetty.vo.FeedFavorVO;
-import net.ipetty.vo.FeedVO;
-import net.ipetty.vo.UserVO;
-import org.apache.commons.lang3.StringUtils;
 
 public class SimpleFeedActivity extends BaseActivity {
 
@@ -232,7 +236,7 @@ public class SimpleFeedActivity extends BaseActivity {
 		});
 
 		// 发布时间
-		String creatAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(feed.getCreatedOn());
+		String creatAt = new PrettyDateFormat("@", "yyyy-MM-dd HH:mm:dd").format(feed.getCreatedOn());
 		// TODO: 日期需要处理为 多少分钟前 多少秒前
 		created_at.setText(creatAt); // 发布时间
 		// 发布内容
@@ -241,8 +245,8 @@ public class SimpleFeedActivity extends BaseActivity {
 		Log.d(TAG, "imgURL" + Constant.FILE_SERVER_BASE + feed.getImageSmallURL());
 		// 图片显示
 		if (StringUtils.isNoneBlank(feed.getImageSmallURL())) {
-		ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(), content_image,
-				options);
+			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(), content_image,
+					options);
 		}
 
 		// 内容空不显示内容区域
