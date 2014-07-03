@@ -1,5 +1,9 @@
 package net.ipetty.android.core;
 
+import java.util.HashMap;
+
+import net.ipetty.R;
+
 public class Constant {
 
 	// 文件服务器地址
@@ -32,4 +36,16 @@ public class Constant {
 	public final static float COMPRESS_IMAGE_MIN_HEIGHT = 64f;
 	public final static int COMPRESS_IMAGE_KB = 100;
 
+	// PET_FAMILY
+	public final static String PET_FAMILY_DOG_KEY = "dog";
+	public final static String PET_FAMILY_CAT_KEY = "cat";
+	public final static String PET_FAMILY_OTHER_KEY = "other";
+
+	public static HashMap<String, Integer> PET_FAMILY_RES_MAP = new HashMap<String, Integer>();
+
+	static {
+		PET_FAMILY_RES_MAP.put(PET_FAMILY_DOG_KEY, R.drawable.default_main_header_bg_dog);
+		PET_FAMILY_RES_MAP.put(PET_FAMILY_CAT_KEY, R.drawable.default_main_header_bg_cat);
+		PET_FAMILY_RES_MAP.put(PET_FAMILY_OTHER_KEY, R.drawable.default_main_header_bg_other);
+	}
 }

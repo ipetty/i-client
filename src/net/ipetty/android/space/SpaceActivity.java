@@ -1,21 +1,8 @@
 package net.ipetty.android.space;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.bonuspoint.BonusPointActivity;
@@ -45,8 +32,25 @@ import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.PetVO;
 import net.ipetty.vo.UserStatisticsVO;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SpaceActivity extends Activity {
 
@@ -76,10 +80,11 @@ public class SpaceActivity extends Activity {
 	private Boolean isFollow;// 记录当前用户是否已关注被查看用户
 	private Integer pageNumber = 0;// 我的feed
 	private final Integer pageSize = 5;// 我的feed
-	private View space_feed_layout;	//feed列表布局
-	private ListView space_feed_list;//feed列表View
-	private FeedAdapter feedListAdapter;//feed列表适配
+	private View space_feed_layout; // feed列表布局
+	private ListView space_feed_list;// feed列表View
+	private FeedAdapter feedListAdapter;// feed列表适配
 	private Long lastTimeMillis;
+	private ImageView header_bg;
 
 	// 获取刷新时间，若网络不可用则取最后一次刷新时间
 	private void getRefreshTime() {
@@ -147,6 +152,8 @@ public class SpaceActivity extends Activity {
 			}).execute(this.userId);
 
 		}
+
+		header_bg = (ImageView) this.findViewById(R.id.header_bg);
 
 		// 用户统计信息
 		feed_num_text = (TextView) this.findViewById(R.id.feed_num_text);
@@ -320,7 +327,7 @@ public class SpaceActivity extends Activity {
 				if (StringUtils.isNotBlank(pet.getGender())) {
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petGender, pet.getGender())).execute(
-									OptionGroup.PET_GENDER);
+							OptionGroup.PET_GENDER);
 				}
 
 				TextView petBirthday = (TextView) space_petty_view.findViewById(R.id.pet_birthday);
@@ -331,9 +338,11 @@ public class SpaceActivity extends Activity {
 				TextView petFamily = (TextView) space_petty_view.findViewById(R.id.pet_family);
 				// TODO 缓存OptionValueLabelMap
 				if (StringUtils.isNotBlank(pet.getFamily())) {
+					header_bg.setImageResource(Constant.PET_FAMILY_RES_MAP.get(pet.getFamily()));
+
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petFamily, pet.getFamily())).execute(
-									OptionGroup.PET_FAMILY);
+							OptionGroup.PET_FAMILY);
 				}
 
 				if (isCurrentUser) {
