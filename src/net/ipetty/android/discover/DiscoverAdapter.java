@@ -81,6 +81,8 @@ public class DiscoverAdapter extends BaseAdapter {
 			String str = Constant.FILE_SERVER_BASE + feed.getImageSmallURL();
 			Log.d(TAG, str);
 			ImageLoader.getInstance().displayImage(str, holder.image, options);
+		} else {
+			holder.image.setImageResource(R.drawable.avatar);
 		}
 
 		return convertView;

@@ -276,6 +276,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		if (StringUtils.isNotBlank(user.getAvatar())) {
 			ImageLoader.getInstance()
 					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.avatar);
 		}
 		Log.d(TAG, "发布人昵称：" + user.getNickname());
 		if (StringUtils.isNotBlank(user.getNickname())) {
@@ -328,6 +330,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		if (StringUtils.isNotBlank(feed.getImageSmallURL())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(),
 					holder.content_image, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.avatar);
 		}
 
 		// 内容空不显示内容区域
@@ -585,6 +589,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 				if (StringUtils.isNotBlank(resultUser.getAvatar())) {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + resultUser.getAvatar(),
 							holder.avatar, options);
+				} else {
+					holder.avatar.setImageResource(R.drawable.avatar);
 				}
 				Log.d(TAG, "发布人昵称：" + resultUser.getNickname());
 				if (StringUtils.isNotBlank(resultUser.getNickname())) {

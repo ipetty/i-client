@@ -85,6 +85,8 @@ public class LoginHasAccountActivity extends BaseActivity {
 		}
 		if (!StringUtils.isEmpty(user.getAvatar())) {
 			ImageLoader.getInstance().displayImage(user.getAvatar(), avatar, options);
+		} else {
+			avatar.setImageResource(R.drawable.avatar);
 		}
 	}
 
@@ -94,12 +96,12 @@ public class LoginHasAccountActivity extends BaseActivity {
 		public void onClick(View arg0) {
 			int index = passwordView.getSelectionStart();
 			if (!psdDisplayFlg) {
-                // display password text, for example "123456"
+				// display password text, for example "123456"
 				// passwordView.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
 				passwordView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 				toggleView.setText(R.string.login_toggle_password_hide);
 			} else {
-                // hide password, display "."
+				// hide password, display "."
 				// passwordView.setTransformationMethod(PasswordTransformationMethod.getInstance());
 				passwordView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 				toggleView.setText(R.string.login_toggle_password_show);

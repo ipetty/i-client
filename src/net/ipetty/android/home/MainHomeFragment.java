@@ -204,6 +204,8 @@ public class MainHomeFragment extends Fragment {
 						if (StringUtils.isNotEmpty(result.getAvatar())) {
 							ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getAvatar(),
 									avatar, options);
+						} else {
+							avatar.setImageResource(R.drawable.avatar);
 						}
 						// 根据个人信息加载背景
 						if (StringUtils.isNotEmpty(result.getBackground())) {
@@ -228,6 +230,8 @@ public class MainHomeFragment extends Fragment {
 						if (StringUtils.isNotEmpty(result.getAvatar())) {
 							ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getAvatar(),
 									avatar, options);
+						} else {
+							avatar.setImageResource(R.drawable.avatar);
 						}
 						new ListPetsByUserId(getActivity()).setListener(
 								new DefaultTaskListener<List<PetVO>>(getActivity()) {
@@ -285,6 +289,8 @@ public class MainHomeFragment extends Fragment {
 		UserVO user = UserApiWithCache.getUserById4Synchronous(getActivity(), id);
 		if (StringUtils.isNotBlank(user.getAvatar())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+		} else {
+			avatar.setImageResource(R.drawable.avatar);
 		}
 
 		listView.addHeaderView(v);

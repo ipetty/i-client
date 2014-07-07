@@ -207,6 +207,8 @@ public class SimpleFeedActivity extends BaseActivity {
 		Log.d(TAG, "发布人头像：" + user.getAvatar());
 		if (!StringUtils.isEmpty(user.getAvatar())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+		} else {
+			avatar.setImageResource(R.drawable.avatar);
 		}
 		Log.d(TAG, "发布人昵称：" + user.getNickname());
 		if (!StringUtils.isEmpty(user.getNickname())) {
@@ -243,6 +245,8 @@ public class SimpleFeedActivity extends BaseActivity {
 		if (StringUtils.isNotBlank(feed.getImageSmallURL())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + feed.getImageSmallURL(), content_image,
 					options);
+		} else {
+			content_image.setImageResource(R.drawable.avatar);
 		}
 
 		// 内容空不显示内容区域

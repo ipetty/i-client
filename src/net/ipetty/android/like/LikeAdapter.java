@@ -1,19 +1,5 @@
 package net.ipetty.android.like;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.sdk.task.user.GetUserById;
-import net.ipetty.vo.FeedFavorVO;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -25,9 +11,19 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.sdk.task.user.GetUserById;
+import net.ipetty.vo.FeedFavorVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class LikeAdapter extends BaseAdapter implements OnScrollListener {
 
@@ -93,6 +89,8 @@ public class LikeAdapter extends BaseAdapter implements OnScrollListener {
 		if (StringUtils.isNotBlank(user.getAvatar())) {
 			ImageLoader.getInstance()
 					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.avatar);
 		}
 		return view;
 	}
@@ -110,6 +108,8 @@ public class LikeAdapter extends BaseAdapter implements OnScrollListener {
 				if (null != result.getAvatar()) {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result.getAvatar(),
 							holder.avatar, options);
+				} else {
+					holder.avatar.setImageResource(R.drawable.avatar);
 				}
 			}
 		}).execute(userId);

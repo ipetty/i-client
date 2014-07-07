@@ -80,6 +80,8 @@ public class MyFollowsAdapter extends BaseAdapter implements OnScrollListener {
 		UserVO user = list.get(position);
 		if (StringUtils.isNotBlank(user.getAvatar())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.avatar);
 		}
 		holder.name.setText(user.getNickname());
 		//TODO:对于关注、反关注图标和点击事件处理

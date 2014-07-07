@@ -1,8 +1,21 @@
 package net.ipetty.android.space;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.bonuspoint.BonusPointActivity;
@@ -32,25 +45,8 @@ import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.PetVO;
 import net.ipetty.vo.UserStatisticsVO;
 import net.ipetty.vo.UserVO;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SpaceActivity extends Activity {
 
@@ -173,6 +169,8 @@ public class SpaceActivity extends Activity {
 		avatar = (ImageView) this.findViewById(R.id.avatar);
 		if (!StringUtils.isEmpty(user.getAvatar())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+		} else {
+			avatar.setImageResource(R.drawable.avatar);
 		}
 		if (isCurrentUser) {
 			avatar.setOnClickListener(userEditClick);
@@ -317,6 +315,8 @@ public class SpaceActivity extends Activity {
 				if (StringUtils.isNotBlank(pet.getAvatar())) {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + pet.getAvatar(), petAvatar,
 							options);
+				} else {
+					petAvatar.setImageResource(R.drawable.avatar);
 				}
 
 				TextView petName = (TextView) space_petty_view.findViewById(R.id.pet_name);
@@ -327,7 +327,7 @@ public class SpaceActivity extends Activity {
 				if (StringUtils.isNotBlank(pet.getGender())) {
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petGender, pet.getGender())).execute(
-							OptionGroup.PET_GENDER);
+									OptionGroup.PET_GENDER);
 				}
 
 				TextView petBirthday = (TextView) space_petty_view.findViewById(R.id.pet_birthday);
@@ -342,7 +342,7 @@ public class SpaceActivity extends Activity {
 
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petFamily, pet.getFamily())).execute(
-							OptionGroup.PET_FAMILY);
+									OptionGroup.PET_FAMILY);
 				}
 
 				if (isCurrentUser) {
@@ -373,6 +373,8 @@ public class SpaceActivity extends Activity {
 		// 头像
 		if (!StringUtils.isEmpty(user.getAvatar())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+		} else {
+			avatar.setImageResource(R.drawable.avatar);
 		}
 		// 统计数据
 		new GetUserStatisticsByUserId(this).setListener(new DefaultTaskListener<UserStatisticsVO>(SpaceActivity.this) {
