@@ -34,12 +34,13 @@ public class UserApiWithCache {
 	 * @return
 	 */
 	public static synchronized UserVO getUserById4Synchronous(final Context context, final Integer userId) {
+		Log.d(TAG, "getUserById4Synchronous:" + userId);
 		UserVO user = cache.get(userId);
 		if (null != user) {
-			Log.d(TAG, "找到缓存:" + userId + ",Avatar:" + user.getAvatar());
+			Log.d(TAG, "getUserById4Synchronous:找到缓存," + userId + ",Avatar:" + user.getAvatar());
 			return user;
 		}
-
+		Log.d(TAG, "getUserById4Synchronous:没找到缓存," + userId);
 		final CountDownLatch latch = new CountDownLatch(1);
 		new Thread(new Runnable() {
 			@Override
@@ -53,6 +54,7 @@ public class UserApiWithCache {
 		} catch (InterruptedException ex) {
 			throw new APIException(ex);
 		}
+		Log.d(TAG, "getUserById4Synchronous:put," + userId + ",Avatar:" + userForGetUserById4Synchronous.getAvatar());
 		cache.put(userForGetUserById4Synchronous);
 		return userForGetUserById4Synchronous;
 
@@ -60,12 +62,14 @@ public class UserApiWithCache {
 
 	public static synchronized void getUserById4Asynchronous(final Context context, final Integer userId,
 			final DefaultTaskListener<UserVO> listenner) {
+		Log.d(TAG, "getUserById4Asynchronous:" + userId);
 		UserVO user = cache.get(userId);
 		if (null != user) {
+			Log.d(TAG, "getUserById4Asynchronous:找到缓存," + userId + ",Avatar:" + user.getAvatar());
 			listenner.onSuccess(user);
 			return;
 		}
-
+		Log.d(TAG, "getUserById4Asynchronous:没有找到缓存," + userId);
 		String loadingMsg = listenner.getLoadingMessage();
 		DefaultTaskListener<UserVO> myListener = null;
 		if (StringUtils.isEmpty(loadingMsg)) {
@@ -73,6 +77,7 @@ public class UserApiWithCache {
 				@Override
 				public void onSuccess(UserVO result) {
 					UserApiWithCache.cache.put(result);
+					Log.d(TAG, "getUserById4Asynchronous:put," + userId + ",Avatar:" + result.getAvatar());
 					listenner.onSuccess(result);
 				}
 			};
@@ -80,6 +85,7 @@ public class UserApiWithCache {
 			myListener = new DefaultTaskListener<UserVO>((Activity) context, loadingMsg) {
 				@Override
 				public void onSuccess(UserVO result) {
+					Log.d(TAG, "getUserById4Asynchronous:put," + userId + ",Avatar:" + result.getAvatar());
 					UserApiWithCache.cache.put(result);
 					listenner.onSuccess(result);
 				}
@@ -90,10 +96,12 @@ public class UserApiWithCache {
 	}
 
 	public static synchronized void updateCache(UserVO user) {
+		Log.d(TAG, "updateCache:" + user.getId());
 		cache.put(user);
 	}
 
 	public static synchronized void removeCache(Integer id) {
+		Log.d(TAG, "removeCache:" + id);
 		cache.remove(id);
 	}
 }
