@@ -5,22 +5,19 @@
  */
 package net.ipetty.android.api;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import java.util.concurrent.CountDownLatch;
-
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.sdk.core.APIException;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.vo.UserVO;
-
 import org.apache.commons.lang3.StringUtils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
-
 /**
- * 
+ *
  * @author yneos
  */
 public class UserApiWithCache {
@@ -31,7 +28,7 @@ public class UserApiWithCache {
 
 	/**
 	 * 同步获取用户
-	 * 
+	 *
 	 * @param context
 	 * @param userId
 	 * @return
@@ -39,7 +36,7 @@ public class UserApiWithCache {
 	public static synchronized UserVO getUserById4Synchronous(final Context context, final Integer userId) {
 		UserVO user = cache.get(userId);
 		if (null != user) {
-			Log.d(TAG, "找到缓存:" + userId);
+			Log.d(TAG, "找到缓存:" + userId + ",Avatar:" + user.getAvatar());
 			return user;
 		}
 

@@ -1,32 +1,5 @@
 package net.ipetty.android.home;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DeviceUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.ImageUtils;
-import net.ipetty.android.core.util.JSONUtils;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.core.util.PathUtils;
-import net.ipetty.android.feed.FeedPublishActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
-import net.ipetty.android.sdk.task.pet.ListPetsByUserId;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.FeedVO;
-import net.ipetty.vo.PetVO;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -45,13 +18,37 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DeviceUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.ImageUtils;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.core.util.PathUtils;
+import net.ipetty.android.feed.FeedPublishActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
+import net.ipetty.android.sdk.task.pet.ListPetsByUserId;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.android.update.UpdateManager;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.PetVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class MainHomeFragment extends Fragment {
 
@@ -106,7 +103,9 @@ public class MainHomeFragment extends Fragment {
 		initListView();
 		initCamera();
 		loadData();
-
+		// 检查软件更新
+		UpdateManager manager = new UpdateManager(this.getActivity());
+		manager.checkUpdate();
 	}
 
 	@Override
@@ -155,7 +154,7 @@ public class MainHomeFragment extends Fragment {
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				String label = DateUtils.formatDateTime(MainHomeFragment.this.getActivity().getApplicationContext(),
 						getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+						| DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -177,8 +176,8 @@ public class MainHomeFragment extends Fragment {
 				if (hasMore) {
 					new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
 							new LoadMoreFeedListListener(MainHomeFragment.this)).execute(
-							MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
-							pageSize.toString());
+									MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
+									pageSize.toString());
 
 				}
 			}
@@ -300,7 +299,7 @@ public class MainHomeFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
+			OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
 			cameraDialog = DialogUtils.bottomPopupDialog(MainHomeFragment.this.getActivity(), Listener,
 					R.array.alert_camera, getString(R.string.camera_title), cameraDialog);
 		}
