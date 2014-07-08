@@ -104,8 +104,10 @@ public class MainHomeFragment extends Fragment {
 		initCamera();
 		loadData();
 		// 检查软件更新
-		UpdateManager manager = new UpdateManager(this.getActivity());
-		manager.checkUpdate();
+		if (NetWorkUtils.isNetworkConnected(this.getActivity())) {
+			UpdateManager manager = new UpdateManager(this.getActivity());
+			manager.checkUpdate();
+		}
 	}
 
 	@Override

@@ -1,22 +1,24 @@
 package net.ipetty.android.sdk.core;
 
+import android.content.Context;
 import net.ipetty.android.sdk.impl.ActivityApiImpl;
+import net.ipetty.android.sdk.impl.AppUpdateApiImpl;
 import net.ipetty.android.sdk.impl.FeedApiImpl;
 import net.ipetty.android.sdk.impl.FeedbackApiImpl;
 import net.ipetty.android.sdk.impl.FoundationApiImpl;
 import net.ipetty.android.sdk.impl.PetApiImpl;
 import net.ipetty.android.sdk.impl.UserApiImpl;
 import net.ipetty.sdk.ActivityApi;
+import net.ipetty.sdk.AppUpdateApi;
 import net.ipetty.sdk.FeedApi;
 import net.ipetty.sdk.FeedbackApi;
 import net.ipetty.sdk.FoundationApi;
 import net.ipetty.sdk.PetApi;
 import net.ipetty.sdk.UserApi;
-import android.content.Context;
 
 /**
  * API门户，负载组装API组件，对用户提供统一访问接口
- * 
+ *
  * @author xiaojinghai
  */
 public class IpetApi extends ApiBase {
@@ -29,6 +31,7 @@ public class IpetApi extends ApiBase {
 	private final ActivityApi activityApi;
 	private final FeedbackApi feedbackApi;
 	private final FoundationApi foundationApi;
+	private final AppUpdateApi appUpdateApi;
 
 	private IpetApi(Context context) {
 		super(context);
@@ -38,6 +41,7 @@ public class IpetApi extends ApiBase {
 		activityApi = new ActivityApiImpl(context);
 		feedbackApi = new FeedbackApiImpl(context);
 		foundationApi = new FoundationApiImpl(context);
+		appUpdateApi = new AppUpdateApiImpl(context);
 	}
 
 	public static IpetApi init(Context context) {
@@ -69,6 +73,10 @@ public class IpetApi extends ApiBase {
 
 	public FoundationApi getFoundationApi() {
 		return foundationApi;
+	}
+
+	public AppUpdateApi getAppUpdateApi() {
+		return appUpdateApi;
 	}
 
 }
