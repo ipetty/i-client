@@ -44,7 +44,6 @@ import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
 import net.ipetty.android.sdk.task.pet.ListPetsByUserId;
 import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.android.update.UpdateManager;
 import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.PetVO;
 import net.ipetty.vo.UserVO;
@@ -103,11 +102,7 @@ public class MainHomeFragment extends Fragment {
 		initListView();
 		initCamera();
 		loadData();
-		// 检查软件更新
-		if (NetWorkUtils.isNetworkConnected(this.getActivity())) {
-			UpdateManager manager = new UpdateManager(this.getActivity());
-			manager.checkUpdate();
-		}
+
 	}
 
 	@Override

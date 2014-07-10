@@ -114,6 +114,10 @@ public class UpdateManager {
 		// 获取当前软件版本
 		int versionCode = getVersionCode(mContext);
 
+		if (updateInfo == null || updateInfo.getVersionCode() == null) {
+			return false;
+		}
+
 		if (updateInfo.getVersionCode() > versionCode) {
 			return true;
 		}

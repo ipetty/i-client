@@ -1,11 +1,5 @@
 package net.ipetty.android.main;
 
-import net.ipetty.R;
-import net.ipetty.android.core.ActivityManager;
-import net.ipetty.android.core.ui.BaseFragmentActivity;
-import net.ipetty.android.core.util.AnimUtils;
-import net.ipetty.android.discover.MainDiscoverFragment;
-import net.ipetty.android.home.MainHomeFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +20,14 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
+import net.ipetty.R;
+import net.ipetty.android.core.ActivityManager;
+import net.ipetty.android.core.ui.BaseFragmentActivity;
+import net.ipetty.android.core.util.AnimUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.discover.MainDiscoverFragment;
+import net.ipetty.android.home.MainHomeFragment;
+import net.ipetty.android.update.UpdateManager;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -36,7 +38,7 @@ public class MainActivity extends BaseFragmentActivity {
 	private int zero = 0;
 	private int one;
 	private int two;
-	private final Class[] fragments = { MainHomeFragment.class, MainDiscoverFragment.class };// ,MainNewsFragment.class};
+	private final Class[] fragments = {MainHomeFragment.class, MainDiscoverFragment.class};// ,MainNewsFragment.class};
 
 	private TextView main_text;
 	private TextView discover_text;
@@ -86,6 +88,12 @@ public class MainActivity extends BaseFragmentActivity {
 
 		gray = getResources().getColor(R.color.title_gray);
 		red = getResources().getColor(R.color.title_red);
+
+		// 检查软件更新
+		if (NetWorkUtils.isNetworkConnected(this)) {
+			UpdateManager manager = new UpdateManager(this);
+			manager.checkUpdate();
+		}
 
 	}
 
@@ -170,34 +178,34 @@ public class MainActivity extends BaseFragmentActivity {
 			news_text.setTextColor(gray);
 
 			switch (arg0) {
-			case 0: {
-				if (currIndex == 1) {
-					animation = new TranslateAnimation(one, zero, 0, 0);
-				} else if (currIndex == 2) {
-					animation = new TranslateAnimation(two, zero, 0, 0);
-				}
-				main_text.setTextColor(red);
-				break;
+				case 0: {
+					if (currIndex == 1) {
+						animation = new TranslateAnimation(one, zero, 0, 0);
+					} else if (currIndex == 2) {
+						animation = new TranslateAnimation(two, zero, 0, 0);
+					}
+					main_text.setTextColor(red);
+					break;
 
-			}
-			case 1: {
-				if (currIndex == 0) {
-					animation = new TranslateAnimation(zero, one, 0, 0);
-				} else if (currIndex == 2) {
-					animation = new TranslateAnimation(two, one, 0, 0);
 				}
-				discover_text.setTextColor(red);
-				break;
-			}
-			case 2: {
-				if (currIndex == 0) {
-					animation = new TranslateAnimation(zero, two, 0, 0);
-				} else if (currIndex == 1) {
-					animation = new TranslateAnimation(one, two, 0, 0);
+				case 1: {
+					if (currIndex == 0) {
+						animation = new TranslateAnimation(zero, one, 0, 0);
+					} else if (currIndex == 2) {
+						animation = new TranslateAnimation(two, one, 0, 0);
+					}
+					discover_text.setTextColor(red);
+					break;
 				}
-				news_text.setTextColor(red);
-				break;
-			}
+				case 2: {
+					if (currIndex == 0) {
+						animation = new TranslateAnimation(zero, two, 0, 0);
+					} else if (currIndex == 1) {
+						animation = new TranslateAnimation(one, two, 0, 0);
+					}
+					news_text.setTextColor(red);
+					break;
+				}
 
 			}
 			currIndex = arg0;
