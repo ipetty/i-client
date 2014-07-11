@@ -316,6 +316,7 @@ public class UserActivity extends BaseActivity {
 				} else {
 					avatar.setImageResource(R.drawable.avatar);
 				}
+				IpetApi.init(UserActivity.this).setCurrUserInfo(user);
 				UserActivity.this.showMessageForLongTime("更新头像成功");
 			}
 

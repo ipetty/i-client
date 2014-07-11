@@ -1,12 +1,5 @@
 package net.ipetty.android.discover;
 
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.feed.SimpleFeedActivity;
-import net.ipetty.android.main.MainActivity;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,8 +11,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.main.MainActivity;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
 
 public class MainDiscoverFragment extends Fragment {
+
 	public final static String TAG = "MainDiscoverFragment";
 	private Activity activity;
 	private GridView gridview;
@@ -57,14 +58,14 @@ public class MainDiscoverFragment extends Fragment {
 			}
 		});
 
-		loadDate();
+		//loadDate();
 	}
 
 	private void loadDate() {
 		// TODO Auto-generated method stub
 		new ListByTimelineForSquare(MainDiscoverFragment.this.getActivity()).setListener(
 				new DiscoverListener(MainDiscoverFragment.this.getActivity(), adapter)).execute(
-				getRefreshTime().toString(), "0", pageSize.toString());
+						getRefreshTime().toString(), "0", pageSize.toString());
 	}
 
 	private Long getRefreshTime() {
@@ -86,6 +87,7 @@ public class MainDiscoverFragment extends Fragment {
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
+		loadDate();
 		super.onResume();
 		Log.i(TAG, "onResume");
 	}
