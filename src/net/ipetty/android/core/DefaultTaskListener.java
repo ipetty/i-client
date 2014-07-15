@@ -128,7 +128,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 
 		//服务器不可用异常
 		if (ex instanceof ServiceUnavailableException) {
-			showError("当前服务器不可用,请稍后使用");
+			showError("服务器维护中,请稍后使用");
 			waitFor(3 * 1000);
 			ActivityManager.getInstance().exit();
 			return;
