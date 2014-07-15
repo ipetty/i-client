@@ -7,9 +7,11 @@ package net.ipetty.android.core;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
+import java.util.concurrent.CountDownLatch;
 import net.ipetty.android.sdk.core.APIException;
 import net.ipetty.android.sdk.core.ServiceUnavailableException;
 import org.apache.http.conn.ConnectTimeoutException;
@@ -126,7 +128,9 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 
 		//服务器不可用异常
 		if (ex instanceof ServiceUnavailableException) {
-			showError("服务器不可用");
+			showError("当前服务器不可用,请稍后使用");
+			waitFor(3 * 1000);
+			ActivityManager.getInstance().exit();
 			return;
 		}
 
@@ -186,7 +190,15 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 	//显示错误信息
 	private void showError(final String msg) {
 		Log.d(TAG, "showError");
-		Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+		//非UI线程进行UI界面操作
+		new Thread() {
+			@Override
+			public void run() {
+				Looper.prepare();
+				Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+				Looper.loop();
+			}
+		}.start();
 	}
 
 	/**
@@ -194,6 +206,29 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 	 */
 	public String getLoadingMessage() {
 		return loadingMessage;
+	}
+
+	//另启线程进行等待，防止阻塞UI线程
+	private void waitFor(long time) {
+		//异步转同步
+		final CountDownLatch latch = new CountDownLatch(1);
+		final Long waitTime = time;
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(waitTime);
+				} catch (InterruptedException ex) {
+
+				}
+				latch.countDown();
+			}
+		}.start();
+		try {
+			latch.await();
+		} catch (InterruptedException ex) {
+
+		}
 	}
 
 }
