@@ -37,8 +37,8 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 
 	private TextSwitcher title_ts;
 	private TextSwitcher ts;
-	private String[] titleArray = { "记录", "分享", "发现" };
-	private String[] poemArray = { "让手机记录我的宠物生活", "选择精彩记录分享到社交网络", "发现更多的宠物邻居和日常服务，这里有你需要的一些" };
+	private String[] titleArray = { "记录", "分享", "VIP内测" };
+	private String[] poemArray = { "让手机记录我的宠物生活", "选择精彩记录分享到社交网络", "VIP内测版本正式启用" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

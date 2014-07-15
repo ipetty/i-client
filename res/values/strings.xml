@@ -26,6 +26,7 @@
     <string name="register">注册</string>
     <string name="login">登录</string>
     <string name="account">账号</string>
+    <string name="email">邮箱</string>
     <string name="input_account_hint">请输入邮箱</string>
     <string name="password">密码</string>
     <string name="input_password_hint">请输入密码</string>
@@ -149,5 +150,6 @@
     <string name="soft_update_later">稍后更新</string>
     <string name="soft_updating">正在更新</string>
     <string name="soft_update_cancel">取消</string>
+
 
 </resources>
