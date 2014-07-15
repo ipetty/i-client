@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 import net.ipetty.android.sdk.core.APIException;
+import net.ipetty.android.sdk.core.ServiceUnavailableException;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -120,6 +121,12 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 				showError(e.getMessage());
 			}
 
+			return;
+		}
+
+		//服务器不可用异常
+		if (ex instanceof ServiceUnavailableException) {
+			showError("服务器不可用");
 			return;
 		}
 

@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.vo.AppUpdateVO;
@@ -86,9 +87,12 @@ public class UpdateManager {
 	 * 检测软件更新
 	 */
 	public void checkUpdate() {
-		if (isUpdate()) {
-			// 显示提示对话框
-			showNoticeDialog();
+		if (NetWorkUtils.isNetworkConnected(mContext)) {
+			if (IpetApi.init(mContext).checkServiceAvaliable()
+					&& isUpdate()) {
+				// 显示提示对话框
+				showNoticeDialog();
+			}
 		}
 	}
 

@@ -11,6 +11,9 @@ public class Constant {
 	// API服务器地址
 	public static final String API_SERVER_BASE = "http://api.ipetty.net/api";
 
+	// API服务可用性测试地址
+	public static final String API_HEALTH_URL = "http://api.ipetty.net/check.html";
+
 	public static final Integer EMPTY_USER_ID = -1;
 
 	public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";

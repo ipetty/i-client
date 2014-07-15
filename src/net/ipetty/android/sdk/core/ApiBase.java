@@ -2,11 +2,19 @@ package net.ipetty.android.sdk.core;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.URIBuilder;
 import net.ipetty.android.sdk.cache.RestTemplate4Cache;
@@ -30,6 +38,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class ApiBase {
 
+	private final static String TAG = ApiBase.class.getSimpleName();
 	private final RestTemplate restTemplate;
 
 	private final Context context;
@@ -126,8 +135,60 @@ public class ApiBase {
 		return SDKStateManager.getUid(context);
 	}
 
-	protected void setCurrUserId(Integer uid) {
+	public void setCurrUserId(Integer uid) {
 		SDKStateManager.setUid(context, uid);
+	}
+
+	private Boolean result = false;
+
+	/**
+	 * 检测服务器服务是否可用
+	 */
+	public synchronized Boolean checkServiceAvaliable() {
+		final CountDownLatch latch = new CountDownLatch(1);
+		result = false;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					URL url = new URL(Constant.API_HEALTH_URL);
+					// 创建连接
+					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+					conn.setUseCaches(false);
+					conn.setConnectTimeout(3 * 1000);
+					conn.setReadTimeout(3 * 1000);
+					conn.setRequestProperty("Connection", "close");
+					conn.connect();
+					// 获取内容长度
+					int length = conn.getContentLength();
+					Log.d(TAG, "checkServiceAvaliable:" + length);
+					if (length > 0) {
+						result = true;
+					}
+					latch.countDown();
+				} catch (MalformedURLException ex) {
+					latch.countDown();
+					result = false;
+					Log.e(TAG, "", ex);
+				} catch (IOException ex) {
+					latch.countDown();
+					result = false;
+					Log.e(TAG, "", ex);
+				} catch (Exception ex) {
+					latch.countDown();
+					result = false;
+					Log.e(TAG, "", ex);
+				}
+
+			}
+		}).start();
+		try {
+			latch.await();
+			return result;
+		} catch (InterruptedException ex) {
+			throw new APIException("服务检测异常", ex);
+		}
+
 	}
 
 	protected RestTemplate getRestTemplate() {

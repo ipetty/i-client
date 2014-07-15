@@ -67,6 +67,12 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 		requestHeaders.set(HEADER_NAME_DEVICE_UUID, uuidB64);
 		requestHeaders.set("Connection", "close");
 
+		Boolean isServiceAvaliable = IpetApi.init(context).checkServiceAvaliable();
+		//Boolean isServiceAvaliable = true;
+		if (!isServiceAvaliable) {
+			Log.i(TAG, "throw ServiceUnavailableException");
+			throw new ServiceUnavailableException();
+		}
 		//执行请求
 		ClientHttpResponse resp = execution.execute(request, body);
 

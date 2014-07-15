@@ -90,10 +90,8 @@ public class MainActivity extends BaseFragmentActivity {
 		red = getResources().getColor(R.color.title_red);
 
 		// 检查软件更新
-		if (NetWorkUtils.isNetworkConnected(this)) {
-			UpdateManager manager = new UpdateManager(this);
-			manager.checkUpdate();
-		}
+		UpdateManager manager = new UpdateManager(this);
+		manager.checkUpdate();
 
 	}
 

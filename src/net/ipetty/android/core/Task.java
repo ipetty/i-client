@@ -22,101 +22,104 @@ import android.util.Log;
  */
 public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Result> {
 
-    //这样方便重构
-    private final static String TAG = Task.class.getSimpleName();
+	//这样方便重构
+	private final static String TAG = Task.class.getSimpleName();
 
-    protected TaskListener<Result> listener;
-    protected final Activity activity;
+	protected TaskListener<Result> listener;
+	protected final Activity activity;
 
-    //存放异常
-    protected Throwable ex;
+	//存放异常
+	protected Throwable ex;
 
-    public Task(Activity activity) {
-        super();
-        this.activity = activity;
-    }
+	public Task(Activity activity) {
+		super();
+		this.activity = activity;
+	}
 
-    //设置Listener
-    public Task<Params, Result> setListener(TaskListener<Result> listener) {
-        this.listener = listener;
-        return this;
-    }
+	//设置Listener
+	public Task<Params, Result> setListener(TaskListener<Result> listener) {
+		this.listener = listener;
+		return this;
+	}
 
-    //UI线程
-    @Override
-    protected void onPreExecute() {
-        Log.d(TAG, "onPreExecute");
-        super.onPreExecute();
-        if (listener != null) {
-            listener.onPreExecute();
-        }
+	//UI线程
+	@Override
+	protected void onPreExecute() {
+		Log.d(TAG, "onPreExecute");
+		super.onPreExecute();
+		if (listener != null) {
+			listener.onPreExecute();
+		}
 
-    }
+	}
 
-    //非UI线程
-    @Override
-    protected Result doInBackground(Params... paramss) {
-        Log.d(TAG, "doInBackground");
-        try {
-            return myDoInBackground(paramss);
-        } catch (Throwable e) {
-            ex = e;
-            String msg = e.getMessage() == null ? "" : e.getMessage();
-            Log.e(TAG, msg, e);
-            return null;
-        }
-    }
+	//非UI线程
+	@Override
+	protected Result doInBackground(Params... paramss) {
+		Log.d(TAG, "doInBackground");
+		try {
+			return myDoInBackground(paramss);
+		} catch (Throwable e) {
+			Log.d(TAG, "Catch Error");
+			ex = e;
+			String msg = e.getMessage() == null ? "" : e.getMessage();
+			Log.e(TAG, msg, e);
+			return null;
+		}
+	}
 
-    /**
-     * 非UI线程，后台执行内容
-     *
-     * @param args
-     * @return
-     */
-    protected abstract Result myDoInBackground(Params... args);
+	/**
+	 * 非UI线程，后台执行内容
+	 *
+	 * @param args
+	 * @return
+	 */
+	protected abstract Result myDoInBackground(Params... args);
 
-    //UI线程
-    @Override
-    protected void onPostExecute(Result result) {
-        Log.d(TAG, "onPostExecute");
-        super.onPostExecute(result);
-        if (listener != null) {
-            if (ex == null) {
-                listener.doSuccess(result);
-            } else {
-                listener.onError(ex);
-            }
-        }
-    }
+	//UI线程
+	@Override
+	protected void onPostExecute(Result result) {
+		Log.d(TAG, "onPostExecute");
+		super.onPostExecute(result);
+		if (listener != null) {
+			if (ex == null) {
+				Log.d(TAG, "doSuccess");
+				listener.doSuccess(result);
+			} else {
+				Log.d(TAG, "onError");
+				listener.onError(ex);
+			}
+		}
+	}
 
-    //UI线程
-    @Override
-    protected void onProgressUpdate(Integer... prgrss) {
-        Log.d(TAG, "onProgressUpdate");
-        super.onProgressUpdate(prgrss);
-        if (listener != null) {
-            listener.onProgressUpdate(prgrss);
-        }
-    }
+	//UI线程
+	@Override
+	protected void onProgressUpdate(Integer... prgrss) {
+		Log.d(TAG, "onProgressUpdate");
+		super.onProgressUpdate(prgrss);
+		if (listener != null) {
+			listener.onProgressUpdate(prgrss);
+		}
+	}
 
-    //UI线程
-    @Override
-    protected void onCancelled(Result result) {
-        Log.d(TAG, "onCancelled:Result");
-        super.onCancelled(result);
-        if (listener != null) {
-            listener.onCancelled(result);
-        }
-    }
+	//UI线程
+	@Override
+	protected void onCancelled(Result result) {
+		Log.d(TAG, "onCancelled:Result");
+		super.onCancelled(result);
+		if (listener != null) {
+			listener.onCancelled(result);
+		}
+	}
 
-    //UI线程
-    @Override
-    protected void onCancelled() {
-        Log.d(TAG, "onCancelled");
-        super.onCancelled();
-        if (listener != null) {
-            listener.onCancelled();
-        }
-    }
+	//UI线程
+	@Override
+	protected void onCancelled() {
+		Log.d(TAG, "onCancelled");
+		super.onCancelled();
+		if (listener != null) {
+			listener.onCancelled();
+		}
+	}
 
 }
