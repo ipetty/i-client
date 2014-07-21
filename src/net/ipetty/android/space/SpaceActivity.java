@@ -1,21 +1,8 @@
 package net.ipetty.android.space;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.bonuspoint.BonusPointActivity;
@@ -27,6 +14,7 @@ import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.discover.DiscoverAdapter;
 import net.ipetty.android.fans.FansActivity;
+import net.ipetty.android.feed.SimpleFeedActivity;
 import net.ipetty.android.follow.FollowsActivity;
 import net.ipetty.android.home.FeedAdapter;
 import net.ipetty.android.petty.PettyActivity;
@@ -45,8 +33,27 @@ import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.PetVO;
 import net.ipetty.vo.UserStatisticsVO;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SpaceActivity extends Activity {
 
@@ -176,6 +183,14 @@ public class SpaceActivity extends Activity {
 			avatar.setOnClickListener(userEditClick);
 		}
 
+		View feeds = findViewById(R.id.feeds_layout);
+		feeds.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				viewFlipper.setDisplayedChild(2);
+			}
+		});
+
 		View fans = findViewById(R.id.fans_layout);
 		fans.setOnClickListener(new OnClickListener() {
 			@Override
@@ -229,6 +244,16 @@ public class SpaceActivity extends Activity {
 		space_photo_grid = (GridView) space_photo_layout.findViewById(R.id.gridview);
 		space_photo_grid_adapter = new DiscoverAdapter(this);
 		space_photo_grid.setAdapter(space_photo_grid_adapter);
+		space_photo_grid.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(SpaceActivity.this, SimpleFeedActivity.class);
+				intent.putExtra(Constant.INTENT_FEED_ID_KEY, id);
+				SpaceActivity.this.startActivity(intent);
+			}
+		});
+
 		// 列表
 		space_feed_layout = this.findViewById(R.id.space_feed_layout);
 		space_feed_list = (ListView) space_feed_layout.findViewById(R.id.space_feed_list);
@@ -327,7 +352,7 @@ public class SpaceActivity extends Activity {
 				if (StringUtils.isNotBlank(pet.getGender())) {
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petGender, pet.getGender())).execute(
-									OptionGroup.PET_GENDER);
+							OptionGroup.PET_GENDER);
 				}
 
 				TextView petBirthday = (TextView) space_petty_view.findViewById(R.id.pet_birthday);
@@ -342,7 +367,7 @@ public class SpaceActivity extends Activity {
 
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petFamily, pet.getFamily())).execute(
-									OptionGroup.PET_FAMILY);
+							OptionGroup.PET_FAMILY);
 				}
 
 				if (isCurrentUser) {
