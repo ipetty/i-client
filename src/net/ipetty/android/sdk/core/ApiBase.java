@@ -13,8 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.URIBuilder;
 import net.ipetty.android.sdk.cache.RestTemplate4Cache;
@@ -155,9 +153,9 @@ public class ApiBase {
 					// 创建连接
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.setUseCaches(false);
-					conn.setConnectTimeout(3 * 1000);
-					conn.setReadTimeout(3 * 1000);
-					conn.setRequestProperty("Connection", "close");
+					conn.setConnectTimeout(5 * 1000);
+					conn.setReadTimeout(5 * 1000);
+					//conn.setRequestProperty("Connection", "close");
 					conn.connect();
 					// 获取内容长度
 					int length = conn.getContentLength();

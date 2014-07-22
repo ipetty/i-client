@@ -1,29 +1,5 @@
 package net.ipetty.android.home;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DeviceUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.ImageUtils;
-import net.ipetty.android.core.util.JSONUtils;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.core.util.PathUtils;
-import net.ipetty.android.feed.FeedPublishActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.FeedVO;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,13 +18,33 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DeviceUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.ImageUtils;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.core.util.PathUtils;
+import net.ipetty.android.feed.FeedPublishActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class MainHomeFragment extends Fragment {
 
@@ -86,6 +82,7 @@ public class MainHomeFragment extends Fragment {
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_COMMENT);
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_FAVORED);
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_PUBLISH);
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_DELETE);
 		this.getActivity().registerReceiver(broadcastreciver, filter);
 	}
 
@@ -152,7 +149,7 @@ public class MainHomeFragment extends Fragment {
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				String label = DateUtils.formatDateTime(MainHomeFragment.this.getActivity().getApplicationContext(),
 						getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+						| DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -174,8 +171,8 @@ public class MainHomeFragment extends Fragment {
 				if (hasMore) {
 					new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
 							new LoadMoreFeedListListener(MainHomeFragment.this)).execute(
-							MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
-							pageSize.toString());
+									MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
+									pageSize.toString());
 
 				}
 			}
@@ -184,7 +181,6 @@ public class MainHomeFragment extends Fragment {
 		ListView actualListView = mPullRefreshListView.getRefreshableView();
 
 		// initHeaderView(actualListView);
-
 		mAdapter = new FeedAdapter(this.getActivity());
 		actualListView.setAdapter(mAdapter);
 
@@ -198,7 +194,7 @@ public class MainHomeFragment extends Fragment {
 		 * UserApiWithCache.getUserById4Asynchronous(this.getActivity(),
 		 * api.getCurrUserId(), new
 		 * DefaultTaskListener<UserVO>(this.getActivity()) {
-		 * 
+		 *
 		 * @Override public void onSuccess(UserVO result) { // 设置头像 if
 		 * (StringUtils.isNotEmpty(result.getAvatar())) {
 		 * ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE +
@@ -207,7 +203,7 @@ public class MainHomeFragment extends Fragment {
 		 * (StringUtils.isNotEmpty(result.getBackground())) {
 		 * ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE +
 		 * result.getBackground(), header_bg, options); }
-		 * 
+		 *
 		 * mAdapter.notifyDataSetChanged(); } });
 		 */
 	}
@@ -219,7 +215,7 @@ public class MainHomeFragment extends Fragment {
 		 * UserApiWithCache.getUserById4Asynchronous(this.getActivity(),
 		 * api.getCurrUserId(), new
 		 * DefaultTaskListener<UserVO>(this.getActivity()) {
-		 * 
+		 *
 		 * @Override public void onSuccess(UserVO result) { // 设置头像 if
 		 * (StringUtils.isNotEmpty(result.getAvatar())) {
 		 * ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE +
@@ -227,17 +223,17 @@ public class MainHomeFragment extends Fragment {
 		 * avatar.setImageResource(R.drawable.avatar); } new
 		 * ListPetsByUserId(getActivity()).setListener( new
 		 * DefaultTaskListener<List<PetVO>>(getActivity()) {
-		 * 
+		 *
 		 * @Override public void onSuccess(List<PetVO> pets) { PetVO pet =
 		 * pets.get(0); if (StringUtils.isNotBlank(pet.getFamily())) {
 		 * header_bg.
 		 * setImageResource(Constant.PET_FAMILY_RES_MAP.get(pet.getFamily())); }
 		 * } }).execute(result.getId());
-		 * 
+		 *
 		 * if (StringUtils.isNotEmpty(result.getBackground())) {
 		 * ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE +
 		 * result.getBackground(), header_bg, options); }
-		 * 
+		 *
 		 * new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).
 		 * setListener( new
 		 * InitFeedListListener(MainHomeFragment.this.getActivity(),
@@ -247,7 +243,7 @@ public class MainHomeFragment extends Fragment {
 
 		new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
 				new InitFeedListListener(MainHomeFragment.this.getActivity(), mAdapter)).execute(
-				getRefreshTime().toString(), "0", pageSize.toString());
+						getRefreshTime().toString(), "0", pageSize.toString());
 
 	}
 
@@ -299,7 +295,7 @@ public class MainHomeFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
+			OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
 			cameraDialog = DialogUtils.bottomPopupDialog(MainHomeFragment.this.getActivity(), Listener,
 					R.array.alert_camera, getString(R.string.camera_title), cameraDialog);
 		}
@@ -432,6 +428,15 @@ public class MainHomeFragment extends Fragment {
 				String jsonStr = intent.getStringExtra(Constant.FEEDVO_JSON_SERIALIZABLE);
 				FeedVO feedVO = JSONUtils.fromJSON(jsonStr, FeedVO.class);
 				MainHomeFragment.this.prependFeedVO(feedVO);
+			}
+
+			if (Constant.BROADCAST_INTENT_FEED_DELETE.equals(action)) {
+				Log.d(TAG, "receive delete");
+				long feedId = intent.getLongExtra(Constant.FEEDVO_ID, -1l);
+				if (feedId != -1l) {
+					MainHomeFragment.this.mAdapter.removeById(feedId);
+					MainHomeFragment.this.mAdapter.notifyDataSetChanged();
+				}
 			}
 		}
 

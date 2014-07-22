@@ -1,32 +1,5 @@
 package net.ipetty.android.home;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.comment.CommentActivity;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.PrettyDateFormat;
-import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.feed.SimpleFeedActivity;
-import net.ipetty.android.like.LikeActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.Favor;
-import net.ipetty.android.sdk.task.feed.GetFeedById;
-import net.ipetty.android.sdk.task.user.GetUserById;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.CommentVO;
-import net.ipetty.vo.FeedFavorVO;
-import net.ipetty.vo.FeedVO;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -45,9 +18,33 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.comment.CommentActivity;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.PrettyDateFormat;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.like.LikeActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.DeleteFeed;
+import net.ipetty.android.sdk.task.feed.Favor;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
+import net.ipetty.android.sdk.task.user.GetUserById;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.CommentVO;
+import net.ipetty.vo.FeedFavorVO;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
@@ -98,6 +95,20 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
 	public List<FeedVO> getList() {
 		return list;
+	}
+
+	public void removeById(long feedId) {
+		int position = -1;
+		int i = 0;
+		for (FeedVO feed : list) {
+			if (feed.getId() == feedId) {
+				position = i;
+			}
+			i++;
+		}
+		if (position != -1) {
+			list.remove(position);
+		}
 	}
 
 	public void setList(List<FeedVO> list) {
@@ -243,10 +254,23 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 	private OnClickListener delOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO: 用户删除操作
-			int feedId = (int) FeedAdapter.this.getItemId(FeedAdapter.this.currentClickItemPosition);
-			Toast.makeText(FeedAdapter.this.context, "敬请期待", Toast.LENGTH_SHORT).show();
+			final long feedId = FeedAdapter.this.getItemId(FeedAdapter.this.currentClickItemPosition);
+			//Toast.makeText(FeedAdapter.this.context, "敬请期待", Toast.LENGTH_SHORT).show();
 			Log.d(TAG, "feedID->" + feedId);
+			new DeleteFeed((Activity) context).setListener(new DefaultTaskListener<Boolean>((Activity) context, "正在删除...") {
+				@Override
+				public void onSuccess(Boolean result) {
+					if (result) {
+						Intent intent = new Intent(Constant.BROADCAST_INTENT_FEED_DELETE);
+						intent.putExtra(Constant.FEEDVO_ID, feedId);
+						FeedAdapter.this.context.sendBroadcast(intent);
+						//FeedAdapter.this.getList().remove(FeedAdapter.this.currentClickItemPosition);
+						//FeedAdapter.this.notifyDataSetChanged();
+						//TODO:刷新其它界面
+					}
+				}
+			}).execute(feedId);
+
 			moreDialog.cancel();
 		}
 	};

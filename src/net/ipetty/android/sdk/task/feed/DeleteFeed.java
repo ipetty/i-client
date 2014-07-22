@@ -13,9 +13,9 @@ import net.ipetty.android.sdk.core.IpetApi;
  *
  * @author Administrator
  */
-public class Delete extends Task<Long, Boolean> {
+public class DeleteFeed extends Task<Long, Boolean> {
 
-    public Delete(Activity activity) {
+    public DeleteFeed(Activity activity) {
         super(activity);
     }
 

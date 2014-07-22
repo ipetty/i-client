@@ -1,7 +1,10 @@
 package net.ipetty.android.discover;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -36,8 +39,20 @@ public class MainDiscoverFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_PUBLISH);
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_DELETE);
+		this.getActivity().registerReceiver(broadcastreciver, filter);
 		Log.i(TAG, "onCreate");
 	}
+	private BroadcastReceiver broadcastreciver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			loadData();
+		}
+
+	};
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -58,10 +73,10 @@ public class MainDiscoverFragment extends Fragment {
 			}
 		});
 
-		//loadDate();
+		loadData();
 	}
 
-	private void loadDate() {
+	private void loadData() {
 		// TODO Auto-generated method stub
 		new ListByTimelineForSquare(MainDiscoverFragment.this.getActivity()).setListener(
 				new DiscoverListener(MainDiscoverFragment.this.getActivity(), adapter)).execute(
@@ -87,7 +102,7 @@ public class MainDiscoverFragment extends Fragment {
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
-		loadDate();
+		//loadData();
 		super.onResume();
 		Log.i(TAG, "onResume");
 	}
