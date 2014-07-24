@@ -23,6 +23,7 @@ import android.widget.Toast;
 public class LoginActivity extends BaseActivity {
 
 	private final static String TAG = LoginActivity.class.getSimpleName();
+
 	private EditText accountView;
 	private EditText passwordView;
 	private String account = null;
@@ -87,22 +88,24 @@ public class LoginActivity extends BaseActivity {
 		sina.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO sina Login
 				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
 
+				// sina Login
+				// Platform sinaWeibo = ShareSDK.getPlatform(LoginActivity.this,
+				// SinaWeibo.NAME);
+				// new
+				// SinaWeiboAuthorization(LoginActivity.this).authorize(sinaWeibo);
 			}
 		});
+
 		View qq = this.findViewById(R.id.qq);
 		qq.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO qq login
 				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
-
 			}
 		});
-
 	}
 
 	// 登录
@@ -147,20 +150,21 @@ public class LoginActivity extends BaseActivity {
 
 		if (StringUtils.isBlank(this.account)) {
 			accountView.requestFocus();
-			Toast.makeText(this, R.string.login_empty_account, Toast.LENGTH_SHORT).show();
+			Toast.makeText(LoginActivity.this, R.string.login_empty_account, Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
 		// if (!ValidUtils.isEmail(this.account)) {
 		// accountView.requestFocus();
-		// Toast.makeText(this, R.string.login_error_invalid_email,
+		// Toast.makeText(LoginActivity.this,
+		// R.string.login_error_invalid_email,
 		// Toast.LENGTH_SHORT).show();
 		// return false;
 		// }
 
 		if (StringUtils.isBlank(this.password)) {
 			passwordView.requestFocus();
-			Toast.makeText(this, R.string.login_empty_password, Toast.LENGTH_SHORT).show();
+			Toast.makeText(LoginActivity.this, R.string.login_empty_password, Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
