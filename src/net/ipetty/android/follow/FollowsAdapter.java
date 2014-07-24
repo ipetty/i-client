@@ -13,7 +13,6 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
@@ -124,13 +123,14 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 			}
 		});
 		//关注按钮
+		final ImageView followImageView = holder.follow;
 		new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
 			@Override
 			public void onSuccess(Boolean hasFollow) {
 				if (hasFollow) {
-					holder.follow.setImageResource(R.drawable.following_avatar);
+					followImageView.setImageResource(R.drawable.following_avatar);
 				} else {
-					holder.follow.setImageResource(R.drawable.follow_avatar);
+					followImageView.setImageResource(R.drawable.follow_avatar);
 				}
 
 			}
@@ -141,17 +141,6 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 		if (currUserId == user.getId()) {
 			holder.follow.setVisibility(View.INVISIBLE);
 		} else {
-			new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
-				@Override
-				public void onSuccess(Boolean hasFollow) {
-					if (hasFollow) {
-						holder.follow.setImageResource(R.drawable.following_avatar);
-					} else {
-						holder.follow.setImageResource(R.drawable.follow_avatar);
-					}
-				}
-			}).execute(user.getId());
-
 			holder.follow.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -164,10 +153,8 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 											@Override
 											public void onSuccess(Boolean result) {
 												if (result) {
-													holder.follow.setImageResource(R.drawable.follow_avatar);
+													//holder.follow.setImageResource(R.drawable.follow_avatar);
 													FollowsAdapter.this.notifyDataSetChanged();
-												} else {
-													Toast.makeText(FollowsAdapter.this.context, "操作失败", Toast.LENGTH_LONG).show();
 												}
 											}
 										}).execute(user.getId());
@@ -178,10 +165,8 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 											@Override
 											public void onSuccess(Boolean result) {
 												if (result) {
-													holder.follow.setImageResource(R.drawable.following_avatar);
+													//holder.follow.setImageResource(R.drawable.following_avatar);
 													FollowsAdapter.this.notifyDataSetChanged();
-												} else {
-													Toast.makeText(FollowsAdapter.this.context, "操作失败", Toast.LENGTH_LONG).show();
 												}
 											}
 										}).execute(user.getId());

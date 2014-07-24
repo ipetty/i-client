@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
@@ -126,13 +126,14 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 			}
 		});
 		//关注按钮
+		final ImageView followImageView = holder.follow;
 		new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
 			@Override
 			public void onSuccess(Boolean hasFollow) {
 				if (hasFollow) {
-					holder.follow.setImageResource(R.drawable.following_avatar);
+					followImageView.setImageResource(R.drawable.following_avatar);
 				} else {
-					holder.follow.setImageResource(R.drawable.follow_avatar);
+					followImageView.setImageResource(R.drawable.follow_avatar);
 				}
 
 			}
@@ -143,7 +144,7 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 		if (currUserId == user.getId()) {
 			holder.follow.setVisibility(View.INVISIBLE);
 		} else {
-			holder.follow.setOnClickListener(new View.OnClickListener() {
+			holder.follow.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					new IsFollow((Activity) FansAdapter.this.context).setListener(new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context, "操作中...") {
@@ -155,10 +156,7 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 											@Override
 											public void onSuccess(Boolean result) {
 												if (result) {
-													holder.follow.setImageResource(R.drawable.follow_avatar);
 													FansAdapter.this.notifyDataSetChanged();
-												} else {
-													Toast.makeText(FansAdapter.this.context, "操作失败", Toast.LENGTH_LONG).show();
 												}
 											}
 										}).execute(user.getId());
@@ -169,10 +167,7 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 											@Override
 											public void onSuccess(Boolean result) {
 												if (result) {
-													holder.follow.setImageResource(R.drawable.following_avatar);
 													FansAdapter.this.notifyDataSetChanged();
-												} else {
-													Toast.makeText(FansAdapter.this.context, "操作失败", Toast.LENGTH_LONG).show();
 												}
 											}
 										}).execute(user.getId());
