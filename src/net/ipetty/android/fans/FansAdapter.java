@@ -1,104 +1,212 @@
 package net.ipetty.android.fans;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import java.util.ArrayList;
 import java.util.List;
 import net.ipetty.R;
-import net.ipetty.vo.CommentVO;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.sdk.task.user.Follow;
+import net.ipetty.android.sdk.task.user.IsFollow;
+import net.ipetty.android.sdk.task.user.Unfollow;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class FansAdapter extends BaseAdapter implements OnScrollListener {
 
-    public final static String TAG = "FansAdapter";
-    private LayoutInflater inflater;
-    private List<CommentVO> list = null; // 这个就本地dataStore
+	public final static String TAG = BaseAdapter.class.getSimpleName();
+	private LayoutInflater inflater;
+	private List<UserVO> list = new ArrayList<UserVO>(); // 这个就本地dataStore
 
-    public FansAdapter(Context context) {
-        // TODO Auto-generated constructor stub
-        this.inflater = LayoutInflater.from(context);
-    }
+	private int userId;
+	private int currUserId;
+	private Boolean isCurrentUser;
+	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
+	private Context context;
 
-    @Override
-    public int getCount() {
-        return 20;// list == null ? 0 : list.size();
-    }
+	public FansAdapter(Context context, int userId, int currUserId) {
+		this.context = context;
+		this.inflater = LayoutInflater.from(context);
+		this.userId = userId;
+		this.currUserId = currUserId;
+		isCurrentUser = userId == currUserId;
+	}
 
-    @Override
-    public Object getItem(int position) {
-        // TODO Auto-generated method stub
-        return 0;// list.get(position);
-    }
+	@Override
+	public int getCount() {
+		return list.size();
+	}
 
-    @Override
-    public long getItemId(int position) {
-        // TODO Auto-generated method stub
-        return 0;// list.get(position).getId();
-    }
+	@Override
+	public Object getItem(int position) {
+		return list.get(position);
+	}
 
-    // 构建一个布局缓存的结构体 与VO对应
-    public class ViewHolder {
+	@Override
+	public long getItemId(int position) {
+		return list.get(position).getId();
+	}
 
-        public ImageView avatar;
-        public TextView name;
-        public ImageView follow;
-    }
+	// 构建一个布局缓存的结构体 与VO对应
+	public class ViewHolder {
 
-    public ViewHolder holder;
+		public ImageView avatar;
+		public TextView name;
+		public ImageView follow;
+	}
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
-        Log.i(TAG, "list position-->" + position);
-        // 这里开始呈现每个item的布局
-        View view;
-        if (convertView == null) {
-            Log.i(TAG, "init items View");
-            view = inflater.inflate(R.layout.list_fans_item, null);
-            holder = new ViewHolder();
-            holder.avatar = (ImageView) view.findViewById(R.id.avatar);
-            holder.name = (TextView) view.findViewById(R.id.name);
-            holder.follow = (ImageView) view.findViewById(R.id.follow);
-            holder.follow.setOnClickListener(followClick);
+	public ViewHolder holder;
 
-            convertView = view;
-            convertView.setTag(holder);
-        } else {
-            view = convertView;
-            holder = (ViewHolder) view.getTag();
-        }
-        // 数据与界面绑定
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "list position-->" + position);
+		// 这里开始呈现每个item的布局
+		View view;
+		if (convertView == null) {
+			Log.i(TAG, "init items View");
+			view = inflater.inflate(R.layout.list_fans_item, null);
+			holder = new ViewHolder();
+			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
+			holder.name = (TextView) view.findViewById(R.id.name);
+			holder.follow = (ImageView) view.findViewById(R.id.follow);
 
-        return view;
-    }
+			convertView = view;
+			convertView.setTag(holder);
+		} else {
+			view = convertView;
+			holder = (ViewHolder) view.getTag();
+		}
+		// 数据与界面绑定
+		final UserVO user = list.get(position);
+		//昵称
+		holder.name.setText(user.getNickname());
+		// 昵称事件
+		holder.name.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, SpaceActivity.class);
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, user.getId());
+				// intent.putExtra("uid", user.getUid());
+				// intent.putExtra("uniqueName", user.getUniqueName());
+				context.startActivity(intent);
+			}
+		});
+		//头像
+		if (!StringUtils.isEmpty(user.getAvatar())) {
+			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.avatar);
+		}
+		// 头像事件
+		holder.avatar.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, SpaceActivity.class);
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, user.getId());
+				// intent.putExtra("uid", user.getUid());
+				// intent.putExtra("uniqueName", user.getUniqueName());
+				context.startActivity(intent);
+			}
+		});
+		//关注按钮
+		holder.follow.setImageResource(R.drawable.follow_avatar);
+		new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
+			@Override
+			public void onSuccess(Boolean hasFollow) {
+				if (hasFollow) {
+					holder.follow.setImageResource(R.drawable.following_avatar);
+				} else {
+					holder.follow.setImageResource(R.drawable.follow_avatar);
+				}
 
-    private OnClickListener followClick = new OnClickListener() {
+			}
+		}).execute(user.getId());
 
-        @Override
-        public void onClick(View v) {
-			// TODO Auto-generated method stub
-            // test
-            ((ImageView) v).setImageResource(R.drawable.following_avatar);
-        }
-    };
+		//关注事件
+		//如果是自己隐藏按钮
+		if (currUserId == user.getId()) {
+			holder.follow.setVisibility(View.GONE);
+		} else {
+			holder.follow.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					new IsFollow((Activity) FansAdapter.this.context).setListener(new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context, "操作中...") {
+						@Override
+						public void onSuccess(Boolean hasFollow) {
+							if (hasFollow) {
+								new Unfollow((Activity) FansAdapter.this.context).setListener(
+										new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context, "正在反关注...") {
+											@Override
+											public void onSuccess(Boolean result) {
+												if (result) {
+													holder.follow.setImageResource(R.drawable.follow_avatar);
+													FansAdapter.this.notifyDataSetChanged();
+												} else {
+													Toast.makeText(FansAdapter.this.context, "操作失败", Toast.LENGTH_LONG).show();
+												}
+											}
+										}).execute(user.getId());
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        // TODO Auto-generated method stub
+							} else {
+								new Follow((Activity) FansAdapter.this.context).setListener(
+										new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context, "正在关注...") {
+											@Override
+											public void onSuccess(Boolean result) {
+												if (result) {
+													holder.follow.setImageResource(R.drawable.following_avatar);
+													FansAdapter.this.notifyDataSetChanged();
+												} else {
+													Toast.makeText(FansAdapter.this.context, "操作失败", Toast.LENGTH_LONG).show();
+												}
+											}
+										}).execute(user.getId());
 
-    }
+							}
 
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        // TODO Auto-generated method stub
+						}
+					}).execute(user.getId());
+				}
+			});
+		}
 
-    }
+		return view;
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public List<UserVO> getList() {
+		return list;
+	}
+
+	public void setList(List<UserVO> list) {
+		this.list = list;
+	}
 
 }

@@ -1,8 +1,8 @@
 package net.ipetty.android.follow;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -12,87 +12,106 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import java.util.List;
 import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.vo.CommentVO;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.user.ListFriends;
+import net.ipetty.vo.UserVO;
 
 public class FollowsActivity extends BaseActivity {
 
-    public final static String TAG = "FollowsActivity";
-    private FollowsAdapter adapter; // 定义适配器
-    private PullToRefreshListView listView;
+	public final static String TAG = FollowsActivity.class.getSimpleName();
+	private FollowsAdapter adapter; // 定义适配器
+	private PullToRefreshListView listView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_follows);
+	private int userId;
+	private int currUserId;
+	private Boolean isCurrentUser;
+	private int currentPage = 0;
+	private int pageSize = 20;
+	private Boolean hasMore = true;
 
-        /* action bar */
-        ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
-        TextView text = (TextView) this.findViewById(R.id.action_bar_title);
-        text.setText(this.getResources().getString(R.string.title_activity_follows));
-        btnBack.setOnClickListener(new BackClickListener(this));
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_follows);
 
-        listView = (PullToRefreshListView) this.findViewById(R.id.listView);
-        listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+		/* action bar */
+		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
+		text.setText(this.getResources().getString(R.string.title_activity_follows));
+		btnBack.setOnClickListener(new BackClickListener(this));
 
-                // Update the LastUpdatedLabel
-                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+		currUserId = IpetApi.init(this).getCurrUserId();
+		this.userId = this.getIntent().getExtras().getInt(Constant.INTENT_USER_ID_KEY);
 
-                // Do work to refresh the list here.
-                new FollowsTask().execute();
-            }
-        });
+		isCurrentUser = userId == currUserId;
 
-        listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
-            @Override
-            public void onLastItemVisible() {
-                // TODO Auto-generated method stub
-                // loadMoreData(getList(20));
-            }
-        });
+		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
+		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
-        // 初始化适配器
-        adapter = new FollowsAdapter(this);
-        listView.setAdapter(adapter);
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-    }
+				initData(listView);
+			}
+		});
 
-    // TODO:这部分方法没考虑好 是放在adapter中 还是 Activity中
-    // 加载数据
-    public void loadData() {
-        // adapter.setList(this.getList(0));
-        adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-    }
+		listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+			@Override
+			public void onLastItemVisible() {
+				if (FollowsActivity.this.hasMore) {
+					FollowsActivity.this.currentPage++;
+					new ListFriends(FollowsActivity.this).setListener(
+							new DefaultTaskListener<List<UserVO>>(FollowsActivity.this, "加载更多...") {
+								@Override
+								public void onSuccess(List<UserVO> result) {
+									if (result.size() < FollowsActivity.this.pageSize) {
+										FollowsActivity.this.hasMore = false;
+									}
+									adapter.getList().addAll(result);
+									adapter.notifyDataSetChanged();
+								}
+							}).execute(FollowsActivity.this.userId, FollowsActivity.this.currentPage, FollowsActivity.this.pageSize);
+				}
+			}
+		});
 
-    public void loadData(List<CommentVO> list) {
-        // adapter.setList(this.getList(0));
-        adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-    }
+		// 初始化适配器
+		adapter = new FollowsAdapter(this, userId, currUserId);
+		listView.setAdapter(adapter);
+		initData(null);
+	}
 
-    // 加载更多数据
-    public void loadMoreData(List<CommentVO> list) {
-        // adapter.getList().addAll(list);
-        adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-    }
+	// 初始化数据
+	public void initData(final PullToRefreshListView view) {
 
-    private class FollowsTask extends AsyncTask<Void, Void, String[]> {
+		new ListFriends(this).setListener(
+				new DefaultTaskListener<List<UserVO>>(this, "正在加载...") {
+					@Override
+					public void onSuccess(List<UserVO> result) {
+						if (result.size() < FollowsActivity.this.pageSize) {
+							FollowsActivity.this.hasMore = false;
+						}
+						adapter.setList(result);
+						adapter.notifyDataSetChanged();
+						if (null != view) {
+							view.onRefreshComplete();
+						}
+					}
+				}).execute(this.userId, 0, this.pageSize);
 
-        @Override
-        protected String[] doInBackground(Void... params) {
+	}
 
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            // loadData(getList(0));
-            listView.onRefreshComplete();
-            super.onPostExecute(result);
-        }
-    }
-
+	@Override
+	public void onResume() {
+		Log.i(TAG, "onResume");
+		super.onResume();
+		adapter.notifyDataSetChanged();
+	}
 }

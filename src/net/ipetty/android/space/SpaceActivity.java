@@ -166,7 +166,7 @@ public class SpaceActivity extends Activity {
 			@Override
 			public void onSuccess(UserStatisticsVO userStatistics) {
 				feed_num_text.setText(String.valueOf(userStatistics.getFeedNum()));
-				follow_num_text.setText(String.valueOf(userStatistics.getFollowerNum()));
+				follow_num_text.setText(String.valueOf(userStatistics.getFriendsNum()));
 				fan_num_text.setText(String.valueOf(userStatistics.getFollowerNum()));
 			}
 		}).execute(this.userId);
@@ -411,7 +411,7 @@ public class SpaceActivity extends Activity {
 			@Override
 			public void onSuccess(UserStatisticsVO userStatistics) {
 				feed_num_text.setText(String.valueOf(userStatistics.getFeedNum()));
-				follow_num_text.setText(String.valueOf(userStatistics.getFollowerNum()));
+				follow_num_text.setText(String.valueOf(userStatistics.getFriendsNum()));
 				fan_num_text.setText(String.valueOf(userStatistics.getFollowerNum()));
 			}
 		}).execute(this.userId);

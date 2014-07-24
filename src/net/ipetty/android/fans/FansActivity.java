@@ -1,25 +1,38 @@
 package net.ipetty.android.fans;
 
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.user.ListFollowers;
+import net.ipetty.android.sdk.task.user.ListFriends;
+import net.ipetty.vo.UserVO;
 
 public class FansActivity extends BaseActivity {
-	public final static String TAG = "FansActivity";
+
+	public final static String TAG = FansActivity.class.getSimpleName();
 	private FansAdapter adapter; // 定义适配器
 	private PullToRefreshListView listView;
+
+	private int userId;
+	private int currUserId;
+	private Boolean isCurrentUser;
+	private int currentPage = 0;
+	private int pageSize = 20;
+	private Boolean hasMore = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,48 +47,72 @@ public class FansActivity extends BaseActivity {
 		text.setText(this.getResources().getString(R.string.title_activity_fans));
 		btnBack.setOnClickListener(new BackClickListener(this));
 
+		currUserId = IpetApi.init(this).getCurrUserId();
+		this.userId = this.getIntent().getExtras().getInt(Constant.INTENT_USER_ID_KEY);
+		isCurrentUser = userId == currUserId;
+
 		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-
-				// Do work to refresh the list here.
-				new FansTask().execute();
+				initData(listView);
 			}
 		});
 
 		listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
 			@Override
 			public void onLastItemVisible() {
-				// TODO Auto-generated method stub
-				// loadMoreData(getList(20));
+				if (FansActivity.this.hasMore) {
+					FansActivity.this.currentPage++;
+					new ListFriends(FansActivity.this).setListener(
+							new DefaultTaskListener<List<UserVO>>(FansActivity.this, "加载更多...") {
+								@Override
+								public void onSuccess(List<UserVO> result) {
+									if (result.size() < FansActivity.this.pageSize) {
+										FansActivity.this.hasMore = false;
+									}
+									adapter.getList().addAll(result);
+									adapter.notifyDataSetChanged();
+								}
+							}).execute(FansActivity.this.userId, FansActivity.this.currentPage, FansActivity.this.pageSize);
+				}
 			}
 		});
 
 		// 初始化适配器
-		adapter = new FansAdapter(this);
+		adapter = new FansAdapter(this, userId, currUserId);
 		listView.setAdapter(adapter);
-		// loadData();
+		initData(null);
 
 	}
 
-	private class FansTask extends AsyncTask<Void, Void, String[]> {
+	// 初始化数据
+	public void initData(final PullToRefreshListView view) {
 
-		@Override
-		protected String[] doInBackground(Void... params) {
+		new ListFollowers(this).setListener(
+				new DefaultTaskListener<List<UserVO>>(this, "正在加载...") {
+					@Override
+					public void onSuccess(List<UserVO> result) {
+						if (result.size() < FansActivity.this.pageSize) {
+							FansActivity.this.hasMore = false;
+						}
+						adapter.setList(result);
+						adapter.notifyDataSetChanged();
+						if (null != view) {
+							view.onRefreshComplete();
+						}
+					}
+				}).execute(this.userId, 0, this.pageSize);
 
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(String[] result) {
-			listView.onRefreshComplete();
-			super.onPostExecute(result);
-		}
 	}
 
+	@Override
+	public void onResume() {
+		Log.i(TAG, "onResume");
+		super.onResume();
+		adapter.notifyDataSetChanged();
+	}
 }

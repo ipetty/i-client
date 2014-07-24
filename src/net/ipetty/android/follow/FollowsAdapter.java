@@ -1,6 +1,8 @@
 package net.ipetty.android.follow;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,103 +13,195 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import java.util.ArrayList;
 import java.util.List;
 import net.ipetty.R;
-import net.ipetty.vo.CommentVO;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.sdk.task.user.Follow;
+import net.ipetty.android.sdk.task.user.IsFollow;
+import net.ipetty.android.sdk.task.user.Unfollow;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 
-    public final static String TAG = "FollowsAdapter";
-    private LayoutInflater inflater;
-    private List<CommentVO> list = null; // 这个就本地dataStore
+	public final static String TAG = FollowsAdapter.class.getSimpleName();
+	private LayoutInflater inflater;
+	private List<UserVO> list = new ArrayList<UserVO>(); // 这个就本地dataStore
+	private int userId;
+	private int currUserId;
+	private Boolean isCurrentUser;
+	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
+	private Context context;
 
-    public FollowsAdapter(Context context) {
-        // TODO Auto-generated constructor stub
-        this.inflater = LayoutInflater.from(context);
-    }
+	public FollowsAdapter(Context context, int userId, int currUserId) {
+		this.context = context;
+		this.inflater = LayoutInflater.from(context);
+		this.userId = userId;
+		this.currUserId = currUserId;
+		isCurrentUser = userId == currUserId;
+	}
 
-    @Override
-    public int getCount() {
-        return 2;// list == null ? 0 : list.size();
-    }
+	@Override
+	public int getCount() {
+		return list.size();
+	}
 
-    @Override
-    public Object getItem(int position) {
-        // TODO Auto-generated method stub
-        return 0;// list.get(position);
-    }
+	@Override
+	public Object getItem(int position) {
+		return list.get(position);
+	}
 
-    @Override
-    public long getItemId(int position) {
-        // TODO Auto-generated method stub
-        return 0;// list.get(position).getId();
-    }
+	@Override
+	public long getItemId(int position) {
+
+		return list.get(position).getId();
+	}
 
 	// 构建一个布局缓存的结构体 与VO对应
-    // 构建一个布局缓存的结构体 与VO对应
-    public class ViewHolder {
+	// 构建一个布局缓存的结构体 与VO对应
+	public class ViewHolder {
 
-        public ImageView avatar;
-        public TextView name;
-        public ImageView follow;
-    }
+		public ImageView avatar;
+		public TextView name;
+		public ImageView follow;
+	}
 
-    public ViewHolder holder;
+	public ViewHolder holder;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
-        Log.i(TAG, "list position-->" + position);
-        // 这里开始呈现每个item的布局
-        View view;
-        if (convertView == null) {
-            Log.i(TAG, "init items View");
-            view = inflater.inflate(R.layout.list_follows_item, null);
-            holder = new ViewHolder();
-            holder.avatar = (ImageView) view.findViewById(R.id.avatar);
-            holder.name = (TextView) view.findViewById(R.id.name);
-            holder.follow = (ImageView) view.findViewById(R.id.follow);
-            holder.follow.setOnClickListener(followClick);
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "list position-->" + position);
+		// 这里开始呈现每个item的布局
+		View view;
+		if (convertView == null) {
+			Log.i(TAG, "init items View");
+			view = inflater.inflate(R.layout.list_follows_item, null);
+			holder = new ViewHolder();
+			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
+			holder.name = (TextView) view.findViewById(R.id.name);
+			holder.follow = (ImageView) view.findViewById(R.id.follow);
 
-            convertView = view;
-            convertView.setTag(holder);
-        } else {
-            view = convertView;
-            holder = (ViewHolder) view.getTag();
-        }
-        // 数据与界面绑定
+			convertView = view;
+			convertView.setTag(holder);
+		} else {
+			view = convertView;
+			holder = (ViewHolder) view.getTag();
+		}
+		// 数据与界面绑定
+		final UserVO user = list.get(position);
+		//昵称
+		holder.name.setText(user.getNickname());
+		// 昵称事件
+		holder.name.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, SpaceActivity.class);
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, user.getId());
+				context.startActivity(intent);
+			}
+		});
+		//头像
+		if (!StringUtils.isEmpty(user.getAvatar())) {
+			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.avatar);
+		}
+		// 头像事件
+		holder.avatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, SpaceActivity.class);
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, user.getId());
+				context.startActivity(intent);
+			}
+		});
+		//关注按钮
+		//如果是自己隐藏按钮
+		if (currUserId == user.getId()) {
+			holder.follow.setVisibility(View.GONE);
+		} else {
+			new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
+				@Override
+				public void onSuccess(Boolean hasFollow) {
+					if (hasFollow) {
+						holder.follow.setImageResource(R.drawable.following_avatar);
+					} else {
+						holder.follow.setImageResource(R.drawable.follow_avatar);
+					}
+				}
+			}).execute(user.getId());
+			//关注事件
+			holder.follow.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					new IsFollow((Activity) FollowsAdapter.this.context).setListener(new DefaultTaskListener<Boolean>((Activity) FollowsAdapter.this.context, "操作中...") {
+						@Override
+						public void onSuccess(Boolean hasFollow) {
+							if (hasFollow) {
+								new Unfollow((Activity) FollowsAdapter.this.context).setListener(
+										new DefaultTaskListener<Boolean>((Activity) FollowsAdapter.this.context, "正在反关注...") {
+											@Override
+											public void onSuccess(Boolean result) {
+												if (result) {
+													holder.follow.setImageResource(R.drawable.follow_avatar);
+													FollowsAdapter.this.notifyDataSetChanged();
+												} else {
+													Toast.makeText(FollowsAdapter.this.context, "操作失败", Toast.LENGTH_LONG).show();
+												}
+											}
+										}).execute(user.getId());
 
-        return view;
-    }
+							} else {
+								new Follow((Activity) FollowsAdapter.this.context).setListener(
+										new DefaultTaskListener<Boolean>((Activity) FollowsAdapter.this.context, "正在关注...") {
+											@Override
+											public void onSuccess(Boolean result) {
+												if (result) {
+													holder.follow.setImageResource(R.drawable.following_avatar);
+													FollowsAdapter.this.notifyDataSetChanged();
+												} else {
+													Toast.makeText(FollowsAdapter.this.context, "操作失败", Toast.LENGTH_LONG).show();
+												}
+											}
+										}).execute(user.getId());
 
-    private OnClickListener followClick = new OnClickListener() {
+							}
 
-        @Override
-        public void onClick(View v) {
-			// TODO Auto-generated method stub
-            // test
-            ((ImageView) v).setImageResource(R.drawable.following_avatar);
-        }
-    };
+						}
+					}).execute(user.getId());
+				}
+			});
+		}
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        // TODO Auto-generated method stub
+		return view;
+	}
 
-    }
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
 
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        // TODO Auto-generated method stub
+	}
 
-    }
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
 
-    public List<CommentVO> getList() {
-        return list;
-    }
+	}
 
-    public void setList(List<CommentVO> list) {
-        this.list = list;
-    }
+	public List<UserVO> getList() {
+		return list;
+	}
+
+	public void setList(List<UserVO> list) {
+		this.list = list;
+	}
 
 }
