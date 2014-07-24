@@ -1,10 +1,14 @@
 package net.ipetty.android.comment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -20,8 +24,12 @@ import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.DeleteComment;
 import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.vo.CommentVO;
 import net.ipetty.vo.UserVO;
@@ -34,10 +42,69 @@ public class CommentAdapter extends BaseAdapter implements OnScrollListener {
 	DisplayImageOptions options = AppUtils.getNormalImageOptions();
 	private List<CommentVO> list = new ArrayList<CommentVO>(); // 这个就本地dataStore
 
+	public List<ModDialogItem> more_items;
+	private ModDialogItem delItems;
+	private Dialog moreDialog;
+	private int currentClickItemPosition;
+
 	public CommentAdapter(Context context) {
 		// TODO Auto-generated constructor stub
 		this.inflater = LayoutInflater.from(context);
 		this.context = context;
+		more_items = new ArrayList<ModDialogItem>();
+		delItems = new ModDialogItem(null, context.getResources().getString(R.string.item_delete), delOnClick);
+	}
+	private OnClickListener delOnClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			final CommentVO comment = list.get(CommentAdapter.this.currentClickItemPosition);
+			Log.d(TAG, "commentID->" + comment.getId());
+			new DeleteComment((Activity) context).setListener(new DefaultTaskListener<Boolean>((Activity) context, "正在删除...") {
+				@Override
+				public void onSuccess(Boolean result) {
+					if (result) {
+						CommentAdapter.this.getList().remove(CommentAdapter.this.currentClickItemPosition);
+						CommentAdapter.this.notifyDataSetChanged();
+						Intent intent = new Intent(Constant.BROADCAST_INTENT_CCOMMENT_DELETE);
+						intent.putExtra(Constant.CCOMMENT_ID, comment.getId());
+						CommentAdapter.this.context.sendBroadcast(intent);
+					}
+				}
+			}).execute(comment.getId());
+
+			moreDialog.cancel();
+		}
+	};
+
+	private class ViewOnLongClickListener implements OnLongClickListener {
+
+		private int position;
+
+		public ViewOnLongClickListener(int position) {
+			this.position = position;
+		}
+
+		@Override
+		public boolean onLongClick(View v) {
+			CommentAdapter.this.currentClickItemPosition = position;
+			CommentAdapter.this.showItems(position);
+			return false;
+		}
+	};
+
+	private void showItems(int position) {
+		CommentVO comment = list.get(position);
+		if (comment.getCreatedBy() == this.getCurrUserId()) {
+			more_items.clear();
+			more_items.add(delItems);
+			moreDialog = DialogUtils.modPopupDialog(context, more_items, moreDialog);
+		}
+	}
+
+	// 获取当前用户id
+	private int getCurrUserId() {
+		IpetApi api = IpetApi.init(this.context);
+		return api.getCurrUserId();
 	}
 
 	@Override
@@ -84,6 +151,8 @@ public class CommentAdapter extends BaseAdapter implements OnScrollListener {
 			view = convertView;
 			holder = (ViewHolder) view.getTag();
 		}
+		// 长按按钮
+		view.setOnLongClickListener(new ViewOnLongClickListener(position));
 
 		CommentVO commentVo = list.get(position);
 		String creatAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(commentVo.getCreatedOn());

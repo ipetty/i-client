@@ -83,6 +83,7 @@ public class MainHomeFragment extends Fragment {
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_FAVORED);
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_PUBLISH);
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_DELETE);
+		filter.addAction(Constant.BROADCAST_INTENT_CCOMMENT_DELETE);
 		this.getActivity().registerReceiver(broadcastreciver, filter);
 	}
 
@@ -436,6 +437,14 @@ public class MainHomeFragment extends Fragment {
 				if (feedId != -1l) {
 					MainHomeFragment.this.mAdapter.removeById(feedId);
 					MainHomeFragment.this.mAdapter.notifyDataSetChanged();
+				}
+			}
+
+			if (Constant.BROADCAST_INTENT_CCOMMENT_DELETE.equals(action)) {
+				Log.d(TAG, "receive delete comment");
+				long commentId = intent.getLongExtra(Constant.CCOMMENT_ID, -1l);
+				if (commentId != -1l) {
+					MainHomeFragment.this.mAdapter.removeCommentById(commentId);
 				}
 			}
 		}

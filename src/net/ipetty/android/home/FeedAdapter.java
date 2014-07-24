@@ -97,6 +97,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		return list;
 	}
 
+	//删除Feed
 	public void removeById(long feedId) {
 		int position = -1;
 		int i = 0;
@@ -109,6 +110,29 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		if (position != -1) {
 			list.remove(position);
 		}
+	}
+
+	//删除评论
+	public void removeCommentById(long commentId) {
+		int position = -1;
+
+		for (FeedVO feed : list) {
+			List<CommentVO> commentVOList = feed.getComments();
+			int i = 0;
+			for (CommentVO comment : commentVOList) {
+				if (commentId == comment.getId()) {
+					position = i;
+					break;
+				}
+				i++;
+			}
+			if (position != -1) {
+				commentVOList.remove(position);
+				this.notifyDataSetChanged();
+				break;
+			}
+		}
+
 	}
 
 	public void setList(List<FeedVO> list) {
@@ -266,7 +290,6 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 						FeedAdapter.this.context.sendBroadcast(intent);
 						//FeedAdapter.this.getList().remove(FeedAdapter.this.currentClickItemPosition);
 						//FeedAdapter.this.notifyDataSetChanged();
-						//TODO:刷新其它界面
 					}
 				}
 			}).execute(feedId);
@@ -529,7 +552,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 	public void renderCommentView(ViewHolder holder, FeedVO feedVO) {
 		// 评论 总数
 		String commentNumStr = context.getResources().getString(R.string.comment_num_text);
-		Integer commentsNum = feedVO.getCommentCount();
+		Integer commentsNum = feedVO.getComments().size();
 		holder.comments_num.setText(String.format(commentNumStr, commentsNum));
 
 		holder.comments_group_list.removeAllViews();

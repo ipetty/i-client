@@ -264,6 +264,7 @@ public class SpaceActivity extends Activity {
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_FAVORED);
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_PUBLISH);
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_DELETE);
+		filter.addAction(Constant.BROADCAST_INTENT_CCOMMENT_DELETE);
 		this.registerReceiver(broadcastreciver, filter);
 	}
 	private BroadcastReceiver broadcastreciver = new BroadcastReceiver() {
