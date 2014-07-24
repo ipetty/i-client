@@ -124,6 +124,19 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 			}
 		});
 		//关注按钮
+		new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
+			@Override
+			public void onSuccess(Boolean hasFollow) {
+				if (hasFollow) {
+					holder.follow.setImageResource(R.drawable.following_avatar);
+				} else {
+					holder.follow.setImageResource(R.drawable.follow_avatar);
+				}
+
+			}
+		}).execute(user.getId());
+
+		//关注事件
 		//如果是自己隐藏按钮
 		if (currUserId == user.getId()) {
 			holder.follow.setVisibility(View.INVISIBLE);
@@ -138,7 +151,7 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 					}
 				}
 			}).execute(user.getId());
-			//关注事件
+
 			holder.follow.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

@@ -126,7 +126,6 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 			}
 		});
 		//关注按钮
-		holder.follow.setImageResource(R.drawable.follow_avatar);
 		new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
 			@Override
 			public void onSuccess(Boolean hasFollow) {
