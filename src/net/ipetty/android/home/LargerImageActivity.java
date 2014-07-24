@@ -1,17 +1,20 @@
 package net.ipetty.android.home;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.ImageView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class LargerImageActivity extends BaseActivity {
+
+	private String original_url;
+	private String small_url;
+	private ImageView image;
 
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 
@@ -19,16 +22,17 @@ public class LargerImageActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_larger_image);
-
+		Intent intent = getIntent();
+		original_url = intent.getStringExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY);
+		small_url = intent.getStringExtra(Constant.INTENT_IMAGE_SAMILL_KEY);
+		image = (ImageView) this.findViewById(R.id.image);
+		ImageLoader.getInstance().displayImage(small_url, image, options);
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		Intent intent = getIntent();
-		String url = intent.getStringExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY);
-		ImageView image = (ImageView) this.findViewById(R.id.image);
-		ImageLoader.getInstance().displayImage(url, image, options);
+	protected void onStart() {
+		super.onStart();
+		ImageLoader.getInstance().displayImage(original_url, image, options);
 	}
 
 }

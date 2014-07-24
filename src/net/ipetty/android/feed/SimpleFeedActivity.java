@@ -274,6 +274,8 @@ public class SimpleFeedActivity extends BaseActivity {
 				Intent intent = new Intent(SimpleFeedActivity.this, LargerImageActivity.class);
 				intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY,
 						Constant.FILE_SERVER_BASE + feed.getImageOriginalURL());
+				intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY,
+						Constant.FILE_SERVER_BASE + feed.getImageSmallURL());
 				SimpleFeedActivity.this.startActivity(intent);
 			}
 		});

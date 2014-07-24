@@ -410,6 +410,8 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 				Intent intent = new Intent(context, LargerImageActivity.class);
 				intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY,
 						Constant.FILE_SERVER_BASE + feed.getImageOriginalURL());
+				intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY,
+						Constant.FILE_SERVER_BASE + feed.getImageSmallURL());
 				context.startActivity(intent);
 			}
 		});

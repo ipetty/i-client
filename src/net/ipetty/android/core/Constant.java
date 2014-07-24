@@ -18,7 +18,8 @@ public class Constant {
 
 	public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";
 	public final static String INTENT_PHOTO_OUT_PATH_KEY = "publish_photo_out_path";
-	public final static String INTENT_IMAGE_ORIGINAL_KEY = "url";
+	public final static String INTENT_IMAGE_ORIGINAL_KEY = "ORIGINAL_url";
+	public final static String INTENT_IMAGE_SAMILL_KEY = "SAMILL_url";
 	public final static String INTENT_FEED_ID_KEY = "feedId";
 	public final static String INTENT_USER_ID_KEY = "id";
 	public final static String INTENT_PET_ID_KEY = "petId";
