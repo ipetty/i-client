@@ -11,4 +11,19 @@
 	<!-- BypassApproval是绕过审核的标记，设置为true后AppId将被忽略，故不经过审核的应用也可以执行分享，但是仅限于分享文字和图片，不能分享其他类型， 默认值为false。 -->
 	<WechatMoments Id="2" SortId="2" AppId="wx5e88169a674461b5" BypassApproval="false" Enable="true" />
 
+	<!-- QQ -->
+	<QQ Id="3" SortId="3" AppId="1101800301" AppKey="LqJeyBrOVadmfkzl" Enable="true" />
+
+	<!-- QQ空间 -->
+	<QZone Id="4" SortId="4" AppId="1101800301" AppKey="LqJeyBrOVadmfkzl" ShareByAppClient="true" Enable="true" />
+
+	<!-- 新浪 -->
+	<!-- ShareByAppClient标识是否使用微博客户端分享 -->
+	<SinaWeibo Id="5" SortId="5" AppKey="3374776988" AppSecret="3e4cd0f7354a3f8c14e257c6d9b1d44a" RedirectUrl="http://ipetty.net"
+		ShareByAppClient="false" Enable="true" />
+
+	<!-- 腾讯微博 -->
+	<TencentWeibo Id="6" SortId="6" AppKey="801499817" AppSecret="b2f6614e1a7a78a7613998647dc9ae8f"
+		RedirectUri="http://ipetty.net" Enable="true" />
+
 </DevInfor>
