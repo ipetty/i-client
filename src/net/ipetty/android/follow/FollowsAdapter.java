@@ -126,7 +126,7 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 		//关注按钮
 		//如果是自己隐藏按钮
 		if (currUserId == user.getId()) {
-			holder.follow.setVisibility(View.GONE);
+			holder.follow.setVisibility(View.INVISIBLE);
 		} else {
 			new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
 				@Override

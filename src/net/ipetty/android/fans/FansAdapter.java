@@ -142,7 +142,7 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 		//关注事件
 		//如果是自己隐藏按钮
 		if (currUserId == user.getId()) {
-			holder.follow.setVisibility(View.GONE);
+			holder.follow.setVisibility(View.INVISIBLE);
 		} else {
 			holder.follow.setOnClickListener(new View.OnClickListener() {
 				@Override
