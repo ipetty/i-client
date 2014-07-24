@@ -1,19 +1,19 @@
 package net.ipetty.android.core.ui;
 
-import net.ipetty.android.core.ActivityManager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
+import net.ipetty.android.core.ActivityManager;
 
 public class BaseActivity extends Activity {
 
 	public void showMessageForShortTime(String msg) {
-		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 	}
 
 	public void showMessageForLongTime(String msg) {
-		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
