@@ -48,7 +48,7 @@ public class RestTemplate4Cache extends RestTemplate {
 		if (!NetWorkUtils.isNetworkConnected(context)) {
 
 			if (!isCacheableRequest(method)) {
-				Log.i(TAG, "离线状态，只能浏览");
+				Log.i(TAG, "离线状态，只能浏览:" + url);
 				throw new APIException("离线状态，只能浏览");
 			}
 
