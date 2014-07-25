@@ -1,30 +1,34 @@
 package net.ipetty.android.login;
 
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.register.RegisterActivity;
-import net.ipetty.android.sdk.task.user.UserLogin;
-
-import org.apache.commons.lang3.StringUtils;
-
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
+import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.regex.Pattern;
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.register.RegisterActivity;
+import net.ipetty.android.sdk.task.user.UserLogin;
+import org.apache.commons.lang3.StringUtils;
 
 public class LoginActivity extends BaseActivity {
 
 	private final static String TAG = LoginActivity.class.getSimpleName();
 
-	private EditText accountView;
+	private AutoCompleteTextView accountView;
 	private EditText passwordView;
 	private String account = null;
 	private String password = null;
@@ -66,16 +70,41 @@ public class LoginActivity extends BaseActivity {
 		toggleView = (TextView) this.findViewById(R.id.login_toggle_password);
 		toggleView.setOnClickListener(togglePasswordClick);
 
-		accountView = (EditText) this.findViewById(R.id.account);
+		accountView = (AutoCompleteTextView) this.findViewById(R.id.account);
+
+		Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+		Account[] accounts = AccountManager.get(this).getAccounts();
+		String emails = "";
+		for (Account account : accounts) {
+			if (emailPattern.matcher(account.name).matches()) {
+				emails += account.name + ",";
+			}
+		}
+
+		//自动提示
+		ArrayAdapter<String> adapt = new ArrayAdapter<String>(this,
+				android.R.layout.simple_dropdown_item_1line,
+				emails.split(","));
+		accountView.setAdapter(adapt);
+
+		accountView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					accountView.showDropDown();
+				}
+			}
+		});
+
 
 		/*
 		 * accountView.setOnFocusChangeListener(new OnFocusChangeListener(){
-		 * 
+		 *
 		 * @Override public void onFocusChange(View arg0, boolean hasFocus) {
 		 * if(hasFocus){ accountView.setHint(null); if(focuscont==0){
 		 * accountView.clearFocus(); } focuscont++; }else{
 		 * accountView.setHint("Email"); }
-		 * 
+		 *
 		 * }
 		 */
 		passwordView = (EditText) this.findViewById(R.id.password);
@@ -161,7 +190,6 @@ public class LoginActivity extends BaseActivity {
 		// Toast.LENGTH_SHORT).show();
 		// return false;
 		// }
-
 		if (StringUtils.isBlank(this.password)) {
 			passwordView.requestFocus();
 			Toast.makeText(LoginActivity.this, R.string.login_empty_password, Toast.LENGTH_SHORT).show();
