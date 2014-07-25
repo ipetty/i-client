@@ -145,6 +145,7 @@ public class CommentAdapter extends BaseAdapter implements OnScrollListener {
 			holder = new ViewHolder();
 			holder.text = (TextView) view.findViewById(R.id.text);
 			holder.timestamp = (TextView) view.findViewById(R.id.timestamp);
+			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
 			convertView = view;
 			convertView.setTag(holder);
 		} else {
@@ -161,11 +162,20 @@ public class CommentAdapter extends BaseAdapter implements OnScrollListener {
 		int userId = commentVo.getCreatedBy();
 		UserVO user = UserApiWithCache.getUserById4Synchronous(context, userId);
 
+		//头像
+		if (null != user.getAvatar()) {
+			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(),
+					holder.avatar, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.avatar);
+		}
+
 		String nickname = user.getNickname();
 		String html = "<b><a href='" + userId + "'>" + nickname + "</a></b>";
 		String text = commentVo.getText();
 		html = html + " : " + text;
 		WebLinkUtils.setUserLinkClickIntercept((Activity) context, holder.text, html);
+
 		return view;
 	}
 
