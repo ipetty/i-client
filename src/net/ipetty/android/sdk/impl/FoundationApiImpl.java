@@ -34,7 +34,7 @@ public class FoundationApiImpl extends ApiBase implements FoundationApi {
 	public List<Option> listOptionsByGroup(String group) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
 		request.add("group", group);
-		return Arrays.asList(getRestTemplate().postForObject(buildUri(URI_OPTIONS), request, Option[].class));
+		return Arrays.asList(getRestTemplate().getForObject(buildUri(URI_OPTIONS, request), Option[].class));
 	}
 
 	/**

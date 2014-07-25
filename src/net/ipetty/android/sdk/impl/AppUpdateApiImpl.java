@@ -29,7 +29,7 @@ public class AppUpdateApiImpl extends ApiBase implements AppUpdateApi {
 	public AppUpdateVO latestVersion(String appKey) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
 		request.add("appKey", appKey);
-		return getRestTemplate().postForObject(buildUri(URI_GET_LATEST_VERSION), request, AppUpdateVO.class);
+		return getRestTemplate().getForObject(buildUri(URI_GET_LATEST_VERSION, request), AppUpdateVO.class);
 	}
 
 }

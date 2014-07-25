@@ -1,12 +1,14 @@
 package net.ipetty.android.core.ui;
 
+import net.ipetty.android.core.ActivityManager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
-import net.ipetty.android.core.ActivityManager;
 
 public class BaseActivity extends Activity {
+
+	protected String TAG = getClass().getSimpleName();
 
 	public void showMessageForShortTime(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();

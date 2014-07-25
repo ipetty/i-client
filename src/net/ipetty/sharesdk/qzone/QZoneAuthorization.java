@@ -1,4 +1,4 @@
-package net.ipetty.sharesdk.sinaweibo;
+package net.ipetty.sharesdk.qzone;
 
 import java.util.HashMap;
 
@@ -11,14 +11,14 @@ import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.utils.UIHandler;
 
 /**
- * Share SDK 新浪微博授权工具类
+ * Share SDK QQ空间授权工具类
  * 
  * @author luocanfeng
- * @date 2014年7月21日
+ * @date 2014年7月24日
  */
-public class SinaWeiboAuthorization extends AbstractAuthorization {
+public class QZoneAuthorization extends AbstractAuthorization {
 
-	public SinaWeiboAuthorization(Activity activity) {
+	public QZoneAuthorization(Activity activity) {
 		super(activity);
 	}
 
@@ -66,10 +66,16 @@ public class SinaWeiboAuthorization extends AbstractAuthorization {
 						+ userIcon + ",token=" + token + ",tokenSecret=" + tokenSecret);
 
 				// get email, and then register or login
-				HashMap<String, Object> params = new HashMap<String, Object>();
-				platform.setPlatformActionListener(new GetEmailListener());
-				platform.customerProtocol("https://api.weibo.com/2/account/profile/email.json", "GET", (short) 1,
-						params, null);
+				userEmail = userId + "@qq.com";
+				// 注册并登录
+				registerOrLogin(platform, platform.getDb().getUserId(), userEmail, userName);
+
+				// HashMap<String, Object> params = new HashMap<String,
+				// Object>();
+				// platform.setPlatformActionListener(new GetEmailListener());
+				// platform.customerProtocol("https://api.weibo.com/2/account/profile/email.json",
+				// "GET", (short) 1,
+				// params, null);
 			}
 		}
 
