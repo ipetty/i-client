@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import net.ipetty.R;
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
@@ -83,8 +84,10 @@ public class LoginHasAccountActivity extends BaseActivity {
 		if (!StringUtils.isEmpty(user.getEmail())) {
 			account.setText(user.getEmail());
 		}
-		if (!StringUtils.isEmpty(user.getAvatar())) {
-			ImageLoader.getInstance().displayImage(user.getAvatar(), avatar, options);
+
+		if (StringUtils.isNotBlank(user.getAvatar())) {
+			String str = Constant.FILE_SERVER_BASE + user.getAvatar();
+			ImageLoader.getInstance().displayImage(str, avatar, options);
 		} else {
 			avatar.setImageResource(R.drawable.avatar);
 		}
