@@ -1,26 +1,8 @@
 package net.ipetty.android.feed;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.comment.CommentActivity;
@@ -44,7 +26,29 @@ import net.ipetty.vo.CommentVO;
 import net.ipetty.vo.FeedFavorVO;
 import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SimpleFeedActivity extends BaseActivity {
 
@@ -274,8 +278,7 @@ public class SimpleFeedActivity extends BaseActivity {
 				Intent intent = new Intent(SimpleFeedActivity.this, LargerImageActivity.class);
 				intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY,
 						Constant.FILE_SERVER_BASE + feed.getImageOriginalURL());
-				intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY,
-						Constant.FILE_SERVER_BASE + feed.getImageSmallURL());
+				intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY, Constant.FILE_SERVER_BASE + feed.getImageSmallURL());
 				SimpleFeedActivity.this.startActivity(intent);
 			}
 		});
@@ -384,13 +387,17 @@ public class SimpleFeedActivity extends BaseActivity {
 	public void renderFavorUserView(TextView tv, FeedVO feedVO) {
 		int currUserId = IpetApi.init(this).getCurrUserId();
 		StringBuilder html = new StringBuilder("<b>");
+		int lastIndex = feedVO.getFavors().size() - 1;
 		for (FeedFavorVO feedFavorVO : feedVO.getFavors()) {
 			int id = feedFavorVO.getCreatedBy();
 			String nickname = this.getCacheUserById(id).getNickname();
 			if (id == currUserId) {
 				nickname = "我";
 			}
-			html.append("<a href='").append(id).append("'>").append(nickname).append("</a> ");
+			html.append("<a href='").append(id).append("'>").append(nickname).append("</a>");
+			if (feedVO.getFavors().indexOf(feedFavorVO) != lastIndex) {
+				html.append("、");
+			}
 		}
 		html.append("</b>");
 		String liked_num_text = this.getResources().getString(R.string.liked_num_text);
