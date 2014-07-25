@@ -1,6 +1,5 @@
 package net.ipetty.android.setting;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +13,7 @@ import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.feedback.FeedbackActivity;
 import net.ipetty.android.sdk.core.IpetApi;
@@ -22,7 +22,7 @@ import net.ipetty.android.user.UserActivity;
 import net.ipetty.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends BaseActivity {
 
 	private Button logout;
 	private DisplayImageOptions options = AppUtils.getCacheImageBublder()
