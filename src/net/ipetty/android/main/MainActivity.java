@@ -1,12 +1,5 @@
 package net.ipetty.android.main;
 
-import net.ipetty.R;
-import net.ipetty.android.core.ActivityManager;
-import net.ipetty.android.core.ui.BaseFragmentActivity;
-import net.ipetty.android.core.util.AnimUtils;
-import net.ipetty.android.discover.MainDiscoverFragment;
-import net.ipetty.android.home.MainHomeFragment;
-import net.ipetty.android.update.UpdateManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +21,14 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
+import net.ipetty.R;
+import net.ipetty.android.core.ActivityManager;
+import net.ipetty.android.core.ui.BaseFragmentActivity;
+import net.ipetty.android.core.util.AnimUtils;
+import net.ipetty.android.discover.MainDiscoverFragment;
+import net.ipetty.android.home.MainHomeFragment;
+import net.ipetty.android.service.MessageService;
+import net.ipetty.android.update.UpdateManager;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -38,7 +39,7 @@ public class MainActivity extends BaseFragmentActivity {
 	private int zero = 0;
 	private int one;
 	private int two;
-	private final Class[] fragments = { MainHomeFragment.class, MainDiscoverFragment.class };// ,MainNewsFragment.class};
+	private final Class[] fragments = {MainHomeFragment.class, MainDiscoverFragment.class};// ,MainNewsFragment.class};
 
 	private TextView main_text;
 	private TextView discover_text;
@@ -46,6 +47,8 @@ public class MainActivity extends BaseFragmentActivity {
 
 	private int gray;
 	private int red;
+
+	private Intent messageServiceIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,10 @@ public class MainActivity extends BaseFragmentActivity {
 		// 检查软件更新
 		UpdateManager manager = new UpdateManager(this);
 		manager.checkUpdate();
+
+		//启动服务
+		messageServiceIntent = new Intent(this, MessageService.class);
+		startService(messageServiceIntent);
 
 	}
 
@@ -176,34 +183,34 @@ public class MainActivity extends BaseFragmentActivity {
 			news_text.setTextColor(gray);
 
 			switch (arg0) {
-			case 0: {
-				if (currIndex == 1) {
-					animation = new TranslateAnimation(one, zero, 0, 0);
-				} else if (currIndex == 2) {
-					animation = new TranslateAnimation(two, zero, 0, 0);
-				}
-				main_text.setTextColor(red);
-				break;
+				case 0: {
+					if (currIndex == 1) {
+						animation = new TranslateAnimation(one, zero, 0, 0);
+					} else if (currIndex == 2) {
+						animation = new TranslateAnimation(two, zero, 0, 0);
+					}
+					main_text.setTextColor(red);
+					break;
 
-			}
-			case 1: {
-				if (currIndex == 0) {
-					animation = new TranslateAnimation(zero, one, 0, 0);
-				} else if (currIndex == 2) {
-					animation = new TranslateAnimation(two, one, 0, 0);
 				}
-				discover_text.setTextColor(red);
-				break;
-			}
-			case 2: {
-				if (currIndex == 0) {
-					animation = new TranslateAnimation(zero, two, 0, 0);
-				} else if (currIndex == 1) {
-					animation = new TranslateAnimation(one, two, 0, 0);
+				case 1: {
+					if (currIndex == 0) {
+						animation = new TranslateAnimation(zero, one, 0, 0);
+					} else if (currIndex == 2) {
+						animation = new TranslateAnimation(two, one, 0, 0);
+					}
+					discover_text.setTextColor(red);
+					break;
 				}
-				news_text.setTextColor(red);
-				break;
-			}
+				case 2: {
+					if (currIndex == 0) {
+						animation = new TranslateAnimation(zero, two, 0, 0);
+					} else if (currIndex == 1) {
+						animation = new TranslateAnimation(one, two, 0, 0);
+					}
+					news_text.setTextColor(red);
+					break;
+				}
 
 			}
 			currIndex = arg0;
@@ -262,6 +269,8 @@ public class MainActivity extends BaseFragmentActivity {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		ShareSDK.stopSDK(this);
+		//停止服务
+		stopService(messageServiceIntent);
 		Log.i(TAG, "onDestroy");
 	}
 
