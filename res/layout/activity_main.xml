@@ -139,7 +139,7 @@
 	              android:layout_height="wrap_content"
 	              android:layout_gravity="center"
 	              android:src="@drawable/dot_news"
-	              android:visibility="visible" />
+	              android:visibility="invisible" />
                 
             </LinearLayout>
 

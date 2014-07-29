@@ -124,11 +124,12 @@ public class MainNewsFragment extends Fragment {
 									}
 								}
 							}).execute(IpetApi.init(MainNewsFragment.this.getActivity()).getCurrUserId(),
-									++followerPageNumber, followerPageSize);
+							++followerPageNumber, followerPageSize);
 
 				}
 			}
 		});
+
 		loadData();
 	}
 
@@ -137,6 +138,25 @@ public class MainNewsFragment extends Fragment {
 		followerHasMore = true;
 		activitiePageNumber = 0;
 		followerPageNumber = 0;
+
+		List<ActivityVO> arr = new ArrayList<ActivityVO>();
+
+		ActivityVO act = new ActivityVO();
+		ActivityVO act1 = new ActivityVO();
+		act.setId(1L);
+		act1.setId(2L);
+		act.setType(Constant.NEWS_TYPE_FAVOR);
+		act1.setType(Constant.NEWS_TYPE_FOLLOWED);
+
+		arr.add(act);
+		arr.add(act1);
+		arr.add(act1);
+		arr.add(act);
+		arr.add(act1);
+		arr.add(act);
+		related_me_adapter.setList(arr);
+		related_me_adapter.notifyDataSetChanged();
+
 		if (false) {
 			new ListActivities(this.getActivity()).setListener(
 					new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
