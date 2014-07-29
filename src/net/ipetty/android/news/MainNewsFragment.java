@@ -1,14 +1,5 @@
 package net.ipetty.android.news;
 
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.activity.ListActivities;
-import net.ipetty.android.sdk.task.user.ListFollowers;
-import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.UserVO;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,14 +9,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ViewFlipper;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.activity.ListActivities;
+import net.ipetty.android.sdk.task.user.ListFollowers;
+import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.UserVO;
 
 public class MainNewsFragment extends Fragment {
 
-	public final static String TAG = MainNewsFragmentByTab.class.getSimpleName();
+	public final static String TAG = MainNewsFragment.class.getSimpleName();
 	private Activity activity;
 	private ViewFlipper viewFlipper;
 
@@ -122,7 +120,7 @@ public class MainNewsFragment extends Fragment {
 									}
 								}
 							}).execute(IpetApi.init(MainNewsFragment.this.getActivity()).getCurrUserId(),
-							++followerPageNumber, followerPageSize);
+									++followerPageNumber, followerPageSize);
 
 				}
 			}

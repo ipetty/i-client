@@ -1,5 +1,11 @@
 package net.ipetty.android.news;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.vo.ActivityVO;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,10 +16,6 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.vo.ActivityVO;
 
 public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 
@@ -44,11 +46,17 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 	}
 
 	// 构建一个布局缓存的结构体 与VO对应
-	public class ViewHolder {
+	public class NewView {
+		public View favorView;
+	}
 
-		public ImageView avatar;
-		public TextView name;
-		public ImageView follow;
+	public class ViewHolder {
+		public String type;
+		public ImageView avatar; // 称赞人or关注人头像or回复人
+		public TextView createdBy; // 称赞人or关注人名称or回复人
+		public TextView createdOn; // 称赞时间or关注时间or回复时间
+		public TextView content;// 回复内容
+		public ImageView relatedImage; // 称赞的图片or回复帖子的图片
 	}
 
 	public ViewHolder holder;
@@ -59,21 +67,29 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		Log.i(TAG, "list position-->" + position);
 		// 这里开始呈现每个item的布局
 		View view;
-		if (convertView == null) {
-			Log.i(TAG, "init items View");
-			view = inflater.inflate(R.layout.list_related_me_item_favor, null);
-			holder = new ViewHolder();
-			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
-			holder.name = (TextView) view.findViewById(R.id.name);
-
-			convertView = view;
-			convertView.setTag(holder);
-		} else {
-			view = convertView;
-			holder = (ViewHolder) view.getTag();
-		}
-		// TODO：数据与界面绑定
 		ActivityVO act = list.get(position);
+		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType())) {
+			view = getFavorView();
+		} else if (Constant.NEWS_TYPE_FOLLOWED.equals(act.getType())) {
+			view = getFollowedView();
+		} else {
+			view = null;
+		}
+		return view;
+	}
+
+	public View getFavorView() {
+		View view = inflater.inflate(R.layout.list_related_me_item_favor, null);
+		ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
+		TextView name = (TextView) view.findViewById(R.id.name);
+
+		return view;
+	}
+
+	public View getFollowedView() {
+		View view = inflater.inflate(R.layout.list_related_me_item_follow, null);
+		ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
+		TextView name = (TextView) view.findViewById(R.id.name);
 
 		return view;
 	}

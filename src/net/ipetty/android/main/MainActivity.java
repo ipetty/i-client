@@ -1,6 +1,5 @@
 package net.ipetty.android.main;
 
-import android.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +21,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
+import net.ipetty.R;
 import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.ui.BaseFragmentActivity;
 import net.ipetty.android.core.util.AnimUtils;
@@ -40,7 +40,6 @@ public class MainActivity extends BaseFragmentActivity {
 	private int zero = 0;
 	private int one;
 	private int two;
-
 	private final Class[] fragments = {MainHomeFragment.class, MainDiscoverFragment.class, MainNewsFragment.class};
 
 	private TextView main_text;
