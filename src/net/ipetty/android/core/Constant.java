@@ -30,6 +30,7 @@ public class Constant {
 	public final static String BROADCAST_INTENT_FEED_FAVORED = "BROADCAST_INTENT_FEED_FAVORED";
 	public final static String BROADCAST_INTENT_FEED_DELETE = "BROADCAST_INTENT_FEED_DELETE";
 	public final static String BROADCAST_INTENT_CCOMMENT_DELETE = "BROADCAST_INTENT_CCOMMENT_DELETE";
+	public final static String HAS_NEW_MESSAG = "HAS_NEW_MESSAG";
 
 	public static final String FEEDVO_JSON_SERIALIZABLE = "FEEDVO_JSON_SERIALIZABLE";
 	public static final String FEEDVO_ID = "FEEDVO_ID";
