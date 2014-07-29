@@ -86,7 +86,8 @@
           	 <ImageView 
 		     android:background="@drawable/drawable_line" 
 		     android:layout_width="fill_parent" 
-		     android:layout_height="1.0px" />
+		     android:layout_height="1.0px" 
+		     android:visibility="gone"/>
 
 			<RelativeLayout
 			    android:id="@+id/location_layout"
@@ -97,7 +98,8 @@
 			    android:orientation="vertical"
 			    android:background="@drawable/list_color_item_bg"
 			    android:paddingLeft="8dp" 
-			    android:paddingRight="8dp">
+			    android:paddingRight="8dp"
+			    android:visibility="gone">
 
 			    <ImageView android:id="@+id/location_iv" 
 			        android:paddingTop="4.0dp" 
@@ -132,7 +134,8 @@
      		<ImageView 
 		     android:background="@drawable/drawable_line" 
 		     android:layout_width="fill_parent" 
-		     android:layout_height="1.0px" />
+		     android:layout_height="1.0px" 
+		     android:visibility="gone"/>
      </LinearLayout>
 
 </LinearLayout>
