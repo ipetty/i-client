@@ -1,5 +1,14 @@
 package net.ipetty.android.news;
 
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.activity.ListActivities;
+import net.ipetty.android.sdk.task.user.ListFollowers;
+import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.UserVO;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,21 +18,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ViewFlipper;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.activity.ListActivities;
-import net.ipetty.android.sdk.task.user.ListFollowers;
-import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.UserVO;
 
 public class MainNewsFragment extends Fragment {
 
-	public final static String TAG = MainNewsFragment.class.getSimpleName();
+	public final static String TAG = MainNewsFragmentByTab.class.getSimpleName();
 	private Activity activity;
 	private ViewFlipper viewFlipper;
 
@@ -79,8 +81,8 @@ public class MainNewsFragment extends Fragment {
 			public void onLastItemVisible() {
 				// 加载更多
 				if (activitieHasMore) {
-					new ListActivities(MainNewsFragment.this.getActivity())
-							.setListener(new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
+					new ListActivities(MainNewsFragment.this.getActivity()).setListener(
+							new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
 								@Override
 								public void onSuccess(List<ActivityVO> result) {
 									if (result.size() < activitiePageSize) {
@@ -91,8 +93,7 @@ public class MainNewsFragment extends Fragment {
 										related_me_adapter.notifyDataSetChanged();
 									}
 								}
-							})
-							.execute(++activitiePageNumber, activitiePageSize);
+							}).execute(++activitiePageNumber, activitiePageSize);
 
 				}
 			}
@@ -107,8 +108,8 @@ public class MainNewsFragment extends Fragment {
 			public void onLastItemVisible() {
 				// 加载更多
 				if (followerHasMore) {
-					new ListFollowers(MainNewsFragment.this.getActivity())
-							.setListener(new DefaultTaskListener<List<UserVO>>(MainNewsFragment.this, "加载中...") {
+					new ListFollowers(MainNewsFragment.this.getActivity()).setListener(
+							new DefaultTaskListener<List<UserVO>>(MainNewsFragment.this) {
 								@Override
 								public void onSuccess(List<UserVO> result) {
 									if (result.size() < followerPageSize) {
@@ -120,10 +121,8 @@ public class MainNewsFragment extends Fragment {
 										my_follows_adapter.notifyDataSetChanged();
 									}
 								}
-							})
-							.execute(IpetApi
-									.init(MainNewsFragment.this.getActivity())
-									.getCurrUserId(), ++followerPageNumber, followerPageSize);
+							}).execute(IpetApi.init(MainNewsFragment.this.getActivity()).getCurrUserId(),
+							++followerPageNumber, followerPageSize);
 
 				}
 			}
@@ -135,24 +134,26 @@ public class MainNewsFragment extends Fragment {
 		followerHasMore = true;
 		activitiePageNumber = 0;
 		followerPageNumber = 0;
-		new ListActivities(this.getActivity())
-				.setListener(new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
-					@Override
-					public void onSuccess(List<ActivityVO> result) {
-						related_me_adapter.setList(result);
-						related_me_adapter.notifyDataSetChanged();
-					}
-				})
-				.execute(activitiePageNumber, this.activitiePageSize);
-		new ListFollowers(this.getActivity())
-				.setListener(new DefaultTaskListener<List<UserVO>>(MainNewsFragment.this, "加载中...") {
-					@Override
-					public void onSuccess(List<UserVO> users) {
-						my_follows_adapter.setList(users);
-						my_follows_adapter.notifyDataSetChanged();
-					}
-				})
-				.execute(IpetApi.init(this.getActivity()).getCurrUserId(), followerPageNumber, followerPageSize);
+		if (false) {
+			new ListActivities(this.getActivity()).setListener(
+					new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
+						@Override
+						public void onSuccess(List<ActivityVO> result) {
+							related_me_adapter.setList(result);
+							related_me_adapter.notifyDataSetChanged();
+						}
+					}).execute(activitiePageNumber, this.activitiePageSize);
+		}
+		if (false) {
+			new ListFollowers(this.getActivity()).setListener(
+					new DefaultTaskListener<List<UserVO>>(MainNewsFragment.this) {
+						@Override
+						public void onSuccess(List<UserVO> users) {
+							my_follows_adapter.setList(users);
+							my_follows_adapter.notifyDataSetChanged();
+						}
+					}).execute(IpetApi.init(this.getActivity()).getCurrUserId(), followerPageNumber, followerPageSize);
+		}
 	}
 
 	public class TabClickListener implements OnClickListener {

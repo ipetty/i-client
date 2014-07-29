@@ -70,7 +70,7 @@
 
         <LinearLayout
              android:id="@+id/main"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center" >
@@ -88,7 +88,7 @@
 
         <LinearLayout
              android:id="@+id/discover"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center" >
@@ -106,20 +106,44 @@
 
         <LinearLayout
              android:id="@+id/news"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center" 
-            android:visibility="gone">
+            android:gravity="center" >
 
-            <TextView
-                android:id="@+id/textView"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/sub_nav_title_news"
-                android:textColor="@color/title_gray"
-                android:textSize="18sp" />
+                android:layout_height="match_parent" 
+                android:layout_gravity="center">
+                
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/dot_news"
+                    android:visibility="invisible" />
+                
+	          <TextView
+	                android:id="@+id/textView"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center"
+	                android:gravity="center"
+	                android:text="@string/sub_nav_title_news"
+	                android:textColor="@color/title_gray"
+	                android:textSize="18sp" />
+	          
+	          <ImageView
+	              android:id="@+id/dot"
+	              android:layout_width="wrap_content"
+	              android:layout_height="wrap_content"
+	              android:layout_gravity="center"
+	              android:src="@drawable/dot_news"
+	              android:visibility="visible" />
+                
+            </LinearLayout>
+
+  
 
         </LinearLayout>
 
