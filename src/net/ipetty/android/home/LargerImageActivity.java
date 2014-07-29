@@ -1,6 +1,7 @@
 package net.ipetty.android.home;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -26,12 +27,8 @@ public class LargerImageActivity extends BaseActivity {
 		original_url = intent.getStringExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY);
 		small_url = intent.getStringExtra(Constant.INTENT_IMAGE_SAMILL_KEY);
 		image = (ImageView) this.findViewById(R.id.image);
-		ImageLoader.getInstance().displayImage(small_url, image, options);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
+		Uri uri = Uri.fromFile(ImageLoader.getInstance().getDiskCache().get(small_url));
+		image.setImageURI(uri);
 		ImageLoader.getInstance().displayImage(original_url, image, options);
 	}
 

@@ -21,7 +21,7 @@ public class MessageService extends Service {
 
 	private final static String TAG = MessageService.class.getSimpleName();
 
-	private final int interval = 3 * 1000;
+	private final int interval = 60 * 1000;
 
 	private Thread getMessageThread;
 
@@ -51,7 +51,7 @@ public class MessageService extends Service {
 								//TODO:请求消息
 								Intent intent = new Intent(Constant.BROADCAST_HAS_NEW_MESSAG);
 								MessageService.this.sendBroadcast(intent);
-								Log.d(TAG, uuid + ":BROADCAST_HAS_NEW_MESSAG");
+								Log.d(TAG, uuid + ":" + Constant.BROADCAST_HAS_NEW_MESSAG);
 							}
 
 						}
