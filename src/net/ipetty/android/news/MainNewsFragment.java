@@ -1,8 +1,10 @@
 package net.ipetty.android.news;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.ipetty.R;
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.activity.ListActivities;
@@ -25,7 +27,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainNewsFragment extends Fragment {
 
-	public final static String TAG = MainNewsFragmentByTab.class.getSimpleName();
+	public final static String TAG = MainNewsFragment.class.getSimpleName();
 	private Activity activity;
 	private ViewFlipper viewFlipper;
 
@@ -72,7 +74,7 @@ public class MainNewsFragment extends Fragment {
 		my_follows.setOnClickListener(new TabClickListener(1));
 
 		related_me_listView = (PullToRefreshListView) activity.findViewById(R.id.related_me_listView);
-		related_me_listView.setMode(Mode.PULL_FROM_END);
+		// related_me_listView.setMode(Mode.PULL_FROM_END);
 
 		related_me_adapter = new RelatedMeAdapter(this.getActivity());
 		related_me_listView.setAdapter(related_me_adapter);
@@ -82,7 +84,7 @@ public class MainNewsFragment extends Fragment {
 				// 加载更多
 				if (activitieHasMore) {
 					new ListActivities(MainNewsFragment.this.getActivity()).setListener(
-							new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
+							new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
 								@Override
 								public void onSuccess(List<ActivityVO> result) {
 									if (result.size() < activitiePageSize) {
@@ -127,6 +129,7 @@ public class MainNewsFragment extends Fragment {
 				}
 			}
 		});
+		loadData();
 	}
 
 	private void loadData() {
@@ -134,6 +137,23 @@ public class MainNewsFragment extends Fragment {
 		followerHasMore = true;
 		activitiePageNumber = 0;
 		followerPageNumber = 0;
+
+		Log.d(TAG, "start load");
+
+		List<ActivityVO> arr = new ArrayList<ActivityVO>();
+		ActivityVO act = new ActivityVO();
+		act.setType(Constant.NEWS_TYPE_FAVOR);
+		act.setId(1L);
+		arr.add(act);
+		arr.add(act);
+		ActivityVO act2 = new ActivityVO();
+		act2.setType(Constant.NEWS_TYPE_FOLLOWED);
+		act2.setId(1L);
+		arr.add(act2);
+
+		related_me_adapter.setList(arr);
+		related_me_adapter.notifyDataSetChanged();
+
 		if (false) {
 			new ListActivities(this.getActivity()).setListener(
 					new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
@@ -183,6 +203,7 @@ public class MainNewsFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onStart();
 		Log.i(TAG, "onStart");
+
 	}
 
 	@Override
@@ -190,7 +211,7 @@ public class MainNewsFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onResume();
 		Log.i(TAG, "onResume");
-		loadData();
+		// loadData();
 	}
 
 	@Override
