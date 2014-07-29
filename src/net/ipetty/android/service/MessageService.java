@@ -9,6 +9,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import net.ipetty.android.core.Constant;
 
 /**
  *
@@ -18,7 +19,7 @@ public class MessageService extends Service {
 
 	private final static String TAG = MessageService.class.getSimpleName();
 
-	private final int interval = 3 * 1000;
+	private final int interval = 60 * 1000;
 
 	private Thread getMessageThread;
 
@@ -33,13 +34,17 @@ public class MessageService extends Service {
 	public void onCreate() {
 		Log.d(TAG, "onCreate");
 		super.onCreate();
+		running = true;
 		getMessageThread = new Thread() {
 			@Override
 			public void run() {
 				try {
 					while (running) {
 						Thread.sleep(interval);
-						//TODO:请求消息，发送广播
+						//TODO:请求消息
+						Intent intent = new Intent(Constant.BROADCAST_HAS_NEW_MESSAG);
+						MessageService.this.sendBroadcast(intent);
+						Log.d(TAG, "BROADCAST_HAS_NEW_MESSAG");
 					}
 
 				} catch (Exception ex) {
@@ -48,11 +53,14 @@ public class MessageService extends Service {
 				}
 			}
 		};
+		getMessageThread.start();
+
 	}
 
 	@Override
 	public void onDestroy() {
 		Log.d(TAG, "onDestroy");
+		running = false;
 		super.onDestroy();
 	}
 
