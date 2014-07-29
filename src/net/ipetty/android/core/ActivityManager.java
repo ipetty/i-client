@@ -1,14 +1,17 @@
 package net.ipetty.android.core;
 
+import android.app.Activity;
+import android.content.Intent;
 import java.util.LinkedList;
 import java.util.List;
-
-import android.app.Activity;
+import net.ipetty.android.service.MessageService;
 
 public class ActivityManager {
-	public final static String TAG = "ActivityUtils";
+
+	public final static String TAG = ActivityManager.class.getSimpleName();
 	private final List<Activity> activityList = new LinkedList<Activity>();
 	private static ActivityManager instance;
+	private final Intent messageServiceIntent = new Intent(MessageService.class.getName());
 
 	private ActivityManager() {
 	}
@@ -40,8 +43,9 @@ public class ActivityManager {
 	// 获得当前栈顶Activity
 	public Activity currentActivity() {
 		Activity activity = null;
-		if (!activityList.isEmpty())
+		if (!activityList.isEmpty()) {
 			activity = activityList.get(activityList.size() - 1);
+		}
 		return activity;
 	}
 
@@ -51,8 +55,14 @@ public class ActivityManager {
 	}
 
 	public void exit() {
+		int i = 0;
+
 		for (Activity activity : activityList) {
+			if (i == 0) {
+				activity.stopService(messageServiceIntent);
+			}
 			activity.finish();
+			i++;
 		}
 		System.exit(0);
 	}

@@ -50,7 +50,7 @@ public class MainActivity extends BaseFragmentActivity {
 	private int gray;
 	private int red;
 
-	private Intent messageServiceIntent;
+	private final Intent messageServiceIntent = new Intent(MessageService.class.getName());
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +103,6 @@ public class MainActivity extends BaseFragmentActivity {
 		manager.checkUpdate();
 
 		//启动服务
-		messageServiceIntent = new Intent(this, MessageService.class);
 		startService(messageServiceIntent);
 
 	}

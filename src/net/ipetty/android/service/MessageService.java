@@ -9,7 +9,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import java.util.UUID;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.util.NetWorkUtils;
 
 /**
  *
@@ -19,11 +21,13 @@ public class MessageService extends Service {
 
 	private final static String TAG = MessageService.class.getSimpleName();
 
-	private final int interval = 60 * 1000;
+	private final int interval = 3 * 1000;
 
 	private Thread getMessageThread;
 
 	private boolean running = false;
+
+	private final UUID uuid = UUID.randomUUID();
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -35,25 +39,30 @@ public class MessageService extends Service {
 		Log.d(TAG, "onCreate");
 		super.onCreate();
 		running = true;
-		getMessageThread = new Thread() {
-			@Override
-			public void run() {
-				try {
-					while (running) {
-						Thread.sleep(interval);
-						//TODO:请求消息
-						Intent intent = new Intent(Constant.BROADCAST_HAS_NEW_MESSAG);
-						MessageService.this.sendBroadcast(intent);
-						Log.d(TAG, "BROADCAST_HAS_NEW_MESSAG");
-					}
+		if (getMessageThread == null) {
+			Log.d(TAG, "getMessageThread == null");
+			getMessageThread = new Thread() {
+				@Override
+				public void run() {
+					try {
+						while (running) {
+							Thread.sleep(interval);
+							if (NetWorkUtils.isNetworkConnected(MessageService.this)) {
+								//TODO:请求消息
+								Intent intent = new Intent(Constant.BROADCAST_HAS_NEW_MESSAG);
+								MessageService.this.sendBroadcast(intent);
+								Log.d(TAG, uuid + ":BROADCAST_HAS_NEW_MESSAG");
+							}
 
-				} catch (Exception ex) {
-					running = false;
-					Log.e(TAG, "消息服务异常", ex);
+						}
+
+					} catch (Exception ex) {
+						Log.e(TAG, "消息服务异常", ex);
+					}
 				}
-			}
-		};
-		getMessageThread.start();
+			};
+			getMessageThread.start();
+		}
 
 	}
 

@@ -60,7 +60,7 @@ public class ApiBase {
 
 		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 		//HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-		factory.setConnectTimeout(10 * 1000);
+		factory.setConnectTimeout(60 * 1000);
 		factory.setReadTimeout(60 * 1000);
 
 		//避免HttpURLConnection的http.keepAlive Bug
@@ -153,8 +153,8 @@ public class ApiBase {
 					// 创建连接
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.setUseCaches(false);
-					conn.setConnectTimeout(5 * 1000);
-					conn.setReadTimeout(5 * 1000);
+					conn.setConnectTimeout(60 * 1000);
+					conn.setReadTimeout(60 * 1000);
 					//conn.setRequestProperty("Connection", "close");
 					conn.connect();
 					// 获取内容长度
