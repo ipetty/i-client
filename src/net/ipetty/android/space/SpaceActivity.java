@@ -35,6 +35,7 @@ import net.ipetty.android.fans.FansActivity;
 import net.ipetty.android.feed.SimpleFeedActivity;
 import net.ipetty.android.follow.FollowsActivity;
 import net.ipetty.android.home.FeedAdapter;
+import net.ipetty.android.home.LargerImageActivity;
 import net.ipetty.android.petty.PettyActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForSpace;
@@ -123,7 +124,7 @@ public class SpaceActivity extends Activity {
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		btnBack.setOnClickListener(new BackClickListener(this));
 
-		UserVO user = UserApiWithCache.getUserById4Synchronous(this, userId);
+		final UserVO user = UserApiWithCache.getUserById4Synchronous(this, userId);
 		String title = this.getResources().getString(R.string.title_activity_space);
 		// 标题
 		if (!isCurrentUser) {
@@ -178,9 +179,19 @@ public class SpaceActivity extends Activity {
 		} else {
 			avatar.setImageResource(R.drawable.avatar);
 		}
-		if (isCurrentUser) {
-			avatar.setOnClickListener(userEditClick);
-		}
+
+		avatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (StringUtils.isNotBlank(user.getAvatar())) {
+					Intent intent = new Intent(SpaceActivity.this, LargerImageActivity.class);
+					intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY,
+							Constant.FILE_SERVER_BASE + user.getAvatar());
+					intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY, Constant.FILE_SERVER_BASE + user.getAvatar());
+					SpaceActivity.this.startActivity(intent);
+				}
+			}
+		});
 
 		View feeds = findViewById(R.id.feeds_layout);
 		feeds.setOnClickListener(new OnClickListener() {
@@ -336,7 +347,7 @@ public class SpaceActivity extends Activity {
 
 				// TODO 多个宠物的展现
 				// 只展现一个宠物
-				PetVO pet = pets.get(0);
+				final PetVO pet = pets.get(0);
 
 				// FIXME 多个宠物时，目前这种赋值方法明显是错误的
 				SpaceActivity.this.petId = pet.getId();
@@ -348,6 +359,18 @@ public class SpaceActivity extends Activity {
 				} else {
 					petAvatar.setImageResource(R.drawable.avatar);
 				}
+
+				petAvatar.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (StringUtils.isNotBlank(pet.getAvatar())) {
+							Intent intent = new Intent(SpaceActivity.this, LargerImageActivity.class);
+							intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY, Constant.FILE_SERVER_BASE + pet.getAvatar());
+							intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY, Constant.FILE_SERVER_BASE + pet.getAvatar());
+							SpaceActivity.this.startActivity(intent);
+						}
+					}
+				});
 
 				TextView petName = (TextView) space_petty_view.findViewById(R.id.pet_name);
 				petName.setText(pet.getNickname() == null ? "" : pet.getNickname());

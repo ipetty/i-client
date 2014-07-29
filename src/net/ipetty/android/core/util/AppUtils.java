@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.DisplayImageOptions.Builder;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,6 +81,7 @@ public class AppUtils {
 				.cacheInMemory(true)//
 				.cacheOnDisk(true)//
 				.showImageOnFail(R.drawable.avatar)
+				.imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
 				.considerExifParams(true);
 		return bulider;
 	}
