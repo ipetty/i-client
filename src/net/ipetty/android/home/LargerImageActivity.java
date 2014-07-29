@@ -30,6 +30,7 @@ public class LargerImageActivity extends BaseActivity {
 		Uri uri = Uri.fromFile(ImageLoader.getInstance().getDiskCache().get(small_url));
 		image.setImageURI(uri);
 		ImageLoader.getInstance().displayImage(original_url, image, options);
-	}
 
+		//image.setOnTouchListener(new MulitPointTouchListener());//为图片设置监听
+	}
 }
