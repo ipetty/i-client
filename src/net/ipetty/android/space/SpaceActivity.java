@@ -1,7 +1,6 @@
 package net.ipetty.android.space;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +27,7 @@ import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.MyAppStateManager;
 import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.discover.DiscoverAdapter;
@@ -55,7 +55,7 @@ import net.ipetty.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-public class SpaceActivity extends Activity {
+public class SpaceActivity extends BaseActivity {
 
 	public final static String TAG = SpaceActivity.class.getSimpleName();
 
