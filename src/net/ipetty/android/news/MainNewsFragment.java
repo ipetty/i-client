@@ -1,5 +1,16 @@
 package net.ipetty.android.news;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.activity.ListActivities;
+import net.ipetty.android.sdk.task.user.ListFollowers;
+import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.UserVO;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,17 +20,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ViewFlipper;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.activity.ListActivities;
-import net.ipetty.android.sdk.task.user.ListFollowers;
-import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.UserVO;
 
 public class MainNewsFragment extends Fragment {
 
@@ -70,7 +74,7 @@ public class MainNewsFragment extends Fragment {
 		my_follows.setOnClickListener(new TabClickListener(1));
 
 		related_me_listView = (PullToRefreshListView) activity.findViewById(R.id.related_me_listView);
-		related_me_listView.setMode(Mode.PULL_FROM_END);
+		// related_me_listView.setMode(Mode.PULL_FROM_END);
 
 		related_me_adapter = new RelatedMeAdapter(this.getActivity());
 		related_me_listView.setAdapter(related_me_adapter);
@@ -125,6 +129,7 @@ public class MainNewsFragment extends Fragment {
 				}
 			}
 		});
+		loadData();
 	}
 
 	private void loadData() {
@@ -181,6 +186,7 @@ public class MainNewsFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onStart();
 		Log.i(TAG, "onStart");
+
 	}
 
 	@Override
@@ -188,7 +194,7 @@ public class MainNewsFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onResume();
 		Log.i(TAG, "onResume");
-		loadData();
+		// loadData();
 	}
 
 	@Override

@@ -1,5 +1,13 @@
 package net.ipetty.android.main;
 
+import net.ipetty.R;
+import net.ipetty.android.core.ActivityManager;
+import net.ipetty.android.core.ui.BaseFragmentActivity;
+import net.ipetty.android.core.util.AnimUtils;
+import net.ipetty.android.discover.MainDiscoverFragment;
+import net.ipetty.android.home.MainHomeFragment;
+import net.ipetty.android.news.MainNewsFragment;
+import net.ipetty.android.update.UpdateManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -86,6 +94,8 @@ public class MainActivity extends BaseFragmentActivity {
 		main_text = (TextView) main.findViewById(R.id.textView);
 		discover_text = (TextView) discover.findViewById(R.id.textView);
 		news_text = (TextView) news.findViewById(R.id.textView);
+
+		news_dot = (ImageView) news.findViewById(R.id.dot);
 
 		news_dot = (ImageView) news.findViewById(R.id.dot);
 
@@ -232,6 +242,22 @@ public class MainActivity extends BaseFragmentActivity {
 			startActivity(intent);
 		}
 	};
+
+	public void showNewsDot() {
+		toggleNewsDot(true);
+	}
+
+	public void hideNewsDot() {
+		toggleNewsDot(false);
+	}
+
+	public void toggleNewsDot(boolean bl) {
+		if (bl) {
+			news_dot.setVisibility(View.VISIBLE);
+		} else {
+			news_dot.setVisibility(View.INVISIBLE);
+		}
+	}
 
 	public void showNewsDot() {
 		toggleNewsDot(true);
