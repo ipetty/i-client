@@ -19,7 +19,7 @@ import android.widget.ImageView;
  */
 public class MulitPointTouchListener implements OnTouchListener {
 
-	private static final String TAG = "Touch";
+	private static final String TAG = MulitPointTouchListener.class.getSimpleName();
 	// These matrices will be used to move and zoom image
 	Matrix matrix = new Matrix();
 	Matrix savedMatrix = new Matrix();
@@ -39,7 +39,8 @@ public class MulitPointTouchListener implements OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 
 		ImageView view = (ImageView) v;
-            // Log.e("view_width",
+		view.setScaleType(ImageView.ScaleType.MATRIX);
+		// Log.e("view_width",
 		// view.getImageMatrix()..toString()+"*"+v.getWidth());
 		// Dump touch event to log
 		dumpEvent(event);
@@ -69,7 +70,7 @@ public class MulitPointTouchListener implements OnTouchListener {
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_POINTER_UP:
 				mode = NONE;
-                    //Log.e("view.getWidth", view.getWidth() + "");
+				//Log.e("view.getWidth", view.getWidth() + "");
 				//Log.e("view.getHeight", view.getHeight() + "");
 
 				break;

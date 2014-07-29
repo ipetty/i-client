@@ -31,6 +31,6 @@ public class LargerImageActivity extends BaseActivity {
 		image.setImageURI(uri);
 		ImageLoader.getInstance().displayImage(original_url, image, options);
 
-		//image.setOnTouchListener(new MulitPointTouchListener());//为图片设置监听
+		image.setOnTouchListener(new MulitPointTouchListener());// 为图片设置监听
 	}
 }
