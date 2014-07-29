@@ -6,6 +6,7 @@ import net.ipetty.android.core.ui.BaseFragmentActivity;
 import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.discover.MainDiscoverFragment;
 import net.ipetty.android.home.MainHomeFragment;
+import net.ipetty.android.news.MainNewsFragment;
 import net.ipetty.android.update.UpdateManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,11 +39,12 @@ public class MainActivity extends BaseFragmentActivity {
 	private int zero = 0;
 	private int one;
 	private int two;
-	private final Class[] fragments = { MainHomeFragment.class, MainDiscoverFragment.class };// ,MainNewsFragment.class};
+	private final Class[] fragments = { MainHomeFragment.class, MainDiscoverFragment.class, MainNewsFragment.class };
 
 	private TextView main_text;
 	private TextView discover_text;
 	private TextView news_text;
+	private ImageView news_dot;
 
 	private int gray;
 	private int red;
@@ -60,7 +62,7 @@ public class MainActivity extends BaseFragmentActivity {
 		// sub_action_bar_now
 		DisplayMetrics dm = AnimUtils.getDefaultDisplayMetrics(this);
 		int screenWidth = dm.widthPixels;
-		one = screenWidth / 2;
+		one = screenWidth / 3;
 		two = one * 2;
 
 		mTabImg = (ImageView) findViewById(R.id.imageTabNow);
@@ -81,6 +83,8 @@ public class MainActivity extends BaseFragmentActivity {
 		main_text = (TextView) main.findViewById(R.id.textView);
 		discover_text = (TextView) discover.findViewById(R.id.textView);
 		news_text = (TextView) news.findViewById(R.id.textView);
+
+		news_dot = (ImageView) news.findViewById(R.id.dot);
 
 		main.setOnClickListener(new TabClickListener(0));
 		discover.setOnClickListener(new TabClickListener(1));
@@ -222,6 +226,22 @@ public class MainActivity extends BaseFragmentActivity {
 		}
 	};
 
+	public void showNewsDot() {
+		toggleNewsDot(true);
+	}
+
+	public void hideNewsDot() {
+		toggleNewsDot(false);
+	}
+
+	public void toggleNewsDot(boolean bl) {
+		if (bl) {
+			news_dot.setVisibility(View.VISIBLE);
+		} else {
+			news_dot.setVisibility(View.INVISIBLE);
+		}
+	}
+
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
@@ -282,4 +302,5 @@ public class MainActivity extends BaseFragmentActivity {
 		return super.onKeyDown(keyCode, event);
 
 	}
+
 }
