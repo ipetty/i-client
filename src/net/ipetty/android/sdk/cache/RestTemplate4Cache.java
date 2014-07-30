@@ -48,25 +48,25 @@ public class RestTemplate4Cache extends RestTemplate {
 		if (!NetWorkUtils.isNetworkConnected(context)) {
 
 			if (!isCacheableRequest(method)) {
-				Log.i(TAG, "离线状态，只能浏览:" + url);
+				Log.d(TAG, "离线状态，只能浏览:" + url);
 				throw new APIException("离线状态，只能浏览");
 			}
 
 			CacheEntry e = getCache().get(url.toString());
 
 			if (null != e) {
-				Log.i(TAG, "离线，找到离线缓存:" + url + ":" + e.getValue());
+				Log.d(TAG, "离线，找到离线缓存:" + url + ":" + e.getValue());
 				T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
 				return t;
 			} else {
-				Log.i(TAG, "离线，没找到离线缓存:" + url);
+				Log.d(TAG, "离线，没找到离线缓存:" + url);
 				throw new APIException("没找到离线缓存");
 			}
 
 		}
 		//非get请求，则透传给父类正常请求
 		if (!isCacheableRequest(method)) {
-			Log.i(TAG, "在线，非Get方法:" + method + ":" + url);
+			Log.d(TAG, "在线，非Get方法:" + method + ":" + url);
 			return super.doExecute(url, method, requestCallback,
 					responseExtractor);
 		}
@@ -74,13 +74,13 @@ public class RestTemplate4Cache extends RestTemplate {
 		CacheEntry e = getCache().get(url.toString());
 		//找到没有过期的缓存，则直接返回结果，不产生请求
 		if (null != e && System.currentTimeMillis() < e.getExpireOn()) {
-			Log.i(TAG, "在线，未过期,直接从缓存取值:" + url);
+			Log.d(TAG, "在线，未过期,直接从缓存取值:" + url);
 			T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
 			return t;
 		}
 
 		//如果是get请求，则使用自定义的代理对像，以处理缓存
-		Log.i(TAG, "在线，Get方法,使用Etag请求:" + url);
+		Log.d(TAG, "在线，Get方法,使用Etag请求:" + url);
 		return super.doExecute(url, method, new DelegatingRequestCallback(url,
 				requestCallback), new DelegatingResponseExtractor<T>(url,
 						method, responseExtractor));
@@ -118,7 +118,7 @@ public class RestTemplate4Cache extends RestTemplate {
 			//如果之前有缓存则增加IF_NONE_MATCH_HEADER头
 			CacheEntry e = getCache().get(uri.toString());
 			if (null != e) {
-				Log.i(TAG, "doWithRequest-->增加Etag头:" + e.getEtag());
+				Log.d(TAG, "doWithRequest-->增加Etag头:" + e.getEtag());
 				request.getHeaders().setIfNoneMatch(e.getEtag());
 			}
 
@@ -153,7 +153,7 @@ public class RestTemplate4Cache extends RestTemplate {
 			// 如果返回304状态，则直接从缓存取值
 			if (isNotModified) {
 				CacheEntry e = getCache().get(uri.toString());
-				Log.i(TAG, "extractData-->304,从缓存取:" + e.getValue());
+				Log.d(TAG, "extractData-->304,从缓存取:" + e.getValue());
 				T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
 				return t;
 			}
@@ -181,7 +181,7 @@ public class RestTemplate4Cache extends RestTemplate {
 
 				String str = JSONUtils.toJson(result);
 				String classType = result.getClass().getName();
-				Log.i(TAG, "extractData-->200,放入缓存:" + str);
+				Log.d(TAG, "extractData-->200,放入缓存:" + str);
 				getCache().put(new CacheEntry(uri.toString(), str, eTag, expireOn, classType));
 
 			}

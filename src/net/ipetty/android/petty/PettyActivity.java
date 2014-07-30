@@ -265,9 +265,9 @@ public class PettyActivity extends BaseActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.i(TAG, "finish");
-		Log.i(TAG, "requestCode" + requestCode);
-		Log.i(TAG, "resultCode" + resultCode);
+		Log.d(TAG, "finish");
+		Log.d(TAG, "requestCode" + requestCode);
+		Log.d(TAG, "resultCode" + resultCode);
 
 		String path = PathUtils.getCarmerDir() + this.mImageName;
 		File picture = new File(path);
@@ -276,19 +276,19 @@ public class PettyActivity extends BaseActivity {
 		if (requestCode == DeviceUtils.REQUEST_CODE_PICK_IMAGE) {
 			if (resultCode == FragmentActivity.RESULT_OK) {
 				Uri uri = data.getData();
-				Log.i(TAG, "finish" + uri);
+				Log.d(TAG, "finish" + uri);
 				startPhotoZoom(uri, pathUri);
 			}
 		}
 		if (requestCode == DeviceUtils.REQUEST_CODE_TAKE_IMAGE) {
 			if (resultCode == FragmentActivity.RESULT_OK) {
-				Log.i(TAG, "finish" + picture);
+				Log.d(TAG, "finish" + picture);
 				startPhotoZoom(Uri.fromFile(picture), pathUri);
 			}
 
 		}
 		if (requestCode == REQUEST_CODE_PHOTORESOULT) {
-			Log.i(TAG, "crop" + pathUri);
+			Log.d(TAG, "crop" + pathUri);
 
 			avatar.setImageURI(pathUri);
 			this.updateAvatar(picture.getAbsolutePath());
@@ -299,7 +299,7 @@ public class PettyActivity extends BaseActivity {
 		new UpdatePetAvatar(this).setListener(new DefaultTaskListener<String>(this) {
 			@Override
 			public void onSuccess(String result) {
-				Log.i(TAG, "updateAvatar.onSuccess:" + result);
+				Log.d(TAG, "updateAvatar.onSuccess:" + result);
 				// TODO 更新缓存
 				ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + result, avatar, options);
 				PettyActivity.this.showMessageForLongTime("更新宠物头像成功");

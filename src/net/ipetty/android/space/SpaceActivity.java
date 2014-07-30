@@ -416,7 +416,7 @@ public class SpaceActivity extends BaseActivity {
 
 	@Override
 	public void onResume() {
-		Log.i(TAG, "onResume");
+		Log.d(TAG, "onResume");
 		super.onResume();
 		refreshData();
 	}

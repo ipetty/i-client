@@ -185,7 +185,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		// 这里开始呈现每个item的布局
 		View view;
 		if (convertView == null) {
-			Log.i(TAG, "init items View");
+			Log.d(TAG, "init items View");
 			view = inflater.inflate(R.layout.list_feed_item, null);
 			holder = new ViewHolder();
 

@@ -70,7 +70,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		Log.i(TAG, "list position-->" + position);
+		Log.d(TAG, "list position-->" + position);
 		// 这里开始呈现每个item的布局
 		View view;
 		if (convertView == null) {

@@ -43,7 +43,7 @@ public class MainDiscoverFragment extends Fragment {
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_PUBLISH);
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_DELETE);
 		this.getActivity().registerReceiver(broadcastreciver, filter);
-		Log.i(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 	}
 	private BroadcastReceiver broadcastreciver = new BroadcastReceiver() {
 
@@ -57,7 +57,7 @@ public class MainDiscoverFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.i(TAG, "onActivityCreated");
+		Log.d(TAG, "onActivityCreated");
 		this.activity = getActivity();
 		gridview = (GridView) this.activity.findViewById(R.id.gridview);
 		adapter = new DiscoverAdapter(this.activity);
@@ -96,7 +96,7 @@ public class MainDiscoverFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Log.i(TAG, "onStart");
+		Log.d(TAG, "onStart");
 	}
 
 	@Override
@@ -104,28 +104,28 @@ public class MainDiscoverFragment extends Fragment {
 		// TODO Auto-generated method stub
 		//loadData();
 		super.onResume();
-		Log.i(TAG, "onResume");
+		Log.d(TAG, "onResume");
 	}
 
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		Log.i(TAG, "onPause");
+		Log.d(TAG, "onPause");
 	}
 
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		Log.i(TAG, "onStop");
+		Log.d(TAG, "onStop");
 	}
 
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		Log.i(TAG, "onDestroy");
+		Log.d(TAG, "onDestroy");
 	}
 
 }

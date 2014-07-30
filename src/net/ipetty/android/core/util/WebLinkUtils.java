@@ -18,7 +18,7 @@ public class WebLinkUtils {
 		Spannable sp = (Spannable) charSequence;
 		int end = charSequence.length();
 		URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
-		Log.i(TAG, "length" + urls.length);
+		Log.d(TAG, "length" + urls.length);
 		SpannableStringBuilder spannable = new SpannableStringBuilder(sp);
 		for (URLSpan url : urls) {
 			spannable.setSpan(new UserURLSpan(activity, Integer.valueOf(url.getURL().toString())),

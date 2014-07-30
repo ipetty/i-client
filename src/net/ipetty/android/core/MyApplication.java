@@ -17,7 +17,7 @@ public class MyApplication extends Application {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		Log.i(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 		initImageLoader(getApplicationContext());
 		Thread.setDefaultUncaughtExceptionHandler(new MyAppCrashHandler(this));
 	}

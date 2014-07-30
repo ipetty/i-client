@@ -35,7 +35,7 @@ public class ApiExceptionHandler implements ResponseErrorHandler {
 
         byte[] body = getResponseBody(response);
         HttpStatus statusCode = response.getStatusCode();
-        Log.i(TAG, "statusCode:" + statusCode.series());
+        Log.d(TAG, "statusCode:" + statusCode.series());
         String str = null;
         if (body != null) {
             str = new String(body, charset);
@@ -46,15 +46,15 @@ public class ApiExceptionHandler implements ResponseErrorHandler {
         throw new APIException(str);
 //        switch (statusCode.series()) {
 //            case CLIENT_ERROR:
-//                Log.i(TAG, "throw HttpClientErrorException:");
+//                Log.d(TAG, "throw HttpClientErrorException:");
 //                throw new HttpClientErrorException(statusCode, response.getStatusText(), body,
 //                        charset);
 //            case SERVER_ERROR:
-//                Log.i(TAG, "throw HttpServerErrorException:");
+//                Log.d(TAG, "throw HttpServerErrorException:");
 //                throw new HttpServerErrorException(statusCode, response.getStatusText(), body,
 //                        charset);
 //            default:
-//                Log.i(TAG, "throw RestClientException:");
+//                Log.d(TAG, "throw RestClientException:");
 //                throw new RestClientException("Unknown status code [" + statusCode + "]");
 //        }
     }

@@ -25,10 +25,10 @@ public class ImageUtils {
         long t3 = System.currentTimeMillis(); // 排序前取得当前时间
         int level = getCompressLevel(bitmap);
         long t4 = System.currentTimeMillis(); // 排序前取得当前时间
-        Log.i(TAG, "缩小:" + (t2 - t1));
-        Log.i(TAG, "等比:" + (t3 - t2));
-        Log.i(TAG, "质量:" + (t4 - t3));
-        Log.i(TAG, "总耗:" + (t4 - t1));
+        Log.d(TAG, "缩小:" + (t2 - t1));
+        Log.d(TAG, "等比:" + (t3 - t2));
+        Log.d(TAG, "质量:" + (t4 - t3));
+        Log.d(TAG, "总耗:" + (t4 - t1));
         File myCaptureFile = new File(outPath);
         try {
             FileOutputStream bos = new FileOutputStream(myCaptureFile);
@@ -83,7 +83,7 @@ public class ImageUtils {
         if (be <= 0) {
             be = 1;
         }
-        Log.i(TAG, "Zoom:" + be);
+        Log.d(TAG, "Zoom:" + be);
         newOpts.inSampleSize = be;// 设置缩放比例 这里有个问题 貌似如果是
         newOpts.inJustDecodeBounds = false;
         newOpts.inPreferredConfig = Bitmap.Config.RGB_565; // 是否采用这个方案待评估
@@ -100,7 +100,7 @@ public class ImageUtils {
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);
             options -= 10;// 每次都减少10
         }
-        Log.i(TAG, "level" + options);
+        Log.d(TAG, "level" + options);
         return options;
     }
 

@@ -484,7 +484,7 @@ public class SimpleFeedActivity extends BaseActivity {
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		Log.i(TAG, "onDestroy");
+		Log.d(TAG, "onDestroy");
 		this.unregisterReceiver(broadcastreciver);
 	}
 }

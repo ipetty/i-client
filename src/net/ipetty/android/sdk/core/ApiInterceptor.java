@@ -55,10 +55,10 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 			SDKStateManager.setDeviceUUID(context, uuidB64);
 		}
 		String url = request.getURI().toString();
-		Log.i(TAG, "-->：" + url);
-		Log.i(TAG, "userToken：" + userToken);
-		Log.i(TAG, "refreshToken：" + refreshToken);
-		Log.i(TAG, "deviceUUID：" + uuidB64);
+		Log.d(TAG, "-->：" + url);
+		Log.d(TAG, "userToken：" + userToken);
+		Log.d(TAG, "refreshToken：" + refreshToken);
+		Log.d(TAG, "deviceUUID：" + uuidB64);
 		// 发送头
 		HttpHeaders requestHeaders = request.getHeaders();
 		requestHeaders.setAcceptEncoding(ContentCodingType.GZIP);
@@ -69,36 +69,36 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 
 //		Boolean isServiceAvaliable = IpetApi.init(context).checkServiceAvaliable();
 //		if (!isServiceAvaliable) {
-//			Log.i(TAG, "throw ServiceUnavailableException");
+//			Log.d(TAG, "throw ServiceUnavailableException");
 //			throw new ServiceUnavailableException();
 //		}
 		//执行请求
 		ClientHttpResponse resp = execution.execute(request, body);
 
-		Log.i(TAG, "<--:" + request.getURI().toString());
+		Log.d(TAG, "<--:" + request.getURI().toString());
 		// 接收头
 		HttpHeaders responseHeaders = resp.getHeaders();
 		String rut = responseHeaders.getFirst(HEADER_NAME_USER_TOKEN);
 		String rrt = responseHeaders.getFirst(HEADER_NAME_REFRESH_TOKEN);
-		Log.i(TAG, "接收到userToken:" + rut);
-		Log.i(TAG, "接收到refreshToken:" + rrt);
+		Log.d(TAG, "接收到userToken:" + rut);
+		Log.d(TAG, "接收到refreshToken:" + rrt);
 		if (StringUtils.isNotBlank(rut) && !userToken.equals(rut)) {
-			Log.i(TAG, "设置userToken:" + rut);
+			Log.d(TAG, "设置userToken:" + rut);
 			SDKStateManager.setUserToken(context, rut);
 		}
 		if (StringUtils.isNotBlank(rrt) && !refreshToken.equals(rrt)) {
-			Log.i(TAG, "设置refreshToken:" + rrt);
+			Log.d(TAG, "设置refreshToken:" + rrt);
 			SDKStateManager.setRefreshToken(context, rrt);
 		}
 
 //		if (StringUtils.isBlank(resp.getHeaders().getCacheControl())) {
 //			resp.getHeaders().add("Cache-Control", "max-age=15");
 //		}
-		Log.i(TAG, "Etag头：" + resp.getHeaders().getETag());
-		Log.i(TAG, "过期头：" + resp.getHeaders().getCacheControl());
-		Log.i(TAG, "状态：" + resp.getRawStatusCode());
+		Log.d(TAG, "Etag头：" + resp.getHeaders().getETag());
+		Log.d(TAG, "过期头：" + resp.getHeaders().getCacheControl());
+		Log.d(TAG, "状态：" + resp.getRawStatusCode());
 
-		// Log.i(TAG, "-->" + request.getURI() + ":" + resp.getRawStatusCode());
+		// Log.d(TAG, "-->" + request.getURI() + ":" + resp.getRawStatusCode());
 		return resp;
 	}
 

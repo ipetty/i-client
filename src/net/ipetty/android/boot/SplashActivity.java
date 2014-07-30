@@ -23,7 +23,7 @@ public class SplashActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		ShareSDK.initSDK(this);
 		setContentView(R.layout.activity_splash);
-		Log.i(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 		init();
 
 		new SplashTask(SplashActivity.this)
@@ -42,42 +42,42 @@ public class SplashActivity extends BaseActivity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Log.i(TAG, "onStart");
+		Log.d(TAG, "onStart");
 	}
 
 	@Override
 	protected void onRestart() {
 		// TODO Auto-generated method stub
 		super.onRestart();
-		Log.i(TAG, "onRestart");
+		Log.d(TAG, "onRestart");
 	}
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.i(TAG, "onResume");
+		Log.d(TAG, "onResume");
 	}
 
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		Log.i(TAG, "onPause");
+		Log.d(TAG, "onPause");
 	}
 
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		Log.i(TAG, "onStop");
+		Log.d(TAG, "onStop");
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		Log.i(TAG, "onDestroy");
+		Log.d(TAG, "onDestroy");
 	}
 
 }

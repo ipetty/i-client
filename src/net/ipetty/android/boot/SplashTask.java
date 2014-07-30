@@ -53,7 +53,7 @@ public class SplashTask extends Task<Void, Void> {
 
 	// 转向主界面
 	public void goMain() {
-		Log.i(TAG, "to MainActivity");
+		Log.d(TAG, "to MainActivity");
 		AppUtils.goTo(activity, MainActivity.class);
 		AnimUtils.fadeInToOut(this.activity);
 		this.activity.finish();
@@ -61,7 +61,7 @@ public class SplashTask extends Task<Void, Void> {
 
 	// 转向登陆界面
 	public void goWelcomeLogin() {
-		Log.i(TAG, "to WelcomeRegisterOrLoginActivity");
+		Log.d(TAG, "to WelcomeRegisterOrLoginActivity");
 		AppUtils.goTo(activity, WelcomeRegisterOrLoginActivity.class);
 		AnimUtils.fadeInToOut(this.activity);
 		this.activity.finish();
@@ -69,7 +69,7 @@ public class SplashTask extends Task<Void, Void> {
 
 	// 转向已有账号登陆
 	public void goHasAccountLogin() {
-		Log.i(TAG, "to LoginHasAccountActivity");
+		Log.d(TAG, "to LoginHasAccountActivity");
 		AppUtils.goTo(activity, LoginHasAccountActivity.class);
 		AnimUtils.fadeInToOut(this.activity);
 		this.activity.finish();

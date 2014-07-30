@@ -60,7 +60,7 @@ public class MainActivity extends BaseFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Log.i(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 
 		// action_bar
 		ImageView rightBtn = (ImageView) findViewById(R.id.action_bar_right_image);
@@ -263,35 +263,35 @@ public class MainActivity extends BaseFragmentActivity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Log.i(TAG, "onStart");
+		Log.d(TAG, "onStart");
 	}
 
 	@Override
 	protected void onRestart() {
 		// TODO Auto-generated method stub
 		super.onRestart();
-		Log.i(TAG, "onRestart");
+		Log.d(TAG, "onRestart");
 	}
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.i(TAG, "onResume");
+		Log.d(TAG, "onResume");
 	}
 
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		Log.i(TAG, "onPause");
+		Log.d(TAG, "onPause");
 	}
 
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		Log.i(TAG, "onStop");
+		Log.d(TAG, "onStop");
 	}
 
 	@Override
@@ -302,7 +302,7 @@ public class MainActivity extends BaseFragmentActivity {
 		// 停止服务
 		stopService(messageServiceIntent);
 		unregisterReceiver(broadcastreciver);
-		Log.i(TAG, "onDestroy");
+		Log.d(TAG, "onDestroy");
 	}
 
 	private BroadcastReceiver broadcastreciver = new BroadcastReceiver() {

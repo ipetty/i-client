@@ -44,7 +44,7 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome_register_or_login);
-		Log.i(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 
 		// 初始化页面
 		initViews();
@@ -137,7 +137,7 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 		@Override
 		public Object instantiateItem(View container, int position) {
 			((ViewPager) container).addView(welcomeImageViews[position % welcomeImageViews.length], 0);
-			Log.i("welcome", "position->" + position);
+			Log.d("welcome", "position->" + position);
 			return welcomeImageViews[position % welcomeImageViews.length];
 
 		}

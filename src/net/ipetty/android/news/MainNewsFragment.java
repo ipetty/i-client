@@ -56,13 +56,13 @@ public class MainNewsFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.i(TAG, "onActivityCreated");
+		Log.d(TAG, "onActivityCreated");
 		this.activity = this.getActivity();
 
 		viewFlipper = (ViewFlipper) activity.findViewById(R.id.viewFlipper);
@@ -209,7 +209,7 @@ public class MainNewsFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Log.i(TAG, "onStart");
+		Log.d(TAG, "onStart");
 
 	}
 
@@ -217,7 +217,7 @@ public class MainNewsFragment extends Fragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.i(TAG, "onResume");
+		Log.d(TAG, "onResume");
 		// loadData();
 	}
 
@@ -225,21 +225,21 @@ public class MainNewsFragment extends Fragment {
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		Log.i(TAG, "onPause");
+		Log.d(TAG, "onPause");
 	}
 
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		Log.i(TAG, "onStop");
+		Log.d(TAG, "onStop");
 	}
 
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		Log.i(TAG, "onDestroy");
+		Log.d(TAG, "onDestroy");
 	}
 
 }

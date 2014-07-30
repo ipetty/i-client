@@ -76,7 +76,7 @@ public class MainHomeFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		lastTimeMillis = MyAppStateManager.getLastRefrsh4Home(this.getActivity());
-		Log.i(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_COMMENT);
@@ -89,14 +89,14 @@ public class MainHomeFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.i(TAG, "onCreateView");
+		Log.d(TAG, "onCreateView");
 		return inflater.inflate(R.layout.main_fragment_home, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.i(TAG, "onActivityCreated");
+		Log.d(TAG, "onActivityCreated");
 
 		initListView();
 		initCamera();
@@ -108,19 +108,19 @@ public class MainHomeFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Log.i(TAG, "onStart");
+		Log.d(TAG, "onStart");
 
 	}
 
 	@Override
 	public void onResume() {
-		Log.i(TAG, "onResume");
+		Log.d(TAG, "onResume");
 		super.onResume();
 		refreshData();
 	}
 
 	public void loadMoreForResult(List<FeedVO> result) {
-		Log.i(TAG, "loadMoreForResult:" + result.size());
+		Log.d(TAG, "loadMoreForResult:" + result.size());
 		if (result.size() < pageSize) {
 			hasMore = false;
 		}
@@ -321,7 +321,7 @@ public class MainHomeFragment extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.i(TAG, requestCode + " " + resultCode);
+		Log.d(TAG, requestCode + " " + resultCode);
 		if (requestCode == DeviceUtils.REQUEST_CODE_PICK_IMAGE) {
 			if (resultCode == FragmentActivity.RESULT_OK) {
 				Uri uri = data.getData();
@@ -348,7 +348,7 @@ public class MainHomeFragment extends Fragment {
 		}
 		Intent intent = new Intent(this.getActivity(), FeedPublishActivity.class);
 		Bundle bundle = new Bundle();// 该类用作携带数据
-		Log.i(TAG, "-->file path:" + path);
+		Log.d(TAG, "-->file path:" + path);
 		bundle.putString(Constant.INTENT_PHOTO_PATH_KEY, path);
 		intent.putExtras(bundle);
 		startActivity(intent);
@@ -385,14 +385,14 @@ public class MainHomeFragment extends Fragment {
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		Log.i(TAG, "onPause");
+		Log.d(TAG, "onPause");
 	}
 
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		Log.i(TAG, "onStop");
+		Log.d(TAG, "onStop");
 
 	}
 
@@ -400,7 +400,7 @@ public class MainHomeFragment extends Fragment {
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		Log.i(TAG, "onDestroy");
+		Log.d(TAG, "onDestroy");
 		this.getActivity().unregisterReceiver(broadcastreciver);
 	}
 

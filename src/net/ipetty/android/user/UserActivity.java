@@ -133,7 +133,7 @@ public class UserActivity extends BaseActivity {
 			public void onSuccess(UserVO user) {
 				// 头像
 				if (StringUtils.isNotEmpty(user.getAvatar())) {
-					Log.i(TAG, "设置用户头像：" + Constant.FILE_SERVER_BASE + user.getAvatar());
+					Log.d(TAG, "设置用户头像：" + Constant.FILE_SERVER_BASE + user.getAvatar());
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
 							options);
 				} else {
@@ -274,9 +274,9 @@ public class UserActivity extends BaseActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.i(TAG, "finish");
-		Log.i(TAG, "requestCode" + requestCode);
-		Log.i(TAG, "resultCode" + resultCode);
+		Log.d(TAG, "finish");
+		Log.d(TAG, "requestCode" + requestCode);
+		Log.d(TAG, "resultCode" + resultCode);
 
 		String path = PathUtils.getCarmerDir() + this.mImageName;
 		File picture = new File(path);
@@ -285,19 +285,19 @@ public class UserActivity extends BaseActivity {
 		if (requestCode == DeviceUtils.REQUEST_CODE_PICK_IMAGE) {
 			if (resultCode == FragmentActivity.RESULT_OK) {
 				Uri uri = data.getData();
-				Log.i(TAG, "finish" + uri);
+				Log.d(TAG, "finish" + uri);
 				startPhotoZoom(uri, pathUri);
 			}
 		}
 		if (requestCode == DeviceUtils.REQUEST_CODE_TAKE_IMAGE) {
 			if (resultCode == FragmentActivity.RESULT_OK) {
-				Log.i(TAG, "finish" + picture);
+				Log.d(TAG, "finish" + picture);
 				startPhotoZoom(Uri.fromFile(picture), pathUri);
 			}
 
 		}
 		if (requestCode == REQUEST_CODE_PHOTORESOULT) {
-			Log.i(TAG, "crop" + pathUri);
+			Log.d(TAG, "crop" + pathUri);
 
 			avatar.setImageURI(pathUri);
 			updateAvatar(picture.getAbsolutePath());
@@ -308,7 +308,7 @@ public class UserActivity extends BaseActivity {
 		new UpdateUserAvatar(this).setListener(new DefaultTaskListener<String>(this) {
 			@Override
 			public void onSuccess(String result) {
-				Log.i(TAG, "updateAvatar.onSuccess:" + result);
+				Log.d(TAG, "updateAvatar.onSuccess:" + result);
 				UserApiWithCache.removeCache(currUserId);
 				UserVO user = UserApiWithCache.getUserById4Synchronous(UserActivity.this, currUserId);
 				if (StringUtils.isNotBlank(user.getAvatar())) {

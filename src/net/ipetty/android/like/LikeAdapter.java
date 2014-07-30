@@ -67,11 +67,11 @@ public class LikeAdapter extends BaseAdapter implements OnScrollListener {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		Log.i(TAG, "list position-->" + position);
+		Log.d(TAG, "list position-->" + position);
 		// 这里开始呈现每个item的布局
 		View view;
 		if (convertView == null) {
-			Log.i(TAG, "init items View");
+			Log.d(TAG, "init items View");
 			view = inflater.inflate(R.layout.list_like_item, null);
 			holder = new ViewHolder();
 			holder.avatar = (ImageView) view.findViewById(R.id.avatar);

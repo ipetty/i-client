@@ -39,7 +39,7 @@ public class FansActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fans);
 
-		Log.i(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
@@ -111,7 +111,7 @@ public class FansActivity extends BaseActivity {
 
 	@Override
 	public void onResume() {
-		Log.i(TAG, "onResume");
+		Log.d(TAG, "onResume");
 		super.onResume();
 		adapter.notifyDataSetChanged();
 	}
