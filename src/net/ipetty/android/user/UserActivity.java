@@ -84,6 +84,12 @@ public class UserActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user);
 
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		currUserId = IpetApi.init(this).getCurrUserId();
 
 		// Title & Back
@@ -172,7 +178,6 @@ public class UserActivity extends BaseActivity {
 						.getStateAndRegion());
 			}
 		});
-
 	}
 
 	/**

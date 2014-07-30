@@ -105,14 +105,6 @@ public class MainHomeFragment extends Fragment {
 	}
 
 	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		Log.d(TAG, "onStart");
-
-	}
-
-	@Override
 	public void onResume() {
 		Log.d(TAG, "onResume");
 		super.onResume();

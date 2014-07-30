@@ -1,28 +1,27 @@
 package net.ipetty.android.feed;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
-
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.vo.FeedFormVO;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FeedPublishActivity extends BaseActivity {
 
-	private static final String TAG = "FeedPublishActivity";
+	private static final String TAG = FeedPublishActivity.class.getSimpleName();
 	private String path;
 	private DisplayImageOptions options;
 	private EditText edit;
@@ -34,6 +33,12 @@ public class FeedPublishActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_feed_publish);
 
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -18,6 +19,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class LargerImageActivity extends BaseActivity {
 
+	private String TAG = LargerImageActivity.class.getSimpleName();
+
 	private String original_url;
 	private String small_url;
 	private ImageView image;
@@ -29,6 +32,13 @@ public class LargerImageActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_larger_image);
+
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		Intent intent = getIntent();
 		original_url = intent.getStringExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY);
 		small_url = intent.getStringExtra(Constant.INTENT_IMAGE_SAMILL_KEY);

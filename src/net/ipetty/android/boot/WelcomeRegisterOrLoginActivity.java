@@ -1,9 +1,5 @@
 package net.ipetty.android.boot;
 
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.login.LoginActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -20,9 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.login.LoginActivity;
 
 public class WelcomeRegisterOrLoginActivity extends BaseActivity {
-	public final static String TAG = "WelcomeRegisterOrLoginActivity";
+
+	public final static String TAG = WelcomeRegisterOrLoginActivity.class.getSimpleName();
 
 	private ViewPager viewPager;
 	private ViewGroup group;
@@ -37,15 +38,20 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 
 	private TextSwitcher title_ts;
 	private TextSwitcher ts;
-	private String[] titleArray = { "记录", "分享", "VIP内测" };
-	private String[] poemArray = { "让手机记录我的宠物生活", "选择精彩记录分享到社交网络", "VIP内测版本正式启用" };
+	private String[] titleArray = {"记录", "分享", "VIP内测"};
+	private String[] poemArray = {"让手机记录我的宠物生活", "选择精彩记录分享到社交网络", "VIP内测版本正式启用"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome_register_or_login);
 		Log.d(TAG, "onCreate");
+	}
 
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		// 初始化页面
 		initViews();
 		// 初始化小圆点
@@ -66,12 +72,11 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 		String verStr = getResources().getString(R.string.app_version);
 		String v = String.format(verStr, AppUtils.getAppVersionName(this));
 		version.setText(v);
-
 	}
 
 	private void initViews() {
 
-		imgIdArray = new int[] { R.drawable.welcome_pic1, R.drawable.welcome_pic2, R.drawable.welcome_pic3 };
+		imgIdArray = new int[]{R.drawable.welcome_pic1, R.drawable.welcome_pic2, R.drawable.welcome_pic3};
 
 		welcomeImageViews = new ImageView[imgIdArray.length];
 		for (int i = 0; i < welcomeImageViews.length; i++) {

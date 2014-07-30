@@ -91,7 +91,7 @@ public class SpaceActivity extends BaseActivity {
 
 	// 获取刷新时间，若网络不可用则取最后一次刷新时间
 	private void getRefreshTime() {
-
+		Log.d(TAG, "getRefreshTime");
 		if (NetWorkUtils.isNetworkConnected(this)) {
 			lastTimeMillis = System.currentTimeMillis();
 			MyAppStateManager.setLastRefrsh4Space(this, lastTimeMillis);
@@ -107,9 +107,17 @@ public class SpaceActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_space);
-		getRefreshTime();
+
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+
 		currUserId = IpetApi.init(this).getCurrUserId();
 		if (this.getIntent().getExtras() == null) {
 			this.userId = currUserId;
@@ -117,13 +125,22 @@ public class SpaceActivity extends BaseActivity {
 			this.userId = this.getIntent().getExtras().getInt(Constant.INTENT_USER_ID_KEY);
 		}
 		isCurrentUser = userId == currUserId;
-
-		Log.d(TAG, "" + isCurrentUser);
+		Log.d(TAG, "userId：" + userId);
+		Log.d(TAG, "currUserId：" + currUserId);
 
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		btnBack.setOnClickListener(new BackClickListener(this));
 
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_COMMENT);
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_FAVORED);
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_PUBLISH);
+		filter.addAction(Constant.BROADCAST_INTENT_FEED_DELETE);
+		filter.addAction(Constant.BROADCAST_INTENT_CCOMMENT_DELETE);
+		this.registerReceiver(broadcastreciver, filter);
+
+		getRefreshTime();
 		final UserVO user = UserApiWithCache.getUserById4Synchronous(this, userId);
 		String title = this.getResources().getString(R.string.title_activity_space);
 		// 标题
@@ -269,15 +286,10 @@ public class SpaceActivity extends BaseActivity {
 		space_feed_list = (ListView) space_feed_layout.findViewById(R.id.space_feed_list);
 		feedListAdapter = new FeedAdapter(this);
 		space_feed_list.setAdapter(feedListAdapter);
+		refreshData();
 
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(Constant.BROADCAST_INTENT_FEED_COMMENT);
-		filter.addAction(Constant.BROADCAST_INTENT_FEED_FAVORED);
-		filter.addAction(Constant.BROADCAST_INTENT_FEED_PUBLISH);
-		filter.addAction(Constant.BROADCAST_INTENT_FEED_DELETE);
-		filter.addAction(Constant.BROADCAST_INTENT_CCOMMENT_DELETE);
-		this.registerReceiver(broadcastreciver, filter);
 	}
+
 	private BroadcastReceiver broadcastreciver = new BroadcastReceiver() {
 
 		@Override
@@ -337,6 +349,7 @@ public class SpaceActivity extends BaseActivity {
 
 	// 加载宠物信息
 	private void loadPetsData() {
+		Log.d(TAG, "loadPetsData");
 		new ListPetsByUserId(SpaceActivity.this).setListener(new DefaultTaskListener<List<PetVO>>(SpaceActivity.this) {
 			@Override
 			public void onSuccess(List<PetVO> pets) {
@@ -415,13 +428,14 @@ public class SpaceActivity extends BaseActivity {
 	}
 
 	@Override
-	public void onResume() {
-		Log.d(TAG, "onResume");
-		super.onResume();
+	public void onViewResume() {
+		Log.d(TAG, "onViewResume");
 		refreshData();
 	}
 
 	private void refreshData() {
+		Log.d(TAG, "refreshData");
+		Log.d(TAG, "userId:" + userId);
 		UserVO user = UserApiWithCache.getUserById4Synchronous(this, userId);
 		// 头像
 		if (!StringUtils.isEmpty(user.getAvatar())) {

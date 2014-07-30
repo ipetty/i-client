@@ -1,16 +1,5 @@
 package net.ipetty.android.news;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.activity.ListActivities;
-import net.ipetty.android.sdk.task.user.ListFollowers;
-import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.UserVO;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,10 +9,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ViewFlipper;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.activity.ListActivities;
+import net.ipetty.android.sdk.task.user.ListFollowers;
+import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.UserVO;
 
 public class MainNewsFragment extends Fragment {
 
@@ -124,7 +122,7 @@ public class MainNewsFragment extends Fragment {
 									}
 								}
 							}).execute(IpetApi.init(MainNewsFragment.this.getActivity()).getCurrUserId(),
-							++followerPageNumber, followerPageSize);
+									++followerPageNumber, followerPageSize);
 
 				}
 			}
@@ -203,43 +201,6 @@ public class MainNewsFragment extends Fragment {
 				my_follows.setBackgroundResource(R.drawable.news_tab_selected);
 			}
 		}
-	}
-
-	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		Log.d(TAG, "onStart");
-
-	}
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		Log.d(TAG, "onResume");
-		// loadData();
-	}
-
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		Log.d(TAG, "onPause");
-	}
-
-	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		Log.d(TAG, "onStop");
-	}
-
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Log.d(TAG, "onDestroy");
 	}
 
 }

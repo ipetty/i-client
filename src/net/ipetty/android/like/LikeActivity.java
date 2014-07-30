@@ -1,13 +1,5 @@
 package net.ipetty.android.like;
 
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.sdk.task.feed.GetFeedById;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.FeedVO;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -18,11 +10,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.FeedVO;
 
 public class LikeActivity extends BaseActivity {
 
@@ -36,6 +35,13 @@ public class LikeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_like);
 		Log.d(TAG, "onCreate");
+
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		feedId = this.getIntent().getExtras().getLong(Constant.INTENT_FEED_ID_KEY);
 
 		/* action bar */
@@ -92,7 +98,6 @@ public class LikeActivity extends BaseActivity {
 		adapter = new LikeAdapter(this);
 		listView.setAdapter(adapter);
 		loadData();
-
 	}
 
 	// 加载数据
@@ -105,47 +110,4 @@ public class LikeActivity extends BaseActivity {
 			}
 		}).execute(feedId);
 	}
-
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		Log.d(TAG, "onStart");
-	}
-
-	@Override
-	protected void onRestart() {
-		// TODO Auto-generated method stub
-		super.onRestart();
-		Log.d(TAG, "onRestart");
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		Log.d(TAG, "onResume");
-	}
-
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		Log.d(TAG, "onPause");
-	}
-
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		Log.d(TAG, "onStop");
-	}
-
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Log.d(TAG, "onDestroy");
-	}
-
 }

@@ -85,7 +85,12 @@ public class PettyActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_petty);
+	}
 
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		// init petId from Intent
 		petId = this.getIntent().getExtras().getInt(Constant.INTENT_PET_ID_KEY);
 

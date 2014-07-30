@@ -2,6 +2,7 @@ package net.ipetty.android.setting;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,6 +25,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class SettingActivity extends BaseActivity {
 
+	private String TAG = SettingActivity.class.getSimpleName();
+
 	private Button logout;
 	private DisplayImageOptions options = AppUtils.getCacheImageBublder()
 			.showImageForEmptyUri(R.drawable.default_image).build();
@@ -33,6 +36,12 @@ public class SettingActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
 
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);

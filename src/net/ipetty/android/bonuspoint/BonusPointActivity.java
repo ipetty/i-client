@@ -3,6 +3,7 @@ package net.ipetty.android.bonuspoint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,106 +22,112 @@ import net.ipetty.vo.UserVO;
 
 public class BonusPointActivity extends BaseActivity {
 
-    public final static String TAG = "BonusPointActivity";
-    private BonusPointAdapter adapter; // 定义适配器
-    private PullToRefreshListView listView;
+	public final static String TAG = BonusPointActivity.class.getSimpleName();
+	private BonusPointAdapter adapter; // 定义适配器
+	private PullToRefreshListView listView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bonus_point);
-        /* action bar */
-        ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
-        TextView text = (TextView) this.findViewById(R.id.action_bar_title);
-        text.setText(this.getResources().getString(R.string.title_activity_bonus_point));
-        btnBack.setOnClickListener(new BackClickListener(this));
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_bonus_point);
 
-        listView = (PullToRefreshListView) this.findViewById(R.id.listView);
-        listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+	}
 
-                // Update the LastUpdatedLabel
-                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+		/* action bar */
+		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
+		text.setText(this.getResources().getString(R.string.title_activity_bonus_point));
+		btnBack.setOnClickListener(new BackClickListener(this));
 
-                // Do work to refresh the list here.
-                new BonusPointTask().execute();
-            }
-        });
+		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
+		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
-        listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
-            @Override
-            public void onLastItemVisible() {
-                // TODO Auto-generated method stub
-                loadMoreData(getList(20));
-            }
-        });
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-        // 初始化适配器
-        adapter = new BonusPointAdapter(this);
-        listView.setAdapter(adapter);
-        loadData();
+				// Do work to refresh the list here.
+				new BonusPointTask().execute();
+			}
+		});
 
-    }
+		listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+			@Override
+			public void onLastItemVisible() {
+				// TODO Auto-generated method stub
+				loadMoreData(getList(20));
+			}
+		});
 
-    // TODO:这部分方法没考虑好 是放在adapter中 还是 Activity中
-    // 加载数据
-    public void loadData() {
-        adapter.setList(this.getList(0));
-        adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-    }
+		// 初始化适配器
+		adapter = new BonusPointAdapter(this);
+		listView.setAdapter(adapter);
+		loadData();
+	}
 
-    public void loadData(List<CommentVO> list) {
-        adapter.setList(this.getList(0));
-        adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-    }
+	// TODO:这部分方法没考虑好 是放在adapter中 还是 Activity中
+	// 加载数据
+	public void loadData() {
+		adapter.setList(this.getList(0));
+		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
+	}
 
-    // 加载更多数据
-    public void loadMoreData(List<CommentVO> list) {
-        adapter.getList().addAll(list);
-        adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
-    }
+	public void loadData(List<CommentVO> list) {
+		adapter.setList(this.getList(0));
+		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
+	}
 
-    // 模拟数据
-    public List<CommentVO> getList(int x) {
-        List<CommentVO> list = new ArrayList<CommentVO>(0);
-        for (int i = x; i < x + 20; i++) {
-            CommentVO vo = new CommentVO();
-            vo.setId(Long.valueOf(i));
-            vo.setText("text" + i);
+	// 加载更多数据
+	public void loadMoreData(List<CommentVO> list) {
+		adapter.getList().addAll(list);
+		adapter.notifyDataSetChanged(); // 这个方法刷新界面，会重载所有的 getView
+	}
 
-            UserVO u = new UserVO();
-            u.setId(i);
-            //u.setName("user" + Long.valueOf(i));
-            //vo.setUser(u);
+	// 模拟数据
+	public List<CommentVO> getList(int x) {
+		List<CommentVO> list = new ArrayList<CommentVO>(0);
+		for (int i = x; i < x + 20; i++) {
+			CommentVO vo = new CommentVO();
+			vo.setId(Long.valueOf(i));
+			vo.setText("text" + i);
 
-            list.add(vo);
-        }
-        return list;
-    }
+			UserVO u = new UserVO();
+			u.setId(i);
+			//u.setName("user" + Long.valueOf(i));
+			//vo.setUser(u);
 
-    private class BonusPointTask extends AsyncTask<Void, Void, String[]> {
+			list.add(vo);
+		}
+		return list;
+	}
 
-        @Override
-        protected String[] doInBackground(Void... params) {
+	private class BonusPointTask extends AsyncTask<Void, Void, String[]> {
 
-            return null;
-        }
+		@Override
+		protected String[] doInBackground(Void... params) {
 
-        @Override
-        protected void onPostExecute(String[] result) {
-            loadData(getList(0));
-            listView.onRefreshComplete();
-            super.onPostExecute(result);
-        }
-    }
+			return null;
+		}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.fans, menu);
-        return true;
-    }
+		@Override
+		protected void onPostExecute(String[] result) {
+			loadData(getList(0));
+			listView.onRefreshComplete();
+			super.onPostExecute(result);
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.fans, menu);
+		return true;
+	}
 
 }

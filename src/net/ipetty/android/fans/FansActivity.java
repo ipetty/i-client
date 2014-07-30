@@ -41,6 +41,12 @@ public class FansActivity extends BaseActivity {
 
 		Log.d(TAG, "onCreate");
 
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -86,7 +92,6 @@ public class FansActivity extends BaseActivity {
 		adapter = new FansAdapter(this, userId, currUserId);
 		listView.setAdapter(adapter);
 		initData(null);
-
 	}
 
 	// 初始化数据
@@ -110,9 +115,8 @@ public class FansActivity extends BaseActivity {
 	}
 
 	@Override
-	public void onResume() {
-		Log.d(TAG, "onResume");
-		super.onResume();
+	public void onViewResume() {
+		Log.d(TAG, "onViewResume");
 		adapter.notifyDataSetChanged();
 	}
 }

@@ -92,40 +92,4 @@ public class MainDiscoverFragment extends Fragment {
 		return MyAppStateManager.getLastRefrsh4Discover(this.getActivity());
 	}
 
-	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		Log.d(TAG, "onStart");
-	}
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		//loadData();
-		super.onResume();
-		Log.d(TAG, "onResume");
-	}
-
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		Log.d(TAG, "onPause");
-	}
-
-	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		Log.d(TAG, "onStop");
-	}
-
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Log.d(TAG, "onDestroy");
-	}
-
 }

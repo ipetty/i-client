@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +35,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class RegisterActivity extends BaseActivity {
 
+	private String TAG = RegisterActivity.class.getSimpleName();
+
 	private AutoCompleteTextView emailEditor;
 	private EditText passwordEditor;
 	private TextView passwordToggleView = null;
@@ -56,6 +59,12 @@ public class RegisterActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -137,6 +146,7 @@ public class RegisterActivity extends BaseActivity {
 
 		submitButton.setOnClickListener(sumbit);
 	}
+
 	// 密码可见
 	private OnClickListener passwordToggleClick = new OnClickListener() {
 		@Override

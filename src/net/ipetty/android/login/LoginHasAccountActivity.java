@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,6 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class LoginHasAccountActivity extends BaseActivity {
 
+	private String TAG = LoginHasAccountActivity.class.getSimpleName();
+
 	DisplayImageOptions options;
 
 	private EditText passwordView;
@@ -38,6 +41,12 @@ public class LoginHasAccountActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login_has_account);
 
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
