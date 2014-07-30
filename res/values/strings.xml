@@ -110,6 +110,11 @@
     <string name="unfollow_text">取消关注</string>
     <string name="pet_edit">编辑宠物资料</string>
 
+    <!-- news -->
+     <string name="news_item_favor">称赞了您的消息</string>
+     <string name="news_item_follow">开始关注您</string>
+     <string name="news_item_comment">回复了您的消息</string>
+     
     <!-- petty -->
 
 

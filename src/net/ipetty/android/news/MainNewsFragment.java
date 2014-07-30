@@ -143,15 +143,19 @@ public class MainNewsFragment extends Fragment {
 
 		ActivityVO act = new ActivityVO();
 		ActivityVO act1 = new ActivityVO();
+		ActivityVO act2 = new ActivityVO();
 		act.setId(1L);
 		act1.setId(2L);
+		act2.setId(3L);
 		act.setType(Constant.NEWS_TYPE_FAVOR);
 		act1.setType(Constant.NEWS_TYPE_FOLLOWED);
-
+		act2.setType(Constant.NEWS_TYPE_COMMENT);
 		arr.add(act);
+		arr.add(act);
+		arr.add(act2);
 		arr.add(act1);
 		arr.add(act1);
-		arr.add(act);
+		arr.add(act2);
 		arr.add(act1);
 		arr.add(act);
 		related_me_adapter.setList(arr);
