@@ -6,7 +6,6 @@
 package net.ipetty.android.core;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -35,10 +34,6 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
 	public Task(Activity activity) {
 		super();
 		this.activity = activity;
-	}
-
-	public Task(Context context) {
-		this((Activity) context);
 	}
 
 	//设置Listener
