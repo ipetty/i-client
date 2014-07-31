@@ -6,14 +6,22 @@ import java.util.List;
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.ActivityVO;
 import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -21,11 +29,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 
 	public final static String TAG = RelatedMeAdapter.class.getSimpleName();
 	public Context context;
 	private LayoutInflater inflater;
+	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 	private List<ActivityVO> list = new ArrayList<ActivityVO>(); // 这个就本地dataStore
 
 	public RelatedMeAdapter(Context context) {
@@ -97,31 +109,71 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			initCommentView(holder, act);
 		}
 
+		int userId = act.getCreatedBy();
+		final UserVO user = this.getCacheUserById(userId);
+		if (StringUtils.isNotBlank(user.getAvatar())) {
+			ImageLoader.getInstance()
+					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.avatar);
+		}
+
+		// 头像
+		holder.avatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, SpaceActivity.class);
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, user.getId());
+				context.startActivity(intent);
+			}
+		});
+
+		// 消息图片
+		if (StringUtils.isNotBlank(act.getFeedImageUrl())) {
+			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + act.getFeedImageUrl(),
+					holder.relatedImage, options);
+		} else {
+			holder.avatar.setImageResource(R.drawable.default_image);
+		}
+		final Long feedId = act.getTargetId();
+		holder.relatedImage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(context, SimpleFeedActivity.class);
+				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feedId);
+				context.startActivity(intent);
+			}
+		});
 		return view;
 	}
 
+	private UserVO getCacheUserById(Integer id) {
+		return UserApiWithCache.getUserById4Synchronous(context, id);
+	}
+
 	public void initFavorView(ViewHolder holder, ActivityVO act) {
+		holder.relatedImage.setVisibility(View.VISIBLE);
 		String str = context.getResources().getString(R.string.news_item_favor);
 		initContent(holder.content, act.getCreatedBy(), str);
-		holder.relatedImage.setVisibility(View.VISIBLE);
 	}
 
 	public void initFollowedView(ViewHolder holder, ActivityVO act) {
+		holder.relatedImage.setVisibility(View.INVISIBLE);
 		String str = context.getResources().getString(R.string.news_item_follow);
 		initContent(holder.content, act.getCreatedBy(), str);
-		holder.relatedImage.setVisibility(View.INVISIBLE);
 	}
 
 	public void initCommentView(ViewHolder holder, ActivityVO act) {
-		String str = context.getResources().getString(R.string.news_item_comment);
-		str += ": " + "是不又有变胖";
-		initContent(holder.content, act.getCreatedBy(), str);
 		holder.relatedImage.setVisibility(View.VISIBLE);
+		String str = context.getResources().getString(R.string.news_item_comment);
+		str += ": " + act.getContent();
+		initContent(holder.content, act.getCreatedBy(), str);
 	}
 
 	public void initContent(TextView tx, Integer id, String text) {
-		String nickname = "张三";// this.getCacheUserById(id).getNickname();
-		String html = "<b><a href='" + 0 + "'>" + nickname + "</a></b>";
+		String nickname = this.getCacheUserById(id).getNickname();
+		String html = "<b><a href='" + id + "'>" + nickname + "</a></b>";
 		html = html + " " + text;
 		WebLinkUtils.setUserLinkClickIntercept((Activity) context, tx, html);
 	}
