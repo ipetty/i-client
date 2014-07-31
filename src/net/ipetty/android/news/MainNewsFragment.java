@@ -1,19 +1,7 @@
 package net.ipetty.android.news;
 
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.activity.ListActivities;
-import net.ipetty.android.sdk.task.user.ListFollowers;
-import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.UserVO;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,14 +10,24 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.BaseFragment;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.activity.ListActivities;
+import net.ipetty.android.sdk.task.user.ListFollowers;
+import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.UserVO;
 
-public class MainNewsFragment extends Fragment {
+public class MainNewsFragment extends BaseFragment {
 
 	public final static String TAG = MainNewsFragment.class.getSimpleName();
 	private Activity activity;
@@ -69,6 +67,15 @@ public class MainNewsFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated");
+
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+		super.onViewReady(savedInstanceState);
+
 		this.activity = this.getActivity();
 
 		viewFlipper = (ViewFlipper) activity.findViewById(R.id.viewFlipper);
@@ -89,7 +96,7 @@ public class MainNewsFragment extends Fragment {
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				String label = DateUtils.formatDateTime(MainNewsFragment.this.getActivity().getApplicationContext(),
 						getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+						| DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -156,7 +163,7 @@ public class MainNewsFragment extends Fragment {
 										}
 									}
 								}).execute(IpetApi.init(MainNewsFragment.this.getActivity()).getCurrUserId(),
-								++followerPageNumber, followerPageSize);
+										++followerPageNumber, followerPageSize);
 
 					}
 				}

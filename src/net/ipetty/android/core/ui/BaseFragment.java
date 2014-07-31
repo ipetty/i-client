@@ -27,6 +27,8 @@ public class BaseFragment extends Fragment {
 
 	private ErrorHandler errorHandler;
 
+	private final int delayTime = 500;
+
 	public void showMessageForShortTime(String msg) {
 		Toast.makeText(this.getActivity(), msg, Toast.LENGTH_SHORT).show();
 	}
@@ -36,9 +38,10 @@ public class BaseFragment extends Fragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
-		super.onCreate(savedInstanceState);
+		super.onActivityCreated(savedInstanceState);
+		this.isViewReady = false;
 		this.savedInstanceState = savedInstanceState;
 		errorHandler = new ErrorHandler(this.getActivity());
 	}
@@ -58,7 +61,7 @@ public class BaseFragment extends Fragment {
 				}
 				isViewReady = true;
 			}
-		}).execute(500);
+		}).execute(delayTime);
 
 		if (isViewReady) {
 			try {
@@ -69,7 +72,7 @@ public class BaseFragment extends Fragment {
 		}
 	}
 
-	//界面初始化完毕，只触发一次
+	//每次onActivityCreated，只触发一次，否则界面会消失
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
 	}

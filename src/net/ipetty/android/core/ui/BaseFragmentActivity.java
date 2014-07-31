@@ -19,6 +19,8 @@ public class BaseFragmentActivity extends FragmentActivity {
 
 	private ErrorHandler errorHandler;
 
+	private final int delayTime = 500;
+
 	public void showMessageForShortTime(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 	}
@@ -31,6 +33,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		errorHandler = new ErrorHandler(this);
+		isViewReady = false;
 		ActivityManager.getInstance().addActivity(this);
 	}
 
@@ -55,7 +58,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 					}
 					isViewReady = true;
 				}
-			}).execute(500);
+			}).execute(delayTime);
 
 		}
 	}

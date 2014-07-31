@@ -98,16 +98,28 @@ public class MainHomeFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated");
 
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+		super.onViewReady(savedInstanceState);
 		initListView();
 		initCamera();
 		loadData();
-
 	}
 
 	@Override
 	public void onResume() {
 		Log.d(TAG, "onResume");
 		super.onResume();
+	}
+
+	@Override
+	protected void onViewResume() {
+		Log.d(TAG, "onViewResume");
+		super.onViewResume();
 		refreshData();
 	}
 

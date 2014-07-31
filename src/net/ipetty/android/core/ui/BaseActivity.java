@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-import cn.sharesdk.framework.ShareSDK;
 import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.DelayTask;
@@ -20,6 +19,8 @@ public class BaseActivity extends Activity {
 
 	private ErrorHandler errorHandler;
 
+	private final int delayTime = 500;
+
 	public void showMessageForShortTime(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 	}
@@ -33,7 +34,7 @@ public class BaseActivity extends Activity {
 		this.savedInstanceState = savedInstanceState;
 		super.onCreate(savedInstanceState);
 		errorHandler = new ErrorHandler(this);
-		ShareSDK.initSDK(this);
+		isViewReady = false;
 		ActivityManager.getInstance().addActivity(this);
 	}
 
@@ -58,7 +59,7 @@ public class BaseActivity extends Activity {
 					}
 					isViewReady = true;
 				}
-			}).execute(500);
+			}).execute(delayTime);
 
 		}
 	}
