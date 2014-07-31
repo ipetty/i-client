@@ -80,7 +80,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 
 	//ready情况下调用
 	protected void onViewStart() {
-		Log.d(TAG, "onStart");
+		Log.d(TAG, "onViewStart");
 	}
 
 	@Override

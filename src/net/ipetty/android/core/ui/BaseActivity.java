@@ -12,7 +12,7 @@ import net.ipetty.android.core.ErrorHandler;
 
 public class BaseActivity extends Activity {
 
-	private String TAG = getClass().getSimpleName();
+	private String TAG = BaseActivity.class.getSimpleName();
 
 	private boolean isViewReady = false;
 
@@ -83,7 +83,7 @@ public class BaseActivity extends Activity {
 
 	//ready情况下调用
 	protected void onViewStart() {
-		Log.d(TAG, "onStart");
+		Log.d(TAG, "onViewStart");
 	}
 
 	@Override

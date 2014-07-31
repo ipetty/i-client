@@ -7,6 +7,7 @@ package net.ipetty.android.core;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 
 /**
  *
@@ -19,7 +20,11 @@ public class DelayTask extends Task<Integer, Void> {
 	}
 
 	public DelayTask(Context context) {
-		super(context);
+		this((Activity) context);
+	}
+
+	public DelayTask(Fragment fragment) {
+		this(fragment.getActivity());
 	}
 
 	@Override

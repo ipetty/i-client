@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -30,6 +29,7 @@ import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.BaseFragment;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DeviceUtils;
@@ -46,7 +46,7 @@ import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
 
-public class MainHomeFragment extends Fragment {
+public class MainHomeFragment extends BaseFragment {
 
 	public final static String TAG = MainHomeFragment.class.getSimpleName();
 
