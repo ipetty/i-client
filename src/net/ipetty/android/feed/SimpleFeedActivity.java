@@ -111,8 +111,10 @@ public class SimpleFeedActivity extends BaseActivity {
 		Log.d(TAG, "feedJSON-->" + feedJSON);
 		if (feedJSON != null) {
 			feed = JSONUtils.fromJSON(feedJSON, FeedVO.class);
-			renderUser();
-			renderConent();
+			// renderUser();
+			// renderConent();
+			// renderArea();
+			initDefaultView();
 		}
 	}
 
@@ -121,9 +123,10 @@ public class SimpleFeedActivity extends BaseActivity {
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
 		if (feed != null) {
-			renderArea();
-			renderFavor();
-			renderCommentView();
+			// renderArea();
+			// renderFavor();
+			// renderCommentView();
+
 		}
 
 		// 初始化界面操作
