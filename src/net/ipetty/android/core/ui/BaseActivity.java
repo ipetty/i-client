@@ -43,6 +43,8 @@ public class BaseActivity extends Activity {
 			//只调用一次onViewReady
 			if (!isViewReady) {
 				onViewReady(this.savedInstanceState);
+				onViewStart();
+				onViewResume();
 			}
 			isViewReady = true;
 		}

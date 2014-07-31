@@ -40,6 +40,8 @@ public class BaseFragmentActivity extends FragmentActivity {
 			//只调用一次onViewReady
 			if (!isViewReady) {
 				onViewReady(savedInstanceState);
+				onViewStart();
+				onViewResume();
 			}
 			isViewReady = true;
 		}

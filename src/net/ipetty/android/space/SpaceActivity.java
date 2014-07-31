@@ -286,7 +286,7 @@ public class SpaceActivity extends BaseActivity {
 		space_feed_list = (ListView) space_feed_layout.findViewById(R.id.space_feed_list);
 		feedListAdapter = new FeedAdapter(this);
 		space_feed_list.setAdapter(feedListAdapter);
-		refreshData();
+		//refreshData();
 
 	}
 
