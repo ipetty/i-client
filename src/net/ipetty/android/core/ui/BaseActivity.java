@@ -6,6 +6,8 @@ import android.util.Log;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
 import net.ipetty.android.core.ActivityManager;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.DelayTask;
 
 public class BaseActivity extends Activity {
 
@@ -39,14 +41,21 @@ public class BaseActivity extends Activity {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus) {
-			//只调用一次onViewReady
-			if (!isViewReady) {
-				onViewReady(this.savedInstanceState);
-				onViewStart();
-				onViewResume();
-			}
-			isViewReady = true;
+			new DelayTask(this).setListener(new DefaultTaskListener<Void>(this) {
+				@Override
+				public void onSuccess(Void result) {
+					//只调用一次onViewReady
+					if (!isViewReady) {
+						onViewReady(savedInstanceState);
+						onViewStart();
+						onViewResume();
+					}
+					isViewReady = true;
+				}
+			}).execute(500);
+
 		}
 	}
 

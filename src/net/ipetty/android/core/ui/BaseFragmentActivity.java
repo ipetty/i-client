@@ -5,10 +5,12 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 import net.ipetty.android.core.ActivityManager;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.DelayTask;
 
 public class BaseFragmentActivity extends FragmentActivity {
 
-	private String TAG = getClass().getSimpleName();
+	private String TAG = BaseFragmentActivity.class.getSimpleName();
 
 	private boolean isViewReady = false;
 
@@ -36,14 +38,21 @@ public class BaseFragmentActivity extends FragmentActivity {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus) {
-			//只调用一次onViewReady
-			if (!isViewReady) {
-				onViewReady(savedInstanceState);
-				onViewStart();
-				onViewResume();
-			}
-			isViewReady = true;
+			new DelayTask(this).setListener(new DefaultTaskListener<Void>(this) {
+				@Override
+				public void onSuccess(Void result) {
+					//只调用一次onViewReady
+					if (!isViewReady) {
+						onViewReady(savedInstanceState);
+						onViewStart();
+						onViewResume();
+					}
+					isViewReady = true;
+				}
+			}).execute(500);
+
 		}
 	}
 
