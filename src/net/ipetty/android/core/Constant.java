@@ -1,7 +1,6 @@
 package net.ipetty.android.core;
 
 import java.util.HashMap;
-
 import net.ipetty.R;
 
 public class Constant {
@@ -32,6 +31,7 @@ public class Constant {
 	public final static String BROADCAST_INTENT_FEED_DELETE = "BROADCAST_INTENT_FEED_DELETE";
 	public final static String BROADCAST_INTENT_CCOMMENT_DELETE = "BROADCAST_INTENT_CCOMMENT_DELETE";
 	public final static String BROADCAST_HAS_NEW_MESSAG = "BROADCAST_HAS_NEW_MESSAG";
+	public final static String BROADCAST_DATA = "BROADCAST_DATA";
 
 	public static final String FEEDVO_JSON_SERIALIZABLE = "FEEDVO_JSON_SERIALIZABLE";
 	public static final String FEEDVO_ID = "FEEDVO_ID";
