@@ -62,13 +62,6 @@ public class MainActivity extends BaseFragmentActivity {
 		setContentView(R.layout.activity_main);
 		Log.d(TAG, "onCreate");
 
-	}
-
-	//加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
-
 		// action_bar
 		ImageView rightBtn = (ImageView) findViewById(R.id.action_bar_right_image);
 		rightBtn.setOnClickListener(popMenuOnClick);
@@ -82,6 +75,13 @@ public class MainActivity extends BaseFragmentActivity {
 		RelativeLayout.LayoutParams mParams = (LayoutParams) mTabImg.getLayoutParams();
 		mParams.width = one;
 		mTabImg.setLayoutParams(mParams);
+	}
+
+	//加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+
 		// pager
 		viewPager = (ViewPager) findViewById(R.id.tabpager);
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments));
