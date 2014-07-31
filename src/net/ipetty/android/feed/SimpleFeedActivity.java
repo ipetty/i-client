@@ -1,26 +1,8 @@
 package net.ipetty.android.feed;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.comment.CommentActivity;
@@ -44,7 +26,29 @@ import net.ipetty.vo.CommentVO;
 import net.ipetty.vo.FeedFavorVO;
 import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SimpleFeedActivity extends BaseActivity {
 
@@ -53,6 +57,7 @@ public class SimpleFeedActivity extends BaseActivity {
 
 	private Long feedId = null;
 	private FeedVO feed = null;
+	private String feedJSON = null;
 
 	public ImageView avatar;
 	public TextView nickname;
@@ -83,19 +88,13 @@ public class SimpleFeedActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_simple_feed);
 		Log.d(TAG, "onCreate");
-
-	}
-
-	//加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_COMMENT);
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_FAVORED);
 		this.registerReceiver(broadcastreciver, filter);
 		feedId = this.getIntent().getExtras().getLong(Constant.INTENT_FEED_ID_KEY);
-		Log.d(TAG, feedId + "");
+		feedJSON = this.getIntent().getExtras().getString(Constant.FEEDVO_JSON_SERIALIZABLE);
+
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -109,6 +108,39 @@ public class SimpleFeedActivity extends BaseActivity {
 		View item_horizontal_divider = this.findViewById(R.id.horizontal_divider);
 		item_horizontal_divider.setVisibility(View.GONE);
 		initView();
+		Log.d(TAG, "feedJSON-->" + feedJSON);
+		if (feedJSON != null) {
+			feed = JSONUtils.fromJSON(feedJSON, FeedVO.class);
+			renderUser();
+			renderConent();
+		}
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+		if (feed != null) {
+			renderArea();
+			renderFavor();
+			renderCommentView();
+		}
+
+		// 初始化界面操作
+		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
+
+			@Override
+			public void onSuccess(FeedVO result) {
+				if (JSONUtils.toJson(result).toString().equals(feedJSON)) {
+					return;
+				}
+
+				SimpleFeedActivity.this.feed = result;
+				Log.d(TAG, "FAVER" + result.isFavored());
+
+				SimpleFeedActivity.this.initDefaultView();
+			}
+		}).execute(feedId);
 	}
 
 	private void initView() {
@@ -145,18 +177,6 @@ public class SimpleFeedActivity extends BaseActivity {
 		View view = this.findViewById(R.id.list_feed_item);
 		view.setOnLongClickListener(new ViewOnLongClickListener());
 
-		// 初始化界面操作
-		//
-		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
-
-			@Override
-			public void onSuccess(FeedVO result) {
-				SimpleFeedActivity.this.feed = result;
-				Log.d(TAG, "FAVER" + result.isFavored());
-
-				SimpleFeedActivity.this.initDefaultView();
-			}
-		}).execute(feedId);
 	}
 
 	private class ViewOnLongClickListener implements OnLongClickListener {
@@ -206,7 +226,15 @@ public class SimpleFeedActivity extends BaseActivity {
 
 	private void initDefaultView() {
 		// TODO Auto-generated method stub
+		renderUser();
+		renderConent();
+		// 评论视图区域
+		renderArea();
+		renderFavor();
+		renderCommentView();
+	}
 
+	private void renderUser() {
 		// 用户信息
 		final UserVO user = this.getCacheUserById(feed.getCreatedBy());
 		Log.d(TAG, "发布人头像：" + user.getAvatar());
@@ -238,6 +266,9 @@ public class SimpleFeedActivity extends BaseActivity {
 			}
 		});
 
+	}
+
+	private void renderConent() {
 		// 发布时间
 		String creatAt = new PrettyDateFormat("@", "yyyy-MM-dd HH:mm:dd").format(feed.getCreatedOn());
 		// TODO: 日期需要处理为 多少分钟前 多少秒前
@@ -331,12 +362,6 @@ public class SimpleFeedActivity extends BaseActivity {
 
 		// 操作区域更多按钮
 		btn_more.setOnClickListener(new MoreOperateOnClickListener());
-
-		// 评论视图区域
-		renderArea();
-		renderFavor();
-		renderCommentView();
-
 	}
 
 	private void renderArea() {

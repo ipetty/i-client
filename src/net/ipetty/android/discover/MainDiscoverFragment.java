@@ -1,5 +1,14 @@
 package net.ipetty.android.discover;
 
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.main.MainActivity;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
+import net.ipetty.vo.FeedVO;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,13 +23,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.feed.SimpleFeedActivity;
-import net.ipetty.android.main.MainActivity;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
 
 public class MainDiscoverFragment extends Fragment {
 
@@ -45,6 +47,7 @@ public class MainDiscoverFragment extends Fragment {
 		this.getActivity().registerReceiver(broadcastreciver, filter);
 		Log.d(TAG, "onCreate");
 	}
+
 	private BroadcastReceiver broadcastreciver = new BroadcastReceiver() {
 
 		@Override
@@ -69,6 +72,8 @@ public class MainDiscoverFragment extends Fragment {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent((MainActivity) getActivity(), SimpleFeedActivity.class);
 				intent.putExtra(Constant.INTENT_FEED_ID_KEY, id);
+				FeedVO feedVO = (FeedVO) adapter.getItem(position);
+				intent.putExtra(Constant.FEEDVO_JSON_SERIALIZABLE, JSONUtils.toJson(feedVO).toString());
 				((MainActivity) getActivity()).startActivity(intent);
 			}
 		});
@@ -80,7 +85,7 @@ public class MainDiscoverFragment extends Fragment {
 		// TODO Auto-generated method stub
 		new ListByTimelineForSquare(MainDiscoverFragment.this.getActivity()).setListener(
 				new DiscoverListener(MainDiscoverFragment.this.getActivity(), adapter)).execute(
-						getRefreshTime().toString(), "0", pageSize.toString());
+				getRefreshTime().toString(), "0", pageSize.toString());
 	}
 
 	private Long getRefreshTime() {

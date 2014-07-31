@@ -1,6 +1,7 @@
 package net.ipetty.android.core;
 
 import java.util.HashMap;
+
 import net.ipetty.R;
 
 public class Constant {

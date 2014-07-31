@@ -11,6 +11,7 @@ import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.PrettyDateFormat;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.feed.SimpleFeedActivity;
@@ -376,6 +377,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(context, SimpleFeedActivity.class);
 				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feed.getId());
+				intent.putExtra(Constant.FEEDVO_JSON_SERIALIZABLE, JSONUtils.toJson(feed).toString());
 				context.startActivity(intent);
 			}
 		});
