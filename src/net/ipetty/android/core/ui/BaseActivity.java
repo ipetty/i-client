@@ -8,6 +8,7 @@ import cn.sharesdk.framework.ShareSDK;
 import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.DelayTask;
+import net.ipetty.android.core.ErrorHandler;
 
 public class BaseActivity extends Activity {
 
@@ -16,6 +17,8 @@ public class BaseActivity extends Activity {
 	private boolean isViewReady = false;
 
 	private Bundle savedInstanceState;
+
+	private ErrorHandler errorHandler;
 
 	public void showMessageForShortTime(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -29,6 +32,7 @@ public class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		this.savedInstanceState = savedInstanceState;
 		super.onCreate(savedInstanceState);
+		errorHandler = new ErrorHandler(this);
 		ShareSDK.initSDK(this);
 		ActivityManager.getInstance().addActivity(this);
 	}
@@ -69,7 +73,11 @@ public class BaseActivity extends Activity {
 		Log.d(TAG, "onStart");
 		super.onStart();
 		if (isViewReady) {
-			onViewStart();
+			try {
+				onViewStart();
+			} catch (Throwable e) {
+				errorHandler.handleError(e);
+			}
 		}
 	}
 
@@ -83,7 +91,11 @@ public class BaseActivity extends Activity {
 		Log.d(TAG, "onResume");
 		super.onResume();
 		if (isViewReady) {
-			onViewResume();
+			try {
+				onViewResume();
+			} catch (Throwable e) {
+				errorHandler.handleError(e);
+			}
 		}
 	}
 
@@ -97,7 +109,11 @@ public class BaseActivity extends Activity {
 		Log.d(TAG, "onRestart");
 		super.onRestart();
 		if (isViewReady) {
-			onViewRestart();
+			try {
+				onViewRestart();
+			} catch (Throwable e) {
+				errorHandler.handleError(e);
+			}
 		}
 	}
 

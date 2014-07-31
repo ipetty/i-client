@@ -7,6 +7,7 @@ import android.widget.Toast;
 import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.DelayTask;
+import net.ipetty.android.core.ErrorHandler;
 
 public class BaseFragmentActivity extends FragmentActivity {
 
@@ -15,6 +16,8 @@ public class BaseFragmentActivity extends FragmentActivity {
 	private boolean isViewReady = false;
 
 	private Bundle savedInstanceState;
+
+	private ErrorHandler errorHandler;
 
 	public void showMessageForShortTime(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -27,6 +30,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		errorHandler = new ErrorHandler(this);
 		ActivityManager.getInstance().addActivity(this);
 	}
 
@@ -66,7 +70,11 @@ public class BaseFragmentActivity extends FragmentActivity {
 		Log.d(TAG, "onStart");
 		super.onStart();
 		if (isViewReady) {
-			onViewStart();
+			try {
+				onViewStart();
+			} catch (Throwable e) {
+				errorHandler.handleError(e);
+			}
 		}
 	}
 
@@ -80,7 +88,11 @@ public class BaseFragmentActivity extends FragmentActivity {
 		Log.d(TAG, "onResume");
 		super.onResume();
 		if (isViewReady) {
-			onViewResume();
+			try {
+				onViewResume();
+			} catch (Throwable e) {
+				errorHandler.handleError(e);
+			}
 		}
 	}
 
@@ -94,7 +106,11 @@ public class BaseFragmentActivity extends FragmentActivity {
 		Log.d(TAG, "onRestart");
 		super.onRestart();
 		if (isViewReady) {
-			onViewRestart();
+			try {
+				onViewRestart();
+			} catch (Throwable e) {
+				errorHandler.handleError(e);
+			}
 		}
 	}
 

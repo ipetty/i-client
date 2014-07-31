@@ -7,18 +7,9 @@ package net.ipetty.android.core;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.os.Looper;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.Toast;
-import java.util.concurrent.CountDownLatch;
-import net.ipetty.android.sdk.core.APIException;
-import net.ipetty.android.sdk.core.ServiceUnavailableException;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
 
 /**
  *
@@ -35,6 +26,8 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 
 	private ProgressDialog progressDialog;
 
+	private final ErrorHandler errorHandler;
+
 	/**
 	 * 带有默认loading信息的构造
 	 *
@@ -42,10 +35,15 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 	 */
 	public DefaultTaskListener(Activity activity) {
 		this.activity = activity;
+		errorHandler = new ErrorHandler(activity);
+	}
+
+	public DefaultTaskListener(Context context) {
+		this((Activity) context);
 	}
 
 	public DefaultTaskListener(Fragment fragment) {
-		this.activity = fragment.getActivity();
+		this(fragment.getActivity());
 	}
 
 	/**
@@ -77,7 +75,11 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 	public void doSuccess(Result result) {
 		Log.d(TAG, "doSuccess");
 		dismissProgressDialog();
-		onSuccess(result);
+		try {
+			onSuccess(result);
+		} catch (Throwable e) {
+			onError(e);
+		}
 	}
 
 	public abstract void onSuccess(Result result);
@@ -100,73 +102,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 		Log.d(TAG, "onError:" + ex.getClass().getName());
 		dismissProgressDialog();
 
-		//应用异常 界面层
-		if (ex instanceof AppException) {
-			AppException e = (AppException) ex;
-			showError(e.getMessage());
-			return;
-		}
-
-		//超时
-		if (ex instanceof ConnectTimeoutException) {
-			ConnectTimeoutException e = (ConnectTimeoutException) ex;
-			showError("请求超时，请检查网络后重试");
-			return;
-		}
-
-		//API异常 任务层
-		if (ex instanceof APIException) {
-			APIException e = (APIException) ex;
-			if (null == e.getMessage() || "".equals(e.getMessage())) {
-				showError("未知异常");
-			} else {
-				showError(e.getMessage());
-			}
-
-			return;
-		}
-
-		//服务器不可用异常
-		if (ex instanceof ServiceUnavailableException) {
-			showError("服务器维护中,请稍后使用");
-			waitFor(3 * 1000);
-			ActivityManager.getInstance().exit();
-			return;
-		}
-
-		//HTTP客户端异常400
-		if (ex instanceof HttpClientErrorException) {
-			HttpClientErrorException e = (HttpClientErrorException) ex;
-			if (null == e.getMessage() || "".equals(e.getMessage())) {
-				showError(e.getStatusText());
-			} else {
-				showError(e.getMessage());
-			}
-			return;
-		}
-
-		//HTTP服务端异常500
-		if (ex instanceof HttpServerErrorException) {
-			HttpServerErrorException e = (HttpServerErrorException) ex;
-			showError(e.getResponseBodyAsString());
-			return;
-		}
-
-		//HTTP资源访问（IO）异常
-		if (ex instanceof ResourceAccessException) {
-			ResourceAccessException e = (ResourceAccessException) ex;
-			showError("无法连接到服务器");
-			return;
-		}
-
-		//HTTP未知异常
-		if (ex instanceof RestClientException) {
-			RestClientException e = (RestClientException) ex;
-			showError("未知HTTP异常");
-			return;
-		}
-
-		showError("未知任务异常");
+		errorHandler.handleError(ex);
 
 	}
 
@@ -187,48 +123,11 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 		}
 	}
 
-	//显示错误信息
-	private void showError(final String msg) {
-		Log.d(TAG, "showError");
-		//非UI线程进行UI界面操作
-		new Thread() {
-			@Override
-			public void run() {
-				Looper.prepare();
-				Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
-				Looper.loop();
-			}
-		}.start();
-	}
-
 	/**
 	 * @return the loadingMessage
 	 */
 	public String getLoadingMessage() {
 		return loadingMessage;
-	}
-
-	//另启线程进行等待，防止阻塞UI线程
-	private void waitFor(long time) {
-		//异步转同步
-		final CountDownLatch latch = new CountDownLatch(1);
-		final Long waitTime = time;
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(waitTime);
-				} catch (InterruptedException ex) {
-
-				}
-				latch.countDown();
-			}
-		}.start();
-		try {
-			latch.await();
-		} catch (InterruptedException ex) {
-
-		}
 	}
 
 }

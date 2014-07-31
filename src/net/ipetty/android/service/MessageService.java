@@ -48,6 +48,7 @@ public class MessageService extends Service {
 						while (running) {
 							Thread.sleep(interval);
 							if (NetWorkUtils.isNetworkConnected(MessageService.this)) {
+								//IpetApi.init(MessageService.this).getActivityApi().
 								//TODO:请求消息
 								Intent intent = new Intent(Constant.BROADCAST_HAS_NEW_MESSAG);
 								MessageService.this.sendBroadcast(intent);
