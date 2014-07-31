@@ -17,20 +17,20 @@ import net.ipetty.vo.FeedVO;
  */
 public class InitFeedListListener extends DefaultTaskListener<List<FeedVO>> {
 
-    private final static String TAG = InitFeedListListener.class.getSimpleName();
-    private final FeedAdapter adapter;
+	private final static String TAG = InitFeedListListener.class.getSimpleName();
+	private final FeedAdapter adapter;
 
-    public InitFeedListListener(Activity activity, FeedAdapter adapter) {
-        super(activity);
-        this.adapter = adapter;
-    }
+	public InitFeedListListener(Activity activity, FeedAdapter adapter) {
+		super(activity, "努力为您加载...");
+		this.adapter = adapter;
+	}
 
-    @Override
-    public void onSuccess(List<FeedVO> result) {
-        Log.d(TAG, "onSuccess");
-        adapter.getList().clear();
-        adapter.getList().addAll(result);
-        adapter.notifyDataSetChanged();
-    }
+	@Override
+	public void onSuccess(List<FeedVO> result) {
+		Log.d(TAG, "onSuccess");
+		adapter.getList().clear();
+		adapter.getList().addAll(result);
+		adapter.notifyDataSetChanged();
+	}
 
 }

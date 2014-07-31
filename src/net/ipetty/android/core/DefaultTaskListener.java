@@ -60,10 +60,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 	}
 
 	public DefaultTaskListener(Fragment fragment, String loadingMessage) {
-		this(fragment);
-		this.loadingMessage = loadingMessage;
-		this.progressDialog = new ProgressDialog(this.activity);
-		this.progressDialog.setIndeterminate(true);
+		this(fragment.getActivity());
 	}
 
 	public void onPreExecute() {
