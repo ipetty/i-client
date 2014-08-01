@@ -1,21 +1,7 @@
 package net.ipetty.android.news;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ViewFlipper;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.MyAppStateManager;
@@ -27,6 +13,22 @@ import net.ipetty.android.sdk.task.activity.ListActivities;
 import net.ipetty.android.sdk.task.user.ListFollowers;
 import net.ipetty.vo.ActivityVO;
 import net.ipetty.vo.UserVO;
+import android.app.Activity;
+import android.os.Bundle;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.ViewFlipper;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainNewsFragment extends BaseFragment {
 
@@ -45,7 +47,7 @@ public class MainNewsFragment extends BaseFragment {
 
 	private Integer activitiePageNumber = 0;
 	private final Integer activitiePageSize = 20;
-	private Boolean activitieHasMore = false;
+	private Boolean activitieHasMore = true;
 
 	private Integer followerPageNumber = 0;
 	private final Integer followerPageSize = 20;
@@ -99,7 +101,7 @@ public class MainNewsFragment extends BaseFragment {
 				((MainActivity) MainNewsFragment.this.getActivity()).hideNewsDot();
 				String label = DateUtils.formatDateTime(MainNewsFragment.this.getActivity().getApplicationContext(),
 						getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-						| DateUtils.FORMAT_ABBREV_ALL);
+								| DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -108,42 +110,40 @@ public class MainNewsFragment extends BaseFragment {
 						new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
 							@Override
 							public void onSuccess(List<ActivityVO> result) {
-								//related_me_adapter.getList().clear();
 								related_me_adapter.setList(result);
 								related_me_adapter.notifyDataSetChanged();
 								related_me_listView.onRefreshComplete();
-
 							}
 						}).execute(0, MainNewsFragment.this.activitiePageSize);
 				// 重置页号
-				activitieHasMore = false;
+				activitieHasMore = true;
 				activitiePageNumber = 0;
 			}
 		});
-		if (false) {
-			related_me_listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
-				@Override
-				public void onLastItemVisible() {
-					// 加载更多
-					if (activitieHasMore) {
-						new ListActivities(MainNewsFragment.this.getActivity()).setListener(
-								new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
-									@Override
-									public void onSuccess(List<ActivityVO> result) {
-										if (result.size() < activitiePageSize) {
-											activitieHasMore = false;
-										}
-										if (result.size() > 0) {
-											related_me_adapter.getList().addAll(result);
-											related_me_adapter.notifyDataSetChanged();
-										}
+
+		related_me_listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+			@Override
+			public void onLastItemVisible() {
+				// 加载更多
+				if (activitieHasMore) {
+					new ListActivities(MainNewsFragment.this.getActivity()).setListener(
+							new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
+								@Override
+								public void onSuccess(List<ActivityVO> result) {
+									if (result.size() < activitiePageSize) {
+										activitieHasMore = false;
 									}
-								}).execute(++activitiePageNumber, activitiePageSize);
+									if (result.size() > 0) {
+										related_me_adapter.getList().addAll(result);
+										related_me_adapter.notifyDataSetChanged();
+									}
+								}
+							}).execute(++activitiePageNumber, activitiePageSize);
 
-					}
 				}
-			});
-
+			}
+		});
+		if (false) {
 			my_follows_listView = (PullToRefreshListView) activity.findViewById(R.id.my_follows_listView);
 			my_follows_listView.setMode(Mode.PULL_FROM_END);
 			my_follows_adapter = new MyFollowsAdapter(this.getActivity());
@@ -168,7 +168,7 @@ public class MainNewsFragment extends BaseFragment {
 										}
 									}
 								}).execute(IpetApi.init(MainNewsFragment.this.getActivity()).getCurrUserId(),
-										++followerPageNumber, followerPageSize);
+								++followerPageNumber, followerPageSize);
 
 					}
 				}
@@ -189,7 +189,7 @@ public class MainNewsFragment extends BaseFragment {
 	}
 
 	private void loadData() {
-		activitieHasMore = false;
+		activitieHasMore = true;
 		followerHasMore = true;
 		activitiePageNumber = 0;
 		followerPageNumber = 0;

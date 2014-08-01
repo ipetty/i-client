@@ -1,5 +1,24 @@
 package net.ipetty.android.news;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.PrettyDateFormat;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,21 +32,9 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import java.util.ArrayList;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.PrettyDateFormat;
-import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.feed.SimpleFeedActivity;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.UserVO;
-import org.apache.commons.lang3.StringUtils;
 
 public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 
@@ -35,7 +42,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 	public Context context;
 	private LayoutInflater inflater;
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
-	private List<ActivityVO> list = new ArrayList<ActivityVO>(); // 这个就本地dataStore
+	private List<ActivityVO> list = new ArrayList<ActivityVO>(0); // 这个就本地dataStore
 
 	public RelatedMeAdapter(Context context) {
 		// TODO Auto-generated constructor stub
@@ -121,7 +128,6 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		int userId = act.getCreatedBy();
 		final UserVO user = this.getCacheUserById(userId);
 		if (StringUtils.isNotBlank(user.getAvatar())) {
-			Log.d(TAG, user.getAvatar() + "!aa!" + holder.avatar);
 			ImageLoader.getInstance()
 					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
 		} else {
@@ -140,7 +146,6 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 
 		// 消息图片
 		if (StringUtils.isNotBlank(act.getFeedImageUrl())) {
-			Log.d(TAG, act.getFeedImageUrl() + "!aa!" + holder.relatedImage);
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + act.getFeedImageUrl(),
 					holder.relatedImage, options);
 		} else {
@@ -148,7 +153,6 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		}
 		final Long feedId = act.getTargetId();
 
-		Log.d(TAG, feedId + "!getTargetId!");
 		holder.relatedImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -159,16 +163,17 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			}
 		});
 
-		// 这里是消息预加载异步线程 主要提高加载效率
-		/*
-		 * if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) &&
-		 * Constant.NEWS_TYPE_COMMENT.equals(act.getType())) { new
-		 * GetFeedById((Activity) context).setListener(new
-		 * DefaultTaskListener<FeedVO>((Activity) context) {
-		 *
-		 * @Override public void onSuccess(FeedVO result) { }
-		 * }).execute(feedId); }
-		 */
+		// TODO:临时方案 这里是消息预加载异步线程 主要提高加载效率
+		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) || Constant.NEWS_TYPE_COMMENT.equals(act.getType())) {
+			new GetFeedById((Activity) context).setListener(new DefaultTaskListener<FeedVO>((Activity) context) {
+
+				@Override
+				public void onSuccess(FeedVO result) {
+					Log.d(TAG, "TTTTTTTTTTTTTTTTTT");
+				}
+			}).execute(feedId);
+		}
+
 		return view;
 	}
 
