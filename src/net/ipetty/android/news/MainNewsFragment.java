@@ -120,7 +120,7 @@ public class MainNewsFragment extends BaseFragment {
 				activitiePageNumber = 0;
 			}
 		});
-		if (false) {
+	
 			related_me_listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
 				@Override
 				public void onLastItemVisible() {
@@ -143,7 +143,7 @@ public class MainNewsFragment extends BaseFragment {
 					}
 				}
 			});
-
+			if (false) {
 			my_follows_listView = (PullToRefreshListView) activity.findViewById(R.id.my_follows_listView);
 			my_follows_listView.setMode(Mode.PULL_FROM_END);
 			my_follows_adapter = new MyFollowsAdapter(this.getActivity());

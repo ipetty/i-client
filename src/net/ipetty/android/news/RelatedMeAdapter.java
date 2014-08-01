@@ -7,6 +7,7 @@ import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.PrettyDateFormat;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.feed.SimpleFeedActivity;
 import net.ipetty.android.space.SpaceActivity;
@@ -110,6 +111,9 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			initCommentView(holder, act);
 		}
 
+		String creatAt = new PrettyDateFormat("@", "yyyy-MM-dd HH:mm:dd").format(act.getCreatedOn());
+		holder.createdOn.setText(creatAt);
+
 		if (act.isRead()) {
 			holder.item.setBackgroundResource(R.color.news_item_bg_default);
 		} else {
@@ -145,6 +149,8 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			holder.avatar.setImageResource(R.drawable.default_image);
 		}
 		final Long feedId = act.getTargetId();
+
+		Log.d(TAG, feedId + "!getTargetId!");
 		holder.relatedImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
