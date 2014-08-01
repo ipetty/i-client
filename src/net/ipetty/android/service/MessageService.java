@@ -11,7 +11,10 @@ import android.os.IBinder;
 import android.util.Log;
 import java.util.UUID;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.vo.NotificationVO;
 
 /**
  *
@@ -46,15 +49,20 @@ public class MessageService extends Service {
 				public void run() {
 					try {
 						while (running) {
-							Thread.sleep(interval);
 							if (NetWorkUtils.isNetworkConnected(MessageService.this)) {
-								//IpetApi.init(MessageService.this).getActivityApi().
-								//TODO:请求消息
-								Intent intent = new Intent(Constant.BROADCAST_HAS_NEW_MESSAG);
-								MessageService.this.sendBroadcast(intent);
-								Log.d(TAG, uuid + ":" + Constant.BROADCAST_HAS_NEW_MESSAG);
+								NotificationVO nvo = IpetApi.init(MessageService.this).getNotificationApi().getMyNotification();
+								Log.d(TAG, uuid + ":接收到nvo:" + JSONUtils.toJson(nvo));
+								if (nvo.getNewFansNum() > 0
+										|| nvo.getNewFavorsNum() > 0
+										|| nvo.getNewRepliesNum() > 0) {
+									Intent intent = new Intent(Constant.BROADCAST_HAS_NEW_MESSAG);
+									String nvoJsonStr = JSONUtils.toJson(nvo);
+									intent.putExtra(Constant.BROADCAST_DATA, nvoJsonStr);
+									MessageService.this.sendBroadcast(intent);
+									Log.d(TAG, uuid + ":Send new messag:" + nvoJsonStr);
+								}
 							}
-
+							Thread.sleep(interval);
 						}
 
 					} catch (Exception ex) {

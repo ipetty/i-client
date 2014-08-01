@@ -42,6 +42,7 @@ import net.ipetty.android.feed.FeedPublishActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
 import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.android.update.UpdateManager;
 import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
@@ -108,6 +109,9 @@ public class MainHomeFragment extends BaseFragment {
 		initListView();
 		initCamera();
 		loadData();
+		// 检查软件更新
+		UpdateManager manager = new UpdateManager(this.getActivity());
+		manager.checkUpdate();
 	}
 
 	@Override

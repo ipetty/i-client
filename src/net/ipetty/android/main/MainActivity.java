@@ -33,7 +33,6 @@ import net.ipetty.android.discover.MainDiscoverFragment;
 import net.ipetty.android.home.MainHomeFragment;
 import net.ipetty.android.news.MainNewsFragment;
 import net.ipetty.android.service.MessageService;
-import net.ipetty.android.update.UpdateManager;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -106,10 +105,6 @@ public class MainActivity extends BaseFragmentActivity {
 
 		gray = getResources().getColor(R.color.title_gray);
 		red = getResources().getColor(R.color.title_red);
-
-		// 检查软件更新
-		UpdateManager manager = new UpdateManager(this);
-		manager.checkUpdate();
 
 		// 启动服务
 		startService(messageServiceIntent);

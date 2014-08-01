@@ -6,6 +6,7 @@ import net.ipetty.android.sdk.impl.AppUpdateApiImpl;
 import net.ipetty.android.sdk.impl.FeedApiImpl;
 import net.ipetty.android.sdk.impl.FeedbackApiImpl;
 import net.ipetty.android.sdk.impl.FoundationApiImpl;
+import net.ipetty.android.sdk.impl.NotificationApiImpl;
 import net.ipetty.android.sdk.impl.PetApiImpl;
 import net.ipetty.android.sdk.impl.UserApiImpl;
 import net.ipetty.sdk.ActivityApi;
@@ -13,6 +14,7 @@ import net.ipetty.sdk.AppUpdateApi;
 import net.ipetty.sdk.FeedApi;
 import net.ipetty.sdk.FeedbackApi;
 import net.ipetty.sdk.FoundationApi;
+import net.ipetty.sdk.NotificationApi;
 import net.ipetty.sdk.PetApi;
 import net.ipetty.sdk.UserApi;
 
@@ -32,6 +34,7 @@ public class IpetApi extends ApiBase {
 	private final FeedbackApi feedbackApi;
 	private final FoundationApi foundationApi;
 	private final AppUpdateApi appUpdateApi;
+	private final NotificationApi notificationApi;
 
 	private IpetApi(Context context) {
 		super(context);
@@ -42,6 +45,7 @@ public class IpetApi extends ApiBase {
 		feedbackApi = new FeedbackApiImpl(context);
 		foundationApi = new FoundationApiImpl(context);
 		appUpdateApi = new AppUpdateApiImpl(context);
+		notificationApi = new NotificationApiImpl(context);
 	}
 
 	public static IpetApi init(Context context) {
@@ -77,6 +81,10 @@ public class IpetApi extends ApiBase {
 
 	public AppUpdateApi getAppUpdateApi() {
 		return appUpdateApi;
+	}
+
+	public NotificationApi getNotificationApi() {
+		return notificationApi;
 	}
 
 }
