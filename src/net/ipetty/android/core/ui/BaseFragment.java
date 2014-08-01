@@ -41,7 +41,7 @@ public class BaseFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
 		super.onActivityCreated(savedInstanceState);
-		this.isViewReady = false;
+		//this.isViewReady = false;
 		this.savedInstanceState = savedInstanceState;
 		errorHandler = new ErrorHandler(this.getActivity());
 	}
