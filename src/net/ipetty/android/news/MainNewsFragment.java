@@ -70,13 +70,6 @@ public class MainNewsFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated");
-
-	}
-
-	// 加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		super.onViewReady(savedInstanceState);
 
 		this.activity = this.getActivity();
@@ -175,6 +168,12 @@ public class MainNewsFragment extends BaseFragment {
 				}
 			});
 		}
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		loadData();
 	}
 

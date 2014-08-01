@@ -1,5 +1,14 @@
 package net.ipetty.android.main;
 
+import net.ipetty.R;
+import net.ipetty.android.core.ActivityManager;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.ui.BaseFragmentActivity;
+import net.ipetty.android.core.util.AnimUtils;
+import net.ipetty.android.discover.MainDiscoverFragment;
+import net.ipetty.android.home.MainHomeFragment;
+import net.ipetty.android.news.MainNewsFragment;
+import net.ipetty.android.service.MessageService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,15 +33,6 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
-import net.ipetty.R;
-import net.ipetty.android.core.ActivityManager;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.ui.BaseFragmentActivity;
-import net.ipetty.android.core.util.AnimUtils;
-import net.ipetty.android.discover.MainDiscoverFragment;
-import net.ipetty.android.home.MainHomeFragment;
-import net.ipetty.android.news.MainNewsFragment;
-import net.ipetty.android.service.MessageService;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -43,7 +43,7 @@ public class MainActivity extends BaseFragmentActivity {
 	private int zero = 0;
 	private int one;
 	private int two;
-	private final Class[] fragments = {MainHomeFragment.class, MainDiscoverFragment.class, MainNewsFragment.class};
+	private final Class[] fragments = { MainHomeFragment.class, MainDiscoverFragment.class, MainNewsFragment.class };
 
 	private TextView main_text;
 	private TextView discover_text;
@@ -76,7 +76,7 @@ public class MainActivity extends BaseFragmentActivity {
 		mTabImg.setLayoutParams(mParams);
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -168,7 +168,7 @@ public class MainActivity extends BaseFragmentActivity {
 
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object object) {
-			super.destroyItem(container, position, object);
+			// super.destroyItem(container, position, object);
 		}
 	}
 
@@ -195,35 +195,35 @@ public class MainActivity extends BaseFragmentActivity {
 			news_text.setTextColor(gray);
 
 			switch (arg0) {
-				case 0: {
-					if (currIndex == 1) {
-						animation = new TranslateAnimation(one, zero, 0, 0);
-					} else if (currIndex == 2) {
-						animation = new TranslateAnimation(two, zero, 0, 0);
-					}
-					main_text.setTextColor(red);
-					break;
+			case 0: {
+				if (currIndex == 1) {
+					animation = new TranslateAnimation(one, zero, 0, 0);
+				} else if (currIndex == 2) {
+					animation = new TranslateAnimation(two, zero, 0, 0);
+				}
+				main_text.setTextColor(red);
+				break;
 
+			}
+			case 1: {
+				if (currIndex == 0) {
+					animation = new TranslateAnimation(zero, one, 0, 0);
+				} else if (currIndex == 2) {
+					animation = new TranslateAnimation(two, one, 0, 0);
 				}
-				case 1: {
-					if (currIndex == 0) {
-						animation = new TranslateAnimation(zero, one, 0, 0);
-					} else if (currIndex == 2) {
-						animation = new TranslateAnimation(two, one, 0, 0);
-					}
-					discover_text.setTextColor(red);
-					break;
+				discover_text.setTextColor(red);
+				break;
+			}
+			case 2: {
+				if (currIndex == 0) {
+					animation = new TranslateAnimation(zero, two, 0, 0);
+				} else if (currIndex == 1) {
+					animation = new TranslateAnimation(one, two, 0, 0);
 				}
-				case 2: {
-					if (currIndex == 0) {
-						animation = new TranslateAnimation(zero, two, 0, 0);
-					} else if (currIndex == 1) {
-						animation = new TranslateAnimation(one, two, 0, 0);
-					}
-					news_text.setTextColor(red);
-					hideNewsDot();// TODO: just test
-					break;
-				}
+				news_text.setTextColor(red);
+				hideNewsDot();// TODO: just test
+				break;
+			}
 
 			}
 			currIndex = arg0;

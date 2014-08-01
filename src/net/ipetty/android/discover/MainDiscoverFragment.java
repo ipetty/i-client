@@ -1,5 +1,15 @@
 package net.ipetty.android.discover;
 
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.BaseFragment;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.main.MainActivity;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
+import net.ipetty.vo.FeedVO;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,16 +23,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.ui.BaseFragment;
-import net.ipetty.android.core.util.JSONUtils;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.feed.SimpleFeedActivity;
-import net.ipetty.android.main.MainActivity;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
-import net.ipetty.vo.FeedVO;
 
 public class MainDiscoverFragment extends BaseFragment {
 
@@ -61,14 +61,6 @@ public class MainDiscoverFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated");
-
-	}
-
-	//加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
-		super.onViewReady(savedInstanceState);
 		this.activity = getActivity();
 		gridview = (GridView) this.activity.findViewById(R.id.gridview);
 		adapter = new DiscoverAdapter(this.activity);
@@ -85,6 +77,13 @@ public class MainDiscoverFragment extends BaseFragment {
 				((MainActivity) getActivity()).startActivity(intent);
 			}
 		});
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+		super.onViewReady(savedInstanceState);
 
 		loadData();
 	}
@@ -93,7 +92,7 @@ public class MainDiscoverFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		new ListByTimelineForSquare(MainDiscoverFragment.this.getActivity()).setListener(
 				new DiscoverListener(MainDiscoverFragment.this.getActivity(), adapter)).execute(
-						getRefreshTime().toString(), "0", pageSize.toString());
+				getRefreshTime().toString(), "0", pageSize.toString());
 	}
 
 	private Long getRefreshTime() {
