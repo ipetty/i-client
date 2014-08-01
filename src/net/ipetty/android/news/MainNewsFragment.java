@@ -189,6 +189,7 @@ public class MainNewsFragment extends BaseFragment {
 	}
 
 	private void loadData() {
+		((MainActivity) MainNewsFragment.this.getActivity()).hideNewsDot();
 		activitieHasMore = true;
 		followerHasMore = true;
 		activitiePageNumber = 0;

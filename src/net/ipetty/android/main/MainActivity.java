@@ -221,7 +221,7 @@ public class MainActivity extends BaseFragmentActivity {
 					animation = new TranslateAnimation(one, two, 0, 0);
 				}
 				news_text.setTextColor(red);
-				hideNewsDot();// TODO: just test
+				// hideNewsDot();// TODO: just test
 				break;
 			}
 
