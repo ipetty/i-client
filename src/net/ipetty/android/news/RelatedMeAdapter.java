@@ -6,11 +6,14 @@ import java.util.List;
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
@@ -145,6 +148,16 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 				context.startActivity(intent);
 			}
 		});
+
+		// 这里是消息预加载异步线程 主要提高加载效率
+		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) && Constant.NEWS_TYPE_COMMENT.equals(act.getType())) {
+			new GetFeedById((Activity) context).setListener(new DefaultTaskListener<FeedVO>((Activity) context) {
+				@Override
+				public void onSuccess(FeedVO result) {
+				}
+			}).execute(feedId);
+		}
+
 		return view;
 	}
 

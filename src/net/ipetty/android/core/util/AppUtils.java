@@ -80,7 +80,7 @@ public class AppUtils {
 		Builder bulider = new DisplayImageOptions.Builder()//
 				.cacheInMemory(true)//
 				.cacheOnDisk(true)//
-				.showImageOnFail(R.drawable.avatar)
+				.showImageOnFail(R.drawable.default_image)
 				.imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
 				.considerExifParams(true);
 		return bulider;

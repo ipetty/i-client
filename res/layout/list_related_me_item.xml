@@ -33,7 +33,7 @@
            android:textColorLink="@color/link_text" 
            android:textColor="@color/title_gray"
            android:textSize="16dp" 
-           android:text="ACADFASFWEFASFDASDFASDFASDFAFASDFAS"/>
+           android:text=""/>
 
         <TextView
             android:id="@+id/createdOn"
