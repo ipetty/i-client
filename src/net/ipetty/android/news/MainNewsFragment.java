@@ -1,7 +1,21 @@
 package net.ipetty.android.news;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.ViewFlipper;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import java.util.List;
-
 import net.ipetty.R;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.MyAppStateManager;
@@ -13,22 +27,6 @@ import net.ipetty.android.sdk.task.activity.ListActivities;
 import net.ipetty.android.sdk.task.user.ListFollowers;
 import net.ipetty.vo.ActivityVO;
 import net.ipetty.vo.UserVO;
-import android.app.Activity;
-import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ViewFlipper;
-
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainNewsFragment extends BaseFragment {
 
@@ -101,7 +99,7 @@ public class MainNewsFragment extends BaseFragment {
 				((MainActivity) MainNewsFragment.this.getActivity()).hideNewsDot();
 				String label = DateUtils.formatDateTime(MainNewsFragment.this.getActivity().getApplicationContext(),
 						getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+						| DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -110,7 +108,7 @@ public class MainNewsFragment extends BaseFragment {
 						new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
 							@Override
 							public void onSuccess(List<ActivityVO> result) {
-								related_me_adapter.getList().clear();
+								//related_me_adapter.getList().clear();
 								related_me_adapter.setList(result);
 								related_me_adapter.notifyDataSetChanged();
 								related_me_listView.onRefreshComplete();
@@ -170,7 +168,7 @@ public class MainNewsFragment extends BaseFragment {
 										}
 									}
 								}).execute(IpetApi.init(MainNewsFragment.this.getActivity()).getCurrUserId(),
-								++followerPageNumber, followerPageSize);
+										++followerPageNumber, followerPageSize);
 
 					}
 				}

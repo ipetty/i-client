@@ -1,21 +1,5 @@
 package net.ipetty.android.news;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.PrettyDateFormat;
-import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.feed.SimpleFeedActivity;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,9 +13,21 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import java.util.ArrayList;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.PrettyDateFormat;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 
@@ -66,10 +62,12 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 
 	// 构建一个布局缓存的结构体 与VO对应
 	public class NewView {
+
 		public View favorView;
 	}
 
 	public class ViewHolder {
+
 		public View item;
 		public ImageView avatar; // 称赞人or关注人头像or回复人
 		public TextView createdBy; // 称赞人or关注人名称or回复人
@@ -146,7 +144,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + act.getFeedImageUrl(),
 					holder.relatedImage, options);
 		} else {
-			holder.avatar.setImageResource(R.drawable.default_image);
+			holder.relatedImage.setImageResource(R.drawable.default_image);
 		}
 		final Long feedId = act.getTargetId();
 
@@ -167,11 +165,10 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		 * Constant.NEWS_TYPE_COMMENT.equals(act.getType())) { new
 		 * GetFeedById((Activity) context).setListener(new
 		 * DefaultTaskListener<FeedVO>((Activity) context) {
-		 * 
+		 *
 		 * @Override public void onSuccess(FeedVO result) { }
 		 * }).execute(feedId); }
 		 */
-
 		return view;
 	}
 
