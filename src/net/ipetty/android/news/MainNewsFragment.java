@@ -47,7 +47,7 @@ public class MainNewsFragment extends BaseFragment {
 
 	private Integer activitiePageNumber = 0;
 	private final Integer activitiePageSize = 20;
-	private Boolean activitieHasMore = true;
+	private Boolean activitieHasMore = false;
 
 	private Integer followerPageNumber = 0;
 	private final Integer followerPageSize = 20;
@@ -110,17 +110,19 @@ public class MainNewsFragment extends BaseFragment {
 						new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
 							@Override
 							public void onSuccess(List<ActivityVO> result) {
+								related_me_adapter.getList().clear();
 								related_me_adapter.setList(result);
 								related_me_adapter.notifyDataSetChanged();
 								related_me_listView.onRefreshComplete();
+
 							}
 						}).execute(0, MainNewsFragment.this.activitiePageSize);
 				// 重置页号
-				activitieHasMore = true;
+				activitieHasMore = false;
 				activitiePageNumber = 0;
 			}
 		});
-	
+		if (false) {
 			related_me_listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
 				@Override
 				public void onLastItemVisible() {
@@ -143,7 +145,7 @@ public class MainNewsFragment extends BaseFragment {
 					}
 				}
 			});
-			if (false) {
+
 			my_follows_listView = (PullToRefreshListView) activity.findViewById(R.id.my_follows_listView);
 			my_follows_listView.setMode(Mode.PULL_FROM_END);
 			my_follows_adapter = new MyFollowsAdapter(this.getActivity());
@@ -189,7 +191,7 @@ public class MainNewsFragment extends BaseFragment {
 	}
 
 	private void loadData() {
-		activitieHasMore = true;
+		activitieHasMore = false;
 		followerHasMore = true;
 		activitiePageNumber = 0;
 		followerPageNumber = 0;
@@ -201,7 +203,7 @@ public class MainNewsFragment extends BaseFragment {
 						related_me_adapter.setList(result);
 						related_me_adapter.notifyDataSetChanged();
 					}
-				}).execute(activitiePageNumber, this.activitiePageSize);
+				}).execute(0, this.activitiePageSize);
 
 		if (false) {
 			new ListFollowers(this.getActivity()).setListener(
