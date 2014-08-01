@@ -1,13 +1,16 @@
 package net.ipetty.android.news;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.PrettyDateFormat;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.feed.SimpleFeedActivity;
@@ -43,6 +46,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 	private LayoutInflater inflater;
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 	private List<ActivityVO> list = new ArrayList<ActivityVO>(0); // 这个就本地dataStore
+	public Map<Long, String> feedCache = new HashMap<Long, String>(0);
 
 	public RelatedMeAdapter(Context context) {
 		// TODO Auto-generated constructor stub
@@ -159,6 +163,9 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(context, SimpleFeedActivity.class);
 				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feedId);
+				if (feedCache.containsKey(feedId)) {
+					intent.putExtra(Constant.FEEDVO_JSON_SERIALIZABLE, feedCache.get(feedId));
+				}
 				context.startActivity(intent);
 			}
 		});
@@ -166,10 +173,12 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		// TODO:临时方案 这里是消息预加载异步线程 主要提高加载效率
 		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) || Constant.NEWS_TYPE_COMMENT.equals(act.getType())) {
 			new GetFeedById((Activity) context).setListener(new DefaultTaskListener<FeedVO>((Activity) context) {
-
 				@Override
 				public void onSuccess(FeedVO result) {
-					Log.d(TAG, "TTTTTTTTTTTTTTTTTT");
+					if (feedCache.containsKey(result.getId())) {
+						return;
+					}
+					feedCache.put(result.getId(), JSONUtils.toJson(result).toString());
 				}
 			}).execute(feedId);
 		}
@@ -221,6 +230,10 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void clearCache() {
+		feedCache.clear();
 	}
 
 	public List<ActivityVO> getList() {

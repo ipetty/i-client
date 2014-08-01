@@ -110,6 +110,7 @@ public class MainNewsFragment extends BaseFragment {
 						new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
 							@Override
 							public void onSuccess(List<ActivityVO> result) {
+								related_me_adapter.clearCache();
 								related_me_adapter.setList(result);
 								related_me_adapter.notifyDataSetChanged();
 								related_me_listView.onRefreshComplete();
