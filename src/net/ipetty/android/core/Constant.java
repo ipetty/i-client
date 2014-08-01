@@ -46,9 +46,9 @@ public class Constant {
 	public final static float COMPRESS_IMAGE_MIN_HEIGHT = 64f;
 	public final static int COMPRESS_IMAGE_KB = 100;
 
-	public final static String NEWS_TYPE_FAVOR = "favor";
+	public final static String NEWS_TYPE_FAVOR = "feed_favor";
 	public final static String NEWS_TYPE_COMMENT = "comment";
-	public final static String NEWS_TYPE_FOLLOWED = "followed";
+	public final static String NEWS_TYPE_FOLLOWED = "follow";
 
 	// PET_FAMILY
 	public final static String PET_FAMILY_DOG_KEY = "dog";

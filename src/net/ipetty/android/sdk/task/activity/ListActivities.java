@@ -5,25 +5,27 @@
  */
 package net.ipetty.android.sdk.task.activity;
 
-import android.app.Activity;
 import java.util.List;
+
 import net.ipetty.android.core.Task;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.vo.ActivityVO;
+import android.app.Activity;
 
 /**
- *
+ * 
  * @author Administrator
  */
 public class ListActivities extends Task<Integer, List<ActivityVO>> {
 
-    public ListActivities(Activity activity) {
-        super(activity);
-    }
+	public ListActivities(Activity activity) {
+		super(activity);
+	}
 
-    @Override
-    protected List<ActivityVO> myDoInBackground(Integer... args) {
-        return IpetApi.init(activity).getActivityApi().listActivities(args[0], args[1]);
-    }
+	@Override
+	protected List<ActivityVO> myDoInBackground(Integer... args) {
+		return IpetApi.init(activity).getActivityApi().listNewActivities();// .listActivities(args[0],
+																			// args[1]);
+	}
 
 }
