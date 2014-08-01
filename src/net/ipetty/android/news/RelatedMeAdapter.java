@@ -6,14 +6,11 @@ import java.util.List;
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.feed.SimpleFeedActivity;
-import net.ipetty.android.sdk.task.feed.GetFeedById;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
@@ -72,7 +69,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 	}
 
 	public class ViewHolder {
-		public String type;
+		public View item;
 		public ImageView avatar; // 称赞人or关注人头像or回复人
 		public TextView createdBy; // 称赞人or关注人名称or回复人
 		public TextView createdOn; // 称赞时间or关注时间or回复时间
@@ -91,6 +88,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			view = inflater.inflate(R.layout.list_related_me_item, null);
+			holder.item = view.findViewById(R.id.item);
 			holder.avatar = (ImageView) view.findViewById(R.id.avatar);
 			holder.createdOn = (TextView) view.findViewById(R.id.createdOn);
 			holder.content = (TextView) view.findViewById(R.id.content);
@@ -103,7 +101,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			holder = (ViewHolder) view.getTag();// 取出ViewHolder对象
 		}
 
-		ActivityVO act = list.get(position);
+		final ActivityVO act = list.get(position);
 		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType())) {
 			initFavorView(holder, act);
 		} else if (Constant.NEWS_TYPE_FOLLOWED.equals(act.getType())) {
@@ -112,9 +110,16 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			initCommentView(holder, act);
 		}
 
+		if (act.isRead()) {
+			holder.item.setBackgroundResource(R.color.news_item_bg_default);
+		} else {
+			holder.item.setBackgroundResource(R.color.news_item_bg_news);
+		}
+
 		int userId = act.getCreatedBy();
 		final UserVO user = this.getCacheUserById(userId);
 		if (StringUtils.isNotBlank(user.getAvatar())) {
+			Log.d(TAG, user.getAvatar() + "!aa!" + holder.avatar);
 			ImageLoader.getInstance()
 					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
 		} else {
@@ -133,6 +138,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 
 		// 消息图片
 		if (StringUtils.isNotBlank(act.getFeedImageUrl())) {
+			Log.d(TAG, act.getFeedImageUrl() + "!aa!" + holder.relatedImage);
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + act.getFeedImageUrl(),
 					holder.relatedImage, options);
 		} else {
@@ -150,13 +156,15 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		});
 
 		// 这里是消息预加载异步线程 主要提高加载效率
-		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) && Constant.NEWS_TYPE_COMMENT.equals(act.getType())) {
-			new GetFeedById((Activity) context).setListener(new DefaultTaskListener<FeedVO>((Activity) context) {
-				@Override
-				public void onSuccess(FeedVO result) {
-				}
-			}).execute(feedId);
-		}
+		/*
+		 * if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) &&
+		 * Constant.NEWS_TYPE_COMMENT.equals(act.getType())) { new
+		 * GetFeedById((Activity) context).setListener(new
+		 * DefaultTaskListener<FeedVO>((Activity) context) {
+		 * 
+		 * @Override public void onSuccess(FeedVO result) { }
+		 * }).execute(feedId); }
+		 */
 
 		return view;
 	}

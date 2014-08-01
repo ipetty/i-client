@@ -24,4 +24,7 @@
     <color name="welcome_catchphrase">#ffdddddd</color>
     <color name="welcome_button_red">#ffc83122</color>
     <color name="welcome_title">#ffffffff</color>
+    
+     <color name="news_item_bg_news">#FFF2F2</color>
+     <color name="news_item_bg_default">#FFFFFF</color>
 </resources>

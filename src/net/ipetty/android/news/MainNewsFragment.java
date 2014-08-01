@@ -46,11 +46,11 @@ public class MainNewsFragment extends BaseFragment {
 	private MyFollowsAdapter my_follows_adapter;
 
 	private Integer activitiePageNumber = 0;
-	private final Integer activitiePageSize = 5;
+	private final Integer activitiePageSize = 20;
 	private Boolean activitieHasMore = true;
 
 	private Integer followerPageNumber = 0;
-	private final Integer followerPageSize = 5;
+	private final Integer followerPageSize = 20;
 	private Boolean followerHasMore = true;
 
 	private Long lastTimeMillis;
@@ -114,7 +114,7 @@ public class MainNewsFragment extends BaseFragment {
 								related_me_adapter.notifyDataSetChanged();
 								related_me_listView.onRefreshComplete();
 							}
-						}).execute(activitiePageNumber, MainNewsFragment.this.activitiePageSize);
+						}).execute(0, MainNewsFragment.this.activitiePageSize);
 				// 重置页号
 				activitieHasMore = true;
 				activitiePageNumber = 0;

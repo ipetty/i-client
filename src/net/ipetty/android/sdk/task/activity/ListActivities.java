@@ -24,8 +24,7 @@ public class ListActivities extends Task<Integer, List<ActivityVO>> {
 
 	@Override
 	protected List<ActivityVO> myDoInBackground(Integer... args) {
-		return IpetApi.init(activity).getActivityApi().listNewActivities();// .listActivities(args[0],
-																			// args[1]);
+		return IpetApi.init(activity).getActivityApi().listNewActivities(args[0], args[1]);
 	}
 
 }
