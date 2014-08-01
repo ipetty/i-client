@@ -511,7 +511,16 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 	// UserVO>();
 	private UserVO getCacheUserById(Integer id) {
 		Log.d(TAG, "getUSER-->" + id);
-		return UserApiWithCache.getUserById4Synchronous(context, id);
+		/*
+		 * UserVO user = new UserVO();
+		 * user.setAvatar("/files/10161/ls1h6zdbyv7lf.jpg");
+		 * user.setNickname("TEST");
+		 */
+		long a = System.currentTimeMillis();// 在最好的一行加上:
+		UserVO user = UserApiWithCache.getUserById4Synchronous(context, id);
+		System.out.println("UserApiWithCache 执行耗时 : " + (System.currentTimeMillis() - a) + " ms ");
+
+		return user;
 		// TODO: 这里代码有问题~没有办法直接调用
 		// user = IpetApi.init((MainActivity) context).getUserApi().getById(id);
 
