@@ -2,7 +2,6 @@ package net.ipetty.android.home;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,21 +32,24 @@ public class LargerImageActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_larger_image);
 
+		Intent intent = getIntent();
+		original_url = intent.getStringExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY);
+		small_url = intent.getStringExtra(Constant.INTENT_IMAGE_SAMILL_KEY);
+		image = (ImageView) this.findViewById(R.id.image);
+		//设置初始图片
+		image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+		image.setImageResource(R.drawable.default_image);
 	}
 
 	//加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
-		Intent intent = getIntent();
-		original_url = intent.getStringExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY);
-		small_url = intent.getStringExtra(Constant.INTENT_IMAGE_SAMILL_KEY);
-		image = (ImageView) this.findViewById(R.id.image);
-		Uri uri = Uri.fromFile(ImageLoader.getInstance().getDiskCache().get(small_url));
-		image.setImageURI(uri);
+		//同步加载小图
+		Bitmap smallImage = ImageLoader.getInstance().loadImageSync(small_url, options);
+		image.setImageBitmap(smallImage);
+		//同步加载大图
 		ImageLoader.getInstance().displayImage(original_url, image, options, new LoadListener());
-
-		//image.setOnTouchListener(new MulitPointTouchListener());// 为图片设置监听
 	}
 
 	private class LoadListener implements ImageLoadingListener {
