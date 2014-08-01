@@ -43,11 +43,7 @@ public class LargerImageActivity extends BaseActivity {
 		image = (ImageView) this.findViewById(R.id.image);
 		//设置初始图片
 		image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-		try {
-			image.setImageAlpha(initAlpha);
-		} catch (Exception e) {
-			image.setAlpha(initAlpha);
-		}
+		image.setAlpha(initAlpha);
 		//image.setImageResource(R.drawable.default_image);
 
 		//同步加载小图
@@ -71,11 +67,7 @@ public class LargerImageActivity extends BaseActivity {
 			Log.d(TAG, "current=" + current + ",total=" + total + ",persent:" + current / total);
 			int persent = (current / total) * 100;
 			if (persent > initAlpha) {
-				try {
-					image.setImageAlpha(255 * persent / 100);
-				} catch (Exception e) {
-					image.setAlpha(255 * persent / 100);
-				}
+				image.setAlpha(initAlpha);
 
 			}
 			Log.d(TAG, "当前Alpha:" + 255 * persent);
@@ -95,11 +87,7 @@ public class LargerImageActivity extends BaseActivity {
 		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 			Log.d(TAG, "onLoadingComplete:");
 			mAttacher = new PhotoViewAttacher(image);
-			try {
-				image.setImageAlpha(255);
-			} catch (Exception e) {
-				image.setAlpha(255);
-			}
+			image.setAlpha(initAlpha);
 
 		}
 
