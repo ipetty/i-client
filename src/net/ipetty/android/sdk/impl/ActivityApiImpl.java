@@ -91,4 +91,16 @@ public class ActivityApiImpl extends ApiBase implements ActivityApi {
 				ActivityVO[].class));
 	}
 
+	private static final String URI_LIST_NEW_ACTIVITIES = "/activity/new";
+
+	/**
+	 * 获取用户的新粉丝、新回复、新赞事件列表
+	 */
+	public List<ActivityVO> listNewActivities() {
+		super.requireAuthorization();
+
+		return Arrays.asList(getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_LIST_NEW_ACTIVITIES,
+				ActivityVO[].class));
+	}
+
 }
