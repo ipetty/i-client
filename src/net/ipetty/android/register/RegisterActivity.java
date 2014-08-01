@@ -75,17 +75,23 @@ public class RegisterActivity extends BaseActivity {
 
 		Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
 		Account[] accounts = AccountManager.get(this).getAccounts();
-		String emails = "";
+		final List<String> emailList = new ArrayList<String>();
 		for (Account account : accounts) {
 			if (emailPattern.matcher(account.name).matches()) {
-				emails += account.name + ",";
+				emailList.add(account.name);
+			}
+		}
+		String emails[] = new String[emailList.size()];
+		if (emailList.size() > 0) {
+			for (int i = 0, len = emailList.size(); i < len; i++) {
+				emails[i] = emailList.get(i);
 			}
 		}
 
 		//自动提示
 		ArrayAdapter<String> adapt = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line,
-				emails.split(","));
+				emails);
 		emailEditor.setAdapter(adapt);
 
 		emailEditor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -99,7 +105,9 @@ public class RegisterActivity extends BaseActivity {
 						nicknameEditor.setText(emailstr.split("@")[0]);
 					}
 				} else {
-					emailEditor.showDropDown();
+					if (emailList.size() > 0) {
+						emailEditor.showDropDown();
+					}
 				}
 			}
 		});

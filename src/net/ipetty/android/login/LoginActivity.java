@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
@@ -80,24 +82,33 @@ public class LoginActivity extends BaseActivity {
 
 		Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
 		Account[] accounts = AccountManager.get(this).getAccounts();
-		String emails = "";
-		for (Account account : accounts) {
-			if (emailPattern.matcher(account.name).matches()) {
-				emails += account.name + ",";
+		final List<String> emailList = new ArrayList<String>(0);
+		for (Account acc : accounts) {
+			if (emailPattern.matcher(acc.name).matches()) {
+				emailList.add(acc.name);
+			}
+		}
+		String emails[] = new String[emailList.size()];
+		if (emailList.size() > 0) {
+			for (int i = 0, len = emailList.size(); i < len; i++) {
+				emails[i] = emailList.get(i);
 			}
 		}
 
 		//自动提示
 		ArrayAdapter<String> adapt = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line,
-				emails.split(","));
+				emails);
 		accountView.setAdapter(adapt);
 
 		accountView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					accountView.showDropDown();
+					if (emailList.size() > 0) {
+						accountView.showDropDown();
+					}
+
 				}
 			}
 		});
@@ -142,7 +153,6 @@ public class LoginActivity extends BaseActivity {
 			}
 		});
 	}
-
 	// 登录
 	private final OnClickListener loginOnClick = new OnClickListener() {
 		@Override
