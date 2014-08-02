@@ -1,29 +1,11 @@
 package net.ipetty.android.user;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
@@ -42,7 +24,29 @@ import net.ipetty.android.sdk.task.user.UpdateUserAvatar;
 import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.UserFormVO;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
+
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class UserActivity extends BaseActivity {
 
@@ -86,7 +90,7 @@ public class UserActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -255,7 +259,7 @@ public class UserActivity extends BaseActivity {
 	};
 
 	public void showCameraDialog(View view) {
-		OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
+		OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
 		this.changeAvatarDialog = DialogUtils.bottomPopupDialog(this, Listener, R.array.alert_camera,
 				getString(R.string.camera_title), this.changeAvatarDialog);
 	}
@@ -317,7 +321,8 @@ public class UserActivity extends BaseActivity {
 				UserApiWithCache.removeCache(currUserId);
 				UserVO user = UserApiWithCache.getUserById4Synchronous(UserActivity.this, currUserId);
 				if (StringUtils.isNotBlank(user.getAvatar())) {
-					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar, options);
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
+							options);
 				} else {
 					avatar.setImageResource(R.drawable.avatar);
 				}
@@ -342,8 +347,8 @@ public class UserActivity extends BaseActivity {
 		intent.putExtra("crop", "true");
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
-		intent.putExtra("outputX", 120);
-		intent.putExtra("outputY", 120);
+		intent.putExtra("outputX", 320);
+		intent.putExtra("outputY", 320);
 		intent.putExtra("noFaceDetection", true);
 		intent.putExtra("scale", true);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);

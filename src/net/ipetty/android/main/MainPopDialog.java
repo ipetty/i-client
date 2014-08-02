@@ -1,5 +1,10 @@
 package net.ipetty.android.main;
 
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.feedback.FeedbackActivity;
+import net.ipetty.android.setting.SettingActivity;
+import net.ipetty.android.space.SpaceActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,11 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.feedback.FeedbackActivity;
-import net.ipetty.android.setting.SettingActivity;
-import net.ipetty.android.space.SpaceActivity;
 
 public class MainPopDialog extends BaseActivity {
 
@@ -30,13 +30,6 @@ public class MainPopDialog extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_pop_dialog);
-
-	}
-
-	//加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		// logout = this.findViewById(R.id.menu_logout_layout);
 		feedback = this.findViewById(R.id.menu_feedback_layout);
 		person = this.findViewById(R.id.menu_person_layout);
@@ -54,6 +47,13 @@ public class MainPopDialog extends BaseActivity {
 		// avator.setImageUrl(user.getAvatar48(), R.drawable.menu_person);
 		// username = (TextView) this.findViewById(R.id.username);
 		// username.setText(user.getDisplayName());
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+
 	}
 
 	private final OnClickListener myPerson = new OnClickListener() {
