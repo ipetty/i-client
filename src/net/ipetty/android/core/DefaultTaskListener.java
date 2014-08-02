@@ -12,9 +12,10 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 /**
- *
+ * 
  * @author yneos
- * @param <Result> 结果类型
+ * @param <Result>
+ *            结果类型
  */
 public abstract class DefaultTaskListener<Result> implements TaskListener<Result> {
 
@@ -30,7 +31,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 
 	/**
 	 * 带有默认loading信息的构造
-	 *
+	 * 
 	 * @param activity
 	 */
 	public DefaultTaskListener(Activity activity) {
@@ -48,15 +49,17 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 
 	/**
 	 * 带有自定义loading信息的构造
-	 *
+	 * 
 	 * @param activity
 	 * @param loadingMessage
 	 */
 	public DefaultTaskListener(Activity activity, String loadingMessage) {
 		this(activity);
 		this.loadingMessage = loadingMessage;
+
 		this.progressDialog = new ProgressDialog(this.activity);
 		this.progressDialog.setIndeterminate(true);
+		this.progressDialog.setCancelable(false);
 	}
 
 	public DefaultTaskListener(Fragment fragment, String loadingMessage) {
@@ -103,7 +106,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 
 	}
 
-	//显示进度框
+	// 显示进度框
 	private void showProgressDialog() {
 		Log.d(TAG, "showProgressDialog");
 		if (getLoadingMessage() != null) {
@@ -112,7 +115,7 @@ public abstract class DefaultTaskListener<Result> implements TaskListener<Result
 		}
 	}
 
-	//隐藏进度框
+	// 隐藏进度框
 	private void dismissProgressDialog() {
 		Log.d(TAG, "dismissProgressDialog");
 		if (getLoadingMessage() != null) {
