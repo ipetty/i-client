@@ -13,7 +13,7 @@
         android:id="@+id/include"
         layout="@layout/action_bar_simple_back" />
 
-<com.handmark.pulltorefresh.library.PullToRefreshListView
+<net.ipetty.android.core.ui.MyPullToRefreshListView
     android:id="@+id/listView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,6 +24,6 @@
     android:fastScrollEnabled="false"
     android:footerDividersEnabled="false"
     android:headerDividersEnabled="false" >
-</com.handmark.pulltorefresh.library.PullToRefreshListView>
+</net.ipetty.android.core.ui.MyPullToRefreshListView>
 
 </LinearLayout>

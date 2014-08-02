@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"  >
-		<com.handmark.pulltorefresh.library.PullToRefreshListView
+		<net.ipetty.android.core.ui.MyPullToRefreshListView
 		        android:id="@+id/pull_refresh_list"
 		        android:layout_width="match_parent"
 		        android:layout_height="match_parent"
