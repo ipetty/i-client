@@ -71,12 +71,6 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		return list.get(position).getId();
 	}
 
-	// 构建一个布局缓存的结构体 与VO对应
-	public class NewView {
-
-		public View favorView;
-	}
-
 	public class ViewHolder {
 
 		public View item;
@@ -111,7 +105,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			holder = (ViewHolder) view.getTag();// 取出ViewHolder对象
 		}
 
-		final ActivityVO act = list.get(position);
+		ActivityVO act = list.get(position);
 		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType())) {
 			initFavorView(holder, act);
 		} else if (Constant.NEWS_TYPE_FOLLOWED.equals(act.getType())) {
@@ -129,8 +123,8 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			holder.item.setBackgroundResource(R.color.news_item_bg_news);
 		}
 
-		int userId = act.getCreatedBy();
-		final UserVO user = this.getCacheUserById(userId);
+		final int userId = act.getCreatedBy();
+		UserVO user = this.getCacheUserById(userId);
 		if (StringUtils.isNotBlank(user.getAvatar())) {
 			ImageLoader.getInstance()
 					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
@@ -143,7 +137,7 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, SpaceActivity.class);
-				intent.putExtra(Constant.INTENT_USER_ID_KEY, user.getId());
+				intent.putExtra(Constant.INTENT_USER_ID_KEY, userId);
 				context.startActivity(intent);
 			}
 		});
@@ -156,7 +150,6 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 			holder.relatedImage.setImageResource(R.drawable.default_image);
 		}
 		final Long feedId = act.getTargetId();
-
 		holder.relatedImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -237,11 +230,13 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 	}
 
 	public List<ActivityVO> getList() {
-		return list;
+		return this.list;
 	}
 
 	public void setList(List<ActivityVO> list) {
-		this.list = list;
+		this.clearCache();
+		this.list.clear();
+		this.list.addAll(list);
 	}
 
 }

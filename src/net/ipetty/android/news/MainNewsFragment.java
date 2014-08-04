@@ -91,27 +91,27 @@ public class MainNewsFragment extends BaseFragment {
 		related_me_listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+
 				((MainActivity) MainNewsFragment.this.getActivity()).hideNewsDot();
 				String label = DateUtils.formatDateTime(MainNewsFragment.this.getActivity().getApplicationContext(),
 						getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
 								| DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				// 刷新数据
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label); // 刷新数据
 				new ListActivities(MainNewsFragment.this.getActivity()).setListener(
 						new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
+
 							@Override
 							public void onSuccess(List<ActivityVO> result) {
-								related_me_adapter.clearCache();
 								related_me_adapter.setList(result);
 								related_me_adapter.notifyDataSetChanged();
 								related_me_listView.onRefreshComplete();
 							}
-						}).execute(0, MainNewsFragment.this.activitiePageSize);
-				// 重置页号
+						}).execute(0, MainNewsFragment.this.activitiePageSize); // 重置页号
 				activitieHasMore = true;
 				activitiePageNumber = 0;
+
 			}
 		});
 
@@ -189,6 +189,7 @@ public class MainNewsFragment extends BaseFragment {
 	}
 
 	private void loadData() {
+
 		((MainActivity) MainNewsFragment.this.getActivity()).hideNewsDot();
 		activitieHasMore = true;
 		followerHasMore = true;
@@ -203,7 +204,6 @@ public class MainNewsFragment extends BaseFragment {
 						related_me_adapter.notifyDataSetChanged();
 					}
 				}).execute(0, this.activitiePageSize);
-
 		if (false) {
 			new ListFollowers(this.getActivity()).setListener(
 					new DefaultTaskListener<List<UserVO>>(MainNewsFragment.this) {
