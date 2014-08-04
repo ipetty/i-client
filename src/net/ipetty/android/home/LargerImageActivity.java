@@ -44,6 +44,7 @@ public class LargerImageActivity extends BaseActivity {
 		//设置初始图片
 		image.setScaleType(ImageView.ScaleType.FIT_CENTER);
 		image.setAlpha(initAlpha);
+		image.setImageAlpha(initAlpha);
 		//image.setImageResource(R.drawable.default_image);
 
 		//同步加载小图
@@ -70,7 +71,7 @@ public class LargerImageActivity extends BaseActivity {
 				image.setAlpha(initAlpha);
 
 			}
-			Log.d(TAG, "当前Alpha:" + 255 * persent);
+			Log.d(TAG, "当前Alpha:" + initAlpha);
 		}
 	}
 
@@ -87,7 +88,7 @@ public class LargerImageActivity extends BaseActivity {
 		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 			Log.d(TAG, "onLoadingComplete:");
 			mAttacher = new PhotoViewAttacher(image);
-			image.setAlpha(initAlpha);
+			image.setAlpha(255);
 
 		}
 
