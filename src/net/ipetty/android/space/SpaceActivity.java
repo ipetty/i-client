@@ -14,8 +14,8 @@ import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.discover.DiscoverAdapter;
+import net.ipetty.android.discover.DiscoverRender;
 import net.ipetty.android.fans.FansActivity;
-import net.ipetty.android.feed.SimpleFeedActivity;
 import net.ipetty.android.follow.FollowsActivity;
 import net.ipetty.android.home.FeedAdapter;
 import net.ipetty.android.home.LargerImageActivity;
@@ -48,8 +48,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -73,6 +71,7 @@ public class SpaceActivity extends BaseActivity {
 	private ViewFlipper viewFlipper;
 	private View space_petty_view;
 	private GridView space_photo_grid;
+	private DiscoverRender space_photo_render;
 	private DiscoverAdapter space_photo_grid_adapter;
 
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
@@ -84,7 +83,7 @@ public class SpaceActivity extends BaseActivity {
 	private ImageView avatar;// 头像
 	private Boolean isFollow;// 记录当前用户是否已关注被查看用户
 	private Integer pageNumber = 0;// 我的feed
-	private final Integer pageSize = 5;// 我的feed
+	private final Integer pageSize = 10;// 我的feed
 	private View space_feed_layout; // feed列表布局
 	private ListView space_feed_list;// feed列表View
 	private FeedAdapter feedListAdapter;// feed列表适配
@@ -269,18 +268,7 @@ public class SpaceActivity extends BaseActivity {
 
 		// 图形
 		View space_photo_layout = this.findViewById(R.id.space_photo_layout);
-		space_photo_grid = (GridView) space_photo_layout.findViewById(R.id.gridview);
-		space_photo_grid_adapter = new DiscoverAdapter(this);
-		space_photo_grid.setAdapter(space_photo_grid_adapter);
-		space_photo_grid.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(SpaceActivity.this, SimpleFeedActivity.class);
-				intent.putExtra(Constant.INTENT_FEED_ID_KEY, id);
-				SpaceActivity.this.startActivity(intent);
-			}
-		});
+		space_photo_render = new DiscoverRender(this);
 
 		// 列表
 		space_feed_layout = this.findViewById(R.id.space_feed_layout);
@@ -478,7 +466,8 @@ public class SpaceActivity extends BaseActivity {
 		new ListByTimelineForSpace(this).setListener(new DefaultTaskListener<List<FeedVO>>(SpaceActivity.this) {
 			@Override
 			public void onSuccess(List<FeedVO> result) {
-				space_photo_grid_adapter.loadDate(result);
+				// space_photo_grid_adapter.loadDate(result);
+				space_photo_render.loadData(result);
 				feedListAdapter.setList(result);
 				feedListAdapter.notifyDataSetChanged();
 			}
@@ -489,5 +478,4 @@ public class SpaceActivity extends BaseActivity {
 		// feed列表
 		// feedListAdapter.notifyDataSetChanged();
 	}
-
 }
