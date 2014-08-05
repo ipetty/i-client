@@ -1,19 +1,5 @@
 package net.ipetty.android.comment;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
@@ -24,11 +10,27 @@ import net.ipetty.android.sdk.task.feed.GetFeedById;
 import net.ipetty.android.sdk.task.feed.PublishComment;
 import net.ipetty.vo.CommentVO;
 import net.ipetty.vo.FeedVO;
+
 import org.apache.commons.lang3.StringUtils;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class CommentActivity extends BaseActivity {
 
-	public final static String TAG = CommentActivity.class.getSimpleName();
 	private CommentAdapter adapter; // 定义适配器
 	private PullToRefreshListView listView;
 	private EditText pulishTextView;
@@ -41,7 +43,7 @@ public class CommentActivity extends BaseActivity {
 		Log.d(TAG, "onCreate");
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -60,20 +62,22 @@ public class CommentActivity extends BaseActivity {
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-				new GetFeedById(CommentActivity.this).setListener(new DefaultTaskListener<FeedVO>(CommentActivity.this, "刷新中") {
-					@Override
-					public void onSuccess(FeedVO result) {
-						adapter.setList(result.getComments());
-						adapter.notifyDataSetChanged();
-						listView.onRefreshComplete();
+				new GetFeedById(CommentActivity.this).setListener(
+						new DefaultTaskListener<FeedVO>(CommentActivity.this, "刷新中") {
+							@Override
+							public void onSuccess(FeedVO result) {
+								adapter.setList(result.getComments());
+								adapter.notifyDataSetChanged();
+								listView.onRefreshComplete();
 
-					}
-				}).execute(feedId);
+							}
+						}).execute(feedId);
 			}
 		});
 
@@ -100,21 +104,22 @@ public class CommentActivity extends BaseActivity {
 					CommentVO vo = new CommentVO();
 					vo.setFeedId(feedId);
 					vo.setText(str);
-					new PublishComment(CommentActivity.this).setListener(new DefaultTaskListener<FeedVO>(CommentActivity.this, "正在发布") {
-						@Override
-						public void onSuccess(FeedVO result) {
-							adapter.setList(result.getComments());
-							adapter.notifyDataSetChanged();
-							pulishTextView.setText("");
-							CommentActivity.this.reloadData(result);
+					new PublishComment(CommentActivity.this).setListener(
+							new DefaultTaskListener<FeedVO>(CommentActivity.this, "正在发布") {
+								@Override
+								public void onSuccess(FeedVO result) {
+									adapter.setList(result.getComments());
+									adapter.notifyDataSetChanged();
+									pulishTextView.setText("");
+									CommentActivity.this.reloadData(result);
 
-							Intent intent = new Intent(Constant.BROADCAST_INTENT_FEED_COMMENT);
-							Bundle mBundle = new Bundle();
-							mBundle.putString(Constant.FEEDVO_JSON_SERIALIZABLE, JSONUtils.toJson(result));
-							intent.putExtras(mBundle);
-							CommentActivity.this.sendBroadcast(intent);
-						}
-					}).execute(vo);
+									Intent intent = new Intent(Constant.BROADCAST_INTENT_FEED_COMMENT);
+									Bundle mBundle = new Bundle();
+									mBundle.putString(Constant.FEEDVO_JSON_SERIALIZABLE, JSONUtils.toJson(result));
+									intent.putExtras(mBundle);
+									CommentActivity.this.sendBroadcast(intent);
+								}
+							}).execute(vo);
 				}
 
 			}

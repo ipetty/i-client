@@ -5,14 +5,6 @@
  */
 package net.ipetty.android.core;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -27,12 +19,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+
 import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.sdk.core.IpetApi;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
 
 public class MyAppCrashHandler implements UncaughtExceptionHandler {
 
-	private static final String TAG = MyAppCrashHandler.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
+
 	private final Thread.UncaughtExceptionHandler mDefaultHandler;
 	private final Context mContext;
 
@@ -52,9 +54,9 @@ public class MyAppCrashHandler implements UncaughtExceptionHandler {
 		ActivityManager.getInstance().exit();
 	}
 
-	//另启线程进行等待，防止阻塞UI线程
+	// 另启线程进行等待，防止阻塞UI线程
 	private void waitFor(long time) {
-		//异步转同步
+		// 异步转同步
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Long waitTime = time;
 		new Thread() {
@@ -76,7 +78,7 @@ public class MyAppCrashHandler implements UncaughtExceptionHandler {
 	}
 
 	private void showError(final String msg) {
-		//非UI线程进行UI界面操作
+		// 非UI线程进行UI界面操作
 		new Thread() {
 			@Override
 			public void run() {
@@ -92,7 +94,7 @@ public class MyAppCrashHandler implements UncaughtExceptionHandler {
 
 	/**
 	 * 收集设备参数信息
-	 *
+	 * 
 	 * @param thread
 	 * @param context
 	 */

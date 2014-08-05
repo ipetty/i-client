@@ -36,7 +36,6 @@ import cn.sharesdk.framework.ShareSDK;
 
 public class MainActivity extends BaseFragmentActivity {
 
-	public final static String TAG = MainActivity.class.getSimpleName();
 	private ViewPager viewPager;
 	private ImageView mTabImg;
 	private int currIndex = 0;

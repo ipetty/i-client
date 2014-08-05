@@ -1,5 +1,21 @@
 package net.ipetty.android.register;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.ValidUtils;
+import net.ipetty.android.sdk.task.foundation.ListOptions;
+import net.ipetty.android.sdk.task.user.UserRegister;
+import net.ipetty.vo.OptionGroup;
+import net.ipetty.vo.RegisterVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
@@ -19,23 +35,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.ValidUtils;
-import net.ipetty.android.sdk.task.foundation.ListOptions;
-import net.ipetty.android.sdk.task.user.UserRegister;
-import net.ipetty.vo.OptionGroup;
-import net.ipetty.vo.RegisterVO;
-import org.apache.commons.lang3.StringUtils;
 
 public class RegisterActivity extends BaseActivity {
-
-	private String TAG = RegisterActivity.class.getSimpleName();
 
 	private AutoCompleteTextView emailEditor;
 	private EditText passwordEditor;
@@ -61,7 +62,7 @@ public class RegisterActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -88,17 +89,15 @@ public class RegisterActivity extends BaseActivity {
 			}
 		}
 
-		//自动提示
-		ArrayAdapter<String> adapt = new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line,
-				emails);
+		// 自动提示
+		ArrayAdapter<String> adapt = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, emails);
 		emailEditor.setAdapter(adapt);
 
 		emailEditor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 
-				if (!hasFocus) {//如果组件失去焦点
+				if (!hasFocus) {// 如果组件失去焦点
 					String emailstr = emailEditor.getText().toString();
 					String nickName = nicknameEditor.getText().toString();
 					if (StringUtils.isBlank(nickName) && emailstr.contains("@")) {
@@ -122,8 +121,7 @@ public class RegisterActivity extends BaseActivity {
 		nicknameEditor.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				petNameEditor.setText(s + "的爱宠");
 			}
 
@@ -141,14 +139,12 @@ public class RegisterActivity extends BaseActivity {
 		petGenderText = (TextView) this.findViewById(R.id.pet_gender);
 		petFamilyText = (TextView) this.findViewById(R.id.pet_family);
 
-		new ListOptions(RegisterActivity.this)
-				.setListener(
-						new ListOptionsTaskListener(RegisterActivity.this, OptionGroup.PET_GENDER)).execute(
-						OptionGroup.PET_GENDER);
-		new ListOptions(RegisterActivity.this)
-				.setListener(
-						new ListOptionsTaskListener(RegisterActivity.this, OptionGroup.PET_FAMILY)).execute(
-						OptionGroup.PET_FAMILY);
+		new ListOptions(RegisterActivity.this).setListener(
+				new ListOptionsTaskListener(RegisterActivity.this, OptionGroup.PET_GENDER)).execute(
+				OptionGroup.PET_GENDER);
+		new ListOptions(RegisterActivity.this).setListener(
+				new ListOptionsTaskListener(RegisterActivity.this, OptionGroup.PET_FAMILY)).execute(
+				OptionGroup.PET_FAMILY);
 
 		submitButton = (Button) this.findViewById(R.id.button);
 

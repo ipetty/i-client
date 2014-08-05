@@ -5,30 +5,33 @@
  */
 package net.ipetty.android.api;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
 import java.util.concurrent.CountDownLatch;
+
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.sdk.core.APIException;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+
 /**
- *
+ * 
  * @author yneos
  */
 public class UserApiWithCache {
 
-	private final static String TAG = UserApiWithCache.class.getSimpleName();
+	private static final String TAG = UserApiWithCache.class.getSimpleName();
 	private static UserVO userForGetUserById4Synchronous;
 	private static final UserVOCache cache = new UserVOCache(100);
 
 	/**
 	 * 同步获取用户
-	 *
+	 * 
 	 * @param context
 	 * @param userId
 	 * @return

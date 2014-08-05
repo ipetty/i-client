@@ -1,14 +1,14 @@
 package net.ipetty.android.core;
 
-import android.app.Activity;
-import android.content.Intent;
 import java.util.LinkedList;
 import java.util.List;
+
 import net.ipetty.android.service.MessageService;
+import android.app.Activity;
+import android.content.Intent;
 
 public class ActivityManager {
 
-	public final static String TAG = ActivityManager.class.getSimpleName();
 	private final List<Activity> activityList = new LinkedList<Activity>();
 	private static ActivityManager instance;
 	private final Intent messageServiceIntent = new Intent(MessageService.class.getName());

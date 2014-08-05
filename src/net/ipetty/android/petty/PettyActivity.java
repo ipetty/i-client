@@ -55,8 +55,6 @@ public class PettyActivity extends BaseActivity {
 
 	private static final int REQUEST_CODE_PHOTORESOULT = 20;
 
-	public final static String TAG = PettyActivity.class.getSimpleName();
-
 	@SuppressLint("SimpleDateFormat")
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 

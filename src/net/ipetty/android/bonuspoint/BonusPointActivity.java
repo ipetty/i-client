@@ -1,5 +1,13 @@
 package net.ipetty.android.bonuspoint;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.vo.CommentVO;
+import net.ipetty.vo.UserVO;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -8,21 +16,14 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import java.util.ArrayList;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.vo.CommentVO;
-import net.ipetty.vo.UserVO;
 
 public class BonusPointActivity extends BaseActivity {
 
-	public final static String TAG = BonusPointActivity.class.getSimpleName();
 	private BonusPointAdapter adapter; // 定义适配器
 	private PullToRefreshListView listView;
 
@@ -33,7 +34,7 @@ public class BonusPointActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -47,7 +48,8 @@ public class BonusPointActivity extends BaseActivity {
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -99,8 +101,8 @@ public class BonusPointActivity extends BaseActivity {
 
 			UserVO u = new UserVO();
 			u.setId(i);
-			//u.setName("user" + Long.valueOf(i));
-			//vo.setUser(u);
+			// u.setName("user" + Long.valueOf(i));
+			// vo.setUser(u);
 
 			list.add(vo);
 		}

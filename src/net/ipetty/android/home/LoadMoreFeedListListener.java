@@ -5,30 +5,30 @@
  */
 package net.ipetty.android.home;
 
-import android.util.Log;
 import java.util.List;
+
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.vo.FeedVO;
+import android.util.Log;
 
 /**
- *
+ * 
  * @author yneos
  */
 public class LoadMoreFeedListListener extends DefaultTaskListener<List<FeedVO>> {
 
-    private final static String TAG = LoadMoreFeedListListener.class.getSimpleName();
-    private final MainHomeFragment mainHomeFragment;
+	private final MainHomeFragment mainHomeFragment;
 
-    //加载更多
-    public LoadMoreFeedListListener(MainHomeFragment mainHomeFragment) {
-        super(mainHomeFragment.getActivity());
-        this.mainHomeFragment = mainHomeFragment;
-    }
+	// 加载更多
+	public LoadMoreFeedListListener(MainHomeFragment mainHomeFragment) {
+		super(mainHomeFragment.getActivity());
+		this.mainHomeFragment = mainHomeFragment;
+	}
 
-    @Override
-    public void onSuccess(List<FeedVO> result) {
-        Log.d(TAG, "onSuccess");
-        mainHomeFragment.loadMoreForResult(result);
-    }
+	@Override
+	public void onSuccess(List<FeedVO> result) {
+		Log.d(TAG, "onSuccess");
+		mainHomeFragment.loadMoreForResult(result);
+	}
 
 }

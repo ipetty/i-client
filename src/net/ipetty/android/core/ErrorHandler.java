@@ -5,25 +5,27 @@
  */
 package net.ipetty.android.core;
 
-import android.content.Context;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 import net.ipetty.android.sdk.core.APIException;
 import net.ipetty.android.sdk.core.ServiceUnavailableException;
+
 import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 
+import android.content.Context;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
+
 /**
- *
+ * 
  * @author Administrator
  */
 public class ErrorHandler {
 
-	private final static String TAG = ErrorHandler.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
 
 	private final Context context;
 
@@ -34,21 +36,21 @@ public class ErrorHandler {
 	public void handleError(Throwable ex) {
 		Log.d(TAG, "handleError");
 		Log.e(TAG, "", ex);
-		//应用异常 界面层
+		// 应用异常 界面层
 		if (ex instanceof AppException) {
 			AppException e = (AppException) ex;
 			showError(e.getMessage());
 			return;
 		}
 
-		//超时
+		// 超时
 		if (ex instanceof ConnectTimeoutException) {
 			ConnectTimeoutException e = (ConnectTimeoutException) ex;
 			showError("请求超时，请检查网络后重试");
 			return;
 		}
 
-		//API异常 任务层
+		// API异常 任务层
 		if (ex instanceof APIException) {
 			APIException e = (APIException) ex;
 			if (null == e.getMessage() || "".equals(e.getMessage())) {
@@ -60,7 +62,7 @@ public class ErrorHandler {
 			return;
 		}
 
-		//服务器不可用异常
+		// 服务器不可用异常
 		if (ex instanceof ServiceUnavailableException) {
 			showError("服务器维护中,请稍后使用");
 			new DelayTask(context).setListener(new DefaultTaskListener<Void>(context) {
@@ -73,7 +75,7 @@ public class ErrorHandler {
 			return;
 		}
 
-		//HTTP客户端异常400
+		// HTTP客户端异常400
 		if (ex instanceof HttpClientErrorException) {
 			HttpClientErrorException e = (HttpClientErrorException) ex;
 			if (null == e.getMessage() || "".equals(e.getMessage())) {
@@ -84,21 +86,21 @@ public class ErrorHandler {
 			return;
 		}
 
-		//HTTP服务端异常500
+		// HTTP服务端异常500
 		if (ex instanceof HttpServerErrorException) {
 			HttpServerErrorException e = (HttpServerErrorException) ex;
 			showError(e.getResponseBodyAsString());
 			return;
 		}
 
-		//HTTP资源访问（IO）异常
+		// HTTP资源访问（IO）异常
 		if (ex instanceof ResourceAccessException) {
 			ResourceAccessException e = (ResourceAccessException) ex;
 			showError("无法连接到服务器");
 			return;
 		}
 
-		//HTTP未知异常
+		// HTTP未知异常
 		if (ex instanceof RestClientException) {
 			RestClientException e = (RestClientException) ex;
 			showError("未知HTTP异常");
@@ -108,10 +110,10 @@ public class ErrorHandler {
 		showError("未知任务异常");
 	}
 
-	//显示错误信息
+	// 显示错误信息
 	private void showError(final String msg) {
 		Log.d(TAG, "showError");
-		//支持非UI线程进行UI界面操作
+		// 支持非UI线程进行UI界面操作
 		new Thread() {
 			@Override
 			public void run() {

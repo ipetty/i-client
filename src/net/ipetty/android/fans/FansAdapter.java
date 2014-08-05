@@ -1,5 +1,20 @@
 package net.ipetty.android.fans;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.sdk.task.user.Follow;
+import net.ipetty.android.sdk.task.user.IsFollow;
+import net.ipetty.android.sdk.task.user.Unfollow;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,24 +28,14 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import java.util.ArrayList;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.sdk.task.user.Follow;
-import net.ipetty.android.sdk.task.user.IsFollow;
-import net.ipetty.android.sdk.task.user.Unfollow;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.UserVO;
-import org.apache.commons.lang3.StringUtils;
 
 public class FansAdapter extends BaseAdapter implements OnScrollListener {
 
-	public final static String TAG = BaseAdapter.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
+
 	private LayoutInflater inflater;
 	private List<UserVO> list = new ArrayList<UserVO>(); // 这个就本地dataStore
 
@@ -95,7 +100,7 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 		}
 		// 数据与界面绑定
 		final UserVO user = list.get(position);
-		//昵称
+		// 昵称
 		holder.name.setText(user.getNickname());
 		// 昵称事件
 		holder.name.setOnClickListener(new View.OnClickListener() {
@@ -108,9 +113,10 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 				context.startActivity(intent);
 			}
 		});
-		//头像
+		// 头像
 		if (!StringUtils.isEmpty(user.getAvatar())) {
-			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+			ImageLoader.getInstance()
+					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
 		} else {
 			holder.avatar.setImageResource(R.drawable.avatar);
 		}
@@ -125,7 +131,7 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 				context.startActivity(intent);
 			}
 		});
-		//关注按钮
+		// 关注按钮
 		final ImageView followImageView = holder.follow;
 		new IsFollow((Activity) this.context).setListener(new DefaultTaskListener<Boolean>((Activity) this.context) {
 			@Override
@@ -139,43 +145,46 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 			}
 		}).execute(user.getId());
 
-		//关注事件
-		//如果是自己隐藏按钮
+		// 关注事件
+		// 如果是自己隐藏按钮
 		if (currUserId == user.getId()) {
 			holder.follow.setVisibility(View.INVISIBLE);
 		} else {
 			holder.follow.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					new IsFollow((Activity) FansAdapter.this.context).setListener(new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context, "操作中...") {
-						@Override
-						public void onSuccess(Boolean hasFollow) {
-							if (hasFollow) {
-								new Unfollow((Activity) FansAdapter.this.context).setListener(
-										new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context, "正在反关注...") {
-											@Override
-											public void onSuccess(Boolean result) {
-												if (result) {
-													FansAdapter.this.notifyDataSetChanged();
-												}
-											}
-										}).execute(user.getId());
+					new IsFollow((Activity) FansAdapter.this.context).setListener(
+							new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context, "操作中...") {
+								@Override
+								public void onSuccess(Boolean hasFollow) {
+									if (hasFollow) {
+										new Unfollow((Activity) FansAdapter.this.context).setListener(
+												new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context,
+														"正在反关注...") {
+													@Override
+													public void onSuccess(Boolean result) {
+														if (result) {
+															FansAdapter.this.notifyDataSetChanged();
+														}
+													}
+												}).execute(user.getId());
 
-							} else {
-								new Follow((Activity) FansAdapter.this.context).setListener(
-										new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context, "正在关注...") {
-											@Override
-											public void onSuccess(Boolean result) {
-												if (result) {
-													FansAdapter.this.notifyDataSetChanged();
-												}
-											}
-										}).execute(user.getId());
+									} else {
+										new Follow((Activity) FansAdapter.this.context).setListener(
+												new DefaultTaskListener<Boolean>((Activity) FansAdapter.this.context,
+														"正在关注...") {
+													@Override
+													public void onSuccess(Boolean result) {
+														if (result) {
+															FansAdapter.this.notifyDataSetChanged();
+														}
+													}
+												}).execute(user.getId());
 
-							}
+									}
 
-						}
-					}).execute(user.getId());
+								}
+							}).execute(user.getId());
 				}
 			});
 		}

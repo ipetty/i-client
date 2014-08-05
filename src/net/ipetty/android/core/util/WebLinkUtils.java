@@ -11,7 +11,8 @@ import android.util.Log;
 import android.widget.TextView;
 
 public class WebLinkUtils {
-	public static String TAG = "WebLinkUtils";
+
+	private static final String TAG = WebLinkUtils.class.getSimpleName();
 
 	public static void setUserLinkIntercept(Activity activity, TextView tv, String text) {
 		CharSequence charSequence = Html.fromHtml(text);

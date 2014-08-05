@@ -1,8 +1,5 @@
 package net.ipetty.android.sdk.core;
 
-import android.content.Context;
-import android.os.Build;
-import android.util.Log;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -13,10 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.URIBuilder;
 import net.ipetty.android.sdk.cache.RestTemplate4Cache;
 import net.ipetty.vo.UserVO;
+
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -29,14 +28,19 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import android.content.Context;
+import android.os.Build;
+import android.util.Log;
+
 /**
  * API基类, 提供统一RestTemplate对象和一些常用方法
- *
+ * 
  * @author xiaojinghai
  */
 public class ApiBase {
 
-	private final static String TAG = ApiBase.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
+
 	private final RestTemplate restTemplate;
 
 	private final Context context;
@@ -45,25 +49,26 @@ public class ApiBase {
 
 	public ApiBase(Context ctx) {
 		this.context = ctx;
-		//restTemplate = new RestTemplateWrap(ctx);
+		// restTemplate = new RestTemplateWrap(ctx);
 		Charset charset = Charset.forName("UTF-8");
 
 		restTemplate = new RestTemplate4Cache(context, 50, 5000);
-		//关于HTTP组件的选择：http://www.07net01.com/program/653485.html
+		// 关于HTTP组件的选择：http://www.07net01.com/program/653485.html
 		/**
 		 * SimpleClientHttpRequestFactory HttpURLConnection --推荐
-		 *
+		 * 
 		 * CommonsClientHttpRequestFactory CommonsClientHttpRequest --不推荐
-		 *
+		 * 
 		 * HttpComponentsClientHttpRequestFactory HttpUriRequest --?
 		 */
 
 		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-		//HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		// HttpComponentsClientHttpRequestFactory factory = new
+		// HttpComponentsClientHttpRequestFactory();
 		factory.setConnectTimeout(60 * 1000);
 		factory.setReadTimeout(60 * 1000);
 
-		//避免HttpURLConnection的http.keepAlive Bug
+		// 避免HttpURLConnection的http.keepAlive Bug
 		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
 			System.setProperty("http.keepAlive", "false");
 		}
@@ -114,7 +119,7 @@ public class ApiBase {
 
 	protected void setIsAuthorized(boolean bl) {
 		SDKStateManager.setAuthorized(context, bl);
-		//设置退出时清空UserToken、RefreshToken
+		// 设置退出时清空UserToken、RefreshToken
 		if (!bl) {
 			SDKStateManager.setUserToken(context, "");
 			SDKStateManager.setRefreshToken(context, "");
@@ -155,7 +160,7 @@ public class ApiBase {
 					conn.setUseCaches(false);
 					conn.setConnectTimeout(60 * 1000);
 					conn.setReadTimeout(60 * 1000);
-					//conn.setRequestProperty("Connection", "close");
+					// conn.setRequestProperty("Connection", "close");
 					conn.connect();
 					// 获取内容长度
 					int length = conn.getContentLength();

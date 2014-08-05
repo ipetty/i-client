@@ -1,6 +1,5 @@
 package net.ipetty.android.boot;
 
-import android.util.Log;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.Task;
 import net.ipetty.android.core.ui.BaseActivity;
@@ -9,16 +8,15 @@ import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.login.LoginHasAccountActivity;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
+import android.util.Log;
 
 public class SplashTask extends Task<Void, Void> {
-
-	public final static String TAG = "SplashTask";
 
 	public SplashTask(BaseActivity activity) {
 		super(activity);
 	}
 
-	//重写onPreExecute防止出现loading...
+	// 重写onPreExecute防止出现loading...
 	@Override
 	protected void onPreExecute() {
 
@@ -27,7 +25,7 @@ public class SplashTask extends Task<Void, Void> {
 	@Override
 	protected Void myDoInBackground(Void... args) {
 		IpetApi api = IpetApi.init(activity);
-		//是否就已认证状态
+		// 是否就已认证状态
 		if (api.getIsAuthorized()) {
 			// 首页
 			goMain();
@@ -41,12 +39,12 @@ public class SplashTask extends Task<Void, Void> {
 				goHasAccountLogin();
 			}
 		}
-//        try {
-//            //启动防止白屏,给时间显示出启动画面
-//            Thread.sleep(500);
-//        } catch (InterruptedException e) {
-//            throw new AppException("启动错误", e);
-//        }
+		// try {
+		// //启动防止白屏,给时间显示出启动画面
+		// Thread.sleep(500);
+		// } catch (InterruptedException e) {
+		// throw new AppException("启动错误", e);
+		// }
 
 		return null;
 	}

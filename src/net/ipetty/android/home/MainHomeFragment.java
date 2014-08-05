@@ -53,8 +53,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MainHomeFragment extends BaseFragment {
 
-	public final static String TAG = MainHomeFragment.class.getSimpleName();
-
 	private PullToRefreshListView mPullRefreshListView;
 	private FeedAdapter mAdapter;
 	private Dialog cameraDialog;

@@ -1,16 +1,7 @@
 package net.ipetty.android.follow;
 
-import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
@@ -19,10 +10,20 @@ import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.ListFriends;
 import net.ipetty.vo.UserVO;
+import android.os.Bundle;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class FollowsActivity extends BaseActivity {
 
-	public final static String TAG = FollowsActivity.class.getSimpleName();
 	private FollowsAdapter adapter; // 定义适配器
 	private PullToRefreshListView listView;
 
@@ -39,7 +40,7 @@ public class FollowsActivity extends BaseActivity {
 		setContentView(R.layout.activity_follows);
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -58,7 +59,8 @@ public class FollowsActivity extends BaseActivity {
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -82,7 +84,8 @@ public class FollowsActivity extends BaseActivity {
 									adapter.getList().addAll(result);
 									adapter.notifyDataSetChanged();
 								}
-							}).execute(FollowsActivity.this.userId, FollowsActivity.this.currentPage, FollowsActivity.this.pageSize);
+							}).execute(FollowsActivity.this.userId, FollowsActivity.this.currentPage,
+							FollowsActivity.this.pageSize);
 				}
 			}
 		});
@@ -96,20 +99,19 @@ public class FollowsActivity extends BaseActivity {
 	// 初始化数据
 	public void initData(final PullToRefreshListView view) {
 
-		new ListFriends(this).setListener(
-				new DefaultTaskListener<List<UserVO>>(this, "正在加载...") {
-					@Override
-					public void onSuccess(List<UserVO> result) {
-						if (result.size() < FollowsActivity.this.pageSize) {
-							FollowsActivity.this.hasMore = false;
-						}
-						adapter.setList(result);
-						adapter.notifyDataSetChanged();
-						if (null != view) {
-							view.onRefreshComplete();
-						}
-					}
-				}).execute(this.userId, 0, this.pageSize);
+		new ListFriends(this).setListener(new DefaultTaskListener<List<UserVO>>(this, "正在加载...") {
+			@Override
+			public void onSuccess(List<UserVO> result) {
+				if (result.size() < FollowsActivity.this.pageSize) {
+					FollowsActivity.this.hasMore = false;
+				}
+				adapter.setList(result);
+				adapter.notifyDataSetChanged();
+				if (null != view) {
+					view.onRefreshComplete();
+				}
+			}
+		}).execute(this.userId, 0, this.pageSize);
 
 	}
 

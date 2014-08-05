@@ -1,25 +1,8 @@
 package net.ipetty.android.space;
 
-import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.bonuspoint.BonusPointActivity;
@@ -52,12 +35,31 @@ import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.PetVO;
 import net.ipetty.vo.UserStatisticsVO;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-public class SpaceActivity extends BaseActivity {
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
 
-	public final static String TAG = SpaceActivity.class.getSimpleName();
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+public class SpaceActivity extends BaseActivity {
 
 	@SuppressLint("SimpleDateFormat")
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -113,7 +115,7 @@ public class SpaceActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -202,8 +204,7 @@ public class SpaceActivity extends BaseActivity {
 			public void onClick(View v) {
 				if (StringUtils.isNotBlank(user.getAvatar())) {
 					Intent intent = new Intent(SpaceActivity.this, LargerImageActivity.class);
-					intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY,
-							Constant.FILE_SERVER_BASE + user.getAvatar());
+					intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY, Constant.FILE_SERVER_BASE + user.getAvatar());
 					intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY, Constant.FILE_SERVER_BASE + user.getAvatar());
 					SpaceActivity.this.startActivity(intent);
 				}
@@ -286,7 +287,7 @@ public class SpaceActivity extends BaseActivity {
 		space_feed_list = (ListView) space_feed_layout.findViewById(R.id.space_feed_list);
 		feedListAdapter = new FeedAdapter(this);
 		space_feed_list.setAdapter(feedListAdapter);
-		//refreshData();
+		// refreshData();
 
 	}
 
@@ -378,8 +379,10 @@ public class SpaceActivity extends BaseActivity {
 					public void onClick(View v) {
 						if (StringUtils.isNotBlank(pet.getAvatar())) {
 							Intent intent = new Intent(SpaceActivity.this, LargerImageActivity.class);
-							intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY, Constant.FILE_SERVER_BASE + pet.getAvatar());
-							intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY, Constant.FILE_SERVER_BASE + pet.getAvatar());
+							intent.putExtra(Constant.INTENT_IMAGE_ORIGINAL_KEY,
+									Constant.FILE_SERVER_BASE + pet.getAvatar());
+							intent.putExtra(Constant.INTENT_IMAGE_SAMILL_KEY,
+									Constant.FILE_SERVER_BASE + pet.getAvatar());
 							SpaceActivity.this.startActivity(intent);
 						}
 					}
@@ -393,7 +396,7 @@ public class SpaceActivity extends BaseActivity {
 				if (StringUtils.isNotBlank(pet.getGender())) {
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petGender, pet.getGender())).execute(
-									OptionGroup.PET_GENDER);
+							OptionGroup.PET_GENDER);
 				}
 
 				TextView petBirthday = (TextView) space_petty_view.findViewById(R.id.pet_birthday);
@@ -408,7 +411,7 @@ public class SpaceActivity extends BaseActivity {
 
 					new GetOptionValueLabelMap(SpaceActivity.this).setListener(
 							new SetOptionLabelTaskListener(SpaceActivity.this, petFamily, pet.getFamily())).execute(
-									OptionGroup.PET_FAMILY);
+							OptionGroup.PET_FAMILY);
 				}
 
 				if (isCurrentUser) {
@@ -482,9 +485,9 @@ public class SpaceActivity extends BaseActivity {
 		}).execute(userId.toString(), lastTimeMillis.toString(), "0", pageSize.toString());
 
 		// 9宫格
-		//space_photo_grid_adapter.notifyDataSetChanged();
+		// space_photo_grid_adapter.notifyDataSetChanged();
 		// feed列表
-		//feedListAdapter.notifyDataSetChanged();
+		// feedListAdapter.notifyDataSetChanged();
 	}
 
 }

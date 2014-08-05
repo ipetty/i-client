@@ -19,7 +19,7 @@ import android.util.Log;
  */
 public abstract class DefaultTaskListener<Result> implements TaskListener<Result> {
 
-	private final static String TAG = DefaultTaskListener.class.getSimpleName();
+	protected String TAG = getClass().getSimpleName();
 
 	protected Activity activity;
 

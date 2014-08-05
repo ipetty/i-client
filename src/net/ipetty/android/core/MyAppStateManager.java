@@ -10,12 +10,13 @@ import android.content.SharedPreferences;
 
 /**
  * 应用持久化状态
- *
+ * 
  * @author yneos
  */
 public class MyAppStateManager {
 
 	private static final String TAG = MyAppStateManager.class.getSimpleName();
+
 	// 拍照时临时文件的整路径
 	private static final String CAMERA_TEMP_FILE = "CAMERA_TEMP_FILE";
 

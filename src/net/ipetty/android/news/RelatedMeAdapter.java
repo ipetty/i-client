@@ -41,7 +41,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 
-	public final static String TAG = RelatedMeAdapter.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
+
 	public Context context;
 	private LayoutInflater inflater;
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();

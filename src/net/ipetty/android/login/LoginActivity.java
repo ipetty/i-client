@@ -33,8 +33,6 @@ import android.widget.Toast;
 
 public class LoginActivity extends BaseActivity {
 
-	private final static String TAG = LoginActivity.class.getSimpleName();
-
 	private AutoCompleteTextView accountView;
 	private EditText passwordView;
 	private String account = null;

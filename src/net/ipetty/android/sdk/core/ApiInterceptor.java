@@ -1,10 +1,9 @@
 package net.ipetty.android.sdk.core;
 
-import android.content.Context;
-import android.util.Base64;
-import android.util.Log;
 import java.io.IOException;
+
 import net.ipetty.android.core.util.DeviceUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ContentCodingType;
 import org.springframework.http.HttpHeaders;
@@ -13,9 +12,13 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
+import android.content.Context;
+import android.util.Base64;
+import android.util.Log;
+
 /**
  * Api请求拦截
- *
+ * 
  * @author xiaojinghai
  */
 class ApiInterceptor implements ClientHttpRequestInterceptor {
@@ -30,7 +33,7 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 
 	public static final String HEADER_NAME_DEVICE_MAC = "device_mac";
 
-	private final String TAG = ApiInterceptor.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
 
 	// private final Charset charset = Charset.forName("UTF-8");
 	private final Context context;
@@ -67,12 +70,13 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 		requestHeaders.set(HEADER_NAME_DEVICE_UUID, uuidB64);
 		requestHeaders.set("Connection", "close");
 
-//		Boolean isServiceAvaliable = IpetApi.init(context).checkServiceAvaliable();
-//		if (!isServiceAvaliable) {
-//			Log.d(TAG, "throw ServiceUnavailableException");
-//			throw new ServiceUnavailableException();
-//		}
-		//执行请求
+		// Boolean isServiceAvaliable =
+		// IpetApi.init(context).checkServiceAvaliable();
+		// if (!isServiceAvaliable) {
+		// Log.d(TAG, "throw ServiceUnavailableException");
+		// throw new ServiceUnavailableException();
+		// }
+		// 执行请求
 		ClientHttpResponse resp = execution.execute(request, body);
 
 		Log.d(TAG, "<--:" + request.getURI().toString());
@@ -91,9 +95,9 @@ class ApiInterceptor implements ClientHttpRequestInterceptor {
 			SDKStateManager.setRefreshToken(context, rrt);
 		}
 
-//		if (StringUtils.isBlank(resp.getHeaders().getCacheControl())) {
-//			resp.getHeaders().add("Cache-Control", "max-age=15");
-//		}
+		// if (StringUtils.isBlank(resp.getHeaders().getCacheControl())) {
+		// resp.getHeaders().add("Cache-Control", "max-age=15");
+		// }
 		Log.d(TAG, "Etag头：" + resp.getHeaders().getETag());
 		Log.d(TAG, "过期头：" + resp.getHeaders().getCacheControl());
 		Log.d(TAG, "状态：" + resp.getRawStatusCode());

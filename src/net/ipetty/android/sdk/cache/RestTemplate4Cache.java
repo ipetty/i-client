@@ -1,17 +1,18 @@
 package net.ipetty.android.sdk.cache;
 
-import android.content.Context;
-import android.util.Log;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.NOT_MODIFIED;
+
 import java.io.IOException;
 import java.net.URI;
+
 import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.sdk.core.APIException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import static org.springframework.http.HttpMethod.GET;
 import org.springframework.http.HttpStatus;
-import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.Assert;
@@ -20,14 +21,18 @@ import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import android.content.Context;
+import android.util.Log;
+
 /**
- *
- *
+ * 
+ * 
  * @author xiaojinghai
  */
 public class RestTemplate4Cache extends RestTemplate {
 
-	private final String TAG = RestTemplate4Cache.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
+
 	private static final String ETAG_HEADER = "ETag";
 
 	// private final MemoryLRUCache cache = new MemoryLRUCache();
@@ -42,9 +47,9 @@ public class RestTemplate4Cache extends RestTemplate {
 	}
 
 	@Override
-	protected <T> T doExecute(URI url, HttpMethod method, RequestCallback requestCallback, ResponseExtractor<T> responseExtractor)
-			throws RestClientException {
-		//如果网络不可用，直接从缓存获取数据
+	protected <T> T doExecute(URI url, HttpMethod method, RequestCallback requestCallback,
+			ResponseExtractor<T> responseExtractor) throws RestClientException {
+		// 如果网络不可用，直接从缓存获取数据
 		if (!NetWorkUtils.isNetworkConnected(context)) {
 
 			if (!isCacheableRequest(method)) {
@@ -64,26 +69,24 @@ public class RestTemplate4Cache extends RestTemplate {
 			}
 
 		}
-		//非get请求，则透传给父类正常请求
+		// 非get请求，则透传给父类正常请求
 		if (!isCacheableRequest(method)) {
 			Log.d(TAG, "在线，非Get方法:" + method + ":" + url);
-			return super.doExecute(url, method, requestCallback,
-					responseExtractor);
+			return super.doExecute(url, method, requestCallback, responseExtractor);
 		}
 
 		CacheEntry e = getCache().get(url.toString());
-		//找到没有过期的缓存，则直接返回结果，不产生请求
+		// 找到没有过期的缓存，则直接返回结果，不产生请求
 		if (null != e && System.currentTimeMillis() < e.getExpireOn()) {
 			Log.d(TAG, "在线，未过期,直接从缓存取值:" + url);
 			T t = JSONUtils.fromJSON(e.getValue(), e.getClassType());
 			return t;
 		}
 
-		//如果是get请求，则使用自定义的代理对像，以处理缓存
+		// 如果是get请求，则使用自定义的代理对像，以处理缓存
 		Log.d(TAG, "在线，Get方法,使用Etag请求:" + url);
-		return super.doExecute(url, method, new DelegatingRequestCallback(url,
-				requestCallback), new DelegatingResponseExtractor<T>(url,
-						method, responseExtractor));
+		return super.doExecute(url, method, new DelegatingRequestCallback(url, requestCallback),
+				new DelegatingResponseExtractor<T>(url, method, responseExtractor));
 	}
 
 	private boolean isCacheableRequest(HttpMethod method) {
@@ -115,7 +118,7 @@ public class RestTemplate4Cache extends RestTemplate {
 		}
 
 		public void doWithRequest(ClientHttpRequest request) throws IOException {
-			//如果之前有缓存则增加IF_NONE_MATCH_HEADER头
+			// 如果之前有缓存则增加IF_NONE_MATCH_HEADER头
 			CacheEntry e = getCache().get(uri.toString());
 			if (null != e) {
 				Log.d(TAG, "doWithRequest-->增加Etag头:" + e.getEtag());
@@ -128,15 +131,13 @@ public class RestTemplate4Cache extends RestTemplate {
 		}
 	}
 
-	private class DelegatingResponseExtractor<T> implements
-			ResponseExtractor<T> {
+	private class DelegatingResponseExtractor<T> implements ResponseExtractor<T> {
 
 		private final URI uri;
 		private final HttpMethod method;
 		private final ResponseExtractor<T> extractor;
 
-		public DelegatingResponseExtractor(URI uri, HttpMethod method,
-				ResponseExtractor<T> extractor) {
+		public DelegatingResponseExtractor(URI uri, HttpMethod method, ResponseExtractor<T> extractor) {
 
 			Assert.notNull(uri);
 
@@ -160,15 +161,14 @@ public class RestTemplate4Cache extends RestTemplate {
 
 			T result = extractor.extractData(response);
 
-			//如果返回200状态并且带有etag头
-			if (isCacheableRequest(method)
-					&& headers.containsKey(ETAG_HEADER)
+			// 如果返回200状态并且带有etag头
+			if (isCacheableRequest(method) && headers.containsKey(ETAG_HEADER)
 					&& HttpStatus.OK.equals(response.getStatusCode())) {
-				//处理Etag
+				// 处理Etag
 				String eTag = response.getHeaders().getETag();
 				eTag = eTag == null ? "-1" : eTag;
 
-				//处理CacheControl
+				// 处理CacheControl
 				String cacheControl = response.getHeaders().getCacheControl();
 				Long expireOn = System.currentTimeMillis();
 				if (null != cacheControl && !"".equals(cacheControl)) {
@@ -176,7 +176,7 @@ public class RestTemplate4Cache extends RestTemplate {
 					String s = null == t[1] ? "0" : t[1];
 					expireOn = System.currentTimeMillis() + (Long.valueOf(s) * 1000);
 				}
-				//临时处理，只为避免客户端1秒内发起重复请求，不利用这个特性做较长时间的缓存
+				// 临时处理，只为避免客户端1秒内发起重复请求，不利用这个特性做较长时间的缓存
 				expireOn = System.currentTimeMillis() + (1000);
 
 				String str = JSONUtils.toJson(result);

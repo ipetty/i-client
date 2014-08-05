@@ -1,5 +1,13 @@
 package net.ipetty.android.like;
 
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.vo.FeedVO;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -10,22 +18,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.sdk.task.feed.GetFeedById;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.FeedVO;
 
 public class LikeActivity extends BaseActivity {
 
-	public final static String TAG = LikeActivity.class.getSimpleName();
 	private LikeAdapter adapter; // 定义适配器
 	private PullToRefreshListView listView;
 	private Long feedId = null;
@@ -38,7 +38,7 @@ public class LikeActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");

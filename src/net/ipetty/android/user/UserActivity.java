@@ -50,8 +50,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class UserActivity extends BaseActivity {
 
-	public static final String TAG = UserActivity.class.getSimpleName();
-
 	@SuppressLint("SimpleDateFormat")
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 

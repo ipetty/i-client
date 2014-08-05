@@ -1,14 +1,12 @@
 package net.ipetty.android.feed;
 
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BaseActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BaseActivity;
 
 public class LocationActivity extends BaseActivity {
-
-	private String TAG = LocationActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +14,7 @@ public class LocationActivity extends BaseActivity {
 		setContentView(R.layout.activity_location);
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");

@@ -1,5 +1,22 @@
 package net.ipetty.android.comment;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.DeleteComment;
+import net.ipetty.android.sdk.task.user.GetUserById;
+import net.ipetty.vo.CommentVO;
+import net.ipetty.vo.UserVO;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,28 +32,14 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.DeleteComment;
-import net.ipetty.android.sdk.task.user.GetUserById;
-import net.ipetty.vo.CommentVO;
-import net.ipetty.vo.UserVO;
 
 public class CommentAdapter extends BaseAdapter implements OnScrollListener {
 
-	public final static String TAG = "CommentAdapter";
+	private String TAG = getClass().getSimpleName();
+
 	private LayoutInflater inflater;
 	private Context context;
 	DisplayImageOptions options = AppUtils.getNormalImageOptions();
@@ -54,23 +57,25 @@ public class CommentAdapter extends BaseAdapter implements OnScrollListener {
 		more_items = new ArrayList<ModDialogItem>();
 		delItems = new ModDialogItem(null, context.getResources().getString(R.string.item_delete), delOnClick);
 	}
+
 	private OnClickListener delOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			final CommentVO comment = list.get(CommentAdapter.this.currentClickItemPosition);
 			Log.d(TAG, "commentID->" + comment.getId());
-			new DeleteComment((Activity) context).setListener(new DefaultTaskListener<Boolean>((Activity) context, "正在删除...") {
-				@Override
-				public void onSuccess(Boolean result) {
-					if (result) {
-						CommentAdapter.this.getList().remove(CommentAdapter.this.currentClickItemPosition);
-						CommentAdapter.this.notifyDataSetChanged();
-						Intent intent = new Intent(Constant.BROADCAST_INTENT_CCOMMENT_DELETE);
-						intent.putExtra(Constant.CCOMMENT_ID, comment.getId());
-						CommentAdapter.this.context.sendBroadcast(intent);
-					}
-				}
-			}).execute(comment.getId());
+			new DeleteComment((Activity) context).setListener(
+					new DefaultTaskListener<Boolean>((Activity) context, "正在删除...") {
+						@Override
+						public void onSuccess(Boolean result) {
+							if (result) {
+								CommentAdapter.this.getList().remove(CommentAdapter.this.currentClickItemPosition);
+								CommentAdapter.this.notifyDataSetChanged();
+								Intent intent = new Intent(Constant.BROADCAST_INTENT_CCOMMENT_DELETE);
+								intent.putExtra(Constant.CCOMMENT_ID, comment.getId());
+								CommentAdapter.this.context.sendBroadcast(intent);
+							}
+						}
+					}).execute(comment.getId());
 
 			moreDialog.cancel();
 		}
@@ -162,10 +167,10 @@ public class CommentAdapter extends BaseAdapter implements OnScrollListener {
 		int userId = commentVo.getCreatedBy();
 		UserVO user = UserApiWithCache.getUserById4Synchronous(context, userId);
 
-		//头像
+		// 头像
 		if (null != user.getAvatar()) {
-			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(),
-					holder.avatar, options);
+			ImageLoader.getInstance()
+					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
 		} else {
 			holder.avatar.setImageResource(R.drawable.avatar);
 		}

@@ -1,15 +1,5 @@
 package net.ipetty.android.setting;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
@@ -21,11 +11,22 @@ import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.Logout;
 import net.ipetty.android.user.UserActivity;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
 
-public class SettingActivity extends BaseActivity {
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-	private String TAG = SettingActivity.class.getSimpleName();
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+public class SettingActivity extends BaseActivity {
 
 	private Button logout;
 	private DisplayImageOptions options = AppUtils.getCacheImageBublder()
@@ -38,7 +39,7 @@ public class SettingActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");

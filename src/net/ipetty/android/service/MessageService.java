@@ -5,24 +5,25 @@
  */
 package net.ipetty.android.service;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.util.Log;
 import java.util.UUID;
+
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.vo.NotificationVO;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.util.Log;
 
 /**
- *
+ * 
  * @author Administrator
  */
 public class MessageService extends Service {
 
-	private final static String TAG = MessageService.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
 
 	private final int interval = 60 * 1000;
 
@@ -34,7 +35,8 @@ public class MessageService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
@@ -50,11 +52,10 @@ public class MessageService extends Service {
 					try {
 						while (running) {
 							if (NetWorkUtils.isNetworkConnected(MessageService.this)) {
-								NotificationVO nvo = IpetApi.init(MessageService.this).getNotificationApi().getMyNotification();
+								NotificationVO nvo = IpetApi.init(MessageService.this).getNotificationApi()
+										.getMyNotification();
 								Log.d(TAG, uuid + ":接收到nvo:" + JSONUtils.toJson(nvo));
-								if (nvo.getNewFansNum() > 0
-										|| nvo.getNewFavorsNum() > 0
-										|| nvo.getNewRepliesNum() > 0) {
+								if (nvo.getNewFansNum() > 0 || nvo.getNewFavorsNum() > 0 || nvo.getNewRepliesNum() > 0) {
 									Intent intent = new Intent(Constant.BROADCAST_HAS_NEW_MESSAG);
 									String nvoJsonStr = JSONUtils.toJson(nvo);
 									intent.putExtra(Constant.BROADCAST_DATA, nvoJsonStr);

@@ -26,7 +26,6 @@ import android.widget.GridView;
 
 public class MainDiscoverFragment extends BaseFragment {
 
-	public final static String TAG = MainDiscoverFragment.class.getSimpleName();
 	private Activity activity;
 	private GridView gridview;
 	private DiscoverAdapter adapter;

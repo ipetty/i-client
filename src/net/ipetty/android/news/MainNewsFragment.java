@@ -32,7 +32,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainNewsFragment extends BaseFragment {
 
-	public final static String TAG = MainNewsFragment.class.getSimpleName();
 	private Activity activity;
 	private ViewFlipper viewFlipper;
 

@@ -8,15 +8,13 @@ import net.ipetty.vo.UserVO;
 
 public class UserRegister extends Task<RegisterVO, UserVO> {
 
-    public final static String TAG = UserRegister.class.getSimpleName();
+	public UserRegister(BaseActivity activity) {
+		super(activity);
+	}
 
-    public UserRegister(BaseActivity activity) {
-        super(activity);
-    }
-
-    @Override
-    protected UserVO myDoInBackground(RegisterVO... args) {
-        return IpetApi.init(activity).getUserApi().register(args[0]);
-    }
+	@Override
+	protected UserVO myDoInBackground(RegisterVO... args) {
+		return IpetApi.init(activity).getUserApi().register(args[0]);
+	}
 
 }

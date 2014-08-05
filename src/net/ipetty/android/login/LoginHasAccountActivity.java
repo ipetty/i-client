@@ -1,5 +1,16 @@
 package net.ipetty.android.login;
 
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.user.UserLogin;
+import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,21 +23,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.user.UserLogin;
-import net.ipetty.vo.UserVO;
-import org.apache.commons.lang3.StringUtils;
 
 public class LoginHasAccountActivity extends BaseActivity {
-
-	private String TAG = LoginHasAccountActivity.class.getSimpleName();
 
 	DisplayImageOptions options;
 
@@ -43,7 +44,7 @@ public class LoginHasAccountActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -79,9 +80,9 @@ public class LoginHasAccountActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				new UserLogin(LoginHasAccountActivity.this)
-						.setListener(new LoginTaskListener(LoginHasAccountActivity.this))
-						.execute(account.getText().toString(), passwordView.getText().toString());
+				new UserLogin(LoginHasAccountActivity.this).setListener(
+						new LoginTaskListener(LoginHasAccountActivity.this)).execute(account.getText().toString(),
+						passwordView.getText().toString());
 			}
 		});
 		loadData();

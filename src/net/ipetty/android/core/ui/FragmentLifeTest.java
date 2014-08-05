@@ -21,12 +21,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 /**
- *
+ * 
  * @author Administrator
  */
 public class FragmentLifeTest extends Fragment {
 
-	private String TAG = FragmentLifeTest.class.getSimpleName(); //getClass().getSimpleName();
+	private String TAG = getClass().getSimpleName();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

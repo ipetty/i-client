@@ -46,7 +46,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Register3rdActivity extends BaseActivity {
-	private String TAG = Register3rdActivity.class.getSimpleName();
 
 	private AutoCompleteTextView emailEditor;
 	private EditText nicknameEditor;

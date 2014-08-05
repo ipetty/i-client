@@ -1,17 +1,17 @@
 package net.ipetty.android.core.ui;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.DelayTask;
 import net.ipetty.android.core.ErrorHandler;
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 public class BaseActivity extends Activity {
 
-	private String TAG = BaseActivity.class.getSimpleName();
+	protected String TAG = getClass().getSimpleName();
 
 	private boolean isViewReady = false;
 
@@ -51,7 +51,7 @@ public class BaseActivity extends Activity {
 			new DelayTask(this).setListener(new DefaultTaskListener<Void>(this) {
 				@Override
 				public void onSuccess(Void result) {
-					//只调用一次onViewReady
+					// 只调用一次onViewReady
 					if (!isViewReady) {
 						onViewReady(savedInstanceState);
 						onViewStart();
@@ -64,7 +64,7 @@ public class BaseActivity extends Activity {
 		}
 	}
 
-	//界面初始化完毕，只触发一次
+	// 界面初始化完毕，只触发一次
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
 	}
@@ -82,7 +82,7 @@ public class BaseActivity extends Activity {
 		}
 	}
 
-	//ready情况下调用
+	// ready情况下调用
 	protected void onViewStart() {
 		Log.d(TAG, "onViewStart");
 	}
@@ -100,7 +100,7 @@ public class BaseActivity extends Activity {
 		}
 	}
 
-	//ready情况下调用
+	// ready情况下调用
 	protected void onViewResume() {
 		Log.d(TAG, "onViewResume");
 	}
@@ -118,7 +118,7 @@ public class BaseActivity extends Activity {
 		}
 	}
 
-	//ready情况下调用
+	// ready情况下调用
 	protected void onViewRestart() {
 		Log.d(TAG, "onViewRestart");
 	}

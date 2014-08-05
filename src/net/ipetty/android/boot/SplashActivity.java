@@ -1,22 +1,20 @@
 package net.ipetty.android.boot;
 
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.AppUtils;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import cn.sharesdk.framework.ShareSDK;
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.AppUtils;
 
 /**
  * 启动引导
- *
+ * 
  * @author Administrator
- *
+ * 
  */
 public class SplashActivity extends BaseActivity {
-
-	public final static String TAG = SplashActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +24,13 @@ public class SplashActivity extends BaseActivity {
 		Log.d(TAG, "onCreate");
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
 		init();
 		new SplashTask(SplashActivity.this)
-				// .setListener(new SplashTaskListener(SplashActivity.this))
+		// .setListener(new SplashTaskListener(SplashActivity.this))
 				.execute();
 	}
 

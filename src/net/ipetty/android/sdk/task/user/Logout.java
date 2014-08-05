@@ -13,8 +13,6 @@ import android.util.Log;
  */
 public class Logout extends Task<Void, Void> {
 
-	public final static String TAG = Logout.class.getSimpleName();
-
 	public Logout(Activity activity) {
 		super(activity);
 	}

@@ -19,8 +19,6 @@ import android.util.Log;
  */
 public class RegisterTaskListener extends DefaultTaskListener<UserVO> {
 
-	private final static String TAG = RegisterTaskListener.class.getSimpleName();
-
 	private RegisterVO register;
 
 	public RegisterTaskListener(Activity activity, RegisterVO register) {

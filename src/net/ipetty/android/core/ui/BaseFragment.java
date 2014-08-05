@@ -5,21 +5,21 @@
  */
 package net.ipetty.android.core.ui;
 
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.DelayTask;
+import net.ipetty.android.core.ErrorHandler;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.DelayTask;
-import net.ipetty.android.core.ErrorHandler;
 
 /**
- *
+ * 
  * @author Administrator
  */
 public class BaseFragment extends Fragment {
 
-	private String TAG = BaseFragment.class.getSimpleName(); //getClass().getSimpleName();
+	protected String TAG = getClass().getSimpleName();
 
 	private boolean isViewReady = false;
 
@@ -41,7 +41,7 @@ public class BaseFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
 		super.onActivityCreated(savedInstanceState);
-		//this.isViewReady = false;
+		// this.isViewReady = false;
 		this.savedInstanceState = savedInstanceState;
 		errorHandler = new ErrorHandler(this.getActivity());
 	}
@@ -53,7 +53,7 @@ public class BaseFragment extends Fragment {
 		new DelayTask(this).setListener(new DefaultTaskListener<Void>(this) {
 			@Override
 			public void onSuccess(Void result) {
-				//只调用一次onViewReady
+				// 只调用一次onViewReady
 				if (!isViewReady) {
 					onViewReady(savedInstanceState);
 					onViewResume();
@@ -72,7 +72,7 @@ public class BaseFragment extends Fragment {
 		}
 	}
 
-	//每次onActivityCreated，只触发一次，否则界面会消失
+	// 每次onActivityCreated，只触发一次，否则界面会消失
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
 	}
@@ -90,12 +90,12 @@ public class BaseFragment extends Fragment {
 		}
 	}
 
-	//ready情况下调用
+	// ready情况下调用
 	protected void onViewStart() {
 		Log.d(TAG, "onViewStart");
 	}
 
-	//ready情况下调用
+	// ready情况下调用
 	protected void onViewResume() {
 		Log.d(TAG, "onViewResume");
 	}

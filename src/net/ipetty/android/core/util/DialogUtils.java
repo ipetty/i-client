@@ -27,9 +27,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class DialogUtils {
-	public final static String TAG = "DialogUtils";
 
-	public static Dialog datePopupDialog(Context context, DatePickerDialog.OnDateSetListener onDateSetListener, String value, Dialog d) {
+	private String TAG = getClass().getSimpleName();
+
+	public static Dialog datePopupDialog(Context context, DatePickerDialog.OnDateSetListener onDateSetListener,
+			String value, Dialog d) {
 		if (d != null && d.isShowing()) {
 			return d;
 		}

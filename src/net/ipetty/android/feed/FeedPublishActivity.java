@@ -1,5 +1,13 @@
 package net.ipetty.android.feed;
 
+import java.io.File;
+
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.vo.FeedFormVO;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,19 +17,12 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import java.io.File;
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.vo.FeedFormVO;
 
 public class FeedPublishActivity extends BaseActivity {
 
-	private static final String TAG = FeedPublishActivity.class.getSimpleName();
 	private String path;
 	private DisplayImageOptions options;
 	private EditText edit;
@@ -35,7 +36,7 @@ public class FeedPublishActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");

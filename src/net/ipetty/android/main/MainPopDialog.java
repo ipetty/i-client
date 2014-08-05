@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 public class MainPopDialog extends BaseActivity {
 
-	private String TAG = MainPopDialog.class.getSimpleName();
-
 	private View feedback;
 	private View person;
 	private View setting;

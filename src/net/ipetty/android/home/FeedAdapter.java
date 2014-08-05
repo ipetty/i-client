@@ -53,7 +53,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 
-	public final static String TAG = FeedAdapter.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
+
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 	private LayoutInflater inflater;
 	private Context context;

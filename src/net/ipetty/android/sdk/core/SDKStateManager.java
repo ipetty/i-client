@@ -5,24 +5,27 @@
  */
 package net.ipetty.android.sdk.core;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+
 /**
- *
+ * 
  * @author Administrator
  */
 public class SDKStateManager {
 
 	private static final String TAG = SDKStateManager.class.getSimpleName();
-	//是否已登录
+
+	// 是否已登录
 	private static final String IS_AUTHORIZED = "isAuthorized";
-	//当前用户ID
+	// 当前用户ID
 	private static final String UID = "uid";
 
 	private static final String USER_TOKEN = "user_token";
@@ -33,7 +36,7 @@ public class SDKStateManager {
 
 	private static final String CURRENT_USER_INFO = "current_user_info";
 
-	//当前用户信息
+	// 当前用户信息
 	public static void setCurrentUserInfo(Context ctx, UserVO user) {
 		Log.d(TAG, "setCurrentUserInfo");
 		if (user == null) {
@@ -53,7 +56,7 @@ public class SDKStateManager {
 		return user;
 	}
 
-	//设备UUID
+	// 设备UUID
 	public static void setDeviceUUID(Context ctx, String str) {
 		Log.d(TAG, "setDeviceUUID:" + str);
 		setString(ctx, DEVICE_UUID, str);
@@ -65,7 +68,7 @@ public class SDKStateManager {
 		return str;
 	}
 
-	//用户Token
+	// 用户Token
 	public static void setUserToken(Context ctx, String token) {
 		Log.d(TAG, "setUserToken:" + token);
 		setString(ctx, USER_TOKEN, token);
@@ -77,7 +80,7 @@ public class SDKStateManager {
 		return str;
 	}
 
-	//刷新Token
+	// 刷新Token
 	public static void setRefreshToken(Context ctx, String token) {
 		Log.d(TAG, "setRefreshToken:" + token);
 		setString(ctx, REFRESH_TOKEN, token);
@@ -89,7 +92,7 @@ public class SDKStateManager {
 		return str;
 	}
 
-	//验证状态
+	// 验证状态
 	public static boolean getAuthorized(Context ctx) {
 		SharedPreferences sp = ctx.getSharedPreferences(TAG, Context.MODE_PRIVATE);
 		boolean ret = sp.getBoolean(IS_AUTHORIZED, false);
@@ -103,7 +106,7 @@ public class SDKStateManager {
 		editor.commit();
 	}
 
-	//用户ID
+	// 用户ID
 	public static void setUid(Context ctx, Integer uid) {
 		SharedPreferences sp = ctx.getSharedPreferences(TAG, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();

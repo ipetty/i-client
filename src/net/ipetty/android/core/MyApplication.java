@@ -11,7 +11,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 public class MyApplication extends Application {
 
-	public final static String TAG = "MyApplication";
+	private String TAG = getClass().getSimpleName();
 
 	@Override
 	public void onCreate() {
@@ -28,7 +28,7 @@ public class MyApplication extends Application {
 		// StorageUtils.getOwnCacheDirectory(getApplicationContext(), "Cache");
 
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-				// 线程优先级
+		// 线程优先级
 				.threadPriority(Thread.NORM_PRIORITY - 2)
 				// 当同一个Uri获取不同大小的图片，缓存到内存时，只缓存一个
 				.denyCacheImageMultipleSizesInMemory()

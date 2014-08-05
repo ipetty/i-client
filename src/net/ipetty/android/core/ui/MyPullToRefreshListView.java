@@ -21,7 +21,8 @@ import android.util.AttributeSet;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MyPullToRefreshListView extends PullToRefreshListView {
-	public final static String TAG = MyPullToRefreshListView.class.getSimpleName();
+
+	protected String TAG = getClass().getSimpleName();
 
 	public MyPullToRefreshListView(Context context) {
 		super(context);

@@ -5,19 +5,19 @@
  */
 package net.ipetty.android.home;
 
-import android.app.Activity;
-import android.util.Log;
 import java.util.List;
+
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.vo.FeedVO;
+import android.app.Activity;
+import android.util.Log;
 
 /**
- *
+ * 
  * @author yneos
  */
 public class InitFeedListListener extends DefaultTaskListener<List<FeedVO>> {
 
-	private final static String TAG = InitFeedListListener.class.getSimpleName();
 	private final FeedAdapter adapter;
 
 	public InitFeedListListener(Activity activity, FeedAdapter adapter) {

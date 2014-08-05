@@ -20,8 +20,6 @@ import android.util.Log;
  */
 public class PublishListener extends DefaultTaskListener<FeedVO> {
 
-	private final static String TAG = PublishListener.class.getSimpleName();
-
 	public PublishListener(Activity activity) {
 		super(activity, "正在发布...");
 	}

@@ -14,8 +14,6 @@ import android.util.Log;
  */
 public class LoginOrRegister3rd extends Task<String, UserVO> {
 
-	public final static String TAG = LoginOrRegister3rd.class.getSimpleName();
-
 	public LoginOrRegister3rd(Activity activity) {
 		super(activity);
 	}

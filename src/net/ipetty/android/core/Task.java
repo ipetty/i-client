@@ -10,10 +10,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 /**
- *
+ * 
  * @author yneos
- * @param <Params> 参数类型
- * @param <Result> 结果类型
+ * @param <Params>
+ *            参数类型
+ * @param <Result>
+ *            结果类型
  * @异步任务特性
  * @1.只参在UI线程中启动
  * @2.doInBackground在新线程(非UI线程)中执行,其它的on开头方法均在UI线程中执行
@@ -22,13 +24,12 @@ import android.util.Log;
  */
 public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Result> {
 
-	//这样方便重构
-	private final static String TAG = Task.class.getSimpleName();
+	protected String TAG = getClass().getSimpleName();
 
 	protected TaskListener<Result> listener;
 	protected final Activity activity;
 
-	//存放异常
+	// 存放异常
 	protected Throwable ex;
 
 	public Task(Activity activity) {
@@ -36,13 +37,13 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
 		this.activity = activity;
 	}
 
-	//设置Listener
+	// 设置Listener
 	public Task<Params, Result> setListener(TaskListener<Result> listener) {
 		this.listener = listener;
 		return this;
 	}
 
-	//UI线程
+	// UI线程
 	@Override
 	protected void onPreExecute() {
 		Log.d(TAG, "onPreExecute");
@@ -53,7 +54,7 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
 
 	}
 
-	//非UI线程
+	// 非UI线程
 	@Override
 	protected Result doInBackground(Params... paramss) {
 		Log.d(TAG, "doInBackground");
@@ -70,13 +71,13 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
 
 	/**
 	 * 非UI线程，后台执行内容
-	 *
+	 * 
 	 * @param args
 	 * @return
 	 */
 	protected abstract Result myDoInBackground(Params... args);
 
-	//UI线程
+	// UI线程
 	@Override
 	protected void onPostExecute(Result result) {
 		Log.d(TAG, "onPostExecute");
@@ -92,7 +93,7 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
 		}
 	}
 
-	//UI线程
+	// UI线程
 	@Override
 	protected void onProgressUpdate(Integer... prgrss) {
 		Log.d(TAG, "onProgressUpdate");
@@ -102,7 +103,7 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
 		}
 	}
 
-	//UI线程
+	// UI线程
 	@Override
 	protected void onCancelled(Result result) {
 		Log.d(TAG, "onCancelled:Result");
@@ -112,7 +113,7 @@ public abstract class Task<Params, Result> extends AsyncTask<Params, Integer, Re
 		}
 	}
 
-	//UI线程
+	// UI线程
 	@Override
 	protected void onCancelled() {
 		Log.d(TAG, "onCancelled");

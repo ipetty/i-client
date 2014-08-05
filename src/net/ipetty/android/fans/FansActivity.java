@@ -1,16 +1,7 @@
 package net.ipetty.android.fans;
 
-import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
@@ -20,10 +11,20 @@ import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.ListFollowers;
 import net.ipetty.android.sdk.task.user.ListFriends;
 import net.ipetty.vo.UserVO;
+import android.os.Bundle;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class FansActivity extends BaseActivity {
 
-	public final static String TAG = FansActivity.class.getSimpleName();
 	private FansAdapter adapter; // 定义适配器
 	private PullToRefreshListView listView;
 
@@ -43,7 +44,7 @@ public class FansActivity extends BaseActivity {
 
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -61,7 +62,8 @@ public class FansActivity extends BaseActivity {
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				initData(listView);
@@ -83,7 +85,8 @@ public class FansActivity extends BaseActivity {
 									adapter.getList().addAll(result);
 									adapter.notifyDataSetChanged();
 								}
-							}).execute(FansActivity.this.userId, FansActivity.this.currentPage, FansActivity.this.pageSize);
+							}).execute(FansActivity.this.userId, FansActivity.this.currentPage,
+							FansActivity.this.pageSize);
 				}
 			}
 		});
@@ -97,20 +100,19 @@ public class FansActivity extends BaseActivity {
 	// 初始化数据
 	public void initData(final PullToRefreshListView view) {
 
-		new ListFollowers(this).setListener(
-				new DefaultTaskListener<List<UserVO>>(this, "正在加载...") {
-					@Override
-					public void onSuccess(List<UserVO> result) {
-						if (result.size() < FansActivity.this.pageSize) {
-							FansActivity.this.hasMore = false;
-						}
-						adapter.setList(result);
-						adapter.notifyDataSetChanged();
-						if (null != view) {
-							view.onRefreshComplete();
-						}
-					}
-				}).execute(this.userId, 0, this.pageSize);
+		new ListFollowers(this).setListener(new DefaultTaskListener<List<UserVO>>(this, "正在加载...") {
+			@Override
+			public void onSuccess(List<UserVO> result) {
+				if (result.size() < FansActivity.this.pageSize) {
+					FansActivity.this.hasMore = false;
+				}
+				adapter.setList(result);
+				adapter.notifyDataSetChanged();
+				if (null != view) {
+					view.onRefreshComplete();
+				}
+			}
+		}).execute(this.userId, 0, this.pageSize);
 
 	}
 

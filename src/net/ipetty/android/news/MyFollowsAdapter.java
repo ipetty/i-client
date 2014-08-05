@@ -1,5 +1,15 @@
 package net.ipetty.android.news;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,19 +20,14 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import java.util.ArrayList;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.vo.UserVO;
-import org.apache.commons.lang3.StringUtils;
 
 public class MyFollowsAdapter extends BaseAdapter implements OnScrollListener {
 
-	public final static String TAG = MyFollowsAdapter.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
+
 	private LayoutInflater inflater;
 	private List<UserVO> list = new ArrayList<UserVO>(); // 这个就本地dataStore
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
@@ -79,12 +84,13 @@ public class MyFollowsAdapter extends BaseAdapter implements OnScrollListener {
 		// 数据与界面绑定
 		UserVO user = list.get(position);
 		if (StringUtils.isNotBlank(user.getAvatar())) {
-			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
+			ImageLoader.getInstance()
+					.displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), holder.avatar, options);
 		} else {
 			holder.avatar.setImageResource(R.drawable.avatar);
 		}
 		holder.name.setText(user.getNickname());
-		//TODO:对于关注、反关注图标和点击事件处理
+		// TODO:对于关注、反关注图标和点击事件处理
 
 		return view;
 	}

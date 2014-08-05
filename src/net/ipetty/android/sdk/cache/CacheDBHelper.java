@@ -11,43 +11,42 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- *
+ * 
  * @author Administrator
  */
 public class CacheDBHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = CacheDBHelper.class.getSimpleName();
+	private String TAG = getClass().getSimpleName();
 
-    private static final int VERSION = 1;
+	private static final int VERSION = 1;
 
-    private static final String NAME = "cache.db";
+	private static final String NAME = "cache.db";
 
-    public CacheDBHelper(Context context) {
-        super(context, NAME, null, VERSION);
-    }
+	public CacheDBHelper(Context context) {
+		super(context, NAME, null, VERSION);
+	}
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        Log.d(TAG, "onCreate:" + db.toString());
-        StringBuilder str = new StringBuilder();
-        str.append("create table IF NOT EXISTS [http](");
-        str.append("[id] TEXT PRIMARY KEY,");	//MD5(url)
-        str.append("[url] TEXT,");				//url含参数
-        str.append("[value] TEXT,");			//返回值
-        str.append("[etag] TEXT,");				//etag
-        str.append("[hits] BIGINT,");			//命中次数
-        str.append("[put_on] BIGINT,");			//放入缓存时间戳（毫秒数）
-        str.append("[expire_on] BIGINT,");		//过期时间戳（毫秒数）
-        str.append("[class_type] TEXT);");		//Value所对应的Java类型
-        db.execSQL(str.toString());
-    }
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		Log.d(TAG, "onCreate:" + db.toString());
+		StringBuilder str = new StringBuilder();
+		str.append("create table IF NOT EXISTS [http](");
+		str.append("[id] TEXT PRIMARY KEY,"); // MD5(url)
+		str.append("[url] TEXT,"); // url含参数
+		str.append("[value] TEXT,"); // 返回值
+		str.append("[etag] TEXT,"); // etag
+		str.append("[hits] BIGINT,"); // 命中次数
+		str.append("[put_on] BIGINT,"); // 放入缓存时间戳（毫秒数）
+		str.append("[expire_on] BIGINT,"); // 过期时间戳（毫秒数）
+		str.append("[class_type] TEXT);"); // Value所对应的Java类型
+		db.execSQL(str.toString());
+	}
 
-    @Override
-    public void onUpgrade(final SQLiteDatabase db, final int oldVersion,
-            final int newVersion) {
-        Log.d(TAG, "onUpgrade:" + db.toString());
-        db.execSQL("DROP TABLE IF EXISTS [http]");
-        onCreate(db);
-    }
+	@Override
+	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
+		Log.d(TAG, "onUpgrade:" + db.toString());
+		db.execSQL("DROP TABLE IF EXISTS [http]");
+		onCreate(db);
+	}
 
 }

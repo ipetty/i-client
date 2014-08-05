@@ -52,7 +52,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SimpleFeedActivity extends BaseActivity {
 
-	public final static String TAG = SimpleFeedActivity.class.getSimpleName();
 	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
 
 	private Long feedId = null;

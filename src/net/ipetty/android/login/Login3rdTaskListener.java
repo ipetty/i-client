@@ -26,8 +26,6 @@ import cn.sharesdk.framework.Platform;
  */
 public class Login3rdTaskListener extends DefaultTaskListener<UserVO> {
 
-	private final static String TAG = Login3rdTaskListener.class.getSimpleName();
-
 	private Platform platform;
 
 	public Login3rdTaskListener(Activity activity, Platform platform) {

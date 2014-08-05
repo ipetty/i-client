@@ -1,5 +1,12 @@
 package net.ipetty.android.feedback;
 
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.sdk.task.feedback.Feedback;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,15 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.sdk.task.feedback.Feedback;
-import org.apache.commons.lang3.StringUtils;
 
 public class FeedbackActivity extends BaseActivity {
-
-	private String TAG = FeedbackActivity.class.getSimpleName();
 
 	private View submitButton;
 	private EditText contentEditor;
@@ -27,7 +27,7 @@ public class FeedbackActivity extends BaseActivity {
 		setContentView(R.layout.activity_feedback);
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");

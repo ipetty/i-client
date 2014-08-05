@@ -20,8 +20,6 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  */
 public class OneKeyShare {
 
-	protected String TAG = getClass().getSimpleName();
-
 	protected Activity activity;
 	protected ShareSDKMessageCallback shareSDKMessageCallback;
 
