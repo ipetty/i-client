@@ -9,6 +9,8 @@ import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.register.RegisterActivity;
 import net.ipetty.android.sdk.task.user.UserLogin;
+import net.ipetty.sharesdk.qzone.QZoneAuthorization;
+import net.ipetty.sharesdk.sinaweibo.SinaWeiboAuthorization;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -29,6 +31,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qzone.QZone;
 
 public class LoginActivity extends BaseActivity {
 
@@ -132,13 +138,12 @@ public class LoginActivity extends BaseActivity {
 		sina.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
+				// Toast.makeText(LoginActivity.this, "暂时未实现",
+				// Toast.LENGTH_SHORT).show();
 
 				// sina Login
-				// Platform sinaWeibo = ShareSDK.getPlatform(LoginActivity.this,
-				// SinaWeibo.NAME);
-				// new
-				// SinaWeiboAuthorization(LoginActivity.this).authorize(sinaWeibo);
+				Platform sinaWeibo = ShareSDK.getPlatform(LoginActivity.this, SinaWeibo.NAME);
+				new SinaWeiboAuthorization(LoginActivity.this).authorize(sinaWeibo);
 			}
 		});
 
@@ -146,12 +151,12 @@ public class LoginActivity extends BaseActivity {
 		qq.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
+				// Toast.makeText(LoginActivity.this, "暂时未实现",
+				// Toast.LENGTH_SHORT).show();
 
 				// qq login
-				// Platform qzone = ShareSDK.getPlatform(LoginActivity.this,
-				// QZone.NAME);
-				// new QZoneAuthorization(LoginActivity.this).authorize(qzone);
+				Platform qzone = ShareSDK.getPlatform(LoginActivity.this, QZone.NAME);
+				new QZoneAuthorization(LoginActivity.this).authorize(qzone);
 			}
 		});
 	}

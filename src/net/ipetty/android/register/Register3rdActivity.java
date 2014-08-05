@@ -17,6 +17,7 @@ import net.ipetty.android.core.util.DeviceUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.core.util.ValidUtils;
+import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
 import net.ipetty.android.sdk.task.foundation.ListOptions;
@@ -297,6 +298,9 @@ public class Register3rdActivity extends BaseActivity {
 							Toast.makeText(activity, R.string.save_success, Toast.LENGTH_SHORT).show();
 							// 更新缓存
 							UserApiWithCache.updateCache(result);
+
+							// 完善资料后跳转到首页
+							AppUtils.goTo(activity, MainActivity.class);
 						}
 					}).execute(userForm);
 		}
