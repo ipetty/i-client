@@ -73,6 +73,47 @@
   </LinearLayout>
   
 	<include layout="@layout/horizontal_divider" />
+	   <RelativeLayout
+    android:id="@+id/password_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:background="@drawable/list_color_item_bg" >
+
+			    <TextView
+			        android:id="@+id/password"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_centerVertical="true"
+			        android:ellipsize="end"
+			        android:gravity="left|center"
+			        android:singleLine="true"
+			        android:text="@string/title_activity_change_password"
+			        android:textColor="@color/text_black"
+			        android:textSize="16dp" />
+			    
+			     <ImageView
+			        android:id="@+id/into"
+			        android:layout_centerVertical="true"
+			        android:layout_width="wrap_content"
+			        android:layout_height="18dp"
+			         android:layout_marginRight="0dp" 
+			        android:layout_alignParentRight="true"
+			        android:src="@drawable/icon_forward" />
+
+	</RelativeLayout>
+	 <include layout="@layout/horizontal_divider" />
+	   	<LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="10dp" >
+  </LinearLayout>
+    <include layout="@layout/horizontal_divider" />
+	
    <RelativeLayout
     android:id="@+id/feedback_layout"
     android:layout_width="match_parent"

@@ -151,6 +151,11 @@
             android:name="net.ipetty.android.register.Register3rdActivity"
             android:label="@string/title_activity_register3rd" >
         </activity>
+        
+        <activity
+            android:name="net.ipetty.android.setting.ChangePwdActivity"
+            android:label="@string/title_activity_change_password" >
+        </activity>
     </application>
 
 </manifest>

@@ -68,6 +68,15 @@ public class SettingActivity extends BaseActivity {
 			}
 		});
 
+		/* password */
+		View password = this.findViewById(R.id.password_layout);
+		password.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, ChangePwdActivity.class);
+				startActivity(intent);
+			}
+		});
 		/* feedback */
 		View feedback = this.findViewById(R.id.feedback_layout);
 		feedback.setOnClickListener(new OnClickListener() {

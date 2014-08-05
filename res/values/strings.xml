@@ -146,6 +146,11 @@
     <string name="save_success">保存成功</string>
 
     <!-- 系统设置 -->
+     <string name="title_activity_change_password">修改密码</string>
+     <string name="oldPassword">原密码</string>
+     <string name="newPassword">新密码</string>
+      <string name="oldPassword_hint">未设置过可不填</string>
+     <string name="newPassword_hint">请输入新密码</string>
     <string name="title_activity_setting">设置</string>
     <string name="logout">注销</string>
 
@@ -206,6 +211,9 @@
     <string name="app_downloading">应用正在后台下载</string>
     <string name="mingdao_share_content">网页分享</string>
     <string name="share_to_mingdao">分享到明道</string>
+    
+   
+   
 
 
 </resources>
