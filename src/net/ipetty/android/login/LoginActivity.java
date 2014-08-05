@@ -1,5 +1,18 @@
 package net.ipetty.android.login;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import net.ipetty.R;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.register.Register3rdActivity;
+import net.ipetty.android.register.RegisterActivity;
+import net.ipetty.android.sdk.task.user.UserLogin;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
@@ -17,15 +30,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import net.ipetty.R;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.register.RegisterActivity;
-import net.ipetty.android.sdk.task.user.UserLogin;
-import org.apache.commons.lang3.StringUtils;
 
 public class LoginActivity extends BaseActivity {
 
@@ -45,7 +49,7 @@ public class LoginActivity extends BaseActivity {
 		setContentView(R.layout.activity_login);
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -95,10 +99,8 @@ public class LoginActivity extends BaseActivity {
 			}
 		}
 
-		//自动提示
-		ArrayAdapter<String> adapt = new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line,
-				emails);
+		// 自动提示
+		ArrayAdapter<String> adapt = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, emails);
 		accountView.setAdapter(adapt);
 
 		accountView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -113,15 +115,14 @@ public class LoginActivity extends BaseActivity {
 			}
 		});
 
-
 		/*
 		 * accountView.setOnFocusChangeListener(new OnFocusChangeListener(){
-		 *
+		 * 
 		 * @Override public void onFocusChange(View arg0, boolean hasFocus) {
 		 * if(hasFocus){ accountView.setHint(null); if(focuscont==0){
 		 * accountView.clearFocus(); } focuscont++; }else{
 		 * accountView.setHint("Email"); }
-		 *
+		 * 
 		 * }
 		 */
 		passwordView = (EditText) this.findViewById(R.id.password);
@@ -135,6 +136,9 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
+
+				Intent intent = new Intent(LoginActivity.this, Register3rdActivity.class);
+				startActivity(intent);
 
 				// sina Login
 				// Platform sinaWeibo = ShareSDK.getPlatform(LoginActivity.this,
@@ -153,6 +157,7 @@ public class LoginActivity extends BaseActivity {
 			}
 		});
 	}
+
 	// 登录
 	private final OnClickListener loginOnClick = new OnClickListener() {
 		@Override

@@ -54,6 +54,8 @@
     <string name="pet_family_hint">请选择宠物类型</string>
     <string name="changeAccount">切换账号</string>
     <string name="pet_birthday">生日</string>
+    
+    <string name="title_activity_register3rd">完善爱宠资料</string>
 
     <!-- main -->
     <string name="sub_nav_title_home">主页</string>
@@ -111,10 +113,10 @@
     <string name="pet_edit">编辑宠物资料</string>
 
     <!-- news -->
-     <string name="news_item_favor">称赞了您的消息</string>
-     <string name="news_item_follow">开始关注您</string>
-     <string name="news_item_comment">回复了您的消息</string>
-     
+    <string name="news_item_favor">称赞了您的消息</string>
+    <string name="news_item_follow">开始关注您</string>
+    <string name="news_item_comment">回复了您的消息</string>
+
     <!-- petty -->
 
 
@@ -204,5 +206,6 @@
     <string name="app_downloading">应用正在后台下载</string>
     <string name="mingdao_share_content">网页分享</string>
     <string name="share_to_mingdao">分享到明道</string>
+
 
 </resources>

@@ -64,7 +64,7 @@ public class UserActivity extends BaseActivity {
 	private TextView saveButton; // 保存
 
 	private ImageView avatar; // 头像
-	private String mImageName = "cacheHead.jpg"; // 默认头像值
+	private String mImageName = Constant.PIC_USER_HEAD_IMAGE_NAME; // 默认头像值
 	private Dialog changeAvatarDialog; // 更换头像对话框
 
 	private EditText nickname; // 昵称
@@ -347,8 +347,8 @@ public class UserActivity extends BaseActivity {
 		intent.putExtra("crop", "true");
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
-		intent.putExtra("outputX", 320);
-		intent.putExtra("outputY", 320);
+		intent.putExtra("outputX", Constant.ZOOM_IMAGE_MAX_WIDTH);
+		intent.putExtra("outputY", Constant.ZOOM_IMAGE_MAX_HEIGHT);
 		intent.putExtra("noFaceDetection", true);
 		intent.putExtra("scale", true);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);

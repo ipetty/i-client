@@ -17,6 +17,12 @@ public class Constant {
 
 	public static final Integer EMPTY_USER_ID = -1;
 
+	// ZIP默认图片名称
+	public static final String PIC_USER_HEAD_IMAGE_NAME = "cacheHead.jpg";
+	public static final String PIC_PET_HEAD_IMAGE_NAME = "cachePetHead.jpg";
+	public final static float ZOOM_IMAGE_MAX_WIDTH = 320f;
+	public final static float ZOOM_IMAGE_MAX_HEIGHT = 320f;
+
 	public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";
 	public final static String INTENT_PHOTO_OUT_PATH_KEY = "publish_photo_out_path";
 	public final static String INTENT_IMAGE_ORIGINAL_KEY = "ORIGINAL_url";

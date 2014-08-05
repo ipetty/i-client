@@ -55,16 +55,12 @@ public class MainHomeFragment extends BaseFragment {
 
 	public final static String TAG = MainHomeFragment.class.getSimpleName();
 
-	// private Activity activity;
-	// private LinkedList<String> mListItems;
 	private PullToRefreshListView mPullRefreshListView;
 	private FeedAdapter mAdapter;
-	// private String[] mStrings = {"Abbaye de Belloc",
-	// "Abbaye du Mont des Cats"};
 	private Dialog cameraDialog;
 	private ImageView avatar;
 	private Integer pageNumber = 0;
-	private final Integer pageSize = 5;
+	private final Integer pageSize = 20;
 	private Long lastTimeMillis;
 
 	private Dialog headBgDialog;

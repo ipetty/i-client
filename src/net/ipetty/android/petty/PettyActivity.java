@@ -1,31 +1,12 @@
 package net.ipetty.android.petty;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
@@ -45,7 +26,30 @@ import net.ipetty.android.sdk.task.pet.UpdatePetAvatar;
 import net.ipetty.vo.Option;
 import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.PetVO;
+
 import org.apache.commons.lang3.StringUtils;
+
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class PettyActivity extends BaseActivity {
 
@@ -65,7 +69,7 @@ public class PettyActivity extends BaseActivity {
 	private TextView saveButton; // 保存
 
 	private ImageView avatar; // 头像
-	private String mImageName = "cachePetHead.jpg"; // 默认头像值
+	private String mImageName = Constant.PIC_PET_HEAD_IMAGE_NAME; // 默认头像值
 	private Dialog changeAvatarDialog; // 更换头像对话框
 
 	private EditText nickname; // 昵称
@@ -87,7 +91,7 @@ public class PettyActivity extends BaseActivity {
 		setContentView(R.layout.activity_petty);
 	}
 
-	//加载数据
+	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
@@ -246,7 +250,7 @@ public class PettyActivity extends BaseActivity {
 	};
 
 	public void showCameraDialog(View view) {
-		OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
+		OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
 		this.changeAvatarDialog = DialogUtils.bottomPopupDialog(this, Listener, R.array.alert_camera,
 				getString(R.string.camera_title), this.changeAvatarDialog);
 	}
@@ -327,8 +331,8 @@ public class PettyActivity extends BaseActivity {
 		intent.putExtra("crop", "true");
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
-		intent.putExtra("outputX", 120);
-		intent.putExtra("outputY", 120);
+		intent.putExtra("outputX", Constant.ZOOM_IMAGE_MAX_WIDTH);
+		intent.putExtra("outputY", Constant.ZOOM_IMAGE_MAX_HEIGHT);
 		intent.putExtra("noFaceDetection", true);
 		intent.putExtra("scale", true);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
@@ -342,69 +346,69 @@ public class PettyActivity extends BaseActivity {
 	 */
 	private DefaultTaskListener<List<Option>> initGenderDialog = new DefaultTaskListener<List<Option>>(
 			PettyActivity.this) {
-				private List<ModDialogItem> dialogItems;
+		private List<ModDialogItem> dialogItems;
 
+		@Override
+		public void onSuccess(List<Option> options) {
+			dialogItems = new ArrayList<ModDialogItem>();
+			for (Option option : options) {
+				dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
+			}
+
+			PettyActivity.this.gender.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onSuccess(List<Option> options) {
-					dialogItems = new ArrayList<ModDialogItem>();
-					for (Option option : options) {
-						dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
-					}
-
-					PettyActivity.this.gender.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							PettyActivity.this.genderDialog = DialogUtils.modPopupDialog(PettyActivity.this, dialogItems,
-									PettyActivity.this.genderDialog);
-						}
-					});
+				public void onClick(View view) {
+					PettyActivity.this.genderDialog = DialogUtils.modPopupDialog(PettyActivity.this, dialogItems,
+							PettyActivity.this.genderDialog);
 				}
+			});
+		}
 
-				private OnClickListener dialogClick = new OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
-						String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
-						PettyActivity.this.gender.setText(label);
-						PettyActivity.this.genderValue = value;
-						PettyActivity.this.genderDialog.cancel();
-					}
-				};
-			};
+		private OnClickListener dialogClick = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
+				String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
+				PettyActivity.this.gender.setText(label);
+				PettyActivity.this.genderValue = value;
+				PettyActivity.this.genderDialog.cancel();
+			}
+		};
+	};
 
 	/**
 	 * 初始化家族选择对话框
 	 */
 	private DefaultTaskListener<List<Option>> initGenderFamily = new DefaultTaskListener<List<Option>>(
 			PettyActivity.this) {
-				private List<ModDialogItem> dialogItems;
+		private List<ModDialogItem> dialogItems;
 
+		@Override
+		public void onSuccess(List<Option> options) {
+			dialogItems = new ArrayList<ModDialogItem>();
+			for (Option option : options) {
+				dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
+			}
+
+			PettyActivity.this.family.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onSuccess(List<Option> options) {
-					dialogItems = new ArrayList<ModDialogItem>();
-					for (Option option : options) {
-						dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
-					}
-
-					PettyActivity.this.family.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							PettyActivity.this.familyDialog = DialogUtils.modPopupDialog(PettyActivity.this, dialogItems,
-									PettyActivity.this.familyDialog);
-						}
-					});
+				public void onClick(View view) {
+					PettyActivity.this.familyDialog = DialogUtils.modPopupDialog(PettyActivity.this, dialogItems,
+							PettyActivity.this.familyDialog);
 				}
+			});
+		}
 
-				private OnClickListener dialogClick = new OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
-						String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
-						PettyActivity.this.family.setText(label);
-						PettyActivity.this.familyValue = value;
-						PettyActivity.this.familyDialog.cancel();
-					}
-				};
-			};
+		private OnClickListener dialogClick = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
+				String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
+				PettyActivity.this.family.setText(label);
+				PettyActivity.this.familyValue = value;
+				PettyActivity.this.familyDialog.cancel();
+			}
+		};
+	};
 
 }
