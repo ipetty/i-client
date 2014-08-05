@@ -65,11 +65,16 @@ public class SinaWeiboAuthorization extends AbstractAuthorization {
 				Log.v(TAG, "userId=" + userId + ",userName=" + userName + ",userGender=" + userGender + ",userIcon="
 						+ userIcon + ",token=" + token + ",tokenSecret=" + tokenSecret);
 
+				// 注册并登录
+				registerOrLogin(platform, platform.getDb().getUserId(), userEmail, userName);
+
 				// get email, and then register or login
-				HashMap<String, Object> params = new HashMap<String, Object>();
-				platform.setPlatformActionListener(new GetEmailListener());
-				platform.customerProtocol("https://api.weibo.com/2/account/profile/email.json", "GET", (short) 1,
-						params, null);
+				// HashMap<String, Object> params = new HashMap<String,
+				// Object>();
+				// platform.setPlatformActionListener(new GetEmailListener());
+				// platform.customerProtocol("https://api.weibo.com/2/account/profile/email.json",
+				// "GET", (short) 1,
+				// params, null);
 			}
 		}
 

@@ -6,21 +6,32 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DeviceUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.core.util.ValidUtils;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
 import net.ipetty.android.sdk.task.foundation.ListOptions;
+import net.ipetty.android.sdk.task.foundation.SetOptionLabelTaskListener;
+import net.ipetty.android.sdk.task.pet.ListPetsByUserId;
+import net.ipetty.android.sdk.task.user.ImproveUserInfo43rd;
+import net.ipetty.android.sdk.task.user.UpdateUserAvatar;
 import net.ipetty.vo.Option;
 import net.ipetty.vo.OptionGroup;
-import net.ipetty.vo.RegisterVO;
+import net.ipetty.vo.PetVO;
+import net.ipetty.vo.UserForm43rdVO;
+import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -44,20 +55,36 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Register3rdActivity extends BaseActivity {
 
+	private Integer currUserId;
+
+	private DisplayImageOptions options = AppUtils.getNormalImageOptions();
+
+	private TextView title; // 标题
+	private ImageView backButton; // 返回
+
 	private AutoCompleteTextView emailEditor;
 	private EditText nicknameEditor;
+
+	private Integer petId;
+
 	private EditText petNameEditor;
+
 	private Dialog petGenderDialog;
-	private List<ModDialogItem> petGenderItems = new ArrayList<ModDialogItem>();
 	private TextView petGenderText;
 	private String petGender;
+
 	private Dialog petFamilyDialog;
-	private List<ModDialogItem> petFamilyItems = new ArrayList<ModDialogItem>();
 	private TextView petFamilyText;
 	private String petFamily;
+
 	private Button submitButton;
 
 	private static final int REQUEST_CODE_PHOTORESOULT = 20;
@@ -70,11 +97,13 @@ public class Register3rdActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register3rd);
 
-		/* action bar */
-		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
-		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
-		text.setText(this.getResources().getString(R.string.title_activity_register3rd));
-		btnBack.setOnClickListener(new BackClickListener(this));
+		currUserId = IpetApi.init(this).getCurrUserId();
+
+		// Title & Back
+		title = (TextView) this.findViewById(R.id.action_bar_title);
+		title.setText(this.getResources().getString(R.string.title_activity_register3rd));
+		backButton = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		backButton.setOnClickListener(new BackClickListener(this));
 
 		emailEditor = (AutoCompleteTextView) this.findViewById(R.id.account);
 		Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
@@ -116,18 +145,15 @@ public class Register3rdActivity extends BaseActivity {
 
 		nicknameEditor = (EditText) this.findViewById(R.id.nickname);
 		nicknameEditor.addTextChangedListener(new TextWatcher() {
-
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				petNameEditor.setText(s + "的爱宠");
 			}
 
 			public void beforeTextChanged(CharSequence cs, int i, int i1, int i2) {
-
 			}
 
 			public void afterTextChanged(Editable edtbl) {
-
 			}
 		});
 
@@ -143,16 +169,101 @@ public class Register3rdActivity extends BaseActivity {
 
 		submitButton = (Button) this.findViewById(R.id.button);
 		submitButton.setOnClickListener(sumbit);
+
+		// 填充用户信息
+		Register3rdActivity.this.fullfillUserInfo();
+
+		// 填充宠物信息
+		Register3rdActivity.this.fullfillPetInfo();
+	}
+
+	// 填充用户信息
+	private void fullfillUserInfo() {
+		UserApiWithCache.getUserById4Asynchronous(this, currUserId, new DefaultTaskListener<UserVO>(
+				Register3rdActivity.this) {
+			@Override
+			public void onSuccess(UserVO user) {
+				// 头像
+				if (StringUtils.isNotEmpty(user.getAvatar())) {
+					Log.d(TAG, "设置用户头像：" + Constant.FILE_SERVER_BASE + user.getAvatar());
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
+							options);
+				} else {
+					String platformName = Register3rdActivity.this.getIntent().getExtras()
+							.getString(Constant.INTENT_PLATFORM_NAME_KEY);
+					Platform platform = ShareSDK.getPlatform(Register3rdActivity.this, platformName);
+					String userIcon = platform.getDb().getUserIcon();
+					if (StringUtils.isNotBlank(userIcon)) {
+						// TODO 从第三方平台获取用户头像，保存后展现
+					} else {
+						avatar.setImageResource(R.drawable.avatar);
+					}
+				}
+
+				// 邮箱地址
+				Register3rdActivity.this.emailEditor.setText(user.getEmail() == null ? "" : user.getEmail());
+
+				// 昵称
+				Register3rdActivity.this.nicknameEditor.setText(user.getNickname() == null ? "" : user.getNickname());
+			}
+		});
+	}
+
+	// 填充宠物信息
+	private void fullfillPetInfo() {
+		Log.d(TAG, "loadPetsData");
+		new ListPetsByUserId(Register3rdActivity.this).setListener(
+				new DefaultTaskListener<List<PetVO>>(Register3rdActivity.this) {
+					@Override
+					public void onSuccess(List<PetVO> pets) {
+						if (CollectionUtils.isEmpty(pets)) {
+							// 无宠物则无需填充
+							return;
+						}
+
+						// 此时不应该会出现多个宠物
+						final PetVO pet = pets.get(0);
+						Register3rdActivity.this.petId = pet.getId();
+
+						// 昵称
+						Register3rdActivity.this.petNameEditor.setText(pet.getNickname() == null ? "" : pet
+								.getNickname());
+
+						// 性别
+						if (StringUtils.isNotBlank(pet.getGender())) {
+							Register3rdActivity.this.petGender = pet.getGender();
+							new GetOptionValueLabelMap(Register3rdActivity.this)
+									.setListener(
+											new SetOptionLabelTaskListener(Register3rdActivity.this,
+													Register3rdActivity.this.petGenderText,
+													Register3rdActivity.this.petGender))
+									.execute(OptionGroup.PET_GENDER);
+						}
+
+						// 家族
+						if (StringUtils.isNotBlank(pet.getFamily())) {
+							Register3rdActivity.this.petFamily = pet.getFamily();
+							new GetOptionValueLabelMap(Register3rdActivity.this)
+									.setListener(
+											new SetOptionLabelTaskListener(Register3rdActivity.this,
+													Register3rdActivity.this.petFamilyText,
+													Register3rdActivity.this.petFamily))
+									.execute(OptionGroup.PET_FAMILY);
+						}
+					}
+				}).execute(Register3rdActivity.this.currUserId);
 	}
 
 	private final OnClickListener sumbit = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			RegisterVO register = new RegisterVO();
+			UserForm43rdVO userForm = new UserForm43rdVO();
+			userForm.setId(Register3rdActivity.this.currUserId);
+			userForm.setPetId(Register3rdActivity.this.petId);
 
 			// email
 			String email = emailEditor.getText().toString();
-			register.setEmail(email);
+			userForm.setEmail(email);
 			if (StringUtils.isEmpty(email)) {
 				emailEditor.requestFocus();
 				Toast.makeText(Register3rdActivity.this, R.string.login_empty_account, Toast.LENGTH_SHORT).show();
@@ -166,22 +277,28 @@ public class Register3rdActivity extends BaseActivity {
 
 			// nickname
 			String nickname = nicknameEditor.getText().toString();
-			register.setNickname(nickname);
+			userForm.setNickname(nickname);
 
-			// TODO gender
 			// pet name
 			String petName = petNameEditor.getText().toString();
-			register.setPetName(petName);
+			userForm.setPetName(petName);
 
 			// pet gender
-			register.setPetGender(petGender);
+			userForm.setPetGender(petGender);
 
 			// pet family
-			register.setPetFamily(petFamily);
+			userForm.setPetFamily(petFamily);
 
-			// new UserRegister(Register3rdActivity.this).setListener(
-			// new RegisterTaskListener(Register3rdActivity.this,
-			// register)).execute(register);
+			// 保存
+			new ImproveUserInfo43rd(Register3rdActivity.this).setListener(
+					new DefaultTaskListener<UserVO>(Register3rdActivity.this) {
+						@Override
+						public void onSuccess(UserVO result) {
+							Toast.makeText(activity, R.string.save_success, Toast.LENGTH_SHORT).show();
+							// 更新缓存
+							UserApiWithCache.updateCache(result);
+						}
+					}).execute(userForm);
 		}
 	};
 
@@ -314,9 +431,36 @@ public class Register3rdActivity extends BaseActivity {
 			Log.d(TAG, "crop" + pathUri);
 
 			avatar.setImageURI(pathUri);
-			// TODO:
-			// this.updateAvatar(picture.getAbsolutePath());
+			this.updateAvatar(picture.getAbsolutePath());
 		}
+	}
+
+	public void updateAvatar(final String filePath) {
+		new UpdateUserAvatar(this).setListener(new DefaultTaskListener<String>(this) {
+			@Override
+			public void onSuccess(String result) {
+				Log.d(TAG, "updateAvatar.onSuccess:" + result);
+				UserApiWithCache.removeCache(currUserId);
+				UserVO user = UserApiWithCache.getUserById4Synchronous(Register3rdActivity.this, currUserId);
+				if (StringUtils.isNotBlank(user.getAvatar())) {
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
+							options);
+				} else {
+					avatar.setImageResource(R.drawable.avatar);
+				}
+				IpetApi.init(Register3rdActivity.this).setCurrUserInfo(user);
+				Register3rdActivity.this.showMessageForLongTime("更新头像成功");
+			}
+
+			@Override
+			public void onError(Throwable ex) {
+				super.onError(ex);
+				Register3rdActivity.this.showMessageForLongTime("更新头像失败");
+				avatar.setImageResource(R.drawable.avatar);
+				// ImageLoader.getInstance().displayImage(R.drawable.avatar,
+				// avatar, options);
+			}
+		}).execute(filePath);
 	}
 
 	public void startPhotoZoom(Uri uri, Uri photoUri) {

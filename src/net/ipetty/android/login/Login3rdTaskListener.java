@@ -5,15 +5,17 @@
  */
 package net.ipetty.android.login;
 
+import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.main.MainActivity;
-import net.ipetty.android.user.UserActivity;
+import net.ipetty.android.register.Register3rdActivity;
 import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 import cn.sharesdk.framework.Platform;
@@ -36,11 +38,13 @@ public class Login3rdTaskListener extends DefaultTaskListener<UserVO> {
 	@Override
 	public void onSuccess(UserVO user) {
 		Log.d(TAG, "onSuccess");
-		if (user != null && StringUtils.isNotEmpty(user.getNickname())) { // 跳转到首页
+		if (user != null && StringUtils.isNotEmpty(user.getEmail())) { // 跳转到首页
 			AppUtils.goTo(activity, MainActivity.class);
 		} else { // 跳转到完善资料页面
 			Toast.makeText(activity, "请完善个人资料", Toast.LENGTH_SHORT).show();
-			AppUtils.goTo(activity, UserActivity.class);
+			Intent intent = new Intent(activity, Register3rdActivity.class);
+			intent.putExtra(Constant.INTENT_PLATFORM_NAME_KEY, platform.getName());
+			activity.startActivity(intent);
 		}
 	}
 

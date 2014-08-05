@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 import net.ipetty.R;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.register.Register3rdActivity;
 import net.ipetty.android.register.RegisterActivity;
 import net.ipetty.android.sdk.task.user.UserLogin;
 
@@ -135,9 +134,6 @@ public class LoginActivity extends BaseActivity {
 			public void onClick(View v) {
 				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
 
-				Intent intent = new Intent(LoginActivity.this, Register3rdActivity.class);
-				startActivity(intent);
-
 				// sina Login
 				// Platform sinaWeibo = ShareSDK.getPlatform(LoginActivity.this,
 				// SinaWeibo.NAME);
@@ -150,8 +146,12 @@ public class LoginActivity extends BaseActivity {
 		qq.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO qq login
 				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
+
+				// qq login
+				// Platform qzone = ShareSDK.getPlatform(LoginActivity.this,
+				// QZone.NAME);
+				// new QZoneAuthorization(LoginActivity.this).authorize(qzone);
 			}
 		});
 	}

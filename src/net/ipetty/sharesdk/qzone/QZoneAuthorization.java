@@ -65,17 +65,8 @@ public class QZoneAuthorization extends AbstractAuthorization {
 				Log.v(TAG, "userId=" + userId + ",userName=" + userName + ",userGender=" + userGender + ",userIcon="
 						+ userIcon + ",token=" + token + ",tokenSecret=" + tokenSecret);
 
-				// get email, and then register or login
-				userEmail = userId + "@qq.com";
 				// 注册并登录
-				registerOrLogin(platform, platform.getDb().getUserId(), userEmail, userName);
-
-				// HashMap<String, Object> params = new HashMap<String,
-				// Object>();
-				// platform.setPlatformActionListener(new GetEmailListener());
-				// platform.customerProtocol("https://api.weibo.com/2/account/profile/email.json",
-				// "GET", (short) 1,
-				// params, null);
+				registerOrLogin(platform, platform.getDb().getUserId(), null, userName);
 			}
 		}
 
@@ -92,31 +83,6 @@ public class QZoneAuthorization extends AbstractAuthorization {
 				UIHandler.sendEmptyMessage(ShareSDKConstant.MSG_AUTH_ERROR, shareSDKMessageCallback);
 			}
 			Log.e(TAG, "授权操作出错", t);
-			platform.removeAccount();
-		}
-	}
-
-	/**
-	 * 获取新浪微博邮箱帐号Listener
-	 */
-	public class GetEmailListener implements PlatformActionListener {
-		@Override
-		public void onComplete(Platform platform, int action, HashMap<String, Object> result) {
-			Log.v(TAG, result.toString());
-			userEmail = (String) result.get("email");
-			Log.v(TAG, "userEmail=" + userEmail);
-
-			// 注册并登录
-			registerOrLogin(platform, platform.getDb().getUserId(), userEmail, userName);
-		}
-
-		@Override
-		public void onCancel(Platform platform, int action) {
-		}
-
-		@Override
-		public void onError(Platform platform, int action, Throwable t) {
-			Log.e(TAG, "获取新浪微博邮箱帐号出错", t);
 			platform.removeAccount();
 		}
 	}
