@@ -28,6 +28,7 @@ public class InitFeedListListener extends DefaultTaskListener<List<FeedVO>> {
 	@Override
 	public void onSuccess(List<FeedVO> result) {
 		Log.d(TAG, "onSuccess");
+
 		adapter.getList().clear();
 		adapter.getList().addAll(result);
 		adapter.notifyDataSetChanged();

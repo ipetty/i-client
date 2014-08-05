@@ -174,6 +174,7 @@ public class MainHomeFragment extends BaseFragment {
 
 			@Override
 			public void onLastItemVisible() {
+
 				// 加载更多
 				if (hasMore) {
 					new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
@@ -182,6 +183,7 @@ public class MainHomeFragment extends BaseFragment {
 							pageSize.toString());
 
 				}
+
 			}
 		});
 

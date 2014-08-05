@@ -26,7 +26,7 @@ public class PullToRefreshFeedListListener extends DefaultTaskListener<List<Feed
 	// 下接刷新
 	public PullToRefreshFeedListListener(Activity activity, FeedAdapter adapter,
 			PullToRefreshListView pullToRefreshListView) {
-		super(activity, "正在刷新...");
+		super(activity);
 		this.adapter = adapter;
 		this.pullToRefreshListView = pullToRefreshListView;
 	}
