@@ -6,6 +6,7 @@ import net.ipetty.R;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.MyAppStateManager;
 import net.ipetty.android.core.ui.BaseFragment;
+import net.ipetty.android.core.ui.MyPullToRefreshListView;
 import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
@@ -38,7 +39,7 @@ public class MainNewsFragment extends BaseFragment {
 	private View related_me;
 	private View my_follows;
 
-	private PullToRefreshListView related_me_listView;
+	private MyPullToRefreshListView related_me_listView;
 	private RelatedMeAdapter related_me_adapter;
 
 	private PullToRefreshListView my_follows_listView;
@@ -81,7 +82,7 @@ public class MainNewsFragment extends BaseFragment {
 		related_me.setOnClickListener(new TabClickListener(0));
 		my_follows.setOnClickListener(new TabClickListener(1));
 
-		related_me_listView = (PullToRefreshListView) activity.findViewById(R.id.related_me_listView);
+		related_me_listView = (MyPullToRefreshListView) activity.findViewById(R.id.related_me_listView);
 		// related_me_listView.setMode(Mode.PULL_FROM_END);
 
 		related_me_adapter = new RelatedMeAdapter(this.getActivity());
@@ -103,6 +104,12 @@ public class MainNewsFragment extends BaseFragment {
 
 							@Override
 							public void onSuccess(List<ActivityVO> result) {
+								if (result.size() < activitiePageSize) {
+									activitieHasMore = false;
+									related_me_listView.hideMoreView();
+								} else {
+									related_me_listView.showMoreView();
+								}
 								related_me_adapter.setList(result);
 								related_me_adapter.notifyDataSetChanged();
 								related_me_listView.onRefreshComplete();
@@ -125,6 +132,9 @@ public class MainNewsFragment extends BaseFragment {
 								public void onSuccess(List<ActivityVO> result) {
 									if (result.size() < activitiePageSize) {
 										activitieHasMore = false;
+										related_me_listView.hideMoreView();
+									} else {
+										related_me_listView.showMoreView();
 									}
 									if (result.size() > 0) {
 										related_me_adapter.getList().addAll(result);

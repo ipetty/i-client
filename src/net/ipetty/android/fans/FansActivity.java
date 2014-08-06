@@ -7,6 +7,7 @@ import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.ui.MyPullToRefreshListView;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.ListFollowers;
 import net.ipetty.android.sdk.task.user.ListFriends;
@@ -26,7 +27,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 public class FansActivity extends BaseActivity {
 
 	private FansAdapter adapter; // 定义适配器
-	private PullToRefreshListView listView;
+	private MyPullToRefreshListView listView;
 
 	private int userId;
 	private int currUserId;
@@ -58,7 +59,7 @@ public class FansActivity extends BaseActivity {
 		this.userId = this.getIntent().getExtras().getInt(Constant.INTENT_USER_ID_KEY);
 		isCurrentUser = userId == currUserId;
 
-		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
+		listView = (MyPullToRefreshListView) this.findViewById(R.id.listView);
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -81,6 +82,9 @@ public class FansActivity extends BaseActivity {
 								public void onSuccess(List<UserVO> result) {
 									if (result.size() < FansActivity.this.pageSize) {
 										FansActivity.this.hasMore = false;
+										listView.hideMoreView();
+									} else {
+										listView.showMoreView();
 									}
 									adapter.getList().addAll(result);
 									adapter.notifyDataSetChanged();
@@ -105,6 +109,9 @@ public class FansActivity extends BaseActivity {
 			public void onSuccess(List<UserVO> result) {
 				if (result.size() < FansActivity.this.pageSize) {
 					FansActivity.this.hasMore = false;
+					listView.hideMoreView();
+				} else {
+					listView.showMoreView();
 				}
 				adapter.setList(result);
 				adapter.notifyDataSetChanged();
