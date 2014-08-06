@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -44,18 +45,14 @@ public class LoginActivity extends BaseActivity {
 	private String password = null;
 	private TextView toggleView = null;
 	private boolean psdDisplayFlg = false;
+	private ProgressDialog progressDialog;
 
 	// private int focuscont = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-	}
 
-	// 加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -72,6 +69,17 @@ public class LoginActivity extends BaseActivity {
 			}
 		});
 
+		progressDialog = new ProgressDialog(LoginActivity.this);
+		progressDialog.setIndeterminate(true);
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage(getResources().getString(R.string.logining));
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+
 		// 忘记密码
 		TextView forgotView = (TextView) this.findViewById(R.id.forget_password);
 		forgotView.setOnClickListener(new OnClickListener() {
@@ -81,7 +89,6 @@ public class LoginActivity extends BaseActivity {
 			}
 		});
 
-		//
 		toggleView = (TextView) this.findViewById(R.id.login_toggle_password);
 		toggleView.setOnClickListener(togglePasswordClick);
 
@@ -144,6 +151,7 @@ public class LoginActivity extends BaseActivity {
 				// sina Login
 				Platform sinaWeibo = ShareSDK.getPlatform(LoginActivity.this, SinaWeibo.NAME);
 				new SinaWeiboAuthorization(LoginActivity.this).authorize(sinaWeibo);
+				progressDialog.show();
 			}
 		});
 
@@ -157,8 +165,17 @@ public class LoginActivity extends BaseActivity {
 				// qq login
 				Platform qzone = ShareSDK.getPlatform(LoginActivity.this, QZone.NAME);
 				new QZoneAuthorization(LoginActivity.this).authorize(qzone);
+				progressDialog.show();
 			}
 		});
+
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		progressDialog.dismiss();
 	}
 
 	// 登录

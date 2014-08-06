@@ -56,6 +56,7 @@
     <string name="pet_birthday">生日</string>
     
     <string name="title_activity_register3rd">完善爱宠资料</string>
+     <string name="logining">正在登录....</string>
 
     <!-- main -->
     <string name="sub_nav_title_home">主页</string>
