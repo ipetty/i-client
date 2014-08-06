@@ -167,32 +167,62 @@
            android:focusable="false"
            android:focusableInTouchMode="false" >
 
-           <TextView
-               android:id="@+id/sina"
+           <LinearLayout
+                android:id="@+id/sina"
                android:layout_width="wrap_content"
-               android:layout_height="48dp"
-               android:layout_weight="1.0"
+               android:layout_height="match_parent"
+               android:layout_weight="1.0" 
+              	android:background="@drawable/list_color_item_bg"
+               android:gravity="center">
+               
+              <ImageView
+              android:layout_width="26dp"
+              android:layout_height="24dp"
+              android:src="@drawable/ic_sina"
+            />
+  			 
+                <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:layout_marginLeft="5dp"
                android:gravity="center"
                android:text="@string/sina_login" 
                android:textColor="@color/title_gray"
-               android:background="@drawable/list_color_item_bg"
+            
                android:textSize="16sp" />
-           
-  			 <ImageView
+           </LinearLayout>
+	 <ImageView
               android:layout_width="1.0px"
               android:layout_height="fill_parent"
               android:background="@drawable/drawable_line" />
   			 
-           <TextView
-               android:id="@+id/qq"
+           <LinearLayout
+                android:id="@+id/qq"
                android:layout_width="wrap_content"
-               android:layout_height="48dp"
-                 android:gravity="center"
-               android:layout_weight="1.0"
-               android:text="@string/qq_login" 
-                 android:textColor="@color/title_gray"
+               android:layout_height="match_parent"
                   android:background="@drawable/list_color_item_bg"
+               android:gravity="center"
+               android:layout_weight="1.0" >
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:src="@drawable/ic_qq"
+              android:scaleType="fitStart"
+            />
+             <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:layout_marginLeft="5dp"
+               android:text="@string/qq_login" 
+                 android:gravity="center"
+                 android:textColor="@color/title_gray"
                android:textSize="16sp" />
+           </LinearLayout>
+
+          
+           
+  		
+
 
        </LinearLayout>
    </LinearLayout>
