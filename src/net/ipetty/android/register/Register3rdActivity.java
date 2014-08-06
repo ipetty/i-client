@@ -1,6 +1,8 @@
 package net.ipetty.android.register;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -61,6 +63,8 @@ import cn.sharesdk.framework.ShareSDK;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class Register3rdActivity extends BaseActivity {
 
@@ -195,7 +199,46 @@ public class Register3rdActivity extends BaseActivity {
 					Platform platform = ShareSDK.getPlatform(Register3rdActivity.this, platformName);
 					String userIcon = platform.getDb().getUserIcon();
 					if (StringUtils.isNotBlank(userIcon)) {
+
 						// TODO 从第三方平台获取用户头像，保存后展现
+						ImageLoader.getInstance().displayImage(userIcon, avatar, options, new ImageLoadingListener() {
+
+							@Override
+							public void onLoadingStarted(String imageUri, View view) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+								// TODO Auto-generated method stub
+								String path = PathUtils.getCarmerDir() + mImageName;
+								File file = new File(path);
+								FileOutputStream out;
+								try {
+									out = new FileOutputStream(file);
+									loadedImage.compress(Bitmap.CompressFormat.JPEG, 80, out);
+									Register3rdActivity.this.updateAvatar(file.getAbsolutePath());
+								} catch (FileNotFoundException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
+							}
+
+							@Override
+							public void onLoadingCancelled(String imageUri, View view) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
 					} else {
 						avatar.setImageResource(R.drawable.avatar);
 					}

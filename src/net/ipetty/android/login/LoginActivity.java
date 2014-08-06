@@ -172,9 +172,9 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onStart() {
+	protected void onResume() {
 		// TODO Auto-generated method stub
-		super.onStart();
+		super.onResume();
 		progressDialog.dismiss();
 	}
 
