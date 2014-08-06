@@ -1,6 +1,7 @@
 package net.ipetty.android.feed;
 
 import java.io.File;
+import java.io.IOException;
 
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
@@ -9,6 +10,7 @@ import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.vo.FeedFormVO;
 import android.content.Intent;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -72,6 +74,29 @@ public class FeedPublishActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+
+		try {
+			ExifInterface exifInterface = new ExifInterface(path);
+
+			String latV = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+			String latRef = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
+			String lngV = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+			String lngRef = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
+
+			// Log.d(TAG, latV);
+			// Log.d(TAG, latRef);
+			// Log.d(TAG, lngV);
+			// Log.d(TAG, lngRef);
+
+			float[] output = { 0f, 0f };
+			exifInterface.getLatLong(output);
+			// Log.d(TAG, output[0] + "");
+			// Log.d(TAG, output[1] + "");
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// 发布操作

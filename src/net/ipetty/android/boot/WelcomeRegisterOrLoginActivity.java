@@ -44,12 +44,6 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome_register_or_login);
 		Log.d(TAG, "onCreate");
-	}
-
-	// 加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		// 初始化页面
 		initViews();
 		// 初始化小圆点
@@ -70,6 +64,13 @@ public class WelcomeRegisterOrLoginActivity extends BaseActivity {
 		String verStr = getResources().getString(R.string.app_version);
 		String v = String.format(verStr, AppUtils.getAppVersionName(this));
 		version.setText(v);
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+
 	}
 
 	private void initViews() {

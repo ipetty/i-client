@@ -22,13 +22,14 @@ public class SplashActivity extends BaseActivity {
 		ShareSDK.initSDK(this);
 		setContentView(R.layout.activity_splash);
 		Log.d(TAG, "onCreate");
+		init();
 	}
 
 	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
-		init();
+
 		new SplashTask(SplashActivity.this)
 		// .setListener(new SplashTaskListener(SplashActivity.this))
 				.execute();
