@@ -9,7 +9,6 @@ import java.util.List;
 
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.vo.FeedVO;
-import android.app.Activity;
 import android.util.Log;
 
 /**
@@ -18,20 +17,20 @@ import android.util.Log;
  */
 public class InitFeedListListener extends DefaultTaskListener<List<FeedVO>> {
 
-	private final FeedAdapter adapter;
+	private final MainHomeFragment mainHomeFragment;
+	private FeedAdapter adapter;
 
-	public InitFeedListListener(Activity activity, FeedAdapter adapter) {
-		super(activity, "努力加载中...");
+	public InitFeedListListener(MainHomeFragment mainHomeFragment, FeedAdapter adapter) {
+		super(mainHomeFragment.getActivity());
+		this.mainHomeFragment = mainHomeFragment;
 		this.adapter = adapter;
 	}
 
 	@Override
 	public void onSuccess(List<FeedVO> result) {
 		Log.d(TAG, "onSuccess");
-
 		adapter.getList().clear();
-		adapter.getList().addAll(result);
-		adapter.notifyDataSetChanged();
+		mainHomeFragment.loadMoreForResult(result);
 	}
 
 }

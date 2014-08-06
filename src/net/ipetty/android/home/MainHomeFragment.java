@@ -9,6 +9,7 @@ import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.MyAppStateManager;
 import net.ipetty.android.core.ui.BaseFragment;
 import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.ui.MyPullToRefreshListView;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DeviceUtils;
 import net.ipetty.android.core.util.DialogUtils;
@@ -47,13 +48,12 @@ import android.widget.Toast;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MainHomeFragment extends BaseFragment {
 
-	private PullToRefreshListView mPullRefreshListView;
+	private MyPullToRefreshListView mPullRefreshListView;
 	private FeedAdapter mAdapter;
 	private Dialog cameraDialog;
 	private ImageView avatar;
@@ -129,11 +129,15 @@ public class MainHomeFragment extends BaseFragment {
 		Log.d(TAG, "loadMoreForResult:" + result.size());
 		if (result.size() < pageSize) {
 			hasMore = false;
+			mPullRefreshListView.hideMoreView();
+		} else {
+			mPullRefreshListView.showMoreView();
 		}
 		if (result.size() > 0) {
 			mAdapter.getList().addAll(result);
 			mAdapter.notifyDataSetChanged();
 			mPullRefreshListView.onRefreshComplete();
+
 		}
 	}
 
@@ -150,7 +154,7 @@ public class MainHomeFragment extends BaseFragment {
 
 	private void initListView() {
 
-		mPullRefreshListView = (PullToRefreshListView) this.getActivity().findViewById(R.id.pull_refresh_list);
+		mPullRefreshListView = (MyPullToRefreshListView) this.getActivity().findViewById(R.id.pull_refresh_list);
 		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -181,7 +185,6 @@ public class MainHomeFragment extends BaseFragment {
 							new LoadMoreFeedListListener(MainHomeFragment.this)).execute(
 							MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
 							pageSize.toString());
-
 				}
 
 			}
@@ -251,8 +254,8 @@ public class MainHomeFragment extends BaseFragment {
 		 */
 
 		new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
-				new InitFeedListListener(MainHomeFragment.this.getActivity(), mAdapter)).execute(
-				getRefreshTime().toString(), "0", pageSize.toString());
+				new InitFeedListListener(MainHomeFragment.this, mAdapter)).execute(getRefreshTime().toString(), "0",
+				pageSize.toString());
 
 	}
 
