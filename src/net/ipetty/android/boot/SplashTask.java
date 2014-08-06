@@ -7,7 +7,12 @@ import net.ipetty.android.core.util.AnimUtils;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.login.LoginHasAccountActivity;
 import net.ipetty.android.main.MainActivity;
+import net.ipetty.android.register.Register3rdActivity;
 import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.util.Log;
 
 public class SplashTask extends Task<Void, Void> {
@@ -27,8 +32,13 @@ public class SplashTask extends Task<Void, Void> {
 		IpetApi api = IpetApi.init(activity);
 		// 是否就已认证状态
 		if (api.getIsAuthorized()) {
-			// 首页
-			goMain();
+			UserVO currentUser = api.getCurrUserInfo();
+			if (currentUser != null && StringUtils.isNotEmpty(currentUser.getEmail())) { // 跳转到首页
+				goMain();
+			} else { // 跳转到完善资料页面
+				AppUtils.goTo(activity, Register3rdActivity.class);
+				activity.finish();
+			}
 		} else {
 			// 以前没有登录过
 			if (api.getCurrUserId() == Constant.EMPTY_USER_ID) {

@@ -1,6 +1,5 @@
 package net.ipetty.sharesdk;
 
-import net.ipetty.R;
 import android.app.Activity;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -35,11 +34,13 @@ public class ShareSDKMessageCallback implements Callback {
 			Toast.makeText(activity, "分享失败", Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_USERID_FOUND:
-			Toast.makeText(activity, "用户信息已存在，正在跳转登录操作…", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(activity, "用户信息已存在，正在跳转登录操作…",
+			// Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_LOGIN:
-			Toast.makeText(activity, "正在使用" + msg.obj + "的授权帐号登录" + activity.getString(R.string.app_name),
-					Toast.LENGTH_SHORT).show();
+			// Toast.makeText(activity, "正在使用" + msg.obj + "的授权帐号登录" +
+			// activity.getString(R.string.app_name),
+			// Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_AUTH_CANCEL:
 			Toast.makeText(activity, "授权操作已取消", Toast.LENGTH_SHORT).show();
@@ -48,7 +49,8 @@ public class ShareSDKMessageCallback implements Callback {
 			Toast.makeText(activity, "授权操作出错", Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_AUTH_COMPLETE:
-			Toast.makeText(activity, "授权成功，正在跳转登录操作…", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(activity, "授权成功，正在跳转登录操作…",
+			// Toast.LENGTH_SHORT).show();
 			break;
 		}
 		return false;

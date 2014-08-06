@@ -145,9 +145,6 @@ public class LoginActivity extends BaseActivity {
 		sina.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Toast.makeText(LoginActivity.this, "暂时未实现",
-				// Toast.LENGTH_SHORT).show();
-
 				// sina Login
 				Platform sinaWeibo = ShareSDK.getPlatform(LoginActivity.this, SinaWeibo.NAME);
 				new SinaWeiboAuthorization(LoginActivity.this).authorize(sinaWeibo);
@@ -159,21 +156,16 @@ public class LoginActivity extends BaseActivity {
 		qq.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Toast.makeText(LoginActivity.this, "暂时未实现",
-				// Toast.LENGTH_SHORT).show();
-
 				// qq login
 				Platform qzone = ShareSDK.getPlatform(LoginActivity.this, QZone.NAME);
 				new QZoneAuthorization(LoginActivity.this).authorize(qzone);
 				progressDialog.show();
 			}
 		});
-
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		progressDialog.dismiss();
 	}

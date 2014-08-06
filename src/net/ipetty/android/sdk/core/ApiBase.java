@@ -117,12 +117,15 @@ public class ApiBase {
 		return SDKStateManager.getAuthorized(context);
 	}
 
-	protected void setIsAuthorized(boolean bl) {
+	protected void setIsAuthorized(boolean bl, String platformName) {
 		SDKStateManager.setAuthorized(context, bl);
-		// 设置退出时清空UserToken、RefreshToken
+		// 设置退出时清空UserToken、RefreshToken、PlatformName
 		if (!bl) {
 			SDKStateManager.setUserToken(context, "");
 			SDKStateManager.setRefreshToken(context, "");
+			SDKStateManager.setPlatformName(context, "");
+		} else {
+			SDKStateManager.setPlatformName(context, platformName);
 		}
 	}
 

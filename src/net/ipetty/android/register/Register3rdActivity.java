@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.BackClickListener;
@@ -21,6 +22,7 @@ import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.core.util.ValidUtils;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.core.SDKStateManager;
 import net.ipetty.android.sdk.task.foundation.GetOptionValueLabelMap;
 import net.ipetty.android.sdk.task.foundation.ListOptions;
 import net.ipetty.android.sdk.task.foundation.SetOptionLabelTaskListener;
@@ -49,6 +51,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -175,6 +178,8 @@ public class Register3rdActivity extends BaseActivity {
 		submitButton = (Button) this.findViewById(R.id.button);
 		submitButton.setOnClickListener(sumbit);
 
+		Toast.makeText(Register3rdActivity.this, "请完善个人资料", Toast.LENGTH_SHORT).show();
+
 		// 填充用户信息
 		Register3rdActivity.this.fullfillUserInfo();
 
@@ -194,48 +199,37 @@ public class Register3rdActivity extends BaseActivity {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
 							options);
 				} else {
-					String platformName = Register3rdActivity.this.getIntent().getExtras()
-							.getString(Constant.INTENT_PLATFORM_NAME_KEY);
+					String platformName = SDKStateManager.getPlatformName(activity);
 					Platform platform = ShareSDK.getPlatform(Register3rdActivity.this, platformName);
 					String userIcon = platform.getDb().getUserIcon();
 					if (StringUtils.isNotBlank(userIcon)) {
-
-						// TODO 从第三方平台获取用户头像，保存后展现
+						// 从第三方平台获取用户头像，保存后展现
 						ImageLoader.getInstance().displayImage(userIcon, avatar, options, new ImageLoadingListener() {
 
 							@Override
 							public void onLoadingStarted(String imageUri, View view) {
-								// TODO Auto-generated method stub
-
 							}
 
 							@Override
 							public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-								// TODO Auto-generated method stub
-
 							}
 
 							@Override
 							public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-								// TODO Auto-generated method stub
 								String path = PathUtils.getCarmerDir() + mImageName;
 								File file = new File(path);
 								FileOutputStream out;
 								try {
 									out = new FileOutputStream(file);
-									loadedImage.compress(Bitmap.CompressFormat.JPEG, 80, out);
-									Register3rdActivity.this.updateAvatar(file.getAbsolutePath());
+									loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+									Register3rdActivity.this.updateAvatar(file.getAbsolutePath(), null);
 								} catch (FileNotFoundException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-
 							}
 
 							@Override
 							public void onLoadingCancelled(String imageUri, View view) {
-								// TODO Auto-generated method stub
-
 							}
 						});
 
@@ -478,11 +472,11 @@ public class Register3rdActivity extends BaseActivity {
 			Log.d(TAG, "crop" + pathUri);
 
 			avatar.setImageURI(pathUri);
-			this.updateAvatar(picture.getAbsolutePath());
+			this.updateAvatar(picture.getAbsolutePath(), "更新头像成功");
 		}
 	}
 
-	public void updateAvatar(final String filePath) {
+	public void updateAvatar(final String filePath, final String successMsg) {
 		new UpdateUserAvatar(this).setListener(new DefaultTaskListener<String>(this) {
 			@Override
 			public void onSuccess(String result) {
@@ -496,7 +490,9 @@ public class Register3rdActivity extends BaseActivity {
 					avatar.setImageResource(R.drawable.avatar);
 				}
 				IpetApi.init(Register3rdActivity.this).setCurrUserInfo(user);
-				Register3rdActivity.this.showMessageForLongTime("更新头像成功");
+				if (StringUtils.isNotBlank(successMsg)) {
+					Register3rdActivity.this.showMessageForLongTime(successMsg);
+				}
 			}
 
 			@Override
@@ -524,6 +520,24 @@ public class Register3rdActivity extends BaseActivity {
 		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
 		intent.putExtra("return-data", false);
 		super.startActivityForResult(intent, REQUEST_CODE_PHOTORESOULT);
+	}
+
+	private long mExitTime;
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// 双击返回，退出应用
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if ((System.currentTimeMillis() - mExitTime) > 2000) {
+				String exit_once_again = getResources().getString(R.string.exit_once_again);
+				Toast.makeText(this, exit_once_again, Toast.LENGTH_SHORT).show();
+				mExitTime = System.currentTimeMillis();
+			} else {
+				ActivityManager.getInstance().exit();
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 }

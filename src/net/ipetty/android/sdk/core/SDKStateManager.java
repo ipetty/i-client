@@ -36,6 +36,9 @@ public class SDKStateManager {
 
 	private static final String CURRENT_USER_INFO = "current_user_info";
 
+	// 第三方帐号登录时的第三方平台名称
+	private static final String PLATFORM_NAME = "platform_name";
+
 	// 当前用户信息
 	public static void setCurrentUserInfo(Context ctx, UserVO user) {
 		Log.d(TAG, "setCurrentUserInfo");
@@ -104,6 +107,20 @@ public class SDKStateManager {
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putBoolean(IS_AUTHORIZED, isAuthorized);
 		editor.commit();
+	}
+
+	// 第三方平台
+	public static String getPlatformName(Context ctx) {
+		String platformName = getString(ctx, PLATFORM_NAME);
+		Log.d(TAG, "getPlatformName:" + platformName);
+		return platformName;
+	}
+
+	public static void setPlatformName(Context ctx, String platformName) {
+		if (platformName != null) {
+			Log.d(TAG, "setPlatformName:" + platformName);
+			setString(ctx, PLATFORM_NAME, platformName);
+		}
 	}
 
 	// 用户ID

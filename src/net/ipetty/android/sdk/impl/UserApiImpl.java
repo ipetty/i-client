@@ -43,9 +43,9 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		request.set("username", username);
 		request.set("password", password);
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN), request, UserVO.class);
-		setIsAuthorized(true);
+		setIsAuthorized(true, null);
 		setCurrUserId(user.getId());
-		this.setCurrUserInfo(user);
+		setCurrUserInfo(user);
 		return user;
 	}
 
@@ -59,8 +59,9 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		request.set("platform", platform);
 		request.set("userId", userId);
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN_3RD), request, UserVO.class);
-		setIsAuthorized(true);
+		setIsAuthorized(true, platform);
 		setCurrUserId(user.getId());
+		setCurrUserInfo(user);
 		return user;
 	}
 
@@ -76,8 +77,9 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		request.set("email", email);
 		request.set("userName", userName);
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN_OR_REGISTER_3RD), request, UserVO.class);
-		setIsAuthorized(true);
+		setIsAuthorized(true, platform);
 		setCurrUserId(user.getId());
+		setCurrUserInfo(user);
 		return user;
 	}
 
@@ -99,7 +101,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	public void logout() {
 		// getRestTemplate().getForObject(buildUri(URI_LOGOUT), Boolean.class);
 		// setCurrUserId(Constant.EMPTY_USER_ID);
-		setIsAuthorized(false);
+		setIsAuthorized(false, null);
 	}
 
 	private static final String URI_REGISTER = "/register";

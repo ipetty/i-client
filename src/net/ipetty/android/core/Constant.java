@@ -30,7 +30,7 @@ public class Constant {
 	public final static String INTENT_FEED_ID_KEY = "feedId";
 	public final static String INTENT_USER_ID_KEY = "id";
 	public final static String INTENT_PET_ID_KEY = "petId";
-	public final static String INTENT_PLATFORM_NAME_KEY = "platform_name";
+	// public final static String INTENT_PLATFORM_NAME_KEY = "platform_name";
 
 	// BROADCAST
 	public final static String BROADCAST_INTENT_FEED_PUBLISH = "BROADCAST_INTENT_FEED_PUBLISH";
