@@ -5,38 +5,35 @@
  */
 package net.ipetty.android.api;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import java.util.concurrent.CountDownLatch;
-
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.sdk.core.APIException;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.GetUserById;
 import net.ipetty.vo.UserVO;
-
 import org.apache.commons.lang3.StringUtils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
-
 /**
- * 
+ *
  * @author yneos
  */
 public class UserApiWithCache {
 
 	private static final String TAG = UserApiWithCache.class.getSimpleName();
 	private static UserVO userForGetUserById4Synchronous;
-	private static final UserVOCache cache = new UserVOCache(100);
+	private static final UserVOCache cache = new UserVOCache(500);
 
 	/**
 	 * 同步获取用户
-	 * 
+	 *
 	 * @param context
 	 * @param userId
 	 * @return
 	 */
-	public static synchronized UserVO getUserById4Synchronous(final Context context, final Integer userId) {
+	public static UserVO getUserById4Synchronous(final Context context, final Integer userId) {
 		Log.d(TAG, "getUserById4Synchronous:" + userId);
 		UserVO user = cache.get(userId);
 		if (null != user) {
@@ -63,7 +60,7 @@ public class UserApiWithCache {
 
 	}
 
-	public static synchronized void getUserById4Asynchronous(final Context context, final Integer userId,
+	public static void getUserById4Asynchronous(final Context context, final Integer userId,
 			final DefaultTaskListener<UserVO> listenner) {
 		Log.d(TAG, "getUserById4Asynchronous:" + userId);
 		UserVO user = cache.get(userId);
@@ -98,13 +95,12 @@ public class UserApiWithCache {
 		new GetUserById((Activity) context).setListener(myListener).execute(userId);
 	}
 
-	public static synchronized void updateCache(UserVO user) {
+	public static void updateCache(final UserVO user, final Context context) {
 		Log.d(TAG, "updateCache:" + user.getId());
 		cache.put(user);
+		if (IpetApi.init(context).getCurrUserId() == user.getId()) {
+			IpetApi.init(context).setCurrUserInfo(user);
+		}
 	}
 
-	public static synchronized void removeCache(Integer id) {
-		Log.d(TAG, "removeCache:" + id);
-		cache.remove(id);
-	}
 }

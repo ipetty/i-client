@@ -1,5 +1,8 @@
 package net.ipetty.android.sdk.core;
 
+import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -10,12 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.URIBuilder;
 import net.ipetty.android.sdk.cache.RestTemplate4Cache;
 import net.ipetty.vo.UserVO;
-
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -28,13 +29,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import android.content.Context;
-import android.os.Build;
-import android.util.Log;
-
 /**
  * API基类, 提供统一RestTemplate对象和一些常用方法
- * 
+ *
  * @author xiaojinghai
  */
 public class ApiBase {
@@ -43,7 +40,7 @@ public class ApiBase {
 
 	private final RestTemplate restTemplate;
 
-	private final Context context;
+	protected final Context context;
 
 	private static final LinkedMultiValueMap<String, String> EMPTY_PARAMETERS = new LinkedMultiValueMap<String, String>();
 
@@ -56,9 +53,9 @@ public class ApiBase {
 		// 关于HTTP组件的选择：http://www.07net01.com/program/653485.html
 		/**
 		 * SimpleClientHttpRequestFactory HttpURLConnection --推荐
-		 * 
+		 *
 		 * CommonsClientHttpRequestFactory CommonsClientHttpRequest --不推荐
-		 * 
+		 *
 		 * HttpComponentsClientHttpRequestFactory HttpUriRequest --?
 		 */
 

@@ -1,9 +1,10 @@
 package net.ipetty.android.sdk.impl;
 
+import android.content.Context;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-
+import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.sdk.core.ApiBase;
 import net.ipetty.sdk.UserApi;
@@ -12,16 +13,13 @@ import net.ipetty.vo.UserForm43rdVO;
 import net.ipetty.vo.UserFormVO;
 import net.ipetty.vo.UserStatisticsVO;
 import net.ipetty.vo.UserVO;
-
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import android.content.Context;
-
 /**
  * UserApiImpl
- * 
+ *
  * @author luocanfeng
  * @date 2014年5月6日
  */
@@ -45,7 +43,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN), request, UserVO.class);
 		setIsAuthorized(true, null);
 		setCurrUserId(user.getId());
-		// setCurrUserInfo(user);
+		UserApiWithCache.updateCache(user, context);
 		return user;
 	}
 
@@ -61,7 +59,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN_3RD), request, UserVO.class);
 		setIsAuthorized(true, platform);
 		setCurrUserId(user.getId());
-		// setCurrUserInfo(user);
+		UserApiWithCache.updateCache(user, context);
 		return user;
 	}
 
@@ -79,7 +77,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN_OR_REGISTER_3RD), request, UserVO.class);
 		setIsAuthorized(true, platform);
 		setCurrUserId(user.getId());
-		// setCurrUserInfo(user);
+		UserApiWithCache.updateCache(user, context);
 		return user;
 	}
 
@@ -89,7 +87,10 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	 * 使用第三方帐号注册后完善用户信息
 	 */
 	public UserVO improveUserInfo43rd(UserForm43rdVO userForm) {
-		return getRestTemplate().postForObject(buildUri(URI_IMPROVE_USERINFO_4_3RD), userForm, UserVO.class);
+		UserVO user = getRestTemplate().postForObject(buildUri(URI_IMPROVE_USERINFO_4_3RD), userForm, UserVO.class);
+		UserApiWithCache.updateCache(user, context);
+
+		return user;
 	}
 
 	private static final String URI_LOGOUT = "/logout";
@@ -111,7 +112,9 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	 */
 	@Override
 	public UserVO register(RegisterVO register) {
-		return getRestTemplate().postForObject(buildUri(URI_REGISTER), register, UserVO.class);
+		UserVO user = getRestTemplate().postForObject(buildUri(URI_REGISTER), register, UserVO.class);
+		UserApiWithCache.updateCache(user, context);
+		return user;
 	}
 
 	private static final String URI_CHECK_EMAIL_AVAILABLE = "/user/checkEmailAvailable";
@@ -131,7 +134,9 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	 */
 	@Override
 	public UserVO getById(final Integer id) {
-		return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_ID, UserVO.class, id);
+		UserVO user = getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_ID, UserVO.class, id);
+		UserApiWithCache.updateCache(user, context);
+		return user;
 	}
 
 	private static final String URI_GET_USER_STATISTICS_BY_USER_ID = "/user/statistics/{userId}";
@@ -151,8 +156,9 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	 */
 	@Override
 	public UserVO getByUid(final int uid) {
-
-		return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UID, UserVO.class, uid);
+		UserVO user = getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UID, UserVO.class, uid);
+		UserApiWithCache.updateCache(user, context);
+		return user;
 	}
 
 	private static final String URI_GET_BY_UNIQUE_NAME = "/user/{uniqueName}";
@@ -162,8 +168,10 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	 */
 	@Override
 	public UserVO getByUniqueName(String uniqueName) {
-		return getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UNIQUE_NAME, UserVO.class,
+		UserVO user = getRestTemplate().getForObject(Constant.API_SERVER_BASE + URI_GET_BY_UNIQUE_NAME, UserVO.class,
 				uniqueName);
+		UserApiWithCache.updateCache(user, context);
+		return user;
 	}
 
 	private static final String URI_UPDATE_UNIQUE_NAME = "/user/uniqueName";
@@ -177,7 +185,12 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
 		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
 		request.set("uniqueName", uniqueName);
-		return getRestTemplate().postForObject(buildUri(URI_UPDATE_UNIQUE_NAME), request, Boolean.class);
+		Boolean result = getRestTemplate().postForObject(buildUri(URI_UPDATE_UNIQUE_NAME), request, Boolean.class);
+
+		UserVO user = UserApiWithCache.getUserById4Synchronous(context, this.getCurrUserId());
+		UserApiWithCache.updateCache(user, context);
+
+		return result;
 	}
 
 	private static final String URI_CHANGE_PASSWORD = "/changePassword";
@@ -241,9 +254,8 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
 	/**
 	 * 分页获取关注列表
-	 * 
-	 * @param pageNumber
-	 *            分页页码，从0开始
+	 *
+	 * @param pageNumber 分页页码，从0开始
 	 */
 	public List<UserVO> listFriends(Integer userId, int pageNumber, int pageSize) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
@@ -258,9 +270,8 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
 	/**
 	 * 获取粉丝列表
-	 * 
-	 * @param pageNumber
-	 *            分页页码，从0开始
+	 *
+	 * @param pageNumber 分页页码，从0开始
 	 */
 	public List<UserVO> listFollowers(Integer userId, int pageNumber, int pageSize) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
@@ -275,9 +286,8 @@ public class UserApiImpl extends ApiBase implements UserApi {
 
 	/**
 	 * 获取好友列表（双向关注）
-	 * 
-	 * @param pageNumber
-	 *            分页页码，从0开始
+	 *
+	 * @param pageNumber 分页页码，从0开始
 	 */
 	public List<UserVO> listBiFriends(Integer userId, int pageNumber, int pageSize) {
 		LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
@@ -300,7 +310,12 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		URI updateAvatarUri = buildUri(URI_UPDATE_AVATAR);
 		LinkedMultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
 		request.add("imageFile", new FileSystemResource(imagePath));
-		return getRestTemplate().postForObject(updateAvatarUri, request, String.class);
+		String result = getRestTemplate().postForObject(updateAvatarUri, request, String.class);
+
+		UserVO user = UserApiWithCache.getUserById4Synchronous(context, this.getCurrUserId());
+		user.setAvatar(result);
+		UserApiWithCache.updateCache(user, context);
+		return result;
 	}
 
 	private static final String URI_UPDATE_BACKGROUD = "/user/updateBackground";
@@ -315,7 +330,11 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		URI updateBackgroundUri = buildUri(URI_UPDATE_BACKGROUD);
 		LinkedMultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
 		request.add("imageFile", new FileSystemResource(imagePath));
-		return getRestTemplate().postForObject(updateBackgroundUri, request, String.class);
+		String result = getRestTemplate().postForObject(updateBackgroundUri, request, String.class);
+		UserVO user = UserApiWithCache.getUserById4Synchronous(context, this.getCurrUserId());
+		user.setBackground(result);
+		UserApiWithCache.updateCache(user, context);
+		return result;
 	}
 
 	private static final String URI_UPDATE = "/user/update";
@@ -326,7 +345,9 @@ public class UserApiImpl extends ApiBase implements UserApi {
 	@Override
 	public UserVO update(UserFormVO userFormVo) {
 		super.requireAuthorization();
-		return getRestTemplate().postForObject(buildUri(URI_UPDATE), userFormVo, UserVO.class);
+		UserVO user = getRestTemplate().postForObject(buildUri(URI_UPDATE), userFormVo, UserVO.class);
+		UserApiWithCache.updateCache(user, context);
+		return user;
 	}
 
 }
