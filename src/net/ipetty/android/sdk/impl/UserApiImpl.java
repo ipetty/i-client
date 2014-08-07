@@ -45,7 +45,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN), request, UserVO.class);
 		setIsAuthorized(true, null);
 		setCurrUserId(user.getId());
-		setCurrUserInfo(user);
+		// setCurrUserInfo(user);
 		return user;
 	}
 
@@ -61,7 +61,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN_3RD), request, UserVO.class);
 		setIsAuthorized(true, platform);
 		setCurrUserId(user.getId());
-		setCurrUserInfo(user);
+		// setCurrUserInfo(user);
 		return user;
 	}
 
@@ -79,7 +79,7 @@ public class UserApiImpl extends ApiBase implements UserApi {
 		UserVO user = getRestTemplate().postForObject(buildUri(URI_LOGIN_OR_REGISTER_3RD), request, UserVO.class);
 		setIsAuthorized(true, platform);
 		setCurrUserId(user.getId());
-		setCurrUserInfo(user);
+		// setCurrUserInfo(user);
 		return user;
 	}
 
