@@ -5,6 +5,7 @@ import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.ui.MyPullToRefreshListView;
 import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.sdk.task.feed.GetFeedById;
 import net.ipetty.android.sdk.task.feed.PublishComment;
@@ -27,12 +28,11 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class CommentActivity extends BaseActivity {
 
 	private CommentAdapter adapter; // 定义适配器
-	private PullToRefreshListView listView;
+	private MyPullToRefreshListView listView;
 	private EditText pulishTextView;
 	private Long feedId;
 
@@ -41,6 +41,11 @@ public class CommentActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_comment);
 		Log.d(TAG, "onCreate");
+		/* action bar */
+		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
+		text.setText(this.getResources().getString(R.string.title_activity_comment));
+		btnBack.setOnClickListener(new BackClickListener(this));
 	}
 
 	// 加载数据
@@ -49,13 +54,7 @@ public class CommentActivity extends BaseActivity {
 		Log.d(TAG, "onViewReady");
 		feedId = this.getIntent().getExtras().getLong("feedId");
 
-		/* action bar */
-		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
-		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
-		text.setText(this.getResources().getString(R.string.title_activity_comment));
-		btnBack.setOnClickListener(new BackClickListener(this));
-
-		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
+		listView = (MyPullToRefreshListView) this.findViewById(R.id.listView);
 		pulishTextView = (EditText) this.findViewById(R.id.editText);
 
 		// 下拉刷新
@@ -69,9 +68,10 @@ public class CommentActivity extends BaseActivity {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				new GetFeedById(CommentActivity.this).setListener(
-						new DefaultTaskListener<FeedVO>(CommentActivity.this, "刷新中") {
+						new DefaultTaskListener<FeedVO>(CommentActivity.this) {
 							@Override
 							public void onSuccess(FeedVO result) {
+								listView.hideMoreView();
 								adapter.setList(result.getComments());
 								adapter.notifyDataSetChanged();
 								listView.onRefreshComplete();
@@ -129,9 +129,10 @@ public class CommentActivity extends BaseActivity {
 
 	public void loadData() {
 
-		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this, "加载中") {
+		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
 			@Override
 			public void onSuccess(FeedVO result) {
+				listView.hideMoreView();
 				adapter.setList(result.getComments());
 				adapter.notifyDataSetChanged();
 			}
