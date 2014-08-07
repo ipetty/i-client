@@ -76,6 +76,17 @@ public class AppUtils {
 		return versionName;
 	}
 
+	public static int getAppVersionCode(Context context) {
+		int versionCode = 0;
+		try {
+			// 获取软件版本号，对应AndroidManifest.xml下android:versionCode
+			versionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			Log.e("VersionInfo", "Exception", e);
+		}
+		return versionCode;
+	}
+
 	public static Builder getCacheImageBublder() {
 		Builder bulider = new DisplayImageOptions.Builder()//
 				.cacheInMemory(true)//

@@ -3,6 +3,7 @@ package net.ipetty.android.sdk.core;
 import android.content.Context;
 import net.ipetty.android.sdk.impl.ActivityApiImpl;
 import net.ipetty.android.sdk.impl.AppUpdateApiImpl;
+import net.ipetty.android.sdk.impl.CrashLogApiImpl;
 import net.ipetty.android.sdk.impl.FeedApiImpl;
 import net.ipetty.android.sdk.impl.FeedbackApiImpl;
 import net.ipetty.android.sdk.impl.FoundationApiImpl;
@@ -11,6 +12,7 @@ import net.ipetty.android.sdk.impl.PetApiImpl;
 import net.ipetty.android.sdk.impl.UserApiImpl;
 import net.ipetty.sdk.ActivityApi;
 import net.ipetty.sdk.AppUpdateApi;
+import net.ipetty.sdk.CrashLogApi;
 import net.ipetty.sdk.FeedApi;
 import net.ipetty.sdk.FeedbackApi;
 import net.ipetty.sdk.FoundationApi;
@@ -35,6 +37,7 @@ public class IpetApi extends ApiBase {
 	private final FoundationApi foundationApi;
 	private final AppUpdateApi appUpdateApi;
 	private final NotificationApi notificationApi;
+	private final CrashLogApi crashLogApiImpl;
 
 	private IpetApi(Context context) {
 		super(context);
@@ -46,6 +49,7 @@ public class IpetApi extends ApiBase {
 		foundationApi = new FoundationApiImpl(context);
 		appUpdateApi = new AppUpdateApiImpl(context);
 		notificationApi = new NotificationApiImpl(context);
+		crashLogApiImpl = new CrashLogApiImpl(context);
 	}
 
 	public static IpetApi init(Context context) {
@@ -85,6 +89,10 @@ public class IpetApi extends ApiBase {
 
 	public NotificationApi getNotificationApi() {
 		return notificationApi;
+	}
+
+	public CrashLogApi getCrashLogApi() {
+		return crashLogApiImpl;
 	}
 
 }

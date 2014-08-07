@@ -5,6 +5,14 @@
  */
 package net.ipetty.android.core;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,17 +27,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.core.util.PathUtils;
 import net.ipetty.android.sdk.core.IpetApi;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
+import net.ipetty.vo.CrashLogVO;
+import net.ipetty.vo.UserVO;
 
 public class MyAppCrashHandler implements UncaughtExceptionHandler {
 
@@ -37,6 +40,10 @@ public class MyAppCrashHandler implements UncaughtExceptionHandler {
 
 	private final Thread.UncaughtExceptionHandler mDefaultHandler;
 	private final Context mContext;
+
+	private final Map<String, String> info = new HashMap<String, String>();// 用来存储设备信息和异常信息
+	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");// 用于格式化日期,作为日志文件名的一部分
+	private String crashInfo = "";
 
 	public MyAppCrashHandler(Context context) {
 		mContext = context;
@@ -50,12 +57,43 @@ public class MyAppCrashHandler implements UncaughtExceptionHandler {
 		showError(msg);
 		collectDeviceInfo(thread, mContext);
 		saveCrashInfo2File(ex);
+		if (NetWorkUtils.isNetworkConnected(mContext)) {
+			reportCrash();
+		}
 		waitFor(3 * 1000);
+		Log.d(TAG, "waitFor3");
 		ActivityManager.getInstance().exit();
+		Log.d(TAG, "exit");
+	}
+
+	private void reportCrash() {
+		Log.d(TAG, "reportCrash");
+		try {
+			final CrashLogVO crashVO = new CrashLogVO();
+			crashVO.setUserId(IpetApi.init(mContext).getCurrUserId());
+			UserVO user = IpetApi.init(mContext).getCurrUserInfo();
+			String nickName = user == null ? "" : user.getNickname();
+			crashVO.setUserName(nickName);
+			crashVO.setAndroidVersion(android.os.Build.VERSION.RELEASE);
+			crashVO.setAppVersionCode(AppUtils.getAppVersionCode(mContext));
+			crashVO.setAppVersionName(AppUtils.getAppVersionName(mContext));
+			crashVO.setCrashType("crash");
+			crashVO.setLog(crashInfo);
+			new Thread() {
+				@Override
+				public void run() {
+					IpetApi.init(mContext).getCrashLogApi().save(crashVO);
+				}
+			}.start();
+		} catch (Exception ex) {
+			Log.e(TAG, "", ex);
+			//忽略异常
+		}
 	}
 
 	// 另启线程进行等待，防止阻塞UI线程
 	private void waitFor(long time) {
+		Log.d(TAG, "waitFor");
 		// 异步转同步
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Long waitTime = time;
@@ -89,12 +127,9 @@ public class MyAppCrashHandler implements UncaughtExceptionHandler {
 		}.start();
 	}
 
-	private final Map<String, String> info = new HashMap<String, String>();// 用来存储设备信息和异常信息
-	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");// 用于格式化日期,作为日志文件名的一部分
-
 	/**
 	 * 收集设备参数信息
-	 * 
+	 *
 	 * @param thread
 	 * @param context
 	 */
@@ -147,6 +182,8 @@ public class MyAppCrashHandler implements UncaughtExceptionHandler {
 		pw.close();// 记得关闭
 		String result = writer.toString();
 		sb.append(result);
+
+		crashInfo = sb.toString();
 
 		// 如果有外部存储则保存文件
 		long timetamp = System.currentTimeMillis();

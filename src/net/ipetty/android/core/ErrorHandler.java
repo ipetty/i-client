@@ -5,22 +5,27 @@
  */
 package net.ipetty.android.core;
 
+import android.content.Context;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.sdk.core.APIException;
+import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.core.ServiceUnavailableException;
-
+import net.ipetty.vo.CrashLogVO;
+import net.ipetty.vo.UserVO;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 
-import android.content.Context;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
-
 /**
- * 
+ *
  * @author Administrator
  */
 public class ErrorHandler {
@@ -108,6 +113,45 @@ public class ErrorHandler {
 		}
 
 		showError("未知任务异常");
+		reportUnknowError(ex);
+	}
+
+	private void reportUnknowError(Throwable ex) {
+		Log.d(TAG, "reportUnknowError");
+		try {
+
+			Writer writer = new StringWriter();
+			PrintWriter pw = new PrintWriter(writer);
+			ex.printStackTrace(pw);
+			Throwable cause = ex.getCause();
+			// 循环着把所有的异常信息写入writer中
+			while (cause != null) {
+				cause.printStackTrace(pw);
+				cause = cause.getCause();
+			}
+			pw.close();// 记得关闭
+			String errorInfo = writer.toString();
+
+			final CrashLogVO crashVO = new CrashLogVO();
+			crashVO.setUserId(IpetApi.init(context).getCurrUserId());
+			UserVO user = IpetApi.init(context).getCurrUserInfo();
+			String nickName = user == null ? "" : user.getNickname();
+			crashVO.setUserName(nickName);
+			crashVO.setAndroidVersion(android.os.Build.VERSION.RELEASE);
+			crashVO.setAppVersionCode(AppUtils.getAppVersionCode(context));
+			crashVO.setAppVersionName(AppUtils.getAppVersionName(context));
+			crashVO.setCrashType("error");
+			crashVO.setLog(errorInfo);
+			new Thread() {
+				@Override
+				public void run() {
+					IpetApi.init(context).getCrashLogApi().save(crashVO);
+				}
+			}.start();
+		} catch (Exception e) {
+			Log.e(TAG, "", e);
+			//忽略异常
+		}
 	}
 
 	// 显示错误信息
