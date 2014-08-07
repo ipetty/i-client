@@ -479,5 +479,8 @@ public class SpaceActivity extends BaseActivity {
 		// space_photo_grid_adapter.notifyDataSetChanged();
 		// feed列表
 		// feedListAdapter.notifyDataSetChanged();
+
+		View space_content = this.findViewById(R.id.space_content);
+		space_content.setVisibility(View.VISIBLE);
 	}
 }
