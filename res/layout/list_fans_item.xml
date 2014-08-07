@@ -46,7 +46,8 @@
 			        android:layout_height="wrap_content"
 			         android:layout_marginRight="8dp" 
 			        android:layout_alignParentRight="true"
-			        android:src="@drawable/follow_avatar" />
+			        android:src="@drawable/follow_avatar" 
+			        android:visibility="invisible"/>
 
 	</RelativeLayout>
      <include layout="@layout/horizontal_divider"/>

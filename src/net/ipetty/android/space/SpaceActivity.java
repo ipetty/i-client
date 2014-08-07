@@ -112,13 +112,6 @@ public class SpaceActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_space);
 
-	}
-
-	// 加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
-
 		currUserId = IpetApi.init(this).getCurrUserId();
 		if (this.getIntent().getExtras() == null) {
 			this.userId = currUserId;
@@ -141,6 +134,13 @@ public class SpaceActivity extends BaseActivity {
 		filter.addAction(Constant.BROADCAST_INTENT_CCOMMENT_DELETE);
 		this.registerReceiver(broadcastreciver, filter);
 
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+
 		getRefreshTime();
 		final UserVO user = UserApiWithCache.getUserById4Synchronous(this, userId);
 		String title = this.getResources().getString(R.string.title_activity_space);
@@ -153,9 +153,11 @@ public class SpaceActivity extends BaseActivity {
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
 		text.setText(title);
 		// 右侧操作按钮
+		View action_bar_right_divider = this.findViewById(R.id.action_bar_right_divider);
 		action_bar_right_text = (TextView) this.findViewById(R.id.action_bar_right_text);
 		if (isCurrentUser) {
 			action_bar_right_text.setText(R.string.user_edit);
+			action_bar_right_divider.setVisibility(View.VISIBLE);
 			action_bar_right_text.setOnClickListener(userEditClick);
 		} else {
 			// 判断用户是否关注

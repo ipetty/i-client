@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingTop="5dp"
-    android:paddingBottom="10dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
    >
     
      <TextView
@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
+        android:textSize="16dp"
         android:layout_centerInParent="true" />
 
     <ProgressBar

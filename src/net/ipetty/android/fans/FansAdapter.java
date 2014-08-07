@@ -141,6 +141,7 @@ public class FansAdapter extends BaseAdapter implements OnScrollListener {
 				} else {
 					followImageView.setImageResource(R.drawable.follow_avatar);
 				}
+				followImageView.setVisibility(View.VISIBLE);
 
 			}
 		}).execute(user.getId());
