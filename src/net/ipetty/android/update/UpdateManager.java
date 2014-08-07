@@ -22,13 +22,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.CountDownLatch;
 import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.core.util.PathUtils;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.vo.AppUpdateVO;
 
 public class UpdateManager {
 	/* 下载中 */
@@ -38,14 +33,12 @@ public class UpdateManager {
 	private static final int DOWNLOAD_FINISH = 2;
 
 	/* 本版更新对象 */
-	private static AppUpdateVO updateInfo;
+	private UpdateVO updateInfo;
 
 	/* 下载保存路径 */
 	private String mSavePath;
 	/* 下载文件名 */
 	private final String mFileName = "ipetty.apk";
-
-	private final String APP_KEY = "Ipetty";
 
 	/* 记录进度条数量 */
 	private int progress;
@@ -57,6 +50,8 @@ public class UpdateManager {
 	/* 更新进度条 */
 	private ProgressBar mProgress;
 	private Dialog mDownloadDialog;
+
+	private DialogInterface.OnClickListener cancelListener;
 
 	private final Handler mHandler = new Handler() {
 		@Override
@@ -84,52 +79,6 @@ public class UpdateManager {
 	}
 
 	/**
-	 * 检测软件更新
-	 */
-	public void checkUpdate() {
-		if (NetWorkUtils.isNetworkConnected(mContext)) {
-			if (IpetApi.init(mContext).checkServiceAvaliable()
-					&& isUpdate()) {
-				// 显示提示对话框
-				showNoticeDialog();
-			}
-		}
-	}
-
-	/**
-	 * 检查软件是否有更新版本
-	 */
-	private boolean isUpdate() {
-		final CountDownLatch latch = new CountDownLatch(1);
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				updateInfo = IpetApi.init(mContext).getAppUpdateApi().latestVersion(APP_KEY);
-				latch.countDown();
-			}
-		}).start();
-
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		// 获取当前软件版本
-		int versionCode = getVersionCode(mContext);
-
-		if (updateInfo == null || updateInfo.getVersionCode() == null) {
-			return false;
-		}
-
-		if (updateInfo.getVersionCode() > versionCode) {
-			return true;
-		}
-		return false;
-
-	}
-
-	/**
 	 * 获取软件版本号
 	 */
 	private int getVersionCode(Context context) {
@@ -143,13 +92,21 @@ public class UpdateManager {
 		return versionCode;
 	}
 
+	public void setOnCancelListener(DialogInterface.OnClickListener listener) {
+		this.cancelListener = listener;
+	}
+
 	/**
 	 * 显示软件更新对话框
 	 */
-	private void showNoticeDialog() {
+	public void showNoticeDialog(UpdateVO updateInfo) {
+		this.updateInfo = updateInfo;
 		AlertDialog.Builder builder = new Builder(mContext);
 		builder.setTitle(R.string.soft_update_title);
 		builder.setMessage(updateInfo.getVersionDescription());
+		//防止取消
+		builder.setCancelable(false);
+
 		// 更新
 		builder.setPositiveButton(R.string.soft_update_updatebtn, new DialogInterface.OnClickListener() {
 			@Override
@@ -159,13 +116,10 @@ public class UpdateManager {
 				showDownloadDialog();
 			}
 		});
-		// 稍后更新
-		builder.setNegativeButton(R.string.soft_update_later, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
+		if (!updateInfo.getForceUpdate()) {
+			// 稍后更新
+			builder.setNegativeButton(R.string.soft_update_later, this.cancelListener);
+		}
 		Dialog noticeDialog = builder.create();
 		noticeDialog.show();
 	}
@@ -176,21 +130,13 @@ public class UpdateManager {
 	private void showDownloadDialog() {
 		// 构造软件下载对话框
 		AlertDialog.Builder builder = new Builder(mContext);
+		builder.setCancelable(false);
 		builder.setTitle(R.string.soft_updating);
 		// 给下载对话框增加进度条
 		final LayoutInflater inflater = LayoutInflater.from(mContext);
 		View v = inflater.inflate(R.layout.softupdate_progress, null);
 		mProgress = (ProgressBar) v.findViewById(R.id.update_progress);
 		builder.setView(v);
-		// 取消更新
-		builder.setNegativeButton(R.string.soft_update_cancel, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-				// 设置取消状态
-				cancelUpdate = true;
-			}
-		});
 		mDownloadDialog = builder.create();
 		mDownloadDialog.show();
 		// 下载文件
@@ -219,7 +165,7 @@ public class UpdateManager {
 					// 获得存储卡的路径
 					String sdpath = Environment.getExternalStorageDirectory() + "/";
 					mSavePath = PathUtils.getDownloadDir();
-					URL url = new URL(Constant.FILE_SERVER_BASE + updateInfo.getDownloadUrl());
+					URL url = new URL(updateInfo.getDownloadUrl());
 					// 创建连接
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.connect();

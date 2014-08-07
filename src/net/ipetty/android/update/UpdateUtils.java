@@ -5,13 +5,17 @@
  */
 package net.ipetty.android.update;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import java.io.IOException;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.core.ServiceUnavailableException;
 
 /**
  *
@@ -19,38 +23,79 @@ import net.ipetty.android.core.Constant;
  */
 public class UpdateUtils {
 
-	private static String TAG = UpdateUtils.class.getSimpleName();
-	public static OkHttpClient client = new OkHttpClient();
-	public static Gson gson = new Gson();
-	private static String updateUrl = Constant.API_SERVER_BASE + "/files/update.json";
+	private static final String TAG = UpdateUtils.class.getSimpleName();
+	private static final OkHttpClient client = new OkHttpClient();
+	private static final Gson gson = new Gson();
+	private static final String updateUrl = Constant.FILE_SERVER_BASE + "/files/update.json";
 
-	public static UpdateVO getUpdateInfo() {
-		Log.d(TAG, "getUpdateInfo");
+	private static UpdateVO updateInfo;
+
+	public static UpdateVO getUpdaeInfo() {
+		return updateInfo;
+	}
+
+	/**
+	 * 检查软件是否有更新版本
+	 */
+	public static boolean hasUpdate(Context context) {
+
+		if (!NetWorkUtils.isNetworkConnected(context)) {
+			return false;
+		}
+		//服务器无法连接
+		if (!IpetApi.init(context).checkServiceAvaliable()) {
+			throw new ServiceUnavailableException();
+		}
+
+		updateInfo = checkUpdateInfo();
+
+		// 获取当前软件版本
+		int versionCode = getVersionCode(context);
+
+		if (updateInfo == null || updateInfo.getVersionCode() == null) {
+			return false;
+		}
+
+		if (updateInfo.getVersionCode() > versionCode) {
+			return true;
+		}
+		return false;
+
+	}
+
+	private static UpdateVO checkUpdateInfo() {
+		Log.d(TAG, "checkUpdateInfo");
 		Request request = new Request.Builder()
 				.url(updateUrl)
 				.build();
 		Response response = null;
-		UpdateVO result = null;
+		updateInfo = null;
 		try {
 			response = client.newCall(request).execute();
 			Log.d(TAG, "response.isSuccessful = " + response.isSuccessful());
 			if (response.isSuccessful()) {
-				String jsonStr = response.body().toString();
-				Log.d(TAG, "jsonStr = " + jsonStr);
-				result = gson.fromJson(jsonStr, UpdateVO.class);
+				updateInfo = gson.fromJson(response.body().charStream(), UpdateVO.class);
 			}
 
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			Log.e(TAG, "", ex);
+			throw new RuntimeException(ex);
 		}
-		if (result == null) {
-			Log.d(TAG, "result = null");
-		} else {
-			Log.d(TAG, "result.getVersionDescription = " + result.getVersionDescription());
+		return updateInfo;
+	}
+
+	/**
+	 * 获取软件版本号
+	 */
+	private static int getVersionCode(Context context) {
+		int versionCode = 0;
+		try {
+			// 获取软件版本号，对应AndroidManifest.xml下android:versionCode
+			versionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			Log.e(TAG, "", e);
 		}
-
-		return result;
-
+		return versionCode;
 	}
 
 }

@@ -21,7 +21,6 @@ import net.ipetty.android.feed.FeedPublishActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
 import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.android.update.UpdateManager;
 import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
 
@@ -106,10 +105,6 @@ public class MainHomeFragment extends BaseFragment {
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
 		super.onViewReady(savedInstanceState);
-
-		// 检查软件更新
-		UpdateManager manager = new UpdateManager(this.getActivity());
-		manager.checkUpdate();
 	}
 
 	@Override
@@ -160,7 +155,7 @@ public class MainHomeFragment extends BaseFragment {
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				String label = DateUtils.formatDateTime(MainHomeFragment.this.getActivity().getApplicationContext(),
 						getRefreshTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+						| DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -183,8 +178,8 @@ public class MainHomeFragment extends BaseFragment {
 				if (hasMore) {
 					new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
 							new LoadMoreFeedListListener(MainHomeFragment.this)).execute(
-							MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
-							pageSize.toString());
+									MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
+									pageSize.toString());
 				}
 
 			}
@@ -206,7 +201,7 @@ public class MainHomeFragment extends BaseFragment {
 		 * UserApiWithCache.getUserById4Asynchronous(this.getActivity(),
 		 * api.getCurrUserId(), new
 		 * DefaultTaskListener<UserVO>(this.getActivity()) {
-		 * 
+		 *
 		 * @Override public void onSuccess(UserVO result) { // 设置头像 if
 		 * (StringUtils.isNotEmpty(result.getAvatar())) {
 		 * ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE +
@@ -215,7 +210,7 @@ public class MainHomeFragment extends BaseFragment {
 		 * (StringUtils.isNotEmpty(result.getBackground())) {
 		 * ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE +
 		 * result.getBackground(), header_bg, options); }
-		 * 
+		 *
 		 * mAdapter.notifyDataSetChanged(); } });
 		 */
 	}
@@ -227,7 +222,7 @@ public class MainHomeFragment extends BaseFragment {
 		 * UserApiWithCache.getUserById4Asynchronous(this.getActivity(),
 		 * api.getCurrUserId(), new
 		 * DefaultTaskListener<UserVO>(this.getActivity()) {
-		 * 
+		 *
 		 * @Override public void onSuccess(UserVO result) { // 设置头像 if
 		 * (StringUtils.isNotEmpty(result.getAvatar())) {
 		 * ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE +
@@ -235,17 +230,17 @@ public class MainHomeFragment extends BaseFragment {
 		 * avatar.setImageResource(R.drawable.avatar); } new
 		 * ListPetsByUserId(getActivity()).setListener( new
 		 * DefaultTaskListener<List<PetVO>>(getActivity()) {
-		 * 
+		 *
 		 * @Override public void onSuccess(List<PetVO> pets) { PetVO pet =
 		 * pets.get(0); if (StringUtils.isNotBlank(pet.getFamily())) {
 		 * header_bg.
 		 * setImageResource(Constant.PET_FAMILY_RES_MAP.get(pet.getFamily())); }
 		 * } }).execute(result.getId());
-		 * 
+		 *
 		 * if (StringUtils.isNotEmpty(result.getBackground())) {
 		 * ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE +
 		 * result.getBackground(), header_bg, options); }
-		 * 
+		 *
 		 * new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).
 		 * setListener( new
 		 * InitFeedListListener(MainHomeFragment.this.getActivity(),
@@ -255,7 +250,7 @@ public class MainHomeFragment extends BaseFragment {
 
 		new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
 				new InitFeedListListener(MainHomeFragment.this, mAdapter)).execute(getRefreshTime().toString(), "0",
-				pageSize.toString());
+						pageSize.toString());
 
 	}
 
@@ -307,7 +302,7 @@ public class MainHomeFragment extends BaseFragment {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
+			OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
 			cameraDialog = DialogUtils.bottomPopupDialog(MainHomeFragment.this.getActivity(), Listener,
 					R.array.alert_camera, getString(R.string.camera_title), cameraDialog);
 		}
