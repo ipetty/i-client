@@ -211,6 +211,6 @@
     <string name="app_downloading">应用正在后台下载</string>
     <string name="mingdao_share_content">网页分享</string>
     <string name="share_to_mingdao">分享到明道</string>
-    <string name="title_activity_about">关于我们</string>
+    <string name="title_activity_about">当前版本\t\t</string>
 
 </resources>

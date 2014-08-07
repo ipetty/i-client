@@ -1,19 +1,6 @@
 package net.ipetty.android.setting;
 
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.feedback.FeedbackActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.user.Logout;
-import net.ipetty.android.user.UserActivity;
-import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,9 +9,24 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.boot.CheckUpdateTask;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.feedback.FeedbackActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.user.Logout;
+import net.ipetty.android.update.UpdateManager;
+import net.ipetty.android.update.UpdateUtils;
+import net.ipetty.android.user.UserActivity;
+import net.ipetty.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class SettingActivity extends BaseActivity {
 
@@ -91,6 +93,38 @@ public class SettingActivity extends BaseActivity {
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, FeedbackActivity.class);
 				startActivity(intent);
+			}
+		});
+
+		/* about version */
+		TextView about = (TextView) this.findViewById(R.id.about);
+		String verStr = getResources().getString(R.string.app_version);
+		String VersionName = String.format(verStr, AppUtils.getAppVersionName(this));
+		about.setText(about.getText() + VersionName);
+		about.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				new CheckUpdateTask(SettingActivity.this)
+						.setListener(new DefaultTaskListener<Boolean>(SettingActivity.this) {
+							@Override
+							public void onSuccess(Boolean hasUpdate) {
+								//如果有更新
+								if (hasUpdate) {
+									UpdateManager updateManager = new UpdateManager(SettingActivity.this);
+									updateManager.setOnCancelListener(new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											dialog.dismiss();
+										}
+									});
+									updateManager.showNoticeDialog(UpdateUtils.getUpdaeInfo());
+								} else {
+									SettingActivity.this.showMessageForShortTime("当前已是最新版本");
+								}
+
+							}
+						})
+						.execute();
 			}
 		});
 
