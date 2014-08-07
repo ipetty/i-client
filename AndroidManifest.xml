@@ -47,85 +47,106 @@
         </activity>
         <activity
             android:name="net.ipetty.android.boot.WelcomeRegisterOrLoginActivity"
-            android:label="@string/title_activity_welcome_register_or_login" >
+            android:label="@string/title_activity_welcome_register_or_login" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.login.LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"  >
         </activity>
         <activity
             android:name="net.ipetty.android.register.RegisterActivity"
-            android:label="@string/title_activity_register" >
+            android:label="@string/title_activity_register" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.login.LoginHasAccountActivity"
-            android:label="@string/title_activity_login_has_account" >
+            android:label="@string/title_activity_login_has_account" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.comment.CommentActivity"
-            android:label="@string/title_activity_comment" >
+            android:label="@string/title_activity_comment" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.LoginsActivity"
             android:label="@string/title_activity_logins"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.feed.FeedPublishActivity"
-            android:label="@string/title_activity_feed_publish" >
+            android:label="@string/title_activity_feed_publish" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.home.LargerImageActivity"
-            android:label="@string/title_activity_larger_image" >
+            android:label="@string/title_activity_larger_image" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.like.LikeActivity"
-            android:label="@string/title_activity_like" >
+            android:label="@string/title_activity_like"
+            android:screenOrientation="portrait"  >
         </activity>
         <activity
             android:name="net.ipetty.android.main.MainPopDialog"
             android:label="@string/title_activity_main_pop_dialog"
-            android:theme="@style/MenuPopDialog" >
+            android:theme="@style/MenuPopDialog"
+            android:screenOrientation="portrait"  >
         </activity>
         <activity
             android:name="net.ipetty.android.feedback.FeedbackActivity"
-            android:label="@string/title_activity_feedback" >
+            android:label="@string/title_activity_feedback" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.space.SpaceActivity"
-            android:label="@string/title_activity_space" >
+            android:label="@string/title_activity_space" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.fans.FansActivity"
-            android:label="@string/title_activity_fans" >
+            android:label="@string/title_activity_fans" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.follow.FollowsActivity"
-            android:label="@string/title_activity_follows" >
+            android:label="@string/title_activity_follows"
+            android:screenOrientation="portrait"  >
         </activity>
         <activity
             android:name="net.ipetty.android.bonuspoint.BonusPointActivity"
-            android:label="@string/title_activity_bonus_point" >
+            android:label="@string/title_activity_bonus_point" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.petty.PettyActivity"
-            android:label="@string/title_activity_petty" >
+            android:label="@string/title_activity_petty" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.user.UserActivity"
-            android:label="@string/title_activity_user" >
+            android:label="@string/title_activity_user" 
+            android:screenOrientation="portrait" >
+            
         </activity>
         <activity
             android:name="net.ipetty.android.feed.LocationActivity"
-            android:label="@string/title_activity_location" >
+            android:label="@string/title_activity_location" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.setting.SettingActivity"
-            android:label="@string/title_activity_setting" >
+            android:label="@string/title_activity_setting" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.feed.SimpleFeedActivity"
-            android:label="@string/title_activity_simple_feed" >
+            android:label="@string/title_activity_simple_feed" 
+            android:screenOrientation="portrait" >
         </activity>
         <!-- Share SDK -->
         <activity
@@ -139,7 +160,8 @@
             android:name="net.ipetty.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" 
+            android:screenOrientation="portrait" />
         <!-- Service -->
         <service android:name="net.ipetty.android.service.MessageService" >
             <intent-filter>
@@ -149,15 +171,18 @@
 
         <activity
             android:name="net.ipetty.android.register.Register3rdActivity"
-            android:label="@string/title_activity_register3rd" >
+            android:label="@string/title_activity_register3rd"
+            android:screenOrientation="portrait"  >
         </activity>
         <activity
             android:name="net.ipetty.android.setting.ChangePwdActivity"
-            android:label="@string/title_activity_change_password" >
+            android:label="@string/title_activity_change_password" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.ipetty.android.setting.AboutActivity"
-            android:label="@string/title_activity_about" >
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait"  >
         </activity>
     </application>
 

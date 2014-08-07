@@ -149,6 +149,8 @@
     <string name="title_activity_change_password">修改密码</string>
     <string name="oldPassword">原密码</string>
     <string name="newPassword">新密码</string>
+    <string name="old_password_empty">原密码不能为空</string>
+    <string name="new_password_empty">新密码不能为空</string>
     <string name="oldPassword_hint">未设置过可不填</string>
     <string name="newPassword_hint">请输入新密码</string>
     <string name="title_activity_setting">设置</string>

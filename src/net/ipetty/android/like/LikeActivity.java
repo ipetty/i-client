@@ -5,6 +5,7 @@ import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.ui.MyPullToRefreshListView;
 import net.ipetty.android.sdk.task.feed.GetFeedById;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.FeedVO;
@@ -22,12 +23,11 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class LikeActivity extends BaseActivity {
 
 	private LikeAdapter adapter; // 定义适配器
-	private PullToRefreshListView listView;
+	private MyPullToRefreshListView listView;
 	private Long feedId = null;
 
 	@Override
@@ -35,6 +35,11 @@ public class LikeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_like);
 		Log.d(TAG, "onCreate");
+		/* action bar */
+		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
+		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
+		text.setText(this.getResources().getString(R.string.title_activity_like));
+		btnBack.setOnClickListener(new BackClickListener(this));
 
 	}
 
@@ -44,13 +49,7 @@ public class LikeActivity extends BaseActivity {
 		Log.d(TAG, "onViewReady");
 		feedId = this.getIntent().getExtras().getLong(Constant.INTENT_FEED_ID_KEY);
 
-		/* action bar */
-		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
-		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
-		text.setText(this.getResources().getString(R.string.title_activity_like));
-		btnBack.setOnClickListener(new BackClickListener(this));
-
-		listView = (PullToRefreshListView) this.findViewById(R.id.listView);
+		listView = (MyPullToRefreshListView) this.findViewById(R.id.listView);
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -60,15 +59,15 @@ public class LikeActivity extends BaseActivity {
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-				new GetFeedById(LikeActivity.this).setListener(
-						new DefaultTaskListener<FeedVO>(LikeActivity.this, "刷新中") {
-							@Override
-							public void onSuccess(FeedVO result) {
-								adapter.setList(result.getFavors());
-								adapter.notifyDataSetChanged();
-								listView.onRefreshComplete();
-							}
-						}).execute(feedId);
+				new GetFeedById(LikeActivity.this).setListener(new DefaultTaskListener<FeedVO>(LikeActivity.this) {
+					@Override
+					public void onSuccess(FeedVO result) {
+						listView.hideMoreView();
+						adapter.setList(result.getFavors());
+						adapter.notifyDataSetChanged();
+						listView.onRefreshComplete();
+					}
+				}).execute(feedId);
 
 			}
 		});
@@ -102,9 +101,10 @@ public class LikeActivity extends BaseActivity {
 
 	// 加载数据
 	public void loadData() {
-		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this, "加载中") {
+		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
 			@Override
 			public void onSuccess(FeedVO result) {
+				listView.hideMoreView();
 				adapter.setList(result.getFavors());
 				adapter.notifyDataSetChanged();
 			}

@@ -261,6 +261,10 @@ public class RegisterActivity extends BaseActivity {
 				RegisterActivity.this.passwordEditor.requestFocus();
 				Toast.makeText(RegisterActivity.this, R.string.login_empty_password, Toast.LENGTH_SHORT).show();
 				return;
+			} else if (password.length() < 6) {
+				RegisterActivity.this.passwordEditor.requestFocus();
+				Toast.makeText(RegisterActivity.this, "密码不得少于6位", Toast.LENGTH_SHORT).show();
+				return;
 			}
 
 			// nickname
