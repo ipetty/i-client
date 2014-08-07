@@ -1,6 +1,7 @@
 package net.ipetty.android.login;
 
 import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
@@ -133,7 +134,8 @@ public class LoginHasAccountActivity extends BaseActivity {
 
 	private void loadData() {
 		IpetApi api = IpetApi.init(this);
-		UserVO user = api.getCurrUserInfo();
+		Integer currUserId = api.getCurrUserId();
+		UserVO user = UserApiWithCache.getUserById4Synchronous(this, currUserId);
 		if (!StringUtils.isEmpty(user.getEmail())) {
 			account.setText(user.getEmail());
 		}

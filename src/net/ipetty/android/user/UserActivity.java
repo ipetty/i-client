@@ -316,15 +316,15 @@ public class UserActivity extends BaseActivity {
 			@Override
 			public void onSuccess(String result) {
 				Log.d(TAG, "updateAvatar.onSuccess:" + result);
-				UserApiWithCache.removeCache(currUserId);
 				UserVO user = UserApiWithCache.getUserById4Synchronous(UserActivity.this, currUserId);
+				user.setAvatar(result);
+				UserApiWithCache.updateCache(user);
 				if (StringUtils.isNotBlank(user.getAvatar())) {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
 							options);
 				} else {
 					avatar.setImageResource(R.drawable.avatar);
 				}
-				IpetApi.init(UserActivity.this).setCurrUserInfo(user);
 				UserActivity.this.showMessageForLongTime("更新头像成功");
 			}
 

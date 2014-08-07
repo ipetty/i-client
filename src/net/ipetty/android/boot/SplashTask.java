@@ -1,5 +1,6 @@
 package net.ipetty.android.boot;
 
+import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.Task;
 import net.ipetty.android.core.ui.BaseActivity;
@@ -32,7 +33,8 @@ public class SplashTask extends Task<Void, Void> {
 		IpetApi api = IpetApi.init(activity);
 		// 是否就已认证状态
 		if (api.getIsAuthorized()) {
-			UserVO currentUser = api.getCurrUserInfo();
+			Integer currUserId = api.getCurrUserId();
+			UserVO currentUser = UserApiWithCache.getUserById4Synchronous(activity, currUserId);
 			if (currentUser != null && StringUtils.isNotEmpty(currentUser.getEmail())) { // 跳转到首页
 				goMain();
 			} else { // 跳转到完善资料页面

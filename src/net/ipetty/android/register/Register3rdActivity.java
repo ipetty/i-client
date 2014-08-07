@@ -481,15 +481,15 @@ public class Register3rdActivity extends BaseActivity {
 			@Override
 			public void onSuccess(String result) {
 				Log.d(TAG, "updateAvatar.onSuccess:" + result);
-				UserApiWithCache.removeCache(currUserId);
 				UserVO user = UserApiWithCache.getUserById4Synchronous(Register3rdActivity.this, currUserId);
+				user.setAvatar(result);
+				UserApiWithCache.updateCache(user);
 				if (StringUtils.isNotBlank(user.getAvatar())) {
 					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
 							options);
 				} else {
 					avatar.setImageResource(R.drawable.avatar);
 				}
-				IpetApi.init(Register3rdActivity.this).setCurrUserInfo(user);
 				if (StringUtils.isNotBlank(successMsg)) {
 					Register3rdActivity.this.showMessageForLongTime(successMsg);
 				}
