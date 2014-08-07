@@ -59,6 +59,13 @@ public class MainDiscoverFragment extends BaseFragment {
 	};
 
 	@Override
+	protected void onViewResume() {
+		Log.d(TAG, "onViewResume");
+		super.onViewResume();
+		loadData();
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated");
