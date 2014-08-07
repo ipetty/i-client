@@ -6,6 +6,7 @@ import java.util.List;
 import net.ipetty.android.service.MessageService;
 import android.app.Activity;
 import android.content.Intent;
+import cn.sharesdk.framework.ShareSDK;
 
 public class ActivityManager {
 
@@ -60,6 +61,7 @@ public class ActivityManager {
 		for (Activity activity : activityList) {
 			if (i == 0) {
 				activity.stopService(messageServiceIntent);
+				ShareSDK.stopSDK(activity);
 			}
 			activity.finish();
 			i++;

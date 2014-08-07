@@ -8,69 +8,69 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LoginHasAccountActivity" >
-    
+
     <LinearLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_height"
         android:background="@drawable/action_bar_bg"
-
         android:gravity="center_vertical" >
 
         <include layout="@layout/action_bar_simple_back_content" />
+
         <include layout="@layout/action_bar_vertical_divider" />
+
         <TextView
             android:id="@+id/changeAccount"
             style="@style/ActionBarButton"
             android:layout_width="wrap_content"
-            android:paddingLeft="5dp"
- 			android:paddingRight="5dp"
             android:layout_height="@dimen/action_bar_height"
             android:layout_gravity="center_vertical"
             android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:text="@string/changeAccount" />
     </LinearLayout>
 
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:layout_below="@+id/action_bar"
-      android:layout_marginTop="50dp"
-      android:gravity="center"
-      android:orientation="vertical" >
-
-      <ImageView
-          android:id="@+id/avatar"
-          android:layout_width="96dp"
-          android:layout_height="96dp"
-          android:src="@drawable/avatar"
-          android:scaleType="fitXY"/>
-      
     <LinearLayout
-            android:layout_marginTop="5dp"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical" >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/action_bar"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="vertical" >
 
-      <TextView
-          android:id="@+id/account"
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent"
-          android:gravity="center"
-          android:textSize="16sp"
-          android:text="username" />
-      
-      </LinearLayout>
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/avatar" />
 
         <LinearLayout
-             android:layout_marginTop="20dp"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/account"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="username"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/setting_list_single_bg_white"
             android:gravity="center_vertical" >
 
@@ -110,100 +110,93 @@
                 android:text="@string/login_toggle_password_show"
                 android:textColor="@color/text_black"
                 android:textSize="14sp" />
-           
         </LinearLayout>
 
-   <Button
-       android:layout_marginTop="20dp"
-        android:id="@+id/button"
-        android:layout_width="fill_parent"
+        <Button
+            android:id="@+id/button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_light_selector"
+            android:gravity="center"
+            android:text="@string/ok_button"
+            android:textColor="@color/title_gray"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:gravity="center"
-        android:text="@string/ok_button"
-        android:background="@drawable/button_light_selector"
-        android:textColor="@color/title_gray"
-        android:textSize="16sp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical" >
 
-  </LinearLayout>
-  <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_alignParentBottom="true"
-       android:layout_alignParentLeft="true"
-       android:orientation="vertical" >
-  		 <ImageView
-              android:layout_width="fill_parent"
-              android:layout_height="1.0px"
-              android:background="@drawable/drawable_line" />
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1.0px"
+            android:background="@drawable/drawable_line" />
 
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="48dp"
-           android:layout_gravity="center"
-           android:focusable="false"
-           android:focusableInTouchMode="false" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:focusable="false"
+            android:focusableInTouchMode="false" >
 
-           <LinearLayout
+            <LinearLayout
                 android:id="@+id/sina"
-               android:layout_width="wrap_content"
-               android:layout_height="match_parent"
-               android:layout_weight="1.0" 
-              	android:background="@drawable/list_color_item_bg"
-               android:gravity="center">
-               
-              <ImageView
-              android:layout_width="26dp"
-              android:layout_height="24dp"
-              android:src="@drawable/ic_sina"
-            />
-  			 
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/list_color_item_bg"
+                android:gravity="center" >
+
+                <ImageView
+                    android:layout_width="26dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_sina" />
+
                 <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="match_parent"
-               android:layout_marginLeft="5dp"
-               android:gravity="center"
-               android:text="@string/sina_login" 
-               android:textColor="@color/title_gray"
-            
-               android:textSize="16sp" />
-           </LinearLayout>
-	 <ImageView
-              android:layout_width="1.0px"
-              android:layout_height="fill_parent"
-              android:background="@drawable/drawable_line" />
-  			 
-           <LinearLayout
-                android:id="@+id/qq"
-               android:layout_width="wrap_content"
-               android:layout_height="match_parent"
-                  android:background="@drawable/list_color_item_bg"
-               android:gravity="center"
-               android:layout_weight="1.0" >
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:text="@string/sina_login"
+                    android:textColor="@color/title_gray"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
             <ImageView
-              android:layout_width="24dp"
-              android:layout_height="24dp"
-              android:src="@drawable/ic_qq"
-              android:scaleType="fitStart"
-            />
-             <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="match_parent"
-               android:layout_marginLeft="5dp"
-               android:text="@string/qq_login" 
-                 android:gravity="center"
-                 android:textColor="@color/title_gray"
-               android:textSize="16sp" />
-           </LinearLayout>
+                android:layout_width="1.0px"
+                android:layout_height="fill_parent"
+                android:background="@drawable/drawable_line" />
 
-          
-           
-  		
+            <LinearLayout
+                android:id="@+id/qq"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/list_color_item_bg"
+                android:gravity="center" >
 
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/ic_qq" />
 
-       </LinearLayout>
-   </LinearLayout>
-  
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:text="@string/qq_login"
+                    android:textColor="@color/title_gray"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

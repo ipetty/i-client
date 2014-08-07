@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * 
@@ -41,6 +42,7 @@ public class BaseFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
 		super.onActivityCreated(savedInstanceState);
+		ShareSDK.initSDK(this.getActivity());
 		// this.isViewReady = false;
 		this.savedInstanceState = savedInstanceState;
 		errorHandler = new ErrorHandler(this.getActivity());

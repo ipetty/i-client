@@ -120,7 +120,6 @@ public class LoginActivity extends BaseActivity {
 					if (emailList.size() > 0) {
 						accountView.showDropDown();
 					}
-
 				}
 			}
 		});
@@ -140,23 +139,24 @@ public class LoginActivity extends BaseActivity {
 		View loginBtnView = (View) this.findViewById(R.id.button);
 		loginBtnView.setOnClickListener(loginOnClick);
 
-		// sina
+		// sina Login
 		View sina = this.findViewById(R.id.sina);
 		sina.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// sina Login
+				ShareSDK.initSDK(LoginActivity.this);
 				Platform sinaWeibo = ShareSDK.getPlatform(LoginActivity.this, SinaWeibo.NAME);
 				new SinaWeiboAuthorization(LoginActivity.this).authorize(sinaWeibo);
 				progressDialog.show();
 			}
 		});
 
+		// qq login
 		View qq = this.findViewById(R.id.qq);
 		qq.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// qq login
+				ShareSDK.initSDK(LoginActivity.this);
 				Platform qzone = ShareSDK.getPlatform(LoginActivity.this, QZone.NAME);
 				new QZoneAuthorization(LoginActivity.this).authorize(qzone);
 				progressDialog.show();
