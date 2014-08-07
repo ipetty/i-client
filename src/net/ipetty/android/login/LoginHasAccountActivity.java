@@ -7,10 +7,13 @@ import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.UserLogin;
+import net.ipetty.sharesdk.qzone.QZoneAuthorization;
+import net.ipetty.sharesdk.sinaweibo.SinaWeiboAuthorization;
 import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,6 +26,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qzone.QZone;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,12 +43,17 @@ public class LoginHasAccountActivity extends BaseActivity {
 	private boolean psdDisplayFlg = false;
 	private TextView account = null;
 	private ImageView avatar;
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login_has_account);
 
+		progressDialog = new ProgressDialog(LoginHasAccountActivity.this);
+		progressDialog.setIndeterminate(true);
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage(getResources().getString(R.string.logining));
 	}
 
 	// 加载数据
@@ -85,7 +97,38 @@ public class LoginHasAccountActivity extends BaseActivity {
 						passwordView.getText().toString());
 			}
 		});
+
+		// sina Login
+		View sina = this.findViewById(R.id.sina);
+		sina.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ShareSDK.initSDK(LoginHasAccountActivity.this);
+				Platform sinaWeibo = ShareSDK.getPlatform(LoginHasAccountActivity.this, SinaWeibo.NAME);
+				new SinaWeiboAuthorization(LoginHasAccountActivity.this).authorize(sinaWeibo);
+				progressDialog.show();
+			}
+		});
+
+		// qq login
+		View qq = this.findViewById(R.id.qq);
+		qq.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ShareSDK.initSDK(LoginHasAccountActivity.this);
+				Platform qzone = ShareSDK.getPlatform(LoginHasAccountActivity.this, QZone.NAME);
+				new QZoneAuthorization(LoginHasAccountActivity.this).authorize(qzone);
+				progressDialog.show();
+			}
+		});
+
 		loadData();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		progressDialog.dismiss();
 	}
 
 	private void loadData() {
