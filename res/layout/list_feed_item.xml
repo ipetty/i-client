@@ -4,12 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="5.0dip"
     android:paddingTop="13.0dip" >
 
 <LinearLayout android:orientation="horizontal"     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
    android:paddingLeft="10.0dip"
+   android:paddingBottom="13.0dip" 
     android:paddingRight="14.0dip">
     <ImageView
         android:id="@+id/avatar"

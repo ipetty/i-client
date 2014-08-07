@@ -40,15 +40,7 @@ public class FansActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fans);
-
 		Log.d(TAG, "onCreate");
-
-	}
-
-	// 加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -77,7 +69,7 @@ public class FansActivity extends BaseActivity {
 				if (FansActivity.this.hasMore) {
 					FansActivity.this.currentPage++;
 					new ListFriends(FansActivity.this).setListener(
-							new DefaultTaskListener<List<UserVO>>(FansActivity.this, "加载更多...") {
+							new DefaultTaskListener<List<UserVO>>(FansActivity.this) {
 								@Override
 								public void onSuccess(List<UserVO> result) {
 									if (result.size() < FansActivity.this.pageSize) {
@@ -104,7 +96,7 @@ public class FansActivity extends BaseActivity {
 	// 初始化数据
 	public void initData(final PullToRefreshListView view) {
 
-		new ListFollowers(this).setListener(new DefaultTaskListener<List<UserVO>>(this, "正在加载...") {
+		new ListFollowers(this).setListener(new DefaultTaskListener<List<UserVO>>(this) {
 			@Override
 			public void onSuccess(List<UserVO> result) {
 				if (result.size() < FansActivity.this.pageSize) {
@@ -120,6 +112,12 @@ public class FansActivity extends BaseActivity {
 				}
 			}
 		}).execute(this.userId, 0, this.pageSize);
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 
 	}
 

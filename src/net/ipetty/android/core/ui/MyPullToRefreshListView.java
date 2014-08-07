@@ -41,6 +41,7 @@ public class MyPullToRefreshListView extends PullToRefreshListView {
 
 	private int top;
 	private int bottom;
+	private int height;
 
 	public MyPullToRefreshListView(Context context) {
 		super(context);
@@ -102,7 +103,7 @@ public class MyPullToRefreshListView extends PullToRefreshListView {
 		// TODO Auto-generated method stub
 		onFirstLoaded();
 		mMoreView.setVisibility(View.GONE);
-		mMoreView.setPadding(0, -mMoreView.getHeight(), 0, 0);
+		mMoreView.setPadding(0, -10000, 0, 0);
 
 	}
 }

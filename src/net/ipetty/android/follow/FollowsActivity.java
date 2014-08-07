@@ -39,12 +39,6 @@ public class FollowsActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_follows);
-	}
-
-	// 加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -98,6 +92,13 @@ public class FollowsActivity extends BaseActivity {
 		adapter = new FollowsAdapter(this, userId, currUserId);
 		listView.setAdapter(adapter);
 		initData(null);
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+
 	}
 
 	// 初始化数据
