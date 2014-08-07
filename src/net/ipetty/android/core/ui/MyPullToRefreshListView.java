@@ -41,7 +41,6 @@ public class MyPullToRefreshListView extends PullToRefreshListView {
 
 	private int top;
 	private int bottom;
-	private int height;
 
 	public MyPullToRefreshListView(Context context) {
 		super(context);
