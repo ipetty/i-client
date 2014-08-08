@@ -138,7 +138,10 @@ public class FollowsAdapter extends BaseAdapter implements OnScrollListener {
 				} else {
 					followImageView.setImageResource(R.drawable.follow_avatar);
 				}
-				followImageView.setVisibility(View.VISIBLE);
+
+				if (currUserId != user.getId()) {
+					followImageView.setVisibility(View.VISIBLE);
+				}
 
 			}
 		}).execute(user.getId());
