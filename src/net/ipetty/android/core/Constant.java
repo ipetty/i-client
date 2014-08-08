@@ -1,7 +1,6 @@
 package net.ipetty.android.core;
 
 import java.util.HashMap;
-
 import net.ipetty.R;
 
 public class Constant {
@@ -14,6 +13,9 @@ public class Constant {
 
 	// API服务可用性测试地址
 	public static final String API_HEALTH_URL = "http://api.ipetty.net/check.html";
+
+	//定位坐标系
+	public static final String LOCATE_COOR_TYPE = "bd09ll";
 
 	public static final Integer EMPTY_USER_ID = -1;
 

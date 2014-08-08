@@ -20,19 +20,19 @@ import net.ipetty.vo.FeedVO;
  */
 public class FeedPublishTask extends Task< FeedFormVO, FeedVO> {
 
-    public FeedPublishTask(Activity activity) {
-        super(activity);
-    }
+	public FeedPublishTask(Activity activity) {
+		super(activity);
+	}
 
-    @Override
-    protected FeedVO myDoInBackground(FeedFormVO... args) {
-        FeedFormVO ffvo = args[0];
-        String srcFile = ffvo.getImagePath();
-        String imageName = (System.currentTimeMillis() + ".jpg");
-        String outPath = new File(PathUtils.getCarmerDir(), imageName).getPath();
-        ImageUtils.compressImage(srcFile, outPath);
-        ffvo.setImagePath(outPath);
-        return IpetApi.init(activity).getFeedApi().publish(ffvo);
-    }
+	@Override
+	protected FeedVO myDoInBackground(FeedFormVO... args) {
+		FeedFormVO ffvo = args[0];
+		String srcFile = ffvo.getImagePath();
+		String imageName = (System.currentTimeMillis() + ".jpg");
+		String outPath = new File(PathUtils.getCarmerDir(), imageName).getPath();
+		ImageUtils.compressImage(srcFile, outPath);
+		ffvo.setImagePath(outPath);
+		return IpetApi.init(activity).getFeedApi().publishWithLocation(ffvo);
+	}
 
 }
