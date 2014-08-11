@@ -1,15 +1,5 @@
 package net.ipetty.android.discover;
 
-import java.util.List;
-
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.ui.BaseFragment;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
-import net.ipetty.vo.FeedVO;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import java.util.List;
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.BaseFragment;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
+import net.ipetty.vo.FeedVO;
 
 public class MainDiscoverFragment extends BaseFragment {
 
@@ -33,7 +32,6 @@ public class MainDiscoverFragment extends BaseFragment {
 	// private int width;
 	// private List<FeedVO> list = new ArrayList<FeedVO>(0); // 这个就本地dataStore
 	// DisplayImageOptions options;
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.main_fragment_discover, container, false);
@@ -53,6 +51,7 @@ public class MainDiscoverFragment extends BaseFragment {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			Log.d(TAG, "BroadcastReceiver:onReceive");
 			loadData();
 		}
 
@@ -77,7 +76,7 @@ public class MainDiscoverFragment extends BaseFragment {
 		 * adapter = new DiscoverAdapter(this.activity);
 		 * gridview.setAdapter(adapter); gridview.setOnItemClickListener(new
 		 * OnItemClickListener() {
-		 * 
+		 *
 		 * @Override public void onItemClick(AdapterView<?> parent, View view,
 		 * int position, long id) { // TODO Auto-generated method stub Intent
 		 * intent = new Intent((MainActivity) getActivity(),
@@ -99,7 +98,7 @@ public class MainDiscoverFragment extends BaseFragment {
 	}
 
 	private void loadData() {
-		// TODO Auto-generated method stub
+		Log.d(TAG, "loadData");
 		new ListByTimelineForSquare(MainDiscoverFragment.this.getActivity()).setListener(
 				new DefaultTaskListener<List<FeedVO>>(MainDiscoverFragment.this.getActivity()) {
 					@Override
@@ -111,12 +110,16 @@ public class MainDiscoverFragment extends BaseFragment {
 	}
 
 	private Long getRefreshTime() {
+		Log.d(TAG, "getRefreshTime");
 		if (NetWorkUtils.isNetworkConnected(this.getActivity())) {
-			this.lastTimeMillis = System.currentTimeMillis();
+			this.lastTimeMillis = System.currentTimeMillis() + Constant.TIME_CORRECT;
 			MyAppStateManager.setLastRefrsh4Discover(this.getActivity(), this.lastTimeMillis);
+			Log.d(TAG, "getRefreshTime:" + this.lastTimeMillis);
 			return this.lastTimeMillis;
 		}
-		return MyAppStateManager.getLastRefrsh4Discover(this.getActivity());
+		Long lastRefresh = MyAppStateManager.getLastRefrsh4Discover(this.getActivity());
+		Log.d(TAG, "getRefreshTime:" + lastRefresh.toString());
+		return lastRefresh;
 	}
 
 }

@@ -17,6 +17,9 @@ public class Constant {
 	//定位坐标系
 	public static final String LOCATE_COOR_TYPE = "bd09ll";
 
+	//客户端与服务器默认时差3秒
+	public static final Long TIME_CORRECT = 3 * 1000l;
+
 	public static final Integer EMPTY_USER_ID = -1;
 
 	// ZIP默认图片名称
