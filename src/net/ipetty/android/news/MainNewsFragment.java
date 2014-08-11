@@ -127,7 +127,7 @@ public class MainNewsFragment extends BaseFragment {
 				// 加载更多
 				if (activitieHasMore) {
 					new ListActivities(MainNewsFragment.this.getActivity()).setListener(
-							new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this, "加载中...") {
+							new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
 								@Override
 								public void onSuccess(List<ActivityVO> result) {
 									if (result.size() < activitiePageSize) {
@@ -209,6 +209,12 @@ public class MainNewsFragment extends BaseFragment {
 				new DefaultTaskListener<List<ActivityVO>>(MainNewsFragment.this) {
 					@Override
 					public void onSuccess(List<ActivityVO> result) {
+						if (result.size() < activitiePageSize) {
+							activitieHasMore = false;
+							related_me_listView.hideMoreView();
+						} else {
+							related_me_listView.showMoreView();
+						}
 						related_me_adapter.setList(result);
 						related_me_adapter.notifyDataSetChanged();
 					}
