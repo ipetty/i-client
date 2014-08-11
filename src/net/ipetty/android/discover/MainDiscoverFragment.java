@@ -20,6 +20,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MainDiscoverFragment extends BaseFragment {
 
@@ -29,6 +37,13 @@ public class MainDiscoverFragment extends BaseFragment {
 	private DiscoverRender render;
 	private Long lastTimeMillis;
 	private final Integer pageSize = 21;
+
+	private LayoutInflater mInflater;
+	private RelativeLayout mMoreView;
+	private TextView mText;
+	protected ImageView mImage;
+	protected ProgressBar mProgress;
+	private LinearLayout content;
 
 	// private int width;
 	// private List<FeedVO> list = new ArrayList<FeedVO>(0); // 这个就本地dataStore
@@ -62,7 +77,7 @@ public class MainDiscoverFragment extends BaseFragment {
 	protected void onViewResume() {
 		Log.d(TAG, "onViewResume");
 		super.onViewResume();
-		loadData();
+		// loadData();
 	}
 
 	@Override
@@ -71,7 +86,9 @@ public class MainDiscoverFragment extends BaseFragment {
 		Log.d(TAG, "onActivityCreated");
 		this.activity = getActivity();
 		render = new DiscoverRender(this.activity);
+		content = (LinearLayout) this.getActivity().findViewById(R.id.content);
 
+		initFooter(this.getActivity());
 		/*
 		 * gridview = (GridView) this.activity.findViewById(R.id.gridview);
 		 * adapter = new DiscoverAdapter(this.activity);
@@ -90,6 +107,31 @@ public class MainDiscoverFragment extends BaseFragment {
 		 */
 	}
 
+	private void initFooter(Context context) {
+		mInflater = (LayoutInflater) LayoutInflater.from(context);
+		mMoreView = (RelativeLayout) mInflater.inflate(R.layout.pull_to_refreshing, null, false);
+		mImage = (ImageView) mMoreView.findViewById(R.id.pull_to_refresh_image);
+		RotateAnimation mRotateAnimation = new RotateAnimation(0, 720, Animation.RELATIVE_TO_SELF, 0.5f,
+				Animation.RELATIVE_TO_SELF, 0.5f);
+		mRotateAnimation.setInterpolator(new LinearInterpolator());
+		mRotateAnimation.setDuration(1200);
+		mRotateAnimation.setRepeatCount(Animation.INFINITE);
+		mRotateAnimation.setRepeatMode(Animation.RESTART);
+		mImage.startAnimation(mRotateAnimation);
+		content.addView(mMoreView);
+
+	}
+
+	public void showMoreView() {
+		// TODO Auto-generated method stub
+		mMoreView.setVisibility(View.VISIBLE);
+	}
+
+	public void hideMoreView() {
+		// TODO Auto-generated method stub
+		mMoreView.setVisibility(View.GONE);
+	}
+
 	// 加载数据
 	@Override
 	protected void onViewReady(Bundle savedInstanceState) {
@@ -106,6 +148,7 @@ public class MainDiscoverFragment extends BaseFragment {
 					public void onSuccess(List<FeedVO> result) {
 						// TODO Auto-generated method stub
 						render.loadData(result);
+						hideMoreView();
 					}
 				}).execute(getRefreshTime().toString(), "0", pageSize.toString());
 	}
