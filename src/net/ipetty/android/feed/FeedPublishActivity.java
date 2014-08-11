@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.vo.FeedFormVO;
 import net.ipetty.vo.LocationVO;
+import org.apache.commons.lang3.StringUtils;
 
 public class FeedPublishActivity extends BaseActivity {
 
@@ -66,8 +68,32 @@ public class FeedPublishActivity extends BaseActivity {
 		String tmpStr = getResources().getString(R.string.publish_location_tips);
 		String locatStr = String.format(tmpStr, "正在确定...");
 		locationText.setText(locatStr);
+
+		locationText.setOnLongClickListener(new ViewOnLongClickListener());
+
 		mLocationClient.start();
 	}
+
+	private class ViewOnLongClickListener implements OnLongClickListener {
+
+		@Override
+		public boolean onLongClick(View v) {
+			if (locationVO != null) {
+				String tmpStr = getResources().getString(R.string.publish_location_tips);
+				StringBuilder lo = new StringBuilder();
+				lo.append(locationVO.getCity());
+				lo.append(" ");
+				lo.append(locationVO.getDistrict());
+				lo.append(" ");
+				lo.append(locationVO.getStreet());
+				lo.append(" ");
+				lo.append(locationVO.getStreetNumber());
+				String locatStr = String.format(tmpStr, lo.toString());
+				locationText.setText(locatStr);
+			}
+			return false;
+		}
+	};
 
 	@Override
 	protected void onStop() {
@@ -146,15 +172,15 @@ public class FeedPublishActivity extends BaseActivity {
 		public void onReceiveLocation(BDLocation location) {
 			Log.d(TAG, "onReceiveLocation");
 			String tmpStr = getResources().getString(R.string.publish_location_tips);
-			if (location == null) {//定位失败
+			if (location == null || StringUtils.isBlank(location.getCity())) {//定位失败
 				String locatStr = String.format(tmpStr, "定位失败");
 				locationText.setText(locatStr);
 			} else {
 				StringBuilder lo = new StringBuilder();
 				lo.append(location.getCity());
-				lo.append(",");
+				lo.append(" ");
 				lo.append(location.getDistrict());
-				lo.append(",");
+				lo.append(" ");
 				lo.append(location.getStreet());
 				String locatStr = String.format(tmpStr, lo.toString());
 				locationText.setText(locatStr);

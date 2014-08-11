@@ -44,6 +44,9 @@ public class ApiBase {
 
 	private static final LinkedMultiValueMap<String, String> EMPTY_PARAMETERS = new LinkedMultiValueMap<String, String>();
 
+	private int connectTimeout = 15 * 1000;
+	private int readTimeout = 60 * 1000;
+
 	public ApiBase(Context ctx) {
 		this.context = ctx;
 		// restTemplate = new RestTemplateWrap(ctx);
@@ -62,8 +65,8 @@ public class ApiBase {
 		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 		// HttpComponentsClientHttpRequestFactory factory = new
 		// HttpComponentsClientHttpRequestFactory();
-		factory.setConnectTimeout(60 * 1000);
-		factory.setReadTimeout(60 * 1000);
+		factory.setConnectTimeout(connectTimeout);
+		factory.setReadTimeout(readTimeout);
 
 		// 避免HttpURLConnection的http.keepAlive Bug
 		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
@@ -158,8 +161,8 @@ public class ApiBase {
 					// 创建连接
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.setUseCaches(false);
-					conn.setConnectTimeout(60 * 1000);
-					conn.setReadTimeout(60 * 1000);
+					conn.setConnectTimeout(connectTimeout);
+					conn.setReadTimeout(readTimeout);
 					// conn.setRequestProperty("Connection", "close");
 					conn.connect();
 					// 获取内容长度

@@ -12,10 +12,9 @@ import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import java.util.concurrent.TimeUnit;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.core.ServiceUnavailableException;
 
 /**
  *
@@ -43,9 +42,9 @@ public class UpdateUtils {
 			return false;
 		}
 		//服务器无法连接
-		if (!IpetApi.init(context).checkServiceAvaliable()) {
-			throw new ServiceUnavailableException();
-		}
+//		if (!IpetApi.init(context).checkServiceAvaliable()) {
+//			throw new ServiceUnavailableException();
+//		}
 
 		updateInfo = checkUpdateInfo();
 
@@ -68,6 +67,7 @@ public class UpdateUtils {
 		Request request = new Request.Builder()
 				.url(updateUrl)
 				.build();
+		client.setConnectTimeout(3, TimeUnit.SECONDS);
 		Response response = null;
 		updateInfo = null;
 		try {
