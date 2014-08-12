@@ -70,7 +70,7 @@ public class FollowsActivity extends BaseActivity {
 				if (FollowsActivity.this.hasMore) {
 					FollowsActivity.this.currentPage++;
 					new ListFriends(FollowsActivity.this).setListener(
-							new DefaultTaskListener<List<UserVO>>(FollowsActivity.this, "加载更多...") {
+							new DefaultTaskListener<List<UserVO>>(FollowsActivity.this) {
 								@Override
 								public void onSuccess(List<UserVO> result) {
 									if (result.size() < FollowsActivity.this.pageSize) {
@@ -81,6 +81,12 @@ public class FollowsActivity extends BaseActivity {
 									}
 									adapter.getList().addAll(result);
 									adapter.notifyDataSetChanged();
+								}
+
+								@Override
+								public void onError(Throwable ex) {
+									super.onError(ex);
+									listView.hideMoreView();
 								}
 							}).execute(FollowsActivity.this.userId, FollowsActivity.this.currentPage,
 							FollowsActivity.this.pageSize);
@@ -104,7 +110,7 @@ public class FollowsActivity extends BaseActivity {
 	// 初始化数据
 	public void initData(final PullToRefreshListView view) {
 
-		new ListFriends(this).setListener(new DefaultTaskListener<List<UserVO>>(this, "正在加载...") {
+		new ListFriends(this).setListener(new DefaultTaskListener<List<UserVO>>(this) {
 			@Override
 			public void onSuccess(List<UserVO> result) {
 				if (result.size() < FollowsActivity.this.pageSize) {
@@ -118,6 +124,12 @@ public class FollowsActivity extends BaseActivity {
 				if (null != view) {
 					view.onRefreshComplete();
 				}
+			}
+
+			@Override
+			public void onError(Throwable ex) {
+				super.onError(ex);
+				listView.hideMoreView();
 			}
 		}).execute(this.userId, 0, this.pageSize);
 

@@ -81,6 +81,12 @@ public class FansActivity extends BaseActivity {
 									adapter.getList().addAll(result);
 									adapter.notifyDataSetChanged();
 								}
+
+								@Override
+								public void onError(Throwable ex) {
+									super.onError(ex);
+									listView.hideMoreView();
+								}
 							}).execute(FansActivity.this.userId, FansActivity.this.currentPage,
 							FansActivity.this.pageSize);
 				}
@@ -110,6 +116,12 @@ public class FansActivity extends BaseActivity {
 				if (null != view) {
 					view.onRefreshComplete();
 				}
+			}
+
+			@Override
+			public void onError(Throwable ex) {
+				super.onError(ex);
+				listView.hideMoreView();
 			}
 		}).execute(this.userId, 0, this.pageSize);
 	}

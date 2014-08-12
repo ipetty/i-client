@@ -1,5 +1,15 @@
 package net.ipetty.android.discover;
 
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.BaseFragment;
+import net.ipetty.android.core.util.NetWorkUtils;
+import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
+import net.ipetty.vo.FeedVO;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,15 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.ui.BaseFragment;
-import net.ipetty.android.core.util.NetWorkUtils;
-import net.ipetty.android.sdk.task.feed.ListByTimelineForSquare;
-import net.ipetty.vo.FeedVO;
 
 public class MainDiscoverFragment extends BaseFragment {
 
@@ -93,7 +94,7 @@ public class MainDiscoverFragment extends BaseFragment {
 		 * adapter = new DiscoverAdapter(this.activity);
 		 * gridview.setAdapter(adapter); gridview.setOnItemClickListener(new
 		 * OnItemClickListener() {
-		 *
+		 * 
 		 * @Override public void onItemClick(AdapterView<?> parent, View view,
 		 * int position, long id) { // TODO Auto-generated method stub Intent
 		 * intent = new Intent((MainActivity) getActivity(),
@@ -147,6 +148,12 @@ public class MainDiscoverFragment extends BaseFragment {
 					public void onSuccess(List<FeedVO> result) {
 						// TODO Auto-generated method stub
 						render.loadData(result);
+						hideMoreView();
+					}
+
+					@Override
+					public void onError(Throwable ex) {
+						super.onError(ex);
 						hideMoreView();
 					}
 				}).execute(getRefreshTime().toString(), "0", pageSize.toString());

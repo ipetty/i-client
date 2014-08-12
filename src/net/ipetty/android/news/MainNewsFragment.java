@@ -114,6 +114,12 @@ public class MainNewsFragment extends BaseFragment {
 								related_me_adapter.notifyDataSetChanged();
 								related_me_listView.onRefreshComplete();
 							}
+
+							@Override
+							public void onError(Throwable ex) {
+								super.onError(ex);
+								related_me_listView.hideMoreView();
+							}
 						}).execute(0, MainNewsFragment.this.activitiePageSize); // 重置页号
 				activitieHasMore = true;
 				activitiePageNumber = 0;
@@ -140,6 +146,12 @@ public class MainNewsFragment extends BaseFragment {
 										related_me_adapter.getList().addAll(result);
 										related_me_adapter.notifyDataSetChanged();
 									}
+								}
+
+								@Override
+								public void onError(Throwable ex) {
+									super.onError(ex);
+									related_me_listView.hideMoreView();
 								}
 							}).execute(++activitiePageNumber, activitiePageSize);
 
@@ -217,6 +229,12 @@ public class MainNewsFragment extends BaseFragment {
 						}
 						related_me_adapter.setList(result);
 						related_me_adapter.notifyDataSetChanged();
+					}
+
+					@Override
+					public void onError(Throwable ex) {
+						super.onError(ex);
+						related_me_listView.hideMoreView();
 					}
 				}).execute(0, this.activitiePageSize);
 		if (false) {

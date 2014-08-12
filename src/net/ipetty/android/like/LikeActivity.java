@@ -67,6 +67,12 @@ public class LikeActivity extends BaseActivity {
 						adapter.notifyDataSetChanged();
 						listView.onRefreshComplete();
 					}
+
+					@Override
+					public void onError(Throwable ex) {
+						super.onError(ex);
+						listView.hideMoreView();
+					}
 				}).execute(feedId);
 
 			}
@@ -107,6 +113,12 @@ public class LikeActivity extends BaseActivity {
 				listView.hideMoreView();
 				adapter.setList(result.getFavors());
 				adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onError(Throwable ex) {
+				super.onError(ex);
+				listView.hideMoreView();
 			}
 		}).execute(feedId);
 	}

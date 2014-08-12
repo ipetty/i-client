@@ -77,6 +77,12 @@ public class CommentActivity extends BaseActivity {
 								listView.onRefreshComplete();
 
 							}
+
+							@Override
+							public void onError(Throwable ex) {
+								super.onError(ex);
+								listView.hideMoreView();
+							}
 						}).execute(feedId);
 			}
 		});
@@ -135,6 +141,12 @@ public class CommentActivity extends BaseActivity {
 				listView.hideMoreView();
 				adapter.setList(result.getComments());
 				adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onError(Throwable ex) {
+				super.onError(ex);
+				listView.hideMoreView();
 			}
 		}).execute(feedId);
 
