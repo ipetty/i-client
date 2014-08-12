@@ -1,18 +1,17 @@
 package net.ipetty.android.sdk.cache;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpStatus.NOT_MODIFIED;
-
+import android.content.Context;
+import android.util.Log;
 import java.io.IOException;
 import java.net.URI;
-
 import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.NetWorkUtils;
 import net.ipetty.android.sdk.core.APIException;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import static org.springframework.http.HttpMethod.GET;
 import org.springframework.http.HttpStatus;
+import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.Assert;
@@ -21,12 +20,9 @@ import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import android.content.Context;
-import android.util.Log;
-
 /**
- * 
- * 
+ *
+ *
  * @author xiaojinghai
  */
 public class RestTemplate4Cache extends RestTemplate {
@@ -54,7 +50,7 @@ public class RestTemplate4Cache extends RestTemplate {
 
 			if (!isCacheableRequest(method)) {
 				Log.d(TAG, "离线状态，只能浏览:" + url);
-				throw new APIException("离线状态，只能浏览");
+				throw new APIException("您当前处于离线状态！");
 			}
 
 			CacheEntry e = getCache().get(url.toString());
