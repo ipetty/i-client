@@ -1,8 +1,29 @@
 package net.ipetty.android.home;
 
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Toast;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
@@ -23,32 +44,7 @@ import net.ipetty.android.sdk.task.feed.ListByTimelineForHomePage;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
-
 import org.apache.commons.lang3.StringUtils;
-
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.text.format.DateUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MainHomeFragment extends BaseFragment {
 
@@ -177,7 +173,7 @@ public class MainHomeFragment extends BaseFragment {
 				// 加载更多
 				if (hasMore) {
 					new ListByTimelineForHomePage(MainHomeFragment.this.getActivity()).setListener(
-							new LoadMoreFeedListListener(MainHomeFragment.this)).execute(
+							new LoadMoreFeedListListener(MainHomeFragment.this, mPullRefreshListView)).execute(
 									MainHomeFragment.this.lastTimeMillis.toString(), (++pageNumber).toString(),
 									pageSize.toString());
 				}
