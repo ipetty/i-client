@@ -129,7 +129,7 @@
     <string name="title_activity_bonus_point">积分</string>
     <!-- petty -->
     <string name="title_activity_petty">我的宠物</string>
-    <string name="title_activity_location">LocationActivity</string>
+    <string name="title_activity_location">我的位置</string>
 
     <!-- 个人资料 -->
     <string name="save">保存</string>
