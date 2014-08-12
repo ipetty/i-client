@@ -119,6 +119,7 @@ public class LocationActivity extends BaseActivity {
 				layout1.setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
 						locationVO = null;
+						goBack();
 					}
 				});
 				layout1.setVisibility(View.VISIBLE);
