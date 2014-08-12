@@ -78,7 +78,7 @@
     <string name="btn_publish_text">发布</string>
     <string name="publish_loading">正在发布...</string>
     <string name="publish_hint">您现在的想法...</string>
-    <string name="publish_location_tips">所在位置：%1s</string>
+    <string name="publish_location_tips">所在位置 %1s</string>
     <!-- larger_image -->
     <string name="title_activity_larger_image">LargerImageActivity</string>
     <!-- menu -->

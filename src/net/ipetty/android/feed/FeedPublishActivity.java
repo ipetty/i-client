@@ -6,22 +6,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import net.ipetty.R;
 import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.MyApplication;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.vo.FeedFormVO;
 import net.ipetty.vo.LocationVO;
 import org.apache.commons.lang3.StringUtils;
@@ -34,8 +30,6 @@ public class FeedPublishActivity extends BaseActivity {
 	private TextView btn_publish;
 	private View locationView;
 	private TextView locationText;
-	private LocationClient mLocationClient = null;
-	private BDLocationListener myListener = new MyLocationListener();
 	private LocationVO locationVO = null;
 
 	@Override
@@ -55,52 +49,50 @@ public class FeedPublishActivity extends BaseActivity {
 		// photoPath
 		Intent intent = getIntent();
 		path = intent.getStringExtra(Constant.INTENT_PHOTO_PATH_KEY);
+		String t = intent.getStringExtra(Constant.INTENT_FeedText_KEY);
+		if (StringUtils.isNotBlank(t)) {
+			edit.setText(t);
+		}
+
 		ImageView image = (ImageView) this.findViewById(R.id.image);
 		String uri = Uri.decode(Uri.fromFile(new File(path)).toString());
 		ImageLoader.getInstance().displayImage(uri, image, options);
+		//locationVO
+		String locationVOJson = intent.getStringExtra(Constant.INTENT_LOCATION_VO_KEY);
+		if (StringUtils.isNotBlank(locationVOJson)) {
+			locationVO = JSONUtils.fromJSON(locationVOJson, LocationVO.class);
+		}
 
-		mLocationClient = ((MyApplication) getApplication()).mLocationClient;
-		mLocationClient.registerLocationListener(myListener);    //注册监听函数
-
+		//位置布局
 		locationView = this.findViewById(R.id.location_layout);
 		locationView.setVisibility(View.VISIBLE);
+		locationView.setOnClickListener(new ViewOnClickListener());
+
 		locationText = (TextView) this.findViewById(R.id.location_tips);
 		String tmpStr = getResources().getString(R.string.publish_location_tips);
-		String locatStr = String.format(tmpStr, "正在确定...");
-		locationText.setText(locatStr);
 
-		locationText.setOnLongClickListener(new ViewOnLongClickListener());
-
-		mLocationClient.start();
-	}
-
-	private class ViewOnLongClickListener implements OnLongClickListener {
-
-		@Override
-		public boolean onLongClick(View v) {
-			if (locationVO != null) {
-				String tmpStr = getResources().getString(R.string.publish_location_tips);
-				StringBuilder lo = new StringBuilder();
-				lo.append(locationVO.getCity());
-				lo.append(" ");
-				lo.append(locationVO.getDistrict());
-				lo.append(" ");
-				lo.append(locationVO.getStreet());
-				lo.append(" ");
-				lo.append(locationVO.getStreetNumber());
-				String locatStr = String.format(tmpStr, lo.toString());
-				locationText.setText(locatStr);
-			}
-			return false;
+		if (locationVO == null) {
+			String locatStr = String.format(tmpStr, "");
+			locationText.setText(locatStr);
+		} else {
+			String locatStr = String.format(tmpStr, locationVO.getAddress());
+			locationText.setText(locatStr);
 		}
-	};
 
-	@Override
-	protected void onStop() {
-		Log.d(TAG, "onStop");
-		mLocationClient.stop();
-		super.onStop();
 	}
+
+	private class ViewOnClickListener implements OnClickListener {
+
+		public void onClick(View view) {
+			Intent intent = new Intent(FeedPublishActivity.this, LocationActivity.class);
+			intent.putExtra(Constant.INTENT_PHOTO_PATH_KEY, path);
+			intent.putExtra(Constant.INTENT_FeedText_KEY, edit.getText().toString());
+
+			FeedPublishActivity.this.startActivity(intent);
+			FeedPublishActivity.this.finish();
+		}
+
+	};
 
 	// 加载数据
 	@Override
@@ -162,75 +154,5 @@ public class FeedPublishActivity extends BaseActivity {
 		}
 
 	};
-
-	/**
-	 * 实现实位回调监听
-	 */
-	private class MyLocationListener implements BDLocationListener {
-
-		@Override
-		public void onReceiveLocation(BDLocation location) {
-			Log.d(TAG, "onReceiveLocation");
-			String tmpStr = getResources().getString(R.string.publish_location_tips);
-			if (location == null || StringUtils.isBlank(location.getCity())) {//定位失败
-				String locatStr = String.format(tmpStr, "定位失败");
-				locationText.setText(locatStr);
-			} else {
-				StringBuilder lo = new StringBuilder();
-				lo.append(location.getCity());
-				lo.append(" ");
-				lo.append(location.getDistrict());
-				lo.append(" ");
-				lo.append(location.getStreet());
-				String locatStr = String.format(tmpStr, lo.toString());
-				locationText.setText(locatStr);
-
-				locationVO = new LocationVO();
-				locationVO.setCoorType(Constant.LOCATE_COOR_TYPE);
-				locationVO.setSilent(false);
-
-				locationVO.setLatitude(location.getLatitude());
-				locationVO.setLongitude(location.getLongitude());
-				locationVO.setProvince(location.getProvince());
-				locationVO.setCity(location.getCity());
-				locationVO.setDistrict(location.getDistrict());
-				locationVO.setStreet(location.getStreet());
-				locationVO.setStreetNumber(location.getStreetNumber());
-				locationVO.setAddress(lo.toString());
-				locationVO.setRadius(location.getRadius());
-			}
-
-			//Receive Location
-			StringBuilder sb = new StringBuilder(256);
-			sb.append("时间 : ");
-			sb.append(location.getTime());
-			sb.append("\n定位方式 : ");
-			sb.append(location.getLocType());
-			sb.append("\n纬度 : ");
-			sb.append(location.getLatitude());
-			sb.append("\n经度 : ");
-			sb.append(location.getLongitude());
-			sb.append("\n精度 : ");
-			sb.append(location.getRadius());
-			sb.append("\n省 : ");
-			sb.append(location.getProvince());
-			sb.append("\n市 : ");
-			sb.append(location.getCity());
-			sb.append("\n市编码 : ");
-			sb.append(location.getCityCode());
-			sb.append("\n区/县 : ");
-			sb.append(location.getDistrict());
-			sb.append("\n街道 : ");
-			sb.append(location.getStreet());
-			sb.append("\n门牌号 : ");
-			sb.append(location.getStreetNumber());
-			sb.append("\n详细地址 : ");
-			sb.append(location.getAddrStr());
-			sb.append("\n楼层 : ");
-			sb.append(location.getFloor());
-			Log.i(TAG, sb.toString());
-		}
-
-	}
 
 }
