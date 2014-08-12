@@ -1,14 +1,15 @@
 package net.ipetty.android.core.ui;
 
-import net.ipetty.android.core.ActivityManager;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.DelayTask;
-import net.ipetty.android.core.ErrorHandler;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
+import com.baidu.mobstat.StatService;
+import net.ipetty.android.core.ActivityManager;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.DelayTask;
+import net.ipetty.android.core.ErrorHandler;
 
 public class BaseFragmentActivity extends FragmentActivity {
 
@@ -21,6 +22,13 @@ public class BaseFragmentActivity extends FragmentActivity {
 	private ErrorHandler errorHandler;
 
 	private final int delayTime = 500;
+
+	//百度统计
+	@Override
+	public void onPause() {
+		super.onPause();
+		StatService.onPause(this);
+	}
 
 	public void showMessageForShortTime(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -92,6 +100,8 @@ public class BaseFragmentActivity extends FragmentActivity {
 	protected void onResume() {
 		Log.d(TAG, "onResume");
 		super.onResume();
+		//百度统计
+		StatService.onResume(this);
 		if (isViewReady) {
 			try {
 				onViewResume();
