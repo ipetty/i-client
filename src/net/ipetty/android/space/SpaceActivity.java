@@ -83,7 +83,7 @@ public class SpaceActivity extends BaseActivity {
 	private ImageView avatar;// 头像
 	private Boolean isFollow;// 记录当前用户是否已关注被查看用户
 	private Integer pageNumber = 0;// 我的feed
-	private final Integer pageSize = 10;// 我的feed
+	private final Integer pageSize = 30;// 我的feed
 	private View space_feed_layout; // feed列表布局
 	private ListView space_feed_list;// feed列表View
 	private FeedAdapter feedListAdapter;// feed列表适配
