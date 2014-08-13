@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
-import com.baidu.mobstat.StatService;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.DelayTask;
 import net.ipetty.android.core.ErrorHandler;
@@ -35,7 +34,7 @@ public class BaseFragment extends Fragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		StatService.onPause(this);
+		//StatService.onPause(this);
 	}
 
 	public void showMessageForShortTime(String msg) {
@@ -61,7 +60,7 @@ public class BaseFragment extends Fragment {
 		Log.d(TAG, "onResume");
 		super.onResume();
 		//百度统计
-		StatService.onResume(this);
+		//StatService.onResume(this);
 		new DelayTask(this).setListener(new DefaultTaskListener<Void>(this) {
 			@Override
 			public void onSuccess(Void result) {
