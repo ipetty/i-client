@@ -28,6 +28,8 @@ public class Constant {
 	public final static float ZOOM_IMAGE_MAX_WIDTH = 320f;
 	public final static float ZOOM_IMAGE_MAX_HEIGHT = 320f;
 
+	public final static String INTENT_LOCATION_VO_KEY = "INTENT_LOCATION_VO_KEY";
+	public final static String INTENT_FeedText_KEY = "INTENT_FeedText_KEY";
 	public final static String INTENT_PHOTO_PATH_KEY = "publish_photo_path";
 	public final static String INTENT_PHOTO_OUT_PATH_KEY = "publish_photo_out_path";
 	public final static String INTENT_IMAGE_ORIGINAL_KEY = "ORIGINAL_url";
