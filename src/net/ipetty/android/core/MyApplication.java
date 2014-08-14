@@ -32,7 +32,7 @@ public class MyApplication extends Application {
 		option.setScanSpan(0);//一次定位模式
 		option.setIsNeedAddress(true);//返回的定位结果包含地址信息
 		option.setNeedDeviceDirect(false);//返回的定位结果包含手机机头的方向
-		option.setOpenGps(false);//如果用户已打开GPS，则可以使用GPS
+		option.setOpenGps(true);//如果用户已打开GPS，则可以使用GPS
 		option.SetIgnoreCacheException(true);//不捕捉异常
 		option.setTimeOut(5 * 1000);
 		mLocationClient.setLocOption(option);

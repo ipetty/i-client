@@ -60,6 +60,7 @@ public class ErrorHandler {
 			APIException e = (APIException) ex;
 			if (null == e.getMessage() || "".equals(e.getMessage())) {
 				showError("未知异常");
+				reportUnknowError(ex);
 			} else {
 				showError(e.getMessage());
 			}
