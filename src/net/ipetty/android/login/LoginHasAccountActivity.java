@@ -8,7 +8,6 @@ import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.task.user.UserLogin;
-import net.ipetty.sharesdk.qzone.QZoneAuthorization;
 import net.ipetty.sharesdk.sinaweibo.SinaWeiboAuthorization;
 import net.ipetty.vo.UserVO;
 
@@ -27,10 +26,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qzone.QZone;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -116,10 +115,14 @@ public class LoginHasAccountActivity extends BaseActivity {
 		qq.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ShareSDK.initSDK(LoginHasAccountActivity.this);
-				Platform qzone = ShareSDK.getPlatform(LoginHasAccountActivity.this, QZone.NAME);
-				new QZoneAuthorization(LoginHasAccountActivity.this).authorize(qzone);
-				progressDialog.show();
+				Toast.makeText(LoginHasAccountActivity.this, "正在和企鹅沟通中，即将启用~", Toast.LENGTH_SHORT).show();
+				// ShareSDK.initSDK(LoginHasAccountActivity.this);
+				// Platform qzone =
+				// ShareSDK.getPlatform(LoginHasAccountActivity.this,
+				// QZone.NAME);
+				// new
+				// QZoneAuthorization(LoginHasAccountActivity.this).authorize(qzone);
+				// progressDialog.show();
 			}
 		});
 

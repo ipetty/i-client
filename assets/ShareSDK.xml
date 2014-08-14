@@ -22,8 +22,4 @@
 	<SinaWeibo Id="5" SortId="5" AppKey="3374776988" AppSecret="3e4cd0f7354a3f8c14e257c6d9b1d44a" RedirectUrl="http://ipetty.net"
 		ShareByAppClient="false" Enable="true" />
 
-	<!-- 腾讯微博 -->
-	<TencentWeibo Id="6" SortId="6" AppKey="801499817" AppSecret="b2f6614e1a7a78a7613998647dc9ae8f"
-		RedirectUri="http://ipetty.net" Enable="true" />
-
 </DevInfor>

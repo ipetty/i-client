@@ -1,16 +1,22 @@
 package net.ipetty.sharesdk.onekeyshare;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import net.ipetty.R;
 import net.ipetty.sharesdk.ShareSDKConstant;
 import net.ipetty.sharesdk.ShareSDKMessageCallback;
-import android.app.Activity;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.content.Context;
+import android.util.Log;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.framework.utils.UIHandler;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 
 /**
  * 一键分享
@@ -20,27 +26,48 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  */
 public class OneKeyShare {
 
-	protected Activity activity;
-	protected ShareSDKMessageCallback shareSDKMessageCallback;
+	private static final String TAG = OneKeyShare.class.getSimpleName();
 
-	public OneKeyShare(Activity activity) {
+	private static final String SHARE_TITLE = "来自爱宠的分享";
+	private static final String SHARE_SITE = "爱宠";
+	private static final String SHARE_SITE_URL = "http://ipetty.net/";
+
+	private static final String[] SHARE_QUOTES = { "亲，一大波汪星人&喵星人正在来袭，您还在等什么呢~", "亲，一大波汪星人&喵星人正在来袭，您还在等什么呢~",
+			"亲，一大波汪星人&喵星人正在来袭，您还在等什么呢~", "一大波波汪星人&喵星人正在入侵爱宠，快去看看吧！", "一大波波汪星人&喵星人正在入侵爱宠，快去看看吧！" };
+
+	protected Context context;
+	protected ShareSDKMessageCallback shareSDKMessageCallback;
+	private PlatformActionListener shareCallback = new ShareListener();
+	private ShareContentCustomizeCallback customizeShareCallback = new OneKeyShareCustomizeCallback();
+
+	public OneKeyShare(Context context) {
 		super();
-		this.activity = activity;
-		shareSDKMessageCallback = new ShareSDKMessageCallback(this.activity);
+		this.context = context;
+		this.shareSDKMessageCallback = new ShareSDKMessageCallback(this.context);
 	}
 
 	/**
-	 * 一键分享
+	 * 分享消息
 	 */
-	public void oneKeyShare(Context context, String title, String text, String imagePath, boolean silent) {
+	public void share(String feedAuthor, String feedBody, String imageUrl) {
+		ShareSDK.initSDK(this.context);
 		OnekeyShare oks = new OnekeyShare();
-		oks.setNotification(R.drawable.ic_launcher, context.getString(R.string.app_name));
-		oks.setTitle(title);
-		oks.setText(text);
-		oks.setImagePath(imagePath);
-		oks.setSilent(silent); // 是否直接分享，true则直接分享
-		oks.setCallback(new ShareListener());
+		oks.setNotification(R.drawable.ic_launcher, this.context.getString(R.string.app_name));
+		oks.setTitle(SHARE_TITLE);
+		oks.setTitleUrl(SHARE_SITE_URL);
+		String quote = getQuote();
+		oks.setText(StringUtils.isNotBlank(feedBody) ? quote + "// " + feedAuthor + "：" + feedBody : quote);
+		oks.setImageUrl(imageUrl);
+		oks.setSilent(false); // 是否直接分享，true则直接分享
+		oks.setCallback(shareCallback);
+		oks.setSite(SHARE_SITE);
+		oks.setSiteUrl(SHARE_SITE_URL);
+		oks.setShareContentCustomizeCallback(customizeShareCallback);
 		oks.show(context);
+	}
+
+	private static String getQuote() {
+		return SHARE_QUOTES[new Random().nextInt(SHARE_QUOTES.length)];
 	}
 
 	/**
@@ -49,18 +76,19 @@ public class OneKeyShare {
 	public class ShareListener implements PlatformActionListener {
 		@Override
 		public void onComplete(Platform platform, int action, HashMap<String, Object> args) {
-			UIHandler.sendEmptyMessage(ShareSDKConstant.MSG_SHARE_COMPLETE, shareSDKMessageCallback);
+			UIHandler.sendEmptyMessage(ShareSDKConstant.MSG_SHARE_COMPLETE, OneKeyShare.this.shareSDKMessageCallback);
 		}
 
 		@Override
 		public void onCancel(Platform platform, int action) {
-			UIHandler.sendEmptyMessage(ShareSDKConstant.MSG_SHARE_CANCEL, shareSDKMessageCallback);
+			UIHandler.sendEmptyMessage(ShareSDKConstant.MSG_SHARE_CANCEL, OneKeyShare.this.shareSDKMessageCallback);
 		}
 
 		@Override
 		public void onError(Platform platform, int action, Throwable t) {
-			t.printStackTrace();
-			UIHandler.sendEmptyMessage(ShareSDKConstant.MSG_SHARE_ERROR, shareSDKMessageCallback);
+			// t.printStackTrace();
+			Log.d(TAG, "分享失败", t);
+			UIHandler.sendEmptyMessage(ShareSDKConstant.MSG_SHARE_ERROR, OneKeyShare.this.shareSDKMessageCallback);
 		}
 	}
 

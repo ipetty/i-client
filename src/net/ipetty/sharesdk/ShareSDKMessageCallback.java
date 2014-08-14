@@ -1,6 +1,6 @@
 package net.ipetty.sharesdk;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.widget.Toast;
@@ -13,11 +13,11 @@ import android.widget.Toast;
  */
 public class ShareSDKMessageCallback implements Callback {
 
-	private Activity activity;
+	private Context context;
 
-	public ShareSDKMessageCallback(Activity activity) {
+	public ShareSDKMessageCallback(Context context) {
 		super();
-		this.activity = activity;
+		this.context = context;
 	}
 
 	/* 处理异步消息 */
@@ -25,31 +25,31 @@ public class ShareSDKMessageCallback implements Callback {
 	public boolean handleMessage(Message msg) {
 		switch (msg.what) {
 		case ShareSDKConstant.MSG_SHARE_COMPLETE:
-			Toast.makeText(activity, "分享成功", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "分享成功", Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_SHARE_CANCEL:
-			Toast.makeText(activity, "取消分享", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "取消分享", Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_SHARE_ERROR:
-			Toast.makeText(activity, "分享失败", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "分享失败", Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_USERID_FOUND:
-			// Toast.makeText(activity, "用户信息已存在，正在跳转登录操作…",
+			// Toast.makeText(context, "用户信息已存在，正在跳转登录操作…",
 			// Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_LOGIN:
-			// Toast.makeText(activity, "正在使用" + msg.obj + "的授权帐号登录" +
-			// activity.getString(R.string.app_name),
+			// Toast.makeText(context, "正在使用" + msg.obj + "的授权帐号登录" +
+			// context.getString(R.string.app_name),
 			// Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_AUTH_CANCEL:
-			Toast.makeText(activity, "授权操作已取消", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "授权操作已取消", Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_AUTH_ERROR:
-			Toast.makeText(activity, "授权操作出错", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "授权操作出错", Toast.LENGTH_SHORT).show();
 			break;
 		case ShareSDKConstant.MSG_AUTH_COMPLETE:
-			// Toast.makeText(activity, "授权成功，正在跳转登录操作…",
+			// Toast.makeText(context, "授权成功，正在跳转登录操作…",
 			// Toast.LENGTH_SHORT).show();
 			break;
 		}

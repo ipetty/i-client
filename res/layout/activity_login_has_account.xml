@@ -154,9 +154,9 @@
                 android:gravity="center" >
 
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_sina" />
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/logo_sinaweibo" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -182,10 +182,10 @@
                 android:gravity="center" >
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:scaleType="fitStart"
-                    android:src="@drawable/ic_qq" />
+                    android:src="@drawable/logo_qq" />
 
                 <TextView
                     android:layout_width="wrap_content"
