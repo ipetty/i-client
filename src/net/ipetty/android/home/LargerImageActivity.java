@@ -42,7 +42,6 @@ public class LargerImageActivity extends BaseActivity {
 		// 设置初始图片
 		image.setScaleType(ImageView.ScaleType.FIT_CENTER);
 		image.setAlpha(initAlpha);
-		image.setImageAlpha(initAlpha);
 		// image.setImageResource(R.drawable.default_image);
 
 		// 同步加载小图
