@@ -8,16 +8,12 @@ import java.util.Map;
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.PrettyDateFormat;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.feed.SimpleFeedActivity;
-import net.ipetty.android.sdk.task.feed.GetFeedById;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.ActivityVO;
-import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +31,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -147,35 +144,42 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		if (StringUtils.isNotBlank(act.getFeedImageUrl())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + act.getFeedImageUrl(),
 					holder.relatedImage, options);
+			final Long feedId = act.getTargetId();
+			holder.relatedImage.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, SimpleFeedActivity.class);
+					intent.putExtra(Constant.INTENT_FEED_ID_KEY, feedId);
+					if (feedCache.containsKey(feedId)) {
+						intent.putExtra(Constant.FEEDVO_JSON_SERIALIZABLE, feedCache.get(feedId));
+					}
+					context.startActivity(intent);
+				}
+			});
 		} else {
 			holder.relatedImage.setImageResource(R.drawable.default_image);
-		}
-		final Long feedId = act.getTargetId();
-		holder.relatedImage.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(context, SimpleFeedActivity.class);
-				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feedId);
-				if (feedCache.containsKey(feedId)) {
-					intent.putExtra(Constant.FEEDVO_JSON_SERIALIZABLE, feedCache.get(feedId));
+			holder.relatedImage.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(context, "该消息已不存在", Toast.LENGTH_SHORT).show();
 				}
-				context.startActivity(intent);
-			}
-		});
+			});
+		}
 
 		// TODO:临时方案 这里是消息预加载异步线程 主要提高加载效率
-		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) || Constant.NEWS_TYPE_COMMENT.equals(act.getType())) {
-			new GetFeedById((Activity) context).setListener(new DefaultTaskListener<FeedVO>((Activity) context) {
-				@Override
-				public void onSuccess(FeedVO result) {
-					if (feedCache.containsKey(result.getId())) {
-						return;
-					}
-					feedCache.put(result.getId(), JSONUtils.toJson(result).toString());
-				}
-			}).execute(feedId);
-		}
+		// if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) ||
+		// Constant.NEWS_TYPE_COMMENT.equals(act.getType())) {
+		// new GetFeedById((Activity) context).setListener(new
+		// DefaultTaskListener<FeedVO>((Activity) context) {
+		// @Override
+		// public void onSuccess(FeedVO result) {
+		// if (feedCache.containsKey(result.getId())) {
+		// return;
+		// }
+		// feedCache.put(result.getId(), JSONUtils.toJson(result).toString());
+		// }
+		// }).execute(feedId);
+		// }
 
 		return view;
 	}

@@ -47,6 +47,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -116,10 +117,6 @@ public class SimpleFeedActivity extends BaseActivity {
 		Log.d(TAG, "feedJSON-->" + feedJSON);
 		if (feedJSON != null) {
 			feed = JSONUtils.fromJSON(feedJSON, FeedVO.class);
-
-			// renderUser();
-			// renderConent();
-			// renderArea();
 			initDefaultView();
 		}
 	}
@@ -129,27 +126,24 @@ public class SimpleFeedActivity extends BaseActivity {
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
 		if (feed != null) {
-			// renderArea();
-			// renderFavor();
-			// renderCommentView();
+			initDefaultView();
+		} else {
+			// 初始化界面操作
+			new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
 
-		}
+				@Override
+				public void onSuccess(FeedVO result) {
+					if (JSONUtils.toJson(result).toString().equals(feedJSON)) {
+						return;
+					}
 
-		// 初始化界面操作
-		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
+					SimpleFeedActivity.this.feed = result;
+					Log.d(TAG, "FAVER" + result.isFavored());
 
-			@Override
-			public void onSuccess(FeedVO result) {
-				if (JSONUtils.toJson(result).toString().equals(feedJSON)) {
-					return;
+					SimpleFeedActivity.this.initDefaultView();
 				}
-
-				SimpleFeedActivity.this.feed = result;
-				Log.d(TAG, "FAVER" + result.isFavored());
-
-				SimpleFeedActivity.this.initDefaultView();
-			}
-		}).execute(feedId);
+			}).execute(feedId);
+		}
 	}
 
 	private void initView() {
@@ -240,8 +234,8 @@ public class SimpleFeedActivity extends BaseActivity {
 								Intent intent = new Intent(Constant.BROADCAST_INTENT_FEED_DELETE);
 								intent.putExtra(Constant.FEEDVO_ID, feedId);
 								SimpleFeedActivity.this.sendBroadcast(intent);
-								// FeedAdapter.this.getList().remove(FeedAdapter.this.currentClickItemPosition);
-								// FeedAdapter.this.notifyDataSetChanged();
+								Toast.makeText(SimpleFeedActivity.this, "删除消息成功", Toast.LENGTH_SHORT).show();
+								activity.finish();
 							}
 						}
 					}).execute(feedId);
