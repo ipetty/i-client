@@ -8,12 +8,16 @@ import java.util.Map;
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.JSONUtils;
 import net.ipetty.android.core.util.PrettyDateFormat;
 import net.ipetty.android.core.util.WebLinkUtils;
 import net.ipetty.android.feed.SimpleFeedActivity;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
 import net.ipetty.android.space.SpaceActivity;
 import net.ipetty.vo.ActivityVO;
+import net.ipetty.vo.FeedVO;
 import net.ipetty.vo.UserVO;
 
 import org.apache.commons.lang3.StringUtils;
@@ -141,10 +145,10 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		});
 
 		// 消息图片
+		final Long feedId = act.getTargetId();
 		if (StringUtils.isNotBlank(act.getFeedImageUrl())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + act.getFeedImageUrl(),
 					holder.relatedImage, options);
-			final Long feedId = act.getTargetId();
 			holder.relatedImage.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -167,19 +171,18 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		}
 
 		// TODO:临时方案 这里是消息预加载异步线程 主要提高加载效率
-		// if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) ||
-		// Constant.NEWS_TYPE_COMMENT.equals(act.getType())) {
-		// new GetFeedById((Activity) context).setListener(new
-		// DefaultTaskListener<FeedVO>((Activity) context) {
-		// @Override
-		// public void onSuccess(FeedVO result) {
-		// if (feedCache.containsKey(result.getId())) {
-		// return;
-		// }
-		// feedCache.put(result.getId(), JSONUtils.toJson(result).toString());
-		// }
-		// }).execute(feedId);
-		// }
+		if (StringUtils.isNotBlank(act.getFeedImageUrl())
+				&& (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) || Constant.NEWS_TYPE_COMMENT.equals(act.getType()))) {
+			new GetFeedById((Activity) context).setListener(new DefaultTaskListener<FeedVO>((Activity) context) {
+				@Override
+				public void onSuccess(FeedVO result) {
+					if (feedCache.containsKey(result.getId())) {
+						return;
+					}
+					feedCache.put(result.getId(), JSONUtils.toJson(result).toString());
+				}
+			}).execute(feedId);
+		}
 
 		return view;
 	}

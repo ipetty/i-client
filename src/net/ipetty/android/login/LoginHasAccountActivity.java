@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
@@ -111,20 +110,21 @@ public class LoginHasAccountActivity extends BaseActivity {
 		});
 
 		// qq login
-		View qq = this.findViewById(R.id.qq);
-		qq.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(LoginHasAccountActivity.this, "正在和企鹅沟通中，即将启用~", Toast.LENGTH_SHORT).show();
-				// ShareSDK.initSDK(LoginHasAccountActivity.this);
-				// Platform qzone =
-				// ShareSDK.getPlatform(LoginHasAccountActivity.this,
-				// QZone.NAME);
-				// new
-				// QZoneAuthorization(LoginHasAccountActivity.this).authorize(qzone);
-				// progressDialog.show();
-			}
-		});
+		// View qq = this.findViewById(R.id.qq);
+		// qq.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// Toast.makeText(LoginHasAccountActivity.this, "正在和企鹅沟通中，即将启用~",
+		// Toast.LENGTH_SHORT).show();
+		// ShareSDK.initSDK(LoginHasAccountActivity.this);
+		// Platform qzone =
+		// ShareSDK.getPlatform(LoginHasAccountActivity.this,
+		// QZone.NAME);
+		// new
+		// QZoneAuthorization(LoginHasAccountActivity.this).authorize(qzone);
+		// progressDialog.show();
+		// }
+		// });
 
 		loadData();
 	}
