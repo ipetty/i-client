@@ -1,40 +1,12 @@
 package net.ipetty.android.register;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Patterns;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.ShareSDK;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.ActivityManager;
@@ -62,8 +34,40 @@ import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.PetVO;
 import net.ipetty.vo.UserForm43rdVO;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class Register3rdActivity extends BaseActivity {
 
@@ -187,60 +191,60 @@ public class Register3rdActivity extends BaseActivity {
 	private void fullfillUserInfo() {
 		UserApiWithCache.getUserById4Asynchronous(this, currUserId, new DefaultTaskListener<UserVO>(
 				Register3rdActivity.this) {
-					@Override
-					public void onSuccess(UserVO user) {
-						// 头像
-						if (StringUtils.isNotEmpty(user.getAvatar())) {
-							Log.d(TAG, "设置用户头像：" + Constant.FILE_SERVER_BASE + user.getAvatar());
-							ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
-									options);
-						} else {
-							String platformName = SDKStateManager.getPlatformName(activity);
-							Platform platform = ShareSDK.getPlatform(Register3rdActivity.this, platformName);
-							String userIcon = platform.getDb().getUserIcon();
-							if (StringUtils.isNotBlank(userIcon)) {
-								// 从第三方平台获取用户头像，保存后展现
-								ImageLoader.getInstance().displayImage(userIcon, avatar, options, new ImageLoadingListener() {
+			@Override
+			public void onSuccess(UserVO user) {
+				// 头像
+				if (StringUtils.isNotEmpty(user.getAvatar())) {
+					Log.d(TAG, "设置用户头像：" + Constant.FILE_SERVER_BASE + user.getAvatar());
+					ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + user.getAvatar(), avatar,
+							options);
+				} else {
+					String platformName = SDKStateManager.getPlatformName(activity);
+					Platform platform = ShareSDK.getPlatform(Register3rdActivity.this, platformName);
+					String userIcon = platform.getDb().getUserIcon();
+					if (StringUtils.isNotBlank(userIcon)) {
+						// 从第三方平台获取用户头像，保存后展现
+						ImageLoader.getInstance().displayImage(userIcon, avatar, options, new ImageLoadingListener() {
 
-									@Override
-									public void onLoadingStarted(String imageUri, View view) {
-									}
-
-									@Override
-									public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-									}
-
-									@Override
-									public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-										String path = PathUtils.getCarmerDir() + mImageName;
-										File file = new File(path);
-										FileOutputStream out;
-										try {
-											out = new FileOutputStream(file);
-											loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
-											Register3rdActivity.this.updateAvatar(file.getAbsolutePath(), null);
-										} catch (FileNotFoundException e) {
-											e.printStackTrace();
-										}
-									}
-
-									@Override
-									public void onLoadingCancelled(String imageUri, View view) {
-									}
-								});
-
-							} else {
-								avatar.setImageResource(R.drawable.avatar);
+							@Override
+							public void onLoadingStarted(String imageUri, View view) {
 							}
-						}
 
-						// 邮箱地址
-						Register3rdActivity.this.emailEditor.setText(user.getEmail() == null ? "" : user.getEmail());
+							@Override
+							public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+							}
 
-						// 昵称
-						Register3rdActivity.this.nicknameEditor.setText(user.getNickname() == null ? "" : user.getNickname());
+							@Override
+							public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+								String path = PathUtils.getCarmerDir() + mImageName;
+								File file = new File(path);
+								FileOutputStream out;
+								try {
+									out = new FileOutputStream(file);
+									loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+									Register3rdActivity.this.updateAvatar(file.getAbsolutePath(), null);
+								} catch (FileNotFoundException e) {
+									e.printStackTrace();
+								}
+							}
+
+							@Override
+							public void onLoadingCancelled(String imageUri, View view) {
+							}
+						});
+
+					} else {
+						avatar.setImageResource(R.drawable.avatar);
 					}
-				});
+				}
+
+				// 邮箱地址
+				Register3rdActivity.this.emailEditor.setText(user.getEmail() == null ? "" : user.getEmail());
+
+				// 昵称
+				Register3rdActivity.this.nicknameEditor.setText(user.getNickname() == null ? "" : user.getNickname());
+			}
+		});
 	}
 
 	// 填充宠物信息
@@ -267,22 +271,22 @@ public class Register3rdActivity extends BaseActivity {
 						if (StringUtils.isNotBlank(pet.getGender())) {
 							Register3rdActivity.this.petGender = pet.getGender();
 							new GetOptionValueLabelMap(Register3rdActivity.this)
-							.setListener(
-									new SetOptionLabelTaskListener(Register3rdActivity.this,
-											Register3rdActivity.this.petGenderText,
-											Register3rdActivity.this.petGender))
-							.execute(OptionGroup.PET_GENDER);
+									.setListener(
+											new SetOptionLabelTaskListener(Register3rdActivity.this,
+													Register3rdActivity.this.petGenderText,
+													Register3rdActivity.this.petGender))
+									.execute(OptionGroup.PET_GENDER);
 						}
 
 						// 家族
 						if (StringUtils.isNotBlank(pet.getFamily())) {
 							Register3rdActivity.this.petFamily = pet.getFamily();
 							new GetOptionValueLabelMap(Register3rdActivity.this)
-							.setListener(
-									new SetOptionLabelTaskListener(Register3rdActivity.this,
-											Register3rdActivity.this.petFamilyText,
-											Register3rdActivity.this.petFamily))
-							.execute(OptionGroup.PET_FAMILY);
+									.setListener(
+											new SetOptionLabelTaskListener(Register3rdActivity.this,
+													Register3rdActivity.this.petFamilyText,
+													Register3rdActivity.this.petFamily))
+									.execute(OptionGroup.PET_FAMILY);
 						}
 					}
 				}).execute(Register3rdActivity.this.currUserId);
@@ -332,6 +336,7 @@ public class Register3rdActivity extends BaseActivity {
 
 							// 完善资料后跳转到首页
 							AppUtils.goTo(activity, MainActivity.class);
+							activity.finish();
 						}
 					}).execute(userForm);
 		}
@@ -342,70 +347,70 @@ public class Register3rdActivity extends BaseActivity {
 	 */
 	private DefaultTaskListener<List<Option>> initGenderDialog = new DefaultTaskListener<List<Option>>(
 			Register3rdActivity.this) {
-				private List<ModDialogItem> dialogItems;
+		private List<ModDialogItem> dialogItems;
 
+		@Override
+		public void onSuccess(List<Option> options) {
+			dialogItems = new ArrayList<ModDialogItem>();
+			for (Option option : options) {
+				dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
+			}
+
+			Register3rdActivity.this.petGenderText.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onSuccess(List<Option> options) {
-					dialogItems = new ArrayList<ModDialogItem>();
-					for (Option option : options) {
-						dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
-					}
-
-					Register3rdActivity.this.petGenderText.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							Register3rdActivity.this.petGenderDialog = DialogUtils.modPopupDialog(Register3rdActivity.this,
-									dialogItems, Register3rdActivity.this.petGenderDialog);
-						}
-					});
+				public void onClick(View view) {
+					Register3rdActivity.this.petGenderDialog = DialogUtils.modPopupDialog(Register3rdActivity.this,
+							dialogItems, Register3rdActivity.this.petGenderDialog);
 				}
+			});
+		}
 
-				private OnClickListener dialogClick = new OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
-						String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
-						Register3rdActivity.this.petGenderText.setText(label);
-						Register3rdActivity.this.petGender = value;
-						Register3rdActivity.this.petGenderDialog.cancel();
-					}
-				};
-			};
+		private OnClickListener dialogClick = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
+				String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
+				Register3rdActivity.this.petGenderText.setText(label);
+				Register3rdActivity.this.petGender = value;
+				Register3rdActivity.this.petGenderDialog.cancel();
+			}
+		};
+	};
 
 	/**
 	 * 初始化家族选择对话框
 	 */
 	private DefaultTaskListener<List<Option>> initGenderFamily = new DefaultTaskListener<List<Option>>(
 			Register3rdActivity.this) {
-				private List<ModDialogItem> dialogItems;
+		private List<ModDialogItem> dialogItems;
 
+		@Override
+		public void onSuccess(List<Option> options) {
+			dialogItems = new ArrayList<ModDialogItem>();
+			for (Option option : options) {
+				dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
+			}
+
+			Register3rdActivity.this.petFamilyText.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onSuccess(List<Option> options) {
-					dialogItems = new ArrayList<ModDialogItem>();
-					for (Option option : options) {
-						dialogItems.add(new ModDialogItem(null, option.getValue(), option.getLabel(), dialogClick));
-					}
-
-					Register3rdActivity.this.petFamilyText.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							Register3rdActivity.this.petFamilyDialog = DialogUtils.modPopupDialog(Register3rdActivity.this,
-									dialogItems, Register3rdActivity.this.petFamilyDialog);
-						}
-					});
+				public void onClick(View view) {
+					Register3rdActivity.this.petFamilyDialog = DialogUtils.modPopupDialog(Register3rdActivity.this,
+							dialogItems, Register3rdActivity.this.petFamilyDialog);
 				}
+			});
+		}
 
-				private OnClickListener dialogClick = new OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
-						String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
-						Register3rdActivity.this.petFamilyText.setText(label);
-						Register3rdActivity.this.petFamily = value;
-						Register3rdActivity.this.petFamilyDialog.cancel();
-					}
-				};
-			};
+		private OnClickListener dialogClick = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				String label = ((TextView) view.findViewById(R.id.text)).getText().toString();
+				String value = ((TextView) view.findViewById(R.id.value)).getText().toString();
+				Register3rdActivity.this.petFamilyText.setText(label);
+				Register3rdActivity.this.petFamily = value;
+				Register3rdActivity.this.petFamilyDialog.cancel();
+			}
+		};
+	};
 
 	private OnClickListener changeAvatarClick = new OnClickListener() {
 		@Override
@@ -415,7 +420,7 @@ public class Register3rdActivity extends BaseActivity {
 	};
 
 	public void showCameraDialog(View view) {
-		OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
+		OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
 		this.changeAvatarDialog = DialogUtils.bottomPopupDialog(this, Listener, R.array.alert_camera,
 				getString(R.string.camera_title), this.changeAvatarDialog);
 	}

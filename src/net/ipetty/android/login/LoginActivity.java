@@ -150,18 +150,19 @@ public class LoginActivity extends BaseActivity {
 		});
 
 		// qq login
-		View qq = this.findViewById(R.id.qq);
-		qq.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(LoginActivity.this, "正在和企鹅沟通中，即将启用~", Toast.LENGTH_SHORT).show();
-				// ShareSDK.initSDK(LoginActivity.this);
-				// Platform qzone = ShareSDK.getPlatform(LoginActivity.this,
-				// QZone.NAME);
-				// new QZoneAuthorization(LoginActivity.this).authorize(qzone);
-				// progressDialog.show();
-			}
-		});
+		// View qq = this.findViewById(R.id.qq);
+		// qq.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// Toast.makeText(LoginActivity.this, "正在和企鹅沟通中，即将启用~",
+		// Toast.LENGTH_SHORT).show();
+		// ShareSDK.initSDK(LoginActivity.this);
+		// Platform qzone = ShareSDK.getPlatform(LoginActivity.this,
+		// QZone.NAME);
+		// new QZoneAuthorization(LoginActivity.this).authorize(qzone);
+		// progressDialog.show();
+		// }
+		// });
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -144,28 +145,34 @@ public class RelatedMeAdapter extends BaseAdapter implements OnScrollListener {
 		});
 
 		// 消息图片
+		final Long feedId = act.getTargetId();
 		if (StringUtils.isNotBlank(act.getFeedImageUrl())) {
 			ImageLoader.getInstance().displayImage(Constant.FILE_SERVER_BASE + act.getFeedImageUrl(),
 					holder.relatedImage, options);
+			holder.relatedImage.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, SimpleFeedActivity.class);
+					intent.putExtra(Constant.INTENT_FEED_ID_KEY, feedId);
+					if (feedCache.containsKey(feedId)) {
+						intent.putExtra(Constant.FEEDVO_JSON_SERIALIZABLE, feedCache.get(feedId));
+					}
+					context.startActivity(intent);
+				}
+			});
 		} else {
 			holder.relatedImage.setImageResource(R.drawable.default_image);
-		}
-		final Long feedId = act.getTargetId();
-		holder.relatedImage.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(context, SimpleFeedActivity.class);
-				intent.putExtra(Constant.INTENT_FEED_ID_KEY, feedId);
-				if (feedCache.containsKey(feedId)) {
-					intent.putExtra(Constant.FEEDVO_JSON_SERIALIZABLE, feedCache.get(feedId));
+			holder.relatedImage.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(context, "该消息已不存在", Toast.LENGTH_SHORT).show();
 				}
-				context.startActivity(intent);
-			}
-		});
+			});
+		}
 
 		// TODO:临时方案 这里是消息预加载异步线程 主要提高加载效率
-		if (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) || Constant.NEWS_TYPE_COMMENT.equals(act.getType())) {
+		if (StringUtils.isNotBlank(act.getFeedImageUrl())
+				&& (Constant.NEWS_TYPE_FAVOR.equals(act.getType()) || Constant.NEWS_TYPE_COMMENT.equals(act.getType()))) {
 			new GetFeedById((Activity) context).setListener(new DefaultTaskListener<FeedVO>((Activity) context) {
 				@Override
 				public void onSuccess(FeedVO result) {

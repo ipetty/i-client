@@ -278,6 +278,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		@Override
 		public void onClick(View v) {
 			FeedVO feed = (FeedVO) FeedAdapter.this.getItem(FeedAdapter.this.currentClickItemPosition);
+			Log.d(TAG, "分享消息：feedId=" + feed.getId());
 			UserVO user = UserApiWithCache.getUserById4Synchronous(context, feed.getCreatedBy());
 			String feedAuthor = user.getNickname();
 			String feedBody = feed.getText();
@@ -293,9 +294,7 @@ public class FeedAdapter extends BaseAdapter implements OnScrollListener {
 		@Override
 		public void onClick(View v) {
 			final long feedId = FeedAdapter.this.getItemId(FeedAdapter.this.currentClickItemPosition);
-			// Toast.makeText(FeedAdapter.this.context, "敬请期待",
-			// Toast.LENGTH_SHORT).show();
-			Log.d(TAG, "feedID->" + feedId);
+			Log.d(TAG, "删除消息：feedId=" + feedId);
 			new DeleteFeed((Activity) context).setListener(
 					new DefaultTaskListener<Boolean>((Activity) context, "正在删除...") {
 						@Override

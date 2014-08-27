@@ -26,6 +26,7 @@ public class LoginTaskListener extends DefaultTaskListener<UserVO> {
 	public void onSuccess(UserVO result) {
 		Log.d(TAG, "onSuccess");
 		AppUtils.goTo(activity, MainActivity.class);
+		activity.finish();
 	}
 
 }

@@ -98,6 +98,7 @@ public class ChangePwdActivity extends BaseActivity {
 						@Override
 						public void onSuccess(Boolean result) {
 							Toast.makeText(ChangePwdActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
+							ChangePwdActivity.this.finish();
 						}
 					}).execute(oldPassword, password);
 		}

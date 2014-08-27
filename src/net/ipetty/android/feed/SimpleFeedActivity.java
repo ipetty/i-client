@@ -1,5 +1,36 @@
 package net.ipetty.android.feed;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.comment.CommentActivity;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.ui.ModDialogItem;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.core.util.DialogUtils;
+import net.ipetty.android.core.util.JSONUtils;
+import net.ipetty.android.core.util.PrettyDateFormat;
+import net.ipetty.android.core.util.WebLinkUtils;
+import net.ipetty.android.home.LargerImageActivity;
+import net.ipetty.android.like.LikeActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.task.feed.DeleteFeed;
+import net.ipetty.android.sdk.task.feed.Favor;
+import net.ipetty.android.sdk.task.feed.GetFeedById;
+import net.ipetty.android.space.SpaceActivity;
+import net.ipetty.sharesdk.onekeyshare.OneKeyShare;
+import net.ipetty.vo.CommentVO;
+import net.ipetty.vo.FeedFavorVO;
+import net.ipetty.vo.FeedVO;
+import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -17,34 +48,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import java.util.ArrayList;
-import java.util.List;
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.comment.CommentActivity;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.ui.ModDialogItem;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.core.util.DialogUtils;
-import net.ipetty.android.core.util.JSONUtils;
-import net.ipetty.android.core.util.PrettyDateFormat;
-import net.ipetty.android.core.util.WebLinkUtils;
-import net.ipetty.android.home.LargerImageActivity;
-import net.ipetty.android.like.LikeActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.feed.Favor;
-import net.ipetty.android.sdk.task.feed.GetFeedById;
-import net.ipetty.android.space.SpaceActivity;
-import net.ipetty.vo.CommentVO;
-import net.ipetty.vo.FeedFavorVO;
-import net.ipetty.vo.FeedVO;
-import net.ipetty.vo.UserVO;
-import org.apache.commons.lang3.StringUtils;
 
 public class SimpleFeedActivity extends BaseActivity {
 
@@ -78,10 +84,15 @@ public class SimpleFeedActivity extends BaseActivity {
 	private ModDialogItem delItems;
 	private Dialog moreDialog;
 
+	private OneKeyShare oks;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_simple_feed);
+
+		this.oks = new OneKeyShare(SimpleFeedActivity.this);
+
 		Log.d(TAG, "onCreate");
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constant.BROADCAST_INTENT_FEED_COMMENT);
@@ -106,10 +117,6 @@ public class SimpleFeedActivity extends BaseActivity {
 		Log.d(TAG, "feedJSON-->" + feedJSON);
 		if (feedJSON != null) {
 			feed = JSONUtils.fromJSON(feedJSON, FeedVO.class);
-
-			// renderUser();
-			// renderConent();
-			// renderArea();
 			initDefaultView();
 		}
 	}
@@ -119,27 +126,24 @@ public class SimpleFeedActivity extends BaseActivity {
 	protected void onViewReady(Bundle savedInstanceState) {
 		Log.d(TAG, "onViewReady");
 		if (feed != null) {
-			// renderArea();
-			// renderFavor();
-			// renderCommentView();
+			initDefaultView();
+		} else {
+			// 初始化界面操作
+			new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
 
-		}
+				@Override
+				public void onSuccess(FeedVO result) {
+					if (JSONUtils.toJson(result).toString().equals(feedJSON)) {
+						return;
+					}
 
-		// 初始化界面操作
-		new GetFeedById(this).setListener(new DefaultTaskListener<FeedVO>(this) {
+					SimpleFeedActivity.this.feed = result;
+					Log.d(TAG, "FAVER" + result.isFavored());
 
-			@Override
-			public void onSuccess(FeedVO result) {
-				if (JSONUtils.toJson(result).toString().equals(feedJSON)) {
-					return;
+					SimpleFeedActivity.this.initDefaultView();
 				}
-
-				SimpleFeedActivity.this.feed = result;
-				Log.d(TAG, "FAVER" + result.isFavored());
-
-				SimpleFeedActivity.this.initDefaultView();
-			}
-		}).execute(feedId);
+			}).execute(feedId);
+		}
 	}
 
 	private void initView() {
@@ -206,9 +210,14 @@ public class SimpleFeedActivity extends BaseActivity {
 	private OnClickListener shareOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO: 用户分享操作
-			Toast.makeText(SimpleFeedActivity.this, "敬请期待", Toast.LENGTH_SHORT).show();
-			Log.d(TAG, "feedID->" + feedId);
+			Log.d(TAG, "分享消息：feedId=" + feedId);
+			UserVO user = UserApiWithCache.getUserById4Synchronous(SimpleFeedActivity.this, feed.getCreatedBy());
+			String feedAuthor = user.getNickname();
+			String feedBody = feed.getText();
+			String imageUri = feed.getImageOriginalURL();
+			String imageUrl = StringUtils.isNotBlank(imageUri) ? Constant.FILE_SERVER_BASE + imageUri : null;
+
+			oks.share(feedAuthor, feedBody, imageUrl);
 			moreDialog.cancel();
 		}
 	};
@@ -216,9 +225,20 @@ public class SimpleFeedActivity extends BaseActivity {
 	private OnClickListener delOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO: 用户删除操作
-			Toast.makeText(SimpleFeedActivity.this, "敬请期待", Toast.LENGTH_SHORT).show();
-			Log.d(TAG, "feedID->" + feedId);
+			Log.d(TAG, "删除消息：feedId=" + feedId);
+			new DeleteFeed(SimpleFeedActivity.this).setListener(
+					new DefaultTaskListener<Boolean>(SimpleFeedActivity.this, "正在删除...") {
+						@Override
+						public void onSuccess(Boolean result) {
+							if (result) {
+								Intent intent = new Intent(Constant.BROADCAST_INTENT_FEED_DELETE);
+								intent.putExtra(Constant.FEEDVO_ID, feedId);
+								SimpleFeedActivity.this.sendBroadcast(intent);
+								Toast.makeText(SimpleFeedActivity.this, "删除消息成功", Toast.LENGTH_SHORT).show();
+								activity.finish();
+							}
+						}
+					}).execute(feedId);
 			moreDialog.cancel();
 		}
 	};
