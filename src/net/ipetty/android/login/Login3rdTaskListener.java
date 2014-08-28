@@ -8,11 +8,7 @@ package net.ipetty.android.login;
 import net.ipetty.android.core.DefaultTaskListener;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.main.MainActivity;
-import net.ipetty.android.register.Register3rdActivity;
 import net.ipetty.vo.UserVO;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Activity;
 import android.util.Log;
 import cn.sharesdk.framework.Platform;
@@ -35,13 +31,14 @@ public class Login3rdTaskListener extends DefaultTaskListener<UserVO> {
 	@Override
 	public void onSuccess(UserVO user) {
 		Log.d(TAG, "onSuccess");
-		if (user != null && StringUtils.isNotEmpty(user.getEmail())) { // 跳转到首页
-			AppUtils.goTo(activity, MainActivity.class);
-			activity.finish();
-		} else { // 跳转到完善资料页面
-			AppUtils.goTo(activity, Register3rdActivity.class);
-			activity.finish();
-		}
+		// if (user != null && StringUtils.isNotEmpty(user.getEmail())) { //
+		// 跳转到首页
+		AppUtils.goTo(activity, MainActivity.class);
+		activity.finish();
+		// } else { // 跳转到完善资料页面
+		// AppUtils.goTo(activity, Register3rdActivity.class);
+		// activity.finish();
+		// }
 	}
 
 	@Override
