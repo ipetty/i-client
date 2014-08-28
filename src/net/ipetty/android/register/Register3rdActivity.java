@@ -306,8 +306,8 @@ public class Register3rdActivity extends BaseActivity {
 			UserForm43rdVO userForm = new UserForm43rdVO();
 			userForm.setId(Register3rdActivity.this.currUserId);
 			userForm.setPetId(Register3rdActivity.this.petId);
-			AppUtils.goTo(Register3rdActivity.this, MainActivity.class);
-			Register3rdActivity.this.finish();
+			// AppUtils.goTo(Register3rdActivity.this, MainActivity.class);
+			// Register3rdActivity.this.finish();
 			/*
 			 * // email String email = emailEditor.getText().toString();
 			 * userForm.setEmail(email); if (StringUtils.isEmpty(email)) {
