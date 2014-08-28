@@ -86,6 +86,21 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp" >
 
+               <EditText
+                    android:id="@+id/edit_mail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:ems="10"
+                    android:hint="@string/input_account_once_hint"
+                    android:singleLine="true"
+                    android:textColor="@color/link_text"
+                    android:visibility="gone"
+                    android:textSize="16sp" >
+                    <requestFocus />
+                </EditText>
+                
                 <TextView
                     android:id="@+id/email"
                     android:layout_width="wrap_content"

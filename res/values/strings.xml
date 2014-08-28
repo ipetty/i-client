@@ -56,7 +56,7 @@
     <string name="pet_birthday">生日</string>
     <string name="title_activity_register3rd">完善爱宠资料</string>
     <string name="logining">正在登录....</string>
-
+ 	<string name="skip_button">跳过</string>
     <!-- main -->
     <string name="sub_nav_title_home">主页</string>
     <string name="sub_nav_title_discover">发现</string>
@@ -135,6 +135,7 @@
     <string name="save">保存</string>
     <string name="title_activity_user">个人资料</string>
     <string name="nickname_empty">昵称不能为空</string>
+    <string name="input_account_once_hint">请输入邮箱(保存后不可改)</string>
     <string name="description">简介</string>
     <string name="description_hint">一句话介绍</string>
     <string name="gender">性别</string>
@@ -230,5 +231,7 @@
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="release_to_refresh">松开刷新</string>
     <string name="refreshing">刷新中…</string>
+    
+   
 
 </resources>

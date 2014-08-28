@@ -1,29 +1,11 @@
 package net.ipetty.android.user;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
+
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
@@ -42,7 +24,29 @@ import net.ipetty.android.sdk.task.user.UpdateUserAvatar;
 import net.ipetty.vo.OptionGroup;
 import net.ipetty.vo.UserFormVO;
 import net.ipetty.vo.UserVO;
+
 import org.apache.commons.lang3.StringUtils;
+
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class UserActivity extends BaseActivity {
 
@@ -63,6 +67,7 @@ public class UserActivity extends BaseActivity {
 
 	private EditText nickname; // 昵称
 	private TextView email; // 邮箱地址
+	private EditText edit_mail;
 
 	private EditText signature; // 个性签名
 
@@ -81,13 +86,6 @@ public class UserActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user);
-
-	}
-
-	// 加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		currUserId = IpetApi.init(this).getCurrUserId();
 
 		// Title & Back
@@ -109,6 +107,7 @@ public class UserActivity extends BaseActivity {
 
 		// 邮箱地址
 		email = (TextView) this.findViewById(R.id.email);
+		edit_mail = (EditText) this.findViewById(R.id.edit_mail);
 
 		// 个性签名
 		signature = (EditText) this.findViewById(R.id.description);
@@ -149,6 +148,15 @@ public class UserActivity extends BaseActivity {
 
 				// 邮箱地址
 				UserActivity.this.email.setText(user.getEmail() == null ? "" : user.getEmail());
+				UserActivity.this.edit_mail.setText(user.getEmail() == null ? "" : user.getEmail());
+				if (StringUtils.isNotEmpty(user.getEmail())) {
+					UserActivity.this.edit_mail.setVisibility(View.GONE);
+					UserActivity.this.email.setVisibility(View.VISIBLE);
+				} else {
+					UserActivity.this.edit_mail.setVisibility(View.VISIBLE);
+					UserActivity.this.email.setVisibility(View.GONE);
+
+				}
 
 				// 个性签名
 				UserActivity.this.signature.setText(user.getSignature() == null ? "" : user.getSignature());
@@ -176,6 +184,13 @@ public class UserActivity extends BaseActivity {
 						.getStateAndRegion());
 			}
 		});
+	}
+
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
+
 	}
 
 	/**
@@ -219,6 +234,8 @@ public class UserActivity extends BaseActivity {
 				return;
 			}
 
+			String email = UserActivity.this.edit_mail.getText().toString();
+
 			// gender
 			user.setGender(UserActivity.this.genderValue);
 
@@ -251,7 +268,7 @@ public class UserActivity extends BaseActivity {
 	};
 
 	public void showCameraDialog(View view) {
-		OnClickListener[] Listener = new OnClickListener[]{takePhotoClick, pickPhotoClick};
+		OnClickListener[] Listener = new OnClickListener[] { takePhotoClick, pickPhotoClick };
 		this.changeAvatarDialog = DialogUtils.bottomPopupDialog(this, Listener, R.array.alert_camera,
 				getString(R.string.camera_title), this.changeAvatarDialog);
 	}

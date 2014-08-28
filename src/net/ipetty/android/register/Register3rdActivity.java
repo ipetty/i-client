@@ -12,14 +12,13 @@ import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.ActivityManager;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.ui.ModDialogItem;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.core.util.DeviceUtils;
 import net.ipetty.android.core.util.DialogUtils;
 import net.ipetty.android.core.util.PathUtils;
-import net.ipetty.android.core.util.ValidUtils;
+import net.ipetty.android.login.LoginActivity;
 import net.ipetty.android.main.MainActivity;
 import net.ipetty.android.sdk.core.IpetApi;
 import net.ipetty.android.sdk.core.SDKStateManager;
@@ -111,7 +110,15 @@ public class Register3rdActivity extends BaseActivity {
 		title = (TextView) this.findViewById(R.id.action_bar_title);
 		title.setText(this.getResources().getString(R.string.title_activity_register3rd));
 		backButton = (ImageView) this.findViewById(R.id.action_bar_left_image);
-		backButton.setOnClickListener(new BackClickListener(this));
+		backButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AppUtils.goTo(Register3rdActivity.this, LoginActivity.class);
+				Register3rdActivity.this.finish();
+			}
+		});
 
 		emailEditor = (AutoCompleteTextView) this.findViewById(R.id.account);
 		Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
@@ -178,7 +185,8 @@ public class Register3rdActivity extends BaseActivity {
 		submitButton = (Button) this.findViewById(R.id.button);
 		submitButton.setOnClickListener(sumbit);
 
-		Toast.makeText(Register3rdActivity.this, "请完善个人资料", Toast.LENGTH_SHORT).show();
+		// Toast.makeText(Register3rdActivity.this, "请完善个人资料",
+		// Toast.LENGTH_SHORT).show();
 
 		// 填充用户信息
 		Register3rdActivity.this.fullfillUserInfo();
@@ -298,20 +306,19 @@ public class Register3rdActivity extends BaseActivity {
 			UserForm43rdVO userForm = new UserForm43rdVO();
 			userForm.setId(Register3rdActivity.this.currUserId);
 			userForm.setPetId(Register3rdActivity.this.petId);
-
-			// email
-			String email = emailEditor.getText().toString();
-			userForm.setEmail(email);
-			if (StringUtils.isEmpty(email)) {
-				emailEditor.requestFocus();
-				Toast.makeText(Register3rdActivity.this, R.string.login_empty_account, Toast.LENGTH_SHORT).show();
-				return;
-			}
-			if (!ValidUtils.isEmail(email)) {
-				emailEditor.requestFocus();
-				Toast.makeText(Register3rdActivity.this, R.string.login_error_invalid_email, Toast.LENGTH_SHORT).show();
-				return;
-			}
+			AppUtils.goTo(Register3rdActivity.this, MainActivity.class);
+			Register3rdActivity.this.finish();
+			/*
+			 * // email String email = emailEditor.getText().toString();
+			 * userForm.setEmail(email); if (StringUtils.isEmpty(email)) {
+			 * emailEditor.requestFocus();
+			 * Toast.makeText(Register3rdActivity.this,
+			 * R.string.login_empty_account, Toast.LENGTH_SHORT).show(); return;
+			 * } if (!ValidUtils.isEmail(email)) { emailEditor.requestFocus();
+			 * Toast.makeText(Register3rdActivity.this,
+			 * R.string.login_error_invalid_email, Toast.LENGTH_SHORT).show();
+			 * return; }
+			 */
 
 			// nickname
 			String nickname = nicknameEditor.getText().toString();
