@@ -263,6 +263,18 @@ public class UserActivity extends BaseActivity {
 									.getString(R.string.submitting)) {
 								@Override
 								public void onSuccess(UserVO result) {
+									UserActivity.this.email.setText(result.getEmail() == null ? "" : result.getEmail());
+									UserActivity.this.edit_mail.setText(result.getEmail() == null ? "" : result
+											.getEmail());
+									if (StringUtils.isNotEmpty(result.getEmail())) {
+										UserActivity.this.edit_mail.setVisibility(View.GONE);
+										UserActivity.this.email.setVisibility(View.VISIBLE);
+									} else {
+										UserActivity.this.edit_mail.setVisibility(View.VISIBLE);
+										UserActivity.this.email.setVisibility(View.GONE);
+
+									}
+
 									Toast.makeText(activity, R.string.save_success, Toast.LENGTH_SHORT).show();
 								}
 							}).execute(user);
