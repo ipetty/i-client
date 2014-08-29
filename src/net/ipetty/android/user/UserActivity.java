@@ -235,7 +235,9 @@ public class UserActivity extends BaseActivity {
 			}
 
 			String email = UserActivity.this.edit_mail.getText().toString();
+			user.setEmail(email);
 
+			// Log.d(TAG, email);
 			// gender
 			user.setGender(UserActivity.this.genderValue);
 
