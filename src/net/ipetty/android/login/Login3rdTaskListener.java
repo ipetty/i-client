@@ -35,7 +35,8 @@ public class Login3rdTaskListener extends DefaultTaskListener<UserVO> {
 	@Override
 	public void onSuccess(UserVO user) {
 		Log.d(TAG, "onSuccess");
-		if (user != null && StringUtils.isNotEmpty(user.getEmail())) { //
+
+		if (user != null && StringUtils.isNotEmpty(user.getAvatar())) { //
 			// 跳转到首页
 			AppUtils.goTo(activity, MainActivity.class);
 			activity.finish();

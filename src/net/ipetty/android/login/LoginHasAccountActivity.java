@@ -4,7 +4,6 @@ import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
 import net.ipetty.android.core.MyAppStateManager;
-import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
 import net.ipetty.android.sdk.core.IpetApi;
@@ -63,7 +62,14 @@ public class LoginHasAccountActivity extends BaseActivity {
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
 		text.setText(this.getResources().getString(R.string.title_activity_login_has_account));
-		btnBack.setOnClickListener(new BackClickListener(this));
+		btnBack.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(LoginHasAccountActivity.this, LoginActivity.class);
+				LoginHasAccountActivity.this.startActivity(intent);
+			}
+		});
 
 		TextView changeAccount = (TextView) this.findViewById(R.id.changeAccount);
 		changeAccount.setOnClickListener(new OnClickListener() {
