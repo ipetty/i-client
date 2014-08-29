@@ -1,5 +1,25 @@
 package net.ipetty.android.setting;
 
+import net.ipetty.R;
+import net.ipetty.android.api.UserApiWithCache;
+import net.ipetty.android.boot.CheckUpdateTask;
+import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.DefaultTaskListener;
+import net.ipetty.android.core.MyAppStateManager;
+import net.ipetty.android.core.ui.BackClickListener;
+import net.ipetty.android.core.ui.BaseActivity;
+import net.ipetty.android.core.util.AppUtils;
+import net.ipetty.android.feedback.FeedbackActivity;
+import net.ipetty.android.sdk.core.IpetApi;
+import net.ipetty.android.sdk.core.SDKStateManager;
+import net.ipetty.android.sdk.task.user.Logout;
+import net.ipetty.android.update.UpdateManager;
+import net.ipetty.android.update.UpdateUtils;
+import net.ipetty.android.user.UserActivity;
+import net.ipetty.vo.UserVO;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,24 +29,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import net.ipetty.R;
-import net.ipetty.android.api.UserApiWithCache;
-import net.ipetty.android.boot.CheckUpdateTask;
-import net.ipetty.android.core.Constant;
-import net.ipetty.android.core.DefaultTaskListener;
-import net.ipetty.android.core.ui.BackClickListener;
-import net.ipetty.android.core.ui.BaseActivity;
-import net.ipetty.android.core.util.AppUtils;
-import net.ipetty.android.feedback.FeedbackActivity;
-import net.ipetty.android.sdk.core.IpetApi;
-import net.ipetty.android.sdk.task.user.Logout;
-import net.ipetty.android.update.UpdateManager;
-import net.ipetty.android.update.UpdateUtils;
-import net.ipetty.android.user.UserActivity;
-import net.ipetty.vo.UserVO;
-import org.apache.commons.lang3.StringUtils;
 
 public class SettingActivity extends BaseActivity {
 
@@ -63,6 +68,8 @@ public class SettingActivity extends BaseActivity {
 		logout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				String platformName = SDKStateManager.getPlatformName(SettingActivity.this);
+				MyAppStateManager.setLastLogoutPlatform(SettingActivity.this, platformName);
 				new Logout(SettingActivity.this).setListener(new LogoutTaskListener(SettingActivity.this)).execute();
 			}
 		});
@@ -104,11 +111,11 @@ public class SettingActivity extends BaseActivity {
 		about.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new CheckUpdateTask(SettingActivity.this)
-						.setListener(new DefaultTaskListener<Boolean>(SettingActivity.this) {
+				new CheckUpdateTask(SettingActivity.this).setListener(
+						new DefaultTaskListener<Boolean>(SettingActivity.this) {
 							@Override
 							public void onSuccess(Boolean hasUpdate) {
-								//如果有更新
+								// 如果有更新
 								if (hasUpdate) {
 									UpdateManager updateManager = new UpdateManager(SettingActivity.this);
 									updateManager.setOnCancelListener(new DialogInterface.OnClickListener() {
@@ -123,8 +130,7 @@ public class SettingActivity extends BaseActivity {
 								}
 
 							}
-						})
-						.execute();
+						}).execute();
 			}
 		});
 

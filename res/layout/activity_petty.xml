@@ -91,7 +91,6 @@
                         android:ems="10"
                         android:hint="@string/pet_name_hint"
                         android:singleLine="true"
-                        android:text="小旺旺"
                         android:textColor="@color/link_text"
                         android:textSize="16sp" >
 

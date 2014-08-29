@@ -29,6 +29,9 @@ public class MyAppStateManager {
 	// 我的空间列表最后刷新时间
 	private static final String LAST_REFRESH_FOR_SPACE = "LAST_REFRESH_FOR_SPACE";
 
+	// 最后登登出的账号类型
+	private static final String LAST_LOGINOUT_PLATFORM = "LAST_LOGINOUT_PLATFORM";
+
 	public static void setLastRefrsh4Space(Context ctx, Long value) {
 		setLong(ctx, LAST_REFRESH_FOR_SPACE, value);
 	}
@@ -62,6 +65,16 @@ public class MyAppStateManager {
 	// 获取拍照时临时文件完整路径
 	public static String getCameraTempFile(Context ctx) {
 		return getString(ctx, CAMERA_TEMP_FILE);
+	}
+
+	// 设置登出时的平台
+	public static void setLastLogoutPlatform(Context ctx, String value) {
+		setString(ctx, LAST_LOGINOUT_PLATFORM, value);
+	}
+
+	// 获取登出时的平台
+	public static String getLastLogoutPlatform(Context ctx) {
+		return getString(ctx, LAST_LOGINOUT_PLATFORM);
 	}
 
 	protected static void setString(Context ctx, String key, String value) {

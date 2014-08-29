@@ -141,7 +141,7 @@ public class PettyActivity extends BaseActivity {
 					ImageLoader.getInstance()
 							.displayImage(Constant.FILE_SERVER_BASE + pet.getAvatar(), avatar, options);
 				} else {
-					avatar.setImageResource(R.drawable.avatar);
+					avatar.setImageResource(R.drawable.default_image);
 				}
 
 				// 昵称

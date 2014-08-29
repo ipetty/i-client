@@ -3,6 +3,7 @@ package net.ipetty.android.login;
 import net.ipetty.R;
 import net.ipetty.android.api.UserApiWithCache;
 import net.ipetty.android.core.Constant;
+import net.ipetty.android.core.MyAppStateManager;
 import net.ipetty.android.core.ui.BackClickListener;
 import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.core.util.AppUtils;
@@ -42,7 +43,11 @@ public class LoginHasAccountActivity extends BaseActivity {
 	private boolean psdDisplayFlg = false;
 	private TextView account = null;
 	private ImageView avatar;
+	private View password_layout = null;
+	private View sina_layout = null;
+	private Button loginBtn = null;
 	private ProgressDialog progressDialog;
+	private String platformName = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +58,7 @@ public class LoginHasAccountActivity extends BaseActivity {
 		progressDialog.setIndeterminate(true);
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage(getResources().getString(R.string.logining));
-	}
 
-	// 加载数据
-	@Override
-	protected void onViewReady(Bundle savedInstanceState) {
-		Log.d(TAG, "onViewReady");
 		/* action bar */
 		ImageView btnBack = (ImageView) this.findViewById(R.id.action_bar_left_image);
 		TextView text = (TextView) this.findViewById(R.id.action_bar_title);
@@ -75,6 +75,8 @@ public class LoginHasAccountActivity extends BaseActivity {
 			}
 		});
 
+		password_layout = this.findViewById(R.id.password_layout);
+
 		options = AppUtils.getRoundedImageOptions();
 		account = (TextView) this.findViewById(R.id.account);
 
@@ -86,7 +88,7 @@ public class LoginHasAccountActivity extends BaseActivity {
 		toggleView = (TextView) this.findViewById(R.id.login_toggle_password);
 		toggleView.setOnClickListener(togglePasswordClick);
 		// login btn
-		Button loginBtn = (Button) this.findViewById(R.id.button);
+		loginBtn = (Button) this.findViewById(R.id.button);
 		loginBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -98,8 +100,8 @@ public class LoginHasAccountActivity extends BaseActivity {
 		});
 
 		// sina Login
-		View sina = this.findViewById(R.id.sina);
-		sina.setOnClickListener(new OnClickListener() {
+		sina_layout = this.findViewById(R.id.sina_layout);
+		sina_layout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				ShareSDK.initSDK(LoginHasAccountActivity.this);
@@ -108,6 +110,19 @@ public class LoginHasAccountActivity extends BaseActivity {
 				progressDialog.show();
 			}
 		});
+
+		platformName = MyAppStateManager.getLastLogoutPlatform(this);
+		if (StringUtils.isEmpty(platformName)) {
+			password_layout.setVisibility(View.VISIBLE);
+			loginBtn.setVisibility(View.VISIBLE);
+		} else {
+			password_layout.setVisibility(View.GONE);
+			loginBtn.setVisibility(View.GONE);
+		}
+
+		if (SinaWeibo.NAME.equals(platformName)) {
+			sina_layout.setVisibility(View.VISIBLE);
+		}
 
 		// qq login
 		// View qq = this.findViewById(R.id.qq);
@@ -125,7 +140,12 @@ public class LoginHasAccountActivity extends BaseActivity {
 		// progressDialog.show();
 		// }
 		// });
+	}
 
+	// 加载数据
+	@Override
+	protected void onViewReady(Bundle savedInstanceState) {
+		Log.d(TAG, "onViewReady");
 		loadData();
 	}
 
@@ -136,11 +156,16 @@ public class LoginHasAccountActivity extends BaseActivity {
 	}
 
 	private void loadData() {
+
 		IpetApi api = IpetApi.init(this);
 		Integer currUserId = api.getCurrUserId();
 		UserVO user = UserApiWithCache.getUserById4Synchronous(this, currUserId);
 		if (!StringUtils.isEmpty(user.getEmail())) {
 			account.setText(user.getEmail());
+		}
+
+		if (SinaWeibo.NAME.equals(platformName)) {
+			account.setText(user.getNickname());
 		}
 
 		if (StringUtils.isNotBlank(user.getAvatar())) {
