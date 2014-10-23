@@ -1,244 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-		  package="net.ipetty"
-		  android:versionCode="12"
-		  android:versionName="1.1.2" >
+          package="net.ipetty"
+          android:versionCode="13"
+          android:versionName="1.1.3" >
 
-	<uses-sdk
-		android:minSdkVersion="9"
-		android:targetSdkVersion="19" />
+        <uses-sdk
+                android:minSdkVersion="9"
+                android:targetSdkVersion="19" />
 
-	<uses-permission android:name="android.permission.GET_TASKS" />
-	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-	<uses-permission android:name="android.permission.CAMERA" />
+        <uses-permission android:name="android.permission.GET_TASKS" />
+        <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+        <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+        <uses-permission android:name="android.permission.CAMERA" />
 
-	<uses-feature android:name="android.hardware.camera" />
-	<uses-feature android:name="android.hardware.autofocus" />
-	
-	<!--百度定位SDK -->
-	<!-- 这个权限用于进行网络定位-->
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-	<!-- 这个权限用于访问GPS定位-->
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-	<!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-	<!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-	<!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-	<!-- 用于读取手机当前的状态-->
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-	<!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-	<!-- 访问网络，网络定位需要上网-->
-	<uses-permission android:name="android.permission.INTERNET" />
-	<!--SD卡读取权限，用户写入离线定位数据-->
-	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
-	<!--允许应用读取低级别的系统日志文件 -->
-	<uses-permission android:name="android.permission.READ_LOGS"></uses-permission>
-	<!--百度统计 -->
-	<uses-permission android:name="android.permission.WRITE_SETTINGS"></uses-permission>
+        <uses-feature android:name="android.hardware.camera" />
+        <uses-feature android:name="android.hardware.autofocus" />
 
-	<application
-		android:name="net.ipetty.android.core.MyApplication"
-		android:allowBackup="true"
-		android:icon="@drawable/ic_launcher"
-		android:label="@string/app_name"
-		android:theme="@style/IPettyTheme" >
-		
-		<!-- 您从百度网站获取的APP KEY -->
-		<meta-data android:name="BaiduMobAd_STAT_ID" android:value="4ccb5cda81" /> 
-		<!-- 渠道商编号 -->
-		<meta-data android:name="BaiduMobAd_CHANNEL" android:value="official" />
+        <!--百度定位SDK -->
+        <!-- 这个权限用于进行网络定位-->
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+        <!-- 这个权限用于访问GPS定位-->
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+        <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+        <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+        <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+        <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+        <!-- 用于读取手机当前的状态-->
+        <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+        <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+        <!-- 访问网络，网络定位需要上网-->
+        <uses-permission android:name="android.permission.INTERNET" />
+        <!--SD卡读取权限，用户写入离线定位数据-->
+        <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
+        <!--允许应用读取低级别的系统日志文件 -->
+        <uses-permission android:name="android.permission.READ_LOGS"></uses-permission>
+        <!--百度统计 -->
+        <uses-permission android:name="android.permission.WRITE_SETTINGS"></uses-permission>
 
-		<!-- 是否开启错误日志统计，默认为false -->
-		<meta-data android:name="BaiduMobAd_EXCEPTION_LOG" android:value="true" />
-		<!-- 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START -->
-		<meta-data android:name="BaiduMobAd_SEND_STRATEGY" android:value="ONCE_A_DAY" />
-		<!-- 日志发送策略 为SET_TIME_INTERVAL时，需设定时间间隔(取消下行注释)。取值为1-24的整数，默认为1 -->
-		<!-- <meta-data android:name="BaiduMobAd_TIME_INTERVAL" android:value="2" />  -->
-		<!-- 日志仅在wifi网络下发送，默认为false -->
-		<meta-data android:name="BaiduMobAd_ONLY_WIFI" android:value="true" />
-		<!-- 是否获取基站位置信息 ,默认为true-->
-		<meta-data android:name="BaiduMobAd_CELL_LOCATION" android:value="false" />
-		<!-- 是否获取GPS位置信息，默认为true -->
-		<meta-data android:name="BaiduMobAd_GPS_LOCATION" android:value="false" />
-		<!-- 是否获取WIFI位置信息，默认为true -->
-		<meta-data android:name="BaiduMobAd_WIFI_LOCATION" android:value="true" />
-		
-		<!-- 百度定位SDK Accesskey设置 -->
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="b8YcfyxO92wOGYVu6yDVeSNs" />
-		
-		<activity
-			android:name="net.ipetty.android.boot.SplashActivity"
-			android:label="@string/app_name"
-			android:theme="@style/IPettyTheme.NoTitleBar.FullScreen" >
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+        <application
+                android:name="net.ipetty.android.core.MyApplication"
+                android:allowBackup="true"
+                android:icon="@drawable/ic_launcher"
+                android:label="@string/app_name"
+                android:theme="@style/IPettyTheme" >
 
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name="net.ipetty.android.main.MainActivity"
-			android:label="@string/app_name"
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.boot.WelcomeRegisterOrLoginActivity"
-			android:label="@string/title_activity_welcome_register_or_login" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.login.LoginActivity"
-			android:label="@string/title_activity_login"
-			android:screenOrientation="portrait"  >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.register.RegisterActivity"
-			android:label="@string/title_activity_register" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.login.LoginHasAccountActivity"
-			android:label="@string/title_activity_login_has_account" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.comment.CommentActivity"
-			android:label="@string/title_activity_comment" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.LoginsActivity"
-			android:label="@string/title_activity_logins"
-			android:windowSoftInputMode="adjustResize|stateVisible" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.feed.FeedPublishActivity"
-			android:label="@string/title_activity_feed_publish" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.home.LargerImageActivity"
-			android:label="@string/title_activity_larger_image" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.like.LikeActivity"
-			android:label="@string/title_activity_like"
-			android:screenOrientation="portrait"  >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.main.MainPopDialog"
-			android:label="@string/title_activity_main_pop_dialog"
-			android:theme="@style/MenuPopDialog"
-			android:screenOrientation="portrait"  >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.feedback.FeedbackActivity"
-			android:label="@string/title_activity_feedback" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.space.SpaceActivity"
-			android:label="@string/title_activity_space" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.fans.FansActivity"
-			android:label="@string/title_activity_fans" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.follow.FollowsActivity"
-			android:label="@string/title_activity_follows"
-			android:screenOrientation="portrait"  >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.bonuspoint.BonusPointActivity"
-			android:label="@string/title_activity_bonus_point" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.petty.PettyActivity"
-			android:label="@string/title_activity_petty" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.user.UserActivity"
-			android:label="@string/title_activity_user" 
-			android:screenOrientation="portrait" >
-            
-		</activity>
-		<activity
-			android:name="net.ipetty.android.feed.LocationActivity"
-			android:label="@string/title_activity_location" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.setting.SettingActivity"
-			android:label="@string/title_activity_setting" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.feed.SimpleFeedActivity"
-			android:label="@string/title_activity_simple_feed" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<!-- Share SDK -->
-		<activity
-			android:name="cn.sharesdk.framework.ShareSDKUIShell"
-			android:configChanges="keyboardHidden|orientation|screenSize"
-			android:screenOrientation="portrait"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"
-			android:windowSoftInputMode="stateHidden|adjustResize" />
-		<!-- Share SDK微信分享回调 -->
-		<activity
-			android:name="net.ipetty.wxapi.WXEntryActivity"
-			android:configChanges="keyboardHidden|orientation|screenSize"
-			android:exported="true"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar" 
-			android:screenOrientation="portrait" />
-		
-		<!-- 消息Service -->
-		<service android:name="net.ipetty.android.service.MessageService" >
-			<intent-filter>
-				<action android:name="net.ipetty.android.service.MessageService" />
-			</intent-filter>
-		</service>
-		
-		<!-- 百度定位SDK -->
-		<service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
-		</service>
+                <!-- 您从百度网站获取的APP KEY -->
+                <meta-data android:name="BaiduMobAd_STAT_ID" android:value="4ccb5cda81" />
+                <!-- 渠道商编号 -->
+                <meta-data android:name="BaiduMobAd_CHANNEL" android:value="official" />
 
-		<activity
-			android:name="net.ipetty.android.register.Register3rdActivity"
-			android:label="@string/title_activity_register3rd"
-			android:screenOrientation="portrait"  >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.setting.ChangePwdActivity"
-			android:label="@string/title_activity_change_password" 
-			android:screenOrientation="portrait" >
-		</activity>
-		<activity
-			android:name="net.ipetty.android.setting.AboutActivity"
-			android:label="@string/title_activity_about"
-			android:screenOrientation="portrait"  >
-		</activity>
-	</application>
+                <!-- 是否开启错误日志统计，默认为false -->
+                <meta-data android:name="BaiduMobAd_EXCEPTION_LOG" android:value="true" />
+                <!-- 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START -->
+                <meta-data android:name="BaiduMobAd_SEND_STRATEGY" android:value="ONCE_A_DAY" />
+                <!-- 日志发送策略 为SET_TIME_INTERVAL时，需设定时间间隔(取消下行注释)。取值为1-24的整数，默认为1 -->
+                <!-- <meta-data android:name="BaiduMobAd_TIME_INTERVAL" android:value="2" />  -->
+                <!-- 日志仅在wifi网络下发送，默认为false -->
+                <meta-data android:name="BaiduMobAd_ONLY_WIFI" android:value="true" />
+                <!-- 是否获取基站位置信息 ,默认为true-->
+                <meta-data android:name="BaiduMobAd_CELL_LOCATION" android:value="false" />
+                <!-- 是否获取GPS位置信息，默认为true -->
+                <meta-data android:name="BaiduMobAd_GPS_LOCATION" android:value="false" />
+                <!-- 是否获取WIFI位置信息，默认为true -->
+                <meta-data android:name="BaiduMobAd_WIFI_LOCATION" android:value="true" />
+
+                <!-- 百度定位SDK Accesskey设置 -->
+                <meta-data
+                        android:name="com.baidu.lbsapi.API_KEY"
+                        android:value="b8YcfyxO92wOGYVu6yDVeSNs" />
+
+                <activity
+                        android:name="net.ipetty.android.boot.SplashActivity"
+                        android:label="@string/app_name"
+                        android:theme="@style/IPettyTheme.NoTitleBar.FullScreen" >
+                        <intent-filter>
+                                <action android:name="android.intent.action.MAIN" />
+
+                                <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.main.MainActivity"
+                        android:label="@string/app_name"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.boot.WelcomeRegisterOrLoginActivity"
+                        android:label="@string/title_activity_welcome_register_or_login"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.login.LoginActivity"
+                        android:label="@string/title_activity_login"
+                        android:screenOrientation="portrait"  >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.register.RegisterActivity"
+                        android:label="@string/title_activity_register"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.login.LoginHasAccountActivity"
+                        android:label="@string/title_activity_login_has_account"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.comment.CommentActivity"
+                        android:label="@string/title_activity_comment"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.LoginsActivity"
+                        android:label="@string/title_activity_logins"
+                        android:windowSoftInputMode="adjustResize|stateVisible"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.feed.FeedPublishActivity"
+                        android:label="@string/title_activity_feed_publish"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.home.LargerImageActivity"
+                        android:label="@string/title_activity_larger_image"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.like.LikeActivity"
+                        android:label="@string/title_activity_like"
+                        android:screenOrientation="portrait"  >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.main.MainPopDialog"
+                        android:label="@string/title_activity_main_pop_dialog"
+                        android:theme="@style/MenuPopDialog"
+                        android:screenOrientation="portrait"  >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.feedback.FeedbackActivity"
+                        android:label="@string/title_activity_feedback"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.space.SpaceActivity"
+                        android:label="@string/title_activity_space"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.fans.FansActivity"
+                        android:label="@string/title_activity_fans"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.follow.FollowsActivity"
+                        android:label="@string/title_activity_follows"
+                        android:screenOrientation="portrait"  >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.bonuspoint.BonusPointActivity"
+                        android:label="@string/title_activity_bonus_point"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.petty.PettyActivity"
+                        android:label="@string/title_activity_petty"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.user.UserActivity"
+                        android:label="@string/title_activity_user"
+                        android:screenOrientation="portrait" >
+
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.feed.LocationActivity"
+                        android:label="@string/title_activity_location"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.setting.SettingActivity"
+                        android:label="@string/title_activity_setting"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.feed.SimpleFeedActivity"
+                        android:label="@string/title_activity_simple_feed"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <!-- Share SDK -->
+                <activity
+                        android:name="cn.sharesdk.framework.ShareSDKUIShell"
+                        android:configChanges="keyboardHidden|orientation|screenSize"
+                        android:screenOrientation="portrait"
+                        android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                        android:windowSoftInputMode="stateHidden|adjustResize" />
+                <!-- Share SDK微信分享回调 -->
+                <activity
+                        android:name="net.ipetty.wxapi.WXEntryActivity"
+                        android:configChanges="keyboardHidden|orientation|screenSize"
+                        android:exported="true"
+                        android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                        android:screenOrientation="portrait" />
+
+                <!-- 消息Service -->
+                <service android:name="net.ipetty.android.service.MessageService" >
+                        <intent-filter>
+                                <action android:name="net.ipetty.android.service.MessageService" />
+                        </intent-filter>
+                </service>
+
+                <!-- 百度定位SDK -->
+                <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
+                </service>
+
+                <activity
+                        android:name="net.ipetty.android.register.Register3rdActivity"
+                        android:label="@string/title_activity_register3rd"
+                        android:screenOrientation="portrait"  >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.setting.ChangePwdActivity"
+                        android:label="@string/title_activity_change_password"
+                        android:screenOrientation="portrait" >
+                </activity>
+                <activity
+                        android:name="net.ipetty.android.setting.AboutActivity"
+                        android:label="@string/title_activity_about"
+                        android:screenOrientation="portrait"  >
+                </activity>
+        </application>
 
 </manifest>
