@@ -10,6 +10,7 @@ import net.ipetty.android.core.ui.BaseActivity;
 import net.ipetty.android.register.RegisterActivity;
 import net.ipetty.android.sdk.task.user.UserLogin;
 import net.ipetty.sharesdk.sinaweibo.SinaWeiboAuthorization;
+import net.ipetty.sharesdk.wechat.WechatAuthorization;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.wechat.friends.Wechat;
 
 public class LoginActivity extends BaseActivity {
 
@@ -60,6 +62,7 @@ public class LoginActivity extends BaseActivity {
 		// 注册
 		TextView btnReg = (TextView) this.findViewById(R.id.register);
 		btnReg.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -81,6 +84,7 @@ public class LoginActivity extends BaseActivity {
 		// 忘记密码
 		TextView forgotView = (TextView) this.findViewById(R.id.forget_password);
 		forgotView.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(LoginActivity.this, "暂时未实现", Toast.LENGTH_SHORT).show();
@@ -112,6 +116,7 @@ public class LoginActivity extends BaseActivity {
 		accountView.setAdapter(adapt);
 
 		accountView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
@@ -124,22 +129,33 @@ public class LoginActivity extends BaseActivity {
 
 		/*
 		 * accountView.setOnFocusChangeListener(new OnFocusChangeListener(){
-		 * 
 		 * @Override public void onFocusChange(View arg0, boolean hasFocus) {
 		 * if(hasFocus){ accountView.setHint(null); if(focuscont==0){
 		 * accountView.clearFocus(); } focuscont++; }else{
-		 * accountView.setHint("Email"); }
-		 * 
-		 * }
+		 * accountView.setHint("Email"); } }
 		 */
 		passwordView = (EditText) this.findViewById(R.id.password);
 		// 登陆
 		View loginBtnView = (View) this.findViewById(R.id.button);
 		loginBtnView.setOnClickListener(loginOnClick);
 
+		// wechat login
+		View wechatView = this.findViewById(R.id.wechat);
+		wechatView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ShareSDK.initSDK(LoginActivity.this);
+				Platform wechat = ShareSDK.getPlatform(LoginActivity.this, Wechat.NAME);
+				new WechatAuthorization(LoginActivity.this).authorize(wechat);
+				progressDialog.show();
+			}
+		});
+
 		// sina Login
 		View sina = this.findViewById(R.id.sina);
 		sina.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				ShareSDK.initSDK(LoginActivity.this);
@@ -173,6 +189,7 @@ public class LoginActivity extends BaseActivity {
 
 	// 登录
 	private final OnClickListener loginOnClick = new OnClickListener() {
+
 		@Override
 		public void onClick(View loginBtnView) {
 			if (!validateLogin()) {
@@ -186,6 +203,7 @@ public class LoginActivity extends BaseActivity {
 
 	// 密码可见
 	private OnClickListener togglePasswordClick = new OnClickListener() {
+
 		@Override
 		public void onClick(View arg0) {
 			int index = passwordView.getSelectionStart();

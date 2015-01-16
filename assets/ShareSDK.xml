@@ -5,11 +5,13 @@
 
 	<!-- 微信好友 -->
 	<!-- BypassApproval是绕过审核的标记，设置为true后AppId将被忽略，故不经过审核的应用也可以执行分享，但是仅限于分享文字和图片，不能分享其他类型， 默认值为false。 -->
-	<Wechat Id="1" SortId="1" AppId="wx5e88169a674461b5" BypassApproval="false" Enable="true" />
+	<Wechat Id="1" SortId="1" AppId="wx7350575545aeeb96" AppSecret="33356a02bb2d3c637bfe78c57cb0b5ba"
+		BypassApproval="false " Enable="true" />
 
 	<!-- 微信朋友圈 -->
 	<!-- BypassApproval是绕过审核的标记，设置为true后AppId将被忽略，故不经过审核的应用也可以执行分享，但是仅限于分享文字和图片，不能分享其他类型， 默认值为false。 -->
-	<WechatMoments Id="2" SortId="2" AppId="wx5e88169a674461b5" BypassApproval="false" Enable="true" />
+	<WechatMoments Id="2" SortId="2" AppId="wx7350575545aeeb96" AppSecret="33356a02bb2d3c637bfe78c57cb0b5ba"
+		BypassApproval="false" Enable="true" />
 
 	<!-- QQ -->
 	<QQ Id="3" SortId="3" AppId="1101800301" AppKey="LqJeyBrOVadmfkzl" Enable="true" />

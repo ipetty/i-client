@@ -12,7 +12,6 @@ import cn.sharesdk.framework.utils.UIHandler;
 
 /**
  * Share SDK 新浪微博授权工具类
- * 
  * @author luocanfeng
  * @date 2014年7月21日
  */
@@ -48,9 +47,10 @@ public class SinaWeiboAuthorization extends AbstractAuthorization {
 	}
 
 	/**
-	 * 新浪微博帐号登录操作的Listener
+	 * 帐号登录操作的Listener
 	 */
 	public class AuthorizeListener implements PlatformActionListener {
+
 		@Override
 		public void onComplete(Platform platform, int action, HashMap<String, Object> result) {
 			if (action == Platform.ACTION_USER_INFOR) {
@@ -99,6 +99,7 @@ public class SinaWeiboAuthorization extends AbstractAuthorization {
 	 * 获取新浪微博邮箱帐号Listener
 	 */
 	public class GetEmailListener implements PlatformActionListener {
+
 		@Override
 		public void onComplete(Platform platform, int action, HashMap<String, Object> result) {
 			Log.v(TAG, result.toString());
