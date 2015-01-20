@@ -1,0 +1,7 @@
+{
+        "versionCode": 14,
+        "versionName": "1.1.4",
+        "versionDescription": "增加对微信账号登录的支持",
+        "downloadUrl": "http://api.ipetty.net/files/ipetty.apk",
+        "forceUpdate": false
+}
